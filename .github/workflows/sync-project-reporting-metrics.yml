@@ -1,0 +1,463 @@
+name: Sync Project Reporting Metrics
+
+# ---------------------------------------------------------------------------
+# Schedule configuration
+# NOTE: GitHub Actions does not support variables in cron expressions.
+#       To change the schedule update the cron expression below.
+#       All times are in UTC.
+# ---------------------------------------------------------------------------
+on:
+  schedule:
+    - cron: '0 */12 * * *'   # twice daily at 00:00 and 12:00 UTC
+  workflow_dispatch:
+
+# Requires a PAT with 'project' and 'read:org' scopes stored as secret GH_TOKEN.
+# The default GITHUB_TOKEN does not have write access to organization-level projects.
+
+jobs:
+  track-reporting-date:
+    name: Sync project reporting metrics
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      JIRA_BASE_URL: ${{ vars.JIRA_BASE_URL }}
+      PROJECTS: ${{ vars.PROJECTS }}
+    steps:
+      - name: Sync project reporting metrics across all configured projects
+        run: |
+          set -e
+
+          TODAY=$(date -u +%Y-%m-%d)
+
+          # Convert a GH numeric value (in weeks) to JIRA time format.
+          # Convention: 1 week = 5 days = 40 hours.
+          # Examples: 2 → "2w", 0.4 → "2d", 0.1 → "4h".
+          # Returns empty string if input is empty.
+          weeks_to_jira() {
+            local val="$1"
+            [ -z "$val" ] && echo "" && return
+            awk -v v="$val" 'BEGIN {
+              h1000 = int(v * 40000 + 0.5)
+              if (h1000 % 40000 == 0) {
+                printf "%dw\n", h1000 / 40000
+              } else if (h1000 % 8000 == 0) {
+                printf "%dd\n", h1000 / 8000
+              } else {
+                printf "%dh\n", int(h1000 / 1000 + 0.5)
+              }
+            }'
+          }
+
+          # Extract a field value from a project item JSON blob by field name.
+          # Handles text, number, single-select and date field types.
+          get_field() {
+            local item_json="$1"
+            local field_name="$2"
+            echo "$item_json" | jq -r --arg n "$field_name" '
+              [ .fieldValues.nodes[] | select(.field.name == $n) ] |
+              if length == 0 then ""
+              else .[0] |
+                if .text != null then .text
+                elif .number != null then (.number | tostring)
+                elif .["name"] != null then .["name"]
+                elif .date != null then .date
+                else ""
+                end
+              end
+            '
+          }
+
+          # Process all items in a GraphQL response page.
+          # Reads PROJECT_ID, REPORTING_DATE_FIELD_ID, REPORTING_LOG_FIELD_ID, TODAY from outer scope.
+          # Updates UPDATED_COUNT and SKIPPED_COUNT in outer scope.
+          process_items() {
+            local response="$1"
+            while IFS= read -r item; do
+              ITEM_ID=$(echo "$item" | jq -r '.id')
+              ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
+              ISSUE_TITLE=$(echo "$item" | jq -r '.content.title // ""')
+              echo ""
+              echo "Item $ITEM_ID${ISSUE_NUMBER:+ (GH #$ISSUE_NUMBER)}"
+
+              STATUS=$(get_field         "$item" "Status")
+              PRIORITY=$(get_field       "$item" "Priority")
+              ESTIMATE=$(get_field       "$item" "Estimate")
+              REMAINING_WORK=$(get_field "$item" "Remaining Work")
+              TIME_SPENT=$(get_field     "$item" "Time Spent")
+              REPORTING_LOG=$(get_field  "$item" "Reporting Log")
+
+              # Parse tracked field values from the latest (first) entry in the log.
+              # Log format: ENTRY1 | ENTRY2 | ... where each entry is DATE, STATUS, PRIORITY, ESTIMATE, REMAINING_WORK, TIME_SPENT
+              if [ -z "$REPORTING_LOG" ]; then
+                LAST_STATUS="" LAST_PRIORITY="" LAST_ESTIMATE=""
+                LAST_REMAINING_WORK="" LAST_TIME_SPENT=""
+              else
+                LAST_ENTRY=$(echo "$REPORTING_LOG" | sed 's/ | /\n/g' | head -1)
+                LAST_STATUS=$(echo         "$LAST_ENTRY" | cut -d',' -f2 | xargs)
+                LAST_PRIORITY=$(echo       "$LAST_ENTRY" | cut -d',' -f3 | xargs)
+                LAST_ESTIMATE=$(echo       "$LAST_ENTRY" | cut -d',' -f4 | xargs)
+                LAST_REMAINING_WORK=$(echo "$LAST_ENTRY" | cut -d',' -f5 | xargs)
+                LAST_TIME_SPENT=$(echo     "$LAST_ENTRY" | cut -d',' -f6 | xargs)
+              fi
+
+              echo "  Current : $STATUS, $PRIORITY, $ESTIMATE, $REMAINING_WORK, $TIME_SPENT"
+              echo "  Last log: $LAST_STATUS, $LAST_PRIORITY, $LAST_ESTIMATE, $LAST_REMAINING_WORK, $LAST_TIME_SPENT"
+
+              # Skip if nothing has changed
+              if [ "$STATUS"         = "$LAST_STATUS"         ] && \
+                 [ "$PRIORITY"        = "$LAST_PRIORITY"        ] && \
+                 [ "$ESTIMATE"        = "$LAST_ESTIMATE"        ] && \
+                 [ "$REMAINING_WORK"  = "$LAST_REMAINING_WORK"  ] && \
+                 [ "$TIME_SPENT"      = "$LAST_TIME_SPENT"      ]; then
+                echo "  → No change detected. Skipping."
+                SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+                continue
+              fi
+
+              echo "  → Change detected. Updating 'Reporting Date' and prepending to 'Reporting Log'."
+
+              # Build new entry: DATE, STATUS, PRIORITY, ESTIMATE, REMAINING_WORK, TIME_SPENT
+              NEW_ENTRY="${TODAY}, ${STATUS}, ${PRIORITY}, ${ESTIMATE}, ${REMAINING_WORK}, ${TIME_SPENT}"
+
+              # Prepend new entry and keep at most 5 entries total (discard oldest)
+              if [ -z "$REPORTING_LOG" ]; then
+                NEW_LOG="$NEW_ENTRY"
+              else
+                TRIMMED=$(echo "$REPORTING_LOG" | sed 's/ | /\n/g' | head -4 | paste -sd'~' | sed 's/~/ | /g')
+                NEW_LOG="${NEW_ENTRY} | ${TRIMMED}"
+              fi
+
+              # Update 'Reporting Date' to today
+              gh api graphql -f query='
+                mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Date!) {
+                  updateProjectV2ItemFieldValue(input: {
+                    projectId: $projectId
+                    itemId: $itemId
+                    fieldId: $fieldId
+                    value: { date: $date }
+                  }) { projectV2Item { id } }
+                }
+              ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                -f fieldId="$REPORTING_DATE_FIELD_ID" -f date="$TODAY"
+
+              # Append new entry to 'Reporting Log'
+              gh api graphql -f query='
+                mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                  updateProjectV2ItemFieldValue(input: {
+                    projectId: $projectId
+                    itemId: $itemId
+                    fieldId: $fieldId
+                    value: { text: $text }
+                  }) { projectV2Item { id } }
+                }
+              ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                -f fieldId="$REPORTING_LOG_FIELD_ID" -f text="$NEW_LOG"
+
+              # Sync to JIRA if an External Reference is set
+              EXTERNAL_REF=$(get_field "$item" "External Reference")
+              if [ -n "$EXTERNAL_REF" ]; then
+                JIRA_ISSUE_URL="${JIRA_BASE_URL}/rest/api/2/issue/${EXTERNAL_REF}"
+
+                # Fetch JIRA issue upfront to verify sync conditions before making any changes
+                JIRA_GET_STATUS=$(curl -s -o /tmp/jira_issue.json -w "%{http_code}" \
+                  -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                  "${JIRA_ISSUE_URL}")
+
+                if [ "$JIRA_GET_STATUS" -lt 200 ] || [ "$JIRA_GET_STATUS" -ge 300 ]; then
+                  echo "  → Warning: Failed to fetch JIRA issue $EXTERNAL_REF (HTTP $JIRA_GET_STATUS). Skipping JIRA sync."
+                  cat /tmp/jira_issue.json
+                else
+                  JIRA_HAS_LABEL=$(jq -r '[.fields.labels[]] | any(. == "gh-sync")' /tmp/jira_issue.json)
+
+                  if [ "$JIRA_HAS_LABEL" != "true" ]; then
+                    JIRA_LABELS=$(jq -r '[.fields.labels[]] | join(", ")' /tmp/jira_issue.json)
+                    echo "  → Skipping JIRA sync: ticket $EXTERNAL_REF does not have the 'gh-sync' label (current labels: ${JIRA_LABELS:-none})."
+                  else
+                    echo "  → Syncing to JIRA ticket: $EXTERNAL_REF"
+
+                    # Convert GH week-based values to JIRA time format (e.g. 2→"2w", 0.4→"2d", 0.1→"4h")
+                    JIRA_ESTIMATE=$(weeks_to_jira "$ESTIMATE")
+                    JIRA_REMAINING=$(weeks_to_jira "$REMAINING_WORK")
+                    JIRA_TIME_SPENT=$(weeks_to_jira "$TIME_SPENT")
+                    echo "  → JIRA values: priority=$PRIORITY, estimate=$JIRA_ESTIMATE, remaining=$JIRA_REMAINING, timeSpent=$JIRA_TIME_SPENT"
+
+                    # Build update payload: priority + time tracking (estimate and remaining work)
+                    JIRA_PAYLOAD=$(jq -n \
+                      --arg priority       "$PRIORITY" \
+                      --arg estimate       "$JIRA_ESTIMATE" \
+                      --arg remainingWork  "$JIRA_REMAINING" \
+                      '{
+                        fields: {
+                          priority:     {name: $priority},
+                          timetracking: {originalEstimate: $estimate, remainingEstimate: $remainingWork}
+                        }
+                      }')
+
+                    HTTP_STATUS=$(curl -s -o /tmp/jira_resp.json -w "%{http_code}" \
+                      -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                      -X PUT \
+                      -H "Content-Type: application/json" \
+                      -d "$JIRA_PAYLOAD" \
+                      "$JIRA_ISSUE_URL")
+
+                    if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+                      echo "  → JIRA $EXTERNAL_REF updated (HTTP $HTTP_STATUS)"
+                    else
+                      echo "  → Warning: JIRA update failed for $EXTERNAL_REF (HTTP $HTTP_STATUS)"
+                      cat /tmp/jira_resp.json
+                    fi
+
+                    # Sync Time Spent:
+                    # 1. Try to find and PUT-update the workflow-managed worklog in place.
+                    # 2. If editing is not permitted, fall back to the delta approach:
+                    #    GET JIRA issue timespent, compute GH - JIRA, POST a new worklog for the difference.
+                    # GH stores time in weeks (1w = 5d = 40h); JIRA stores timespent in seconds.
+                    if [ -n "$JIRA_TIME_SPENT" ]; then
+                      # Build worklog comments referencing the GH issue number when available
+                      if [ -n "$ISSUE_NUMBER" ]; then
+                        WL_COPY_COMMENT="Copied time spent from GH #${ISSUE_NUMBER}"
+                        WL_DELTA_COMMENT="Increased time spent from GH #${ISSUE_NUMBER}"
+                      else
+                        WL_COPY_COMMENT="Copied time spent from GH project item"
+                        WL_DELTA_COMMENT="Increased time spent from GH project item"
+                      fi
+                      TIME_SPENT_SYNCED=false
+
+                      # Step 1: look for the managed worklog (identified by the copy comment or the legacy
+                      # comment from earlier workflow versions) and try to update it in place.
+                      WL_LIST_STATUS=$(curl -s -o /tmp/jira_wl_list.json -w "%{http_code}" \
+                        -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                        "${JIRA_ISSUE_URL}/worklog")
+                      echo "  → GET worklogs HTTP $WL_LIST_STATUS"
+
+                      if [ "$WL_LIST_STATUS" -ge 200 ] && [ "$WL_LIST_STATUS" -lt 300 ]; then
+                        MANAGED_WL_ID=$(jq -r --arg c "$WL_COPY_COMMENT" \
+                          '.worklogs[] | select(.comment == $c or .comment == "[managed by track-reporting-date workflow]") | .id' \
+                          /tmp/jira_wl_list.json | head -1)
+
+                        if [ -n "$MANAGED_WL_ID" ]; then
+                          WL_PAYLOAD=$(jq -n --arg ts "$JIRA_TIME_SPENT" --arg c "$WL_COPY_COMMENT" \
+                            '{timeSpent: $ts, comment: $c}')
+                          WL_STATUS=$(curl -s -o /tmp/jira_wl.json -w "%{http_code}" \
+                            -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                            -X PUT \
+                            -H "Content-Type: application/json" \
+                            -d "$WL_PAYLOAD" \
+                            "${JIRA_ISSUE_URL}/worklog/${MANAGED_WL_ID}?adjustEstimate=leave")
+                          if [ "$WL_STATUS" -ge 200 ] && [ "$WL_STATUS" -lt 300 ]; then
+                            echo "  → Time Spent updated to $JIRA_TIME_SPENT on managed worklog $MANAGED_WL_ID (HTTP $WL_STATUS)."
+                            TIME_SPENT_SYNCED=true
+                          else
+                            echo "  → Cannot edit managed worklog $MANAGED_WL_ID (HTTP $WL_STATUS). Falling back to delta sync."
+                          fi
+                        fi
+                      fi
+
+                      # Step 2 (fallback): use the already-fetched issue data to get timespent,
+                      # compute delta, POST a new worklog for the difference.
+                      # Also used when no managed worklog exists yet (first sync → posts with copy comment).
+                      if [ "$TIME_SPENT_SYNCED" = "false" ]; then
+                        JIRA_TIMESPENT_SECS=$(jq -r '.fields.timespent // 0' /tmp/jira_issue.json)
+                        echo "  → JIRA timespent: ${JIRA_TIMESPENT_SECS}s, GH Time Spent: ${TIME_SPENT}w"
+
+                        # Compute delta in hours using integer arithmetic (×1000 to avoid float issues).
+                        # GH weeks × 40000 = GH hours × 1000.
+                        # JIRA seconds × 1000 / 3600 = JIRA hours × 1000.
+                        # Output: "Xh" if GH > JIRA, empty if delta ≤ 0.
+                        DELTA_JIRA=$(awk -v gh="$TIME_SPENT" -v jira_s="$JIRA_TIMESPENT_SECS" 'BEGIN {
+                          gh_h1000   = int(gh * 40000 + 0.5)
+                          jira_h1000 = int(jira_s * 1000 / 3600 + 0.5)
+                          delta = gh_h1000 - jira_h1000
+                          if (delta > 0) printf "%dh\n", int(delta / 1000 + 0.5)
+                        }')
+
+                        if [ -n "$DELTA_JIRA" ]; then
+                          # First sync (no prior worklogs) → copy comment; otherwise → delta comment
+                          if [ "$JIRA_TIMESPENT_SECS" = "0" ]; then
+                            WL_COMMENT="$WL_COPY_COMMENT"
+                          else
+                            WL_COMMENT="$WL_DELTA_COMMENT"
+                          fi
+                          echo "  → Logging worklog: $DELTA_JIRA ($WL_COMMENT)"
+                          WL_PAYLOAD=$(jq -n --arg ts "$DELTA_JIRA" --arg c "$WL_COMMENT" \
+                            '{timeSpent: $ts, comment: $c}')
+                          WL_STATUS=$(curl -s -o /tmp/jira_wl.json -w "%{http_code}" \
+                            -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                            -X POST \
+                            -H "Content-Type: application/json" \
+                            -d "$WL_PAYLOAD" \
+                            "${JIRA_ISSUE_URL}/worklog?adjustEstimate=leave")
+                          if [ "$WL_STATUS" -ge 200 ] && [ "$WL_STATUS" -lt 300 ]; then
+                            echo "  → $DELTA_JIRA logged (HTTP $WL_STATUS). JIRA total now ~${JIRA_TIME_SPENT}."
+                          else
+                            echo "  → Warning: Failed to log Time Spent worklog (HTTP $WL_STATUS)"
+                            cat /tmp/jira_wl.json
+                          fi
+                        else
+                          echo "  → Time Spent already up to date in JIRA (delta ≤ 0). Skipping."
+                        fi
+                      fi
+                    fi
+                  fi
+                fi
+              fi
+
+              echo "  → Done."
+              UPDATED_COUNT=$((UPDATED_COUNT + 1))
+
+            done < <(echo "$response" | jq -c '.data.organization.projectV2.items.nodes[]')
+          }
+
+          # ---------------------------------------------------------------------------
+          # Iterate over all configured projects
+          # PROJECTS variable format: space-separated "owner:project_number" entries
+          # e.g. "dgutierr-org:1 another-org:3"
+          # ---------------------------------------------------------------------------
+          TOTAL_UPDATED=0
+          TOTAL_SKIPPED=0
+
+          for PROJECT_ENTRY in $PROJECTS; do
+            PROJECT_OWNER="${PROJECT_ENTRY%%:*}"
+            PROJECT_NUMBER="${PROJECT_ENTRY##*:}"
+
+            echo ""
+            echo "========================================"
+            echo "Project: $PROJECT_OWNER #$PROJECT_NUMBER"
+            echo "========================================"
+
+            # Fetch project metadata and first page of items (100 per page)
+            echo "Fetching project metadata and page 1..."
+            PAGE_RESPONSE=$(gh api graphql -f query='
+              query($owner: String!, $number: Int!) {
+                organization(login: $owner) {
+                  projectV2(number: $number) {
+                    id
+                    fields(first: 30) {
+                      nodes {
+                        ... on ProjectV2Field {
+                          id
+                          name
+                        }
+                        ... on ProjectV2SingleSelectField {
+                          id
+                          name
+                        }
+                      }
+                    }
+                    items(first: 100) {
+                      pageInfo { hasNextPage endCursor }
+                      nodes {
+                        id
+                        content { ... on Issue { number title } }
+                        fieldValues(first: 20) {
+                          nodes {
+                            ... on ProjectV2ItemFieldTextValue {
+                              text
+                              field { ... on ProjectV2Field { name } }
+                            }
+                            ... on ProjectV2ItemFieldNumberValue {
+                              number
+                              field { ... on ProjectV2Field { name } }
+                            }
+                            ... on ProjectV2ItemFieldSingleSelectValue {
+                              name
+                              field { ... on ProjectV2SingleSelectField { name } }
+                            }
+                            ... on ProjectV2ItemFieldDateValue {
+                              date
+                              field { ... on ProjectV2Field { name } }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ' -f owner="$PROJECT_OWNER" -F number=$PROJECT_NUMBER)
+
+            PROJECT_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.id')
+            REPORTING_DATE_FIELD_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Date") | .id')
+            REPORTING_LOG_FIELD_ID=$(echo "$PAGE_RESPONSE"  | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Log")  | .id')
+
+            if [ -z "$REPORTING_DATE_FIELD_ID" ]; then
+              echo "Error: 'Reporting Date' field not found in project $PROJECT_OWNER #$PROJECT_NUMBER. Skipping."
+              continue
+            fi
+            if [ -z "$REPORTING_LOG_FIELD_ID" ]; then
+              echo "Error: 'Reporting Log' field not found in project $PROJECT_OWNER #$PROJECT_NUMBER. Skipping."
+              continue
+            fi
+
+            echo "Project ID             : $PROJECT_ID"
+            echo "Reporting Date field ID: $REPORTING_DATE_FIELD_ID"
+            echo "Reporting Log field ID : $REPORTING_LOG_FIELD_ID"
+
+            UPDATED_COUNT=0
+            SKIPPED_COUNT=0
+            PAGE=1
+
+            process_items "$PAGE_RESPONSE"
+
+            # Paginate through any remaining pages
+            HAS_NEXT=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.items.pageInfo.hasNextPage')
+            CURSOR=$(echo "$PAGE_RESPONSE"   | jq -r '.data.organization.projectV2.items.pageInfo.endCursor')
+
+            while [ "$HAS_NEXT" = "true" ]; do
+              PAGE=$((PAGE + 1))
+              echo ""
+              echo "Fetching page $PAGE (cursor: $CURSOR)..."
+
+              PAGE_RESPONSE=$(gh api graphql -f query='
+                query($owner: String!, $number: Int!, $cursor: String!) {
+                  organization(login: $owner) {
+                    projectV2(number: $number) {
+                      items(first: 100, after: $cursor) {
+                        pageInfo { hasNextPage endCursor }
+                        nodes {
+                          id
+                          content { ... on Issue { number title } }
+                          fieldValues(first: 20) {
+                            nodes {
+                              ... on ProjectV2ItemFieldTextValue {
+                                text
+                                field { ... on ProjectV2Field { name } }
+                              }
+                              ... on ProjectV2ItemFieldNumberValue {
+                                number
+                                field { ... on ProjectV2Field { name } }
+                              }
+                              ... on ProjectV2ItemFieldSingleSelectValue {
+                                name
+                                field { ... on ProjectV2SingleSelectField { name } }
+                              }
+                              ... on ProjectV2ItemFieldDateValue {
+                                date
+                                field { ... on ProjectV2Field { name } }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ' -f owner="$PROJECT_OWNER" -F number=$PROJECT_NUMBER -f cursor="$CURSOR")
+
+              process_items "$PAGE_RESPONSE"
+
+              HAS_NEXT=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.items.pageInfo.hasNextPage')
+              CURSOR=$(echo "$PAGE_RESPONSE"   | jq -r '.data.organization.projectV2.items.pageInfo.endCursor')
+            done
+
+            echo ""
+            echo "Project summary: $UPDATED_COUNT item(s) updated, $SKIPPED_COUNT item(s) skipped (across $PAGE page(s))."
+            TOTAL_UPDATED=$((TOTAL_UPDATED + UPDATED_COUNT))
+            TOTAL_SKIPPED=$((TOTAL_SKIPPED + SKIPPED_COUNT))
+          done
+
+          echo ""
+          echo "========================================"
+          echo "Total: $TOTAL_UPDATED item(s) updated, $TOTAL_SKIPPED item(s) skipped across all projects."
+          echo "========================================"
