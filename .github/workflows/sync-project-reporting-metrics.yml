@@ -68,11 +68,11 @@ jobs:
             '
           }
 
-          # Process all items in a GraphQL response page.
-          # Reads PROJECT_ID, REPORTING_DATE_FIELD_ID, REPORTING_LOG_FIELD_ID, TODAY from outer scope.
+          # process_items reads one compact JSON item per line from stdin.
+          # Reads PROJECT_ID, REPORTING_DATE_FIELD_ID, REPORTING_LOG_FIELD_ID, SYNC_STATUS_FIELD_ID,
+          # ISSUE_STATUS (associative array), TODAY from outer scope.
           # Updates UPDATED_COUNT and SKIPPED_COUNT in outer scope.
           process_items() {
-            local response="$1"
             while IFS= read -r item; do
               ITEM_ID=$(echo "$item" | jq -r '.id')
               ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
@@ -104,7 +104,53 @@ jobs:
               echo "  Current : $STATUS, $PRIORITY, $ESTIMATE, $REMAINING_WORK, $TIME_SPENT"
               echo "  Last log: $LAST_STATUS, $LAST_PRIORITY, $LAST_ESTIMATE, $LAST_REMAINING_WORK, $LAST_TIME_SPENT"
 
-              # Skip if nothing has changed
+              # Compute Alerts codes (validation rules, always evaluated regardless of changes)
+              SYNC_STATUS_CODES=""
+              if [ -n "$STATUS" ] && [ "$STATUS" != "Backlog" ] && [ "$STATUS" != "Next" ] && [ -z "$ESTIMATE" ]; then
+                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_ESTIMATE"
+              fi
+              if [ -n "$STATUS" ] && [ "$STATUS" != "Backlog" ] && [ "$STATUS" != "Next" ] && [ -z "$REMAINING_WORK" ]; then
+                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_REMAINING_WORK"
+              fi
+              if [ "$STATUS" = "Done" ] && [ -z "$TIME_SPENT" ]; then
+                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_TIME_SPENT"
+              fi
+              if [ "$STATUS" = "Done" ] && [ -n "$REMAINING_WORK" ] && \
+                 [ "$(awk -v v="$REMAINING_WORK" 'BEGIN{print (v+0 > 0) ? "true" : "false"}')" = "true" ]; then
+                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }REMAINING_WORK_NOT_ZERO"
+              fi
+              HAS_ASSIGNEE=$(echo "$item" | jq -r '(.content.assignees.nodes | length) > 0')
+              if { [ "$STATUS" = "In Progress" ] || [ "$STATUS" = "In Review" ] || [ "$STATUS" = "Done" ]; } && \
+                 [ "$HAS_ASSIGNEE" != "true" ]; then
+                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_ASSIGNEE"
+              fi
+
+              # Check CHILDREN_STATUS: detect parent/child status inconsistencies.
+              # Only runs when the item is linked to a GH issue with sub-issues in this project.
+              if [ -n "$ISSUE_NUMBER" ]; then
+                SUB_NUMBERS=$(echo "$item" | jq -r '.content.subIssues.nodes[].number // empty' 2>/dev/null)
+                if [ -n "$SUB_NUMBERS" ]; then
+                  MISMATCH=false
+                  while IFS= read -r child_num; do
+                    [ -z "$child_num" ] && continue
+                    CHILD_STATUS="${ISSUE_STATUS[$child_num]:-}"
+                    [ -z "$CHILD_STATUS" ] && continue  # child not in this project, skip
+                    # Condition 1: parent Done but child not Done
+                    if [ "$STATUS" = "Done" ] && [ "$CHILD_STATUS" != "Done" ]; then
+                      MISMATCH=true
+                    fi
+                    # Condition 2: parent not Backlog/Next but child is Backlog
+                    if [ "$STATUS" != "Backlog" ] && [ "$STATUS" != "Next" ] && [ "$CHILD_STATUS" = "Backlog" ]; then
+                      MISMATCH=true
+                    fi
+                  done <<< "$SUB_NUMBERS"
+                  if [ "$MISMATCH" = "true" ]; then
+                    SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }CHILDREN_STATUS"
+                  fi
+                fi
+              fi
+
+              # Skip if nothing has changed; still write Alerts to reflect current validation results
               if [ "$STATUS"         = "$LAST_STATUS"         ] && \
                  [ "$PRIORITY"        = "$LAST_PRIORITY"        ] && \
                  [ "$ESTIMATE"        = "$LAST_ESTIMATE"        ] && \
@@ -112,6 +158,20 @@ jobs:
                  [ "$TIME_SPENT"      = "$LAST_TIME_SPENT"      ]; then
                 echo "  → No change detected. Skipping."
                 SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+                if [ -n "$SYNC_STATUS_FIELD_ID" ]; then
+                  echo "  → Alerts: ${SYNC_STATUS_CODES:-none}"
+                  gh api graphql -f query='
+                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: $projectId
+                        itemId: $itemId
+                        fieldId: $fieldId
+                        value: { text: $text }
+                      }) { projectV2Item { id } }
+                    }
+                  ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                    -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES"
+                fi
                 continue
               fi
 
@@ -164,15 +224,21 @@ jobs:
                   -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
                   "${JIRA_ISSUE_URL}")
 
-                if [ "$JIRA_GET_STATUS" -lt 200 ] || [ "$JIRA_GET_STATUS" -ge 300 ]; then
+                if [ "$JIRA_GET_STATUS" -eq 404 ]; then
+                  echo "  → Warning: JIRA issue $EXTERNAL_REF not found (HTTP 404). Skipping JIRA sync."
+                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_NOT_FOUND"
+                elif [ "$JIRA_GET_STATUS" -lt 200 ] || [ "$JIRA_GET_STATUS" -ge 300 ]; then
                   echo "  → Warning: Failed to fetch JIRA issue $EXTERNAL_REF (HTTP $JIRA_GET_STATUS). Skipping JIRA sync."
                   cat /tmp/jira_issue.json
+                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_SYNC_ERROR HTTP_${JIRA_GET_STATUS}"
                 else
-                  JIRA_HAS_LABEL=$(jq -r '[.fields.labels[]] | any(. == "gh-sync")' /tmp/jira_issue.json)
+                  EXPECTED_LABEL="gh-issue-${ISSUE_NUMBER}"
+                  JIRA_HAS_LABEL=$(jq -r --arg lbl "$EXPECTED_LABEL" '[.fields.labels[]] | any(. == $lbl)' /tmp/jira_issue.json)
 
                   if [ "$JIRA_HAS_LABEL" != "true" ]; then
                     JIRA_LABELS=$(jq -r '[.fields.labels[]] | join(", ")' /tmp/jira_issue.json)
-                    echo "  → Skipping JIRA sync: ticket $EXTERNAL_REF does not have the 'gh-sync' label (current labels: ${JIRA_LABELS:-none})."
+                    echo "  → Skipping JIRA sync: ticket $EXTERNAL_REF does not have the '${EXPECTED_LABEL}' label (current labels: ${JIRA_LABELS:-none})."
+                    SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_SYNC_NOT_ALLOWED"
                   else
                     echo "  → Syncing to JIRA ticket: $EXTERNAL_REF"
 
@@ -206,6 +272,7 @@ jobs:
                     else
                       echo "  → Warning: JIRA update failed for $EXTERNAL_REF (HTTP $HTTP_STATUS)"
                       cat /tmp/jira_resp.json
+                      SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_SYNC_ERROR HTTP_${HTTP_STATUS}"
                     fi
 
                     # Sync Time Spent:
@@ -293,6 +360,7 @@ jobs:
                           else
                             echo "  → Warning: Failed to log Time Spent worklog (HTTP $WL_STATUS)"
                             cat /tmp/jira_wl.json
+                            SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_SYNC_ERROR WORKLOG_HTTP_${WL_STATUS}"
                           fi
                         else
                           echo "  → Time Spent already up to date in JIRA (delta ≤ 0). Skipping."
@@ -306,7 +374,23 @@ jobs:
               echo "  → Done."
               UPDATED_COUNT=$((UPDATED_COUNT + 1))
 
-            done < <(echo "$response" | jq -c '.data.organization.projectV2.items.nodes[]')
+              # Write Alerts field (reflects validation violations and JIRA sync results)
+              if [ -n "$SYNC_STATUS_FIELD_ID" ]; then
+                echo "  → Sync Status: ${SYNC_STATUS_CODES:-none}"
+                gh api graphql -f query='
+                  mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: $projectId
+                      itemId: $itemId
+                      fieldId: $fieldId
+                      value: { text: $text }
+                    }) { projectV2Item { id } }
+                  }
+                ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                  -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES"
+              fi
+
+            done
           }
 
           # ---------------------------------------------------------------------------
@@ -349,7 +433,7 @@ jobs:
                       pageInfo { hasNextPage endCursor }
                       nodes {
                         id
-                        content { ... on Issue { number title } }
+                        content { ... on Issue { number title assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
                         fieldValues(first: 20) {
                           nodes {
                             ... on ProjectV2ItemFieldTextValue {
@@ -380,6 +464,7 @@ jobs:
             PROJECT_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.id')
             REPORTING_DATE_FIELD_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Date") | .id')
             REPORTING_LOG_FIELD_ID=$(echo "$PAGE_RESPONSE"  | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Log")  | .id')
+            SYNC_STATUS_FIELD_ID=$(echo "$PAGE_RESPONSE"    | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Alerts")         | .id')
 
             if [ -z "$REPORTING_DATE_FIELD_ID" ]; then
               echo "Error: 'Reporting Date' field not found in project $PROJECT_OWNER #$PROJECT_NUMBER. Skipping."
@@ -393,12 +478,13 @@ jobs:
             echo "Project ID             : $PROJECT_ID"
             echo "Reporting Date field ID: $REPORTING_DATE_FIELD_ID"
             echo "Reporting Log field ID : $REPORTING_LOG_FIELD_ID"
+            echo "Alerts field ID        : ${SYNC_STATUS_FIELD_ID:-not configured}"
 
-            UPDATED_COUNT=0
-            SKIPPED_COUNT=0
             PAGE=1
 
-            process_items "$PAGE_RESPONSE"
+            # Phase 1: collect all items across all pages into a temp file
+            ITEMS_FILE=$(mktemp)
+            echo "$PAGE_RESPONSE" | jq -c '.data.organization.projectV2.items.nodes[]' >> "$ITEMS_FILE"
 
             # Paginate through any remaining pages
             HAS_NEXT=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.items.pageInfo.hasNextPage')
@@ -417,7 +503,7 @@ jobs:
                         pageInfo { hasNextPage endCursor }
                         nodes {
                           id
-                          content { ... on Issue { number title } }
+                          content { ... on Issue { number title assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
                           fieldValues(first: 20) {
                             nodes {
                               ... on ProjectV2ItemFieldTextValue {
@@ -445,11 +531,26 @@ jobs:
                 }
               ' -f owner="$PROJECT_OWNER" -F number=$PROJECT_NUMBER -f cursor="$CURSOR")
 
-              process_items "$PAGE_RESPONSE"
+              echo "$PAGE_RESPONSE" | jq -c '.data.organization.projectV2.items.nodes[]' >> "$ITEMS_FILE"
 
               HAS_NEXT=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.items.pageInfo.hasNextPage')
               CURSOR=$(echo "$PAGE_RESPONSE"   | jq -r '.data.organization.projectV2.items.pageInfo.endCursor')
             done
+
+            # Phase 2: build issue→status map for CHILDREN_STATUS checks
+            unset ISSUE_STATUS
+            declare -A ISSUE_STATUS
+            while IFS= read -r item; do
+              num=$(echo "$item" | jq -r '.content.number // ""')
+              [ -z "$num" ] && continue
+              ISSUE_STATUS["$num"]=$(get_field "$item" "Status")
+            done < "$ITEMS_FILE"
+
+            # Phase 3: process all items
+            UPDATED_COUNT=0
+            SKIPPED_COUNT=0
+            process_items < "$ITEMS_FILE"
+            rm -f "$ITEMS_FILE"
 
             echo ""
             echo "Project summary: $UPDATED_COUNT item(s) updated, $SKIPPED_COUNT item(s) skipped (across $PAGE page(s))."
