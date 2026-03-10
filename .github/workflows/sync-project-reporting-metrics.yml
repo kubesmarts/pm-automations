@@ -8,7 +8,7 @@ name: Sync Project Reporting Metrics
 # ---------------------------------------------------------------------------
 on:
   schedule:
-    - cron: '0 */12 * * *'   # twice daily at 00:00 and 12:00 UTC
+    - cron: '0 0 * * *'   # once daily at 00:00 UTC
   workflow_dispatch:
 
 # Requires a PAT with 'project' and 'read:org' scopes stored as secret GH_TOKEN.

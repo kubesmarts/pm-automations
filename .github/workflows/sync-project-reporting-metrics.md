@@ -2,7 +2,7 @@
 
 ## What it does
 
-This is an **automation workflow** designed to facilitate **progress reporting and sync across multiple GitHub Projects**. It runs **twice daily at 00:00 and 12:00 UTC** and checks **all items across all configured projects**. For each item it compares the current values of the five tracked fields (**Status**, **Priority**, **Estimate**, **Remaining Work**, **Time Spent**) against the last entry in the item's **`Reporting Log`** field. If a change is detected (or the log is empty), the workflow:
+This is an **automation workflow** designed to facilitate **progress reporting and sync across multiple GitHub Projects**. It runs **once daily at 00:00 UTC** and checks **all items across all configured projects**. For each item it compares the current values of the five tracked fields (**Status**, **Priority**, **Estimate**, **Remaining Work**, **Time Spent**) against the last entry in the item's **`Reporting Log`** field. If a change is detected (or the log is empty), the workflow:
 
 1. Sets **`Reporting Date`** to today
 2. Prepends a new entry to **`Reporting Log`** in the format:
@@ -174,7 +174,7 @@ If `JIRA_API_TOKEN` is not set, the JIRA sync step is skipped silently.
 
 ---
 
-Once all steps are done, the workflow runs automatically twice daily (00:00 and 12:00 UTC) across all projects listed in `PROJECTS`.
+Once all steps are done, the workflow runs automatically once daily (00:00 UTC) across all projects listed in `PROJECTS`.
 
 ---
 
