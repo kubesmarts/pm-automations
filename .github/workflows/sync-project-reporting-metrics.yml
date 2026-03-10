@@ -70,7 +70,7 @@ jobs:
 
           # process_items reads one compact JSON item per line from stdin.
           # Reads PROJECT_ID, REPORTING_DATE_FIELD_ID, REPORTING_LOG_FIELD_ID, SYNC_STATUS_FIELD_ID,
-          # ISSUE_STATUS (associative array), TODAY from outer scope.
+          # EXTERNAL_REF_FIELD_ID, ISSUE_STATUS (associative array), TODAY from outer scope.
           # Updates UPDATED_COUNT and SKIPPED_COUNT in outer scope.
           process_items() {
             while IFS= read -r item; do
@@ -107,8 +107,78 @@ jobs:
               echo "  Current : $AREA, $STATUS, $PRIORITY, $ESTIMATE, $REMAINING_WORK, $TIME_SPENT"
               echo "  Last log: $LAST_AREA, $LAST_STATUS, $LAST_PRIORITY, $LAST_ESTIMATE, $LAST_REMAINING_WORK, $LAST_TIME_SPENT"
 
+              # Read External Reference early — needed both for CREATE handling and JIRA sync
+              EXTERNAL_REF=$(get_field "$item" "External Reference")
+
               # Compute Alerts codes (validation rules, always evaluated regardless of changes)
               SYNC_STATUS_CODES=""
+
+              # Handle JIRA ticket creation if External Reference is a CREATE directive.
+              # Pattern: "CREATE <projectKey> [<component>]"  e.g. "CREATE QUARKUS quarkus-flow"
+              # On success: EXTERNAL_REF is set to the new JIRA key and LAST_STATUS is cleared
+              #             to force the change-detected path so JIRA sync runs immediately.
+              # On failure: JIRA_CREATE_ERROR is added to Alerts and EXTERNAL_REF is cleared.
+              if echo "$EXTERNAL_REF" | grep -qE '^CREATE[[:space:]]+[A-Za-z0-9_]+'; then
+                CREATE_PROJECT_KEY=$(echo "$EXTERNAL_REF" | awk '{print $2}')
+                CREATE_COMPONENT=$(echo "$EXTERNAL_REF" | awk 'NF>2{$1=$2=""; sub(/^[[:space:]]+/,""); print}' | xargs)
+                echo "  → CREATE directive: project=$CREATE_PROJECT_KEY component=${CREATE_COMPONENT:-none}"
+                if [ -z "$ISSUE_NUMBER" ]; then
+                  echo "  → Cannot create JIRA ticket: item is not linked to a GH issue."
+                  SYNC_STATUS_CODES="JIRA_CREATE_ERROR NO_ISSUE"
+                  EXTERNAL_REF=""
+                elif [ -z "$EXTERNAL_REF_FIELD_ID" ]; then
+                  echo "  → Cannot create JIRA ticket: 'External Reference' field not configured in project."
+                  SYNC_STATUS_CODES="JIRA_CREATE_ERROR NO_EXT_REF_FIELD"
+                  EXTERNAL_REF=""
+                else
+                  GH_ISSUE_URL=$(echo "$item" | jq -r '.content.url // ""')
+                  JIRA_CREATE_PAYLOAD=$(jq -n \
+                    --arg project "$CREATE_PROJECT_KEY" \
+                    --arg summary "$ISSUE_TITLE" \
+                    --arg desc    "Details at $GH_ISSUE_URL" \
+                    --arg label   "gh-issue-${ISSUE_NUMBER}" \
+                    --arg comp    "$CREATE_COMPONENT" \
+                    '{
+                      fields: ({
+                        project:     {key: $project},
+                        summary:     $summary,
+                        description: $desc,
+                        issuetype:   {name: "Story"},
+                        labels:      [$label]
+                      } + (if $comp != "" then {components: [{name: $comp}]} else {} end))
+                    }')
+                  JIRA_CREATE_HTTP=$(curl -s -o /tmp/jira_create.json -w "%{http_code}" \
+                    -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                    -H "Content-Type: application/json" \
+                    -X POST \
+                    -d "$JIRA_CREATE_PAYLOAD" \
+                    "${JIRA_BASE_URL}/rest/api/2/issue")
+                  if [ "$JIRA_CREATE_HTTP" -ge 200 ] && [ "$JIRA_CREATE_HTTP" -lt 300 ]; then
+                    NEW_JIRA_KEY=$(jq -r '.key' /tmp/jira_create.json)
+                    echo "  → JIRA ticket $NEW_JIRA_KEY created (HTTP $JIRA_CREATE_HTTP)."
+                    gh api graphql -f query='
+                      mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                        updateProjectV2ItemFieldValue(input: {
+                          projectId: $projectId
+                          itemId: $itemId
+                          fieldId: $fieldId
+                          value: { text: $text }
+                        }) { projectV2Item { id } }
+                      }
+                    ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                      -f fieldId="$EXTERNAL_REF_FIELD_ID" -f text="$NEW_JIRA_KEY"
+                    echo "  → External Reference updated to $NEW_JIRA_KEY."
+                    EXTERNAL_REF="$NEW_JIRA_KEY"
+                    # Force the change-detected path so JIRA sync runs immediately after creation
+                    LAST_STATUS=""
+                  else
+                    echo "  → Warning: Failed to create JIRA ticket (HTTP $JIRA_CREATE_HTTP)"
+                    cat /tmp/jira_create.json
+                    SYNC_STATUS_CODES="JIRA_CREATE_ERROR HTTP_${JIRA_CREATE_HTTP}"
+                    EXTERNAL_REF=""
+                  fi
+                fi
+              fi
               if [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ -z "$ESTIMATE" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_ESTIMATE"
               fi
@@ -226,7 +296,6 @@ jobs:
                 -f fieldId="$REPORTING_LOG_FIELD_ID" -f text="$NEW_LOG"
 
               # Sync to JIRA if an External Reference is set
-              EXTERNAL_REF=$(get_field "$item" "External Reference")
               if [ -n "$EXTERNAL_REF" ]; then
                 JIRA_ISSUE_URL="${JIRA_BASE_URL}/rest/api/2/issue/${EXTERNAL_REF}"
 
@@ -459,7 +528,7 @@ jobs:
                       pageInfo { hasNextPage endCursor }
                       nodes {
                         id
-                        content { ... on Issue { number title assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
+                        content { ... on Issue { number title url assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
                         fieldValues(first: 20) {
                           nodes {
                             ... on ProjectV2ItemFieldTextValue {
@@ -490,7 +559,8 @@ jobs:
             PROJECT_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.id')
             REPORTING_DATE_FIELD_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Date") | .id')
             REPORTING_LOG_FIELD_ID=$(echo "$PAGE_RESPONSE"  | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Log")  | .id')
-            SYNC_STATUS_FIELD_ID=$(echo "$PAGE_RESPONSE"    | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Alerts")         | .id')
+            SYNC_STATUS_FIELD_ID=$(echo "$PAGE_RESPONSE"    | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Alerts")              | .id')
+            EXTERNAL_REF_FIELD_ID=$(echo "$PAGE_RESPONSE"  | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "External Reference") | .id')
 
             if [ -z "$REPORTING_DATE_FIELD_ID" ]; then
               echo "Error: 'Reporting Date' field not found in project $PROJECT_OWNER #$PROJECT_NUMBER. Skipping."
@@ -505,6 +575,7 @@ jobs:
             echo "Reporting Date field ID: $REPORTING_DATE_FIELD_ID"
             echo "Reporting Log field ID : $REPORTING_LOG_FIELD_ID"
             echo "Alerts field ID        : ${SYNC_STATUS_FIELD_ID:-not configured}"
+            echo "External Ref field ID  : ${EXTERNAL_REF_FIELD_ID:-not configured}"
 
             PAGE=1
 
@@ -529,7 +600,7 @@ jobs:
                         pageInfo { hasNextPage endCursor }
                         nodes {
                           id
-                          content { ... on Issue { number title assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
+                          content { ... on Issue { number title url assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
                           fieldValues(first: 20) {
                             nodes {
                               ... on ProjectV2ItemFieldTextValue {

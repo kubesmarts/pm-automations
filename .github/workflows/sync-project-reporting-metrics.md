@@ -31,7 +31,34 @@ In every GitHub Project you want to track, make sure the following fields exist 
 | `Remaining Work`     | Number        | Remaining effort in weeks                                                                 |
 | `Time Spent`         | Number        | Time already spent in weeks                                                               |
 | `Area`               | Single select | `Runtimes`, `Tooling`, `Cloud`, `CI`, `QE`, `Docs`. Synced to JIRA as `area/<value>` label. |
-| `External Reference` | Text          | Optional: JIRA ticket ID (e.g. `ISSUE-774`). When set, changes are synced to JIRA.    |
+| `External Reference` | Text          | JIRA ticket ID (e.g. `ISSUE-774`) for sync, **or** a `CREATE` directive (see below). |
+
+#### Auto-creating JIRA tickets via the `CREATE` directive
+
+Instead of a JIRA ticket ID, the `External Reference` field can hold a **CREATE directive** to automatically create a new JIRA ticket during the next workflow run:
+
+```
+CREATE <projectKey> [<component>]
+```
+
+| Example | Effect |
+|---------|--------|
+| `CREATE QUARKUS` | Creates a Story in the QUARKUS JIRA project |
+| `CREATE QUARKUS quarkus-flow` | Creates a Story in QUARKUS with component `quarkus-flow` |
+
+When the workflow detects this pattern it:
+
+1. Creates a JIRA Story with:
+   - **Summary** — same as the GH issue title
+   - **Description** — `Details at <GH issue URL>`
+   - **Label** — `gh-issue-<number>` (e.g. `gh-issue-3`)
+   - **Component** — as specified (omitted if not provided)
+2. Overwrites the `External Reference` field with the new JIRA key (e.g. `QUARKUS-42`)
+3. Immediately syncs all tracked fields (Priority, Area, Estimate, etc.) to the new ticket
+
+On subsequent runs the item is treated as a normal JIRA-synced issue. Requires the `JIRA_API_TOKEN` secret and `JIRA_BASE_URL` variable to be configured.
+
+---
 
 **Workflow-managed fields** — updated automatically, do not edit manually:
 
@@ -68,6 +95,9 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 | `JIRA_NOT_FOUND` | `External Reference` is set but the JIRA ticket returned HTTP 404 |
 | `JIRA_SYNC_NOT_ALLOWED` | The JIRA ticket exists but does not carry the `gh-issue-<number>` label |
 | `JIRA_SYNC_ERROR HTTP_<code>` | A JIRA API call failed with the given HTTP status code |
+| `JIRA_CREATE_ERROR HTTP_<code>` | A `CREATE` directive was detected but the JIRA ticket creation failed |
+| `JIRA_CREATE_ERROR NO_ISSUE` | A `CREATE` directive was detected but the item is not linked to a GH issue |
+| `JIRA_CREATE_ERROR NO_EXT_REF_FIELD` | A `CREATE` directive was detected but the `External Reference` field is not configured in the project |
 | `CHILDREN_STATUS` | Parent/child status inconsistency detected (see below) |
 
 **`CHILDREN_STATUS` rules** — only sub-issues that are also tracked in the same project are considered:
