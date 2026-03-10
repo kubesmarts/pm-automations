@@ -81,46 +81,55 @@ jobs:
               echo "Item $ITEM_ID${ISSUE_NUMBER:+ (GH #$ISSUE_NUMBER)}"
 
               STATUS=$(get_field         "$item" "Status")
+              STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
               PRIORITY=$(get_field       "$item" "Priority")
               ESTIMATE=$(get_field       "$item" "Estimate")
               REMAINING_WORK=$(get_field "$item" "Remaining Work")
               TIME_SPENT=$(get_field     "$item" "Time Spent")
+              AREA=$(get_field           "$item" "Area")
               REPORTING_LOG=$(get_field  "$item" "Reporting Log")
 
               # Parse tracked field values from the latest (first) entry in the log.
-              # Log format: ENTRY1 | ENTRY2 | ... where each entry is DATE, STATUS, PRIORITY, ESTIMATE, REMAINING_WORK, TIME_SPENT
+              # Log format: ENTRY1 | ENTRY2 | ... where each entry is DATE, AREA, STATUS, PRIORITY, ESTIMATE, REMAINING_WORK, TIME_SPENT
               if [ -z "$REPORTING_LOG" ]; then
-                LAST_STATUS="" LAST_PRIORITY="" LAST_ESTIMATE=""
+                LAST_AREA="" LAST_STATUS="" LAST_PRIORITY="" LAST_ESTIMATE=""
                 LAST_REMAINING_WORK="" LAST_TIME_SPENT=""
               else
                 LAST_ENTRY=$(echo "$REPORTING_LOG" | sed 's/ | /\n/g' | head -1)
-                LAST_STATUS=$(echo         "$LAST_ENTRY" | cut -d',' -f2 | xargs)
-                LAST_PRIORITY=$(echo       "$LAST_ENTRY" | cut -d',' -f3 | xargs)
-                LAST_ESTIMATE=$(echo       "$LAST_ENTRY" | cut -d',' -f4 | xargs)
-                LAST_REMAINING_WORK=$(echo "$LAST_ENTRY" | cut -d',' -f5 | xargs)
-                LAST_TIME_SPENT=$(echo     "$LAST_ENTRY" | cut -d',' -f6 | xargs)
+                LAST_AREA=$(echo           "$LAST_ENTRY" | cut -d',' -f2 | xargs)
+                LAST_STATUS=$(echo         "$LAST_ENTRY" | cut -d',' -f3 | xargs)
+                LAST_PRIORITY=$(echo       "$LAST_ENTRY" | cut -d',' -f4 | xargs)
+                LAST_ESTIMATE=$(echo       "$LAST_ENTRY" | cut -d',' -f5 | xargs)
+                LAST_REMAINING_WORK=$(echo "$LAST_ENTRY" | cut -d',' -f6 | xargs)
+                LAST_TIME_SPENT=$(echo     "$LAST_ENTRY" | cut -d',' -f7 | xargs)
               fi
 
-              echo "  Current : $STATUS, $PRIORITY, $ESTIMATE, $REMAINING_WORK, $TIME_SPENT"
-              echo "  Last log: $LAST_STATUS, $LAST_PRIORITY, $LAST_ESTIMATE, $LAST_REMAINING_WORK, $LAST_TIME_SPENT"
+              echo "  Current : $AREA, $STATUS, $PRIORITY, $ESTIMATE, $REMAINING_WORK, $TIME_SPENT"
+              echo "  Last log: $LAST_AREA, $LAST_STATUS, $LAST_PRIORITY, $LAST_ESTIMATE, $LAST_REMAINING_WORK, $LAST_TIME_SPENT"
 
               # Compute Alerts codes (validation rules, always evaluated regardless of changes)
               SYNC_STATUS_CODES=""
-              if [ -n "$STATUS" ] && [ "$STATUS" != "Backlog" ] && [ "$STATUS" != "Next" ] && [ -z "$ESTIMATE" ]; then
+              if [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ -z "$ESTIMATE" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_ESTIMATE"
               fi
-              if [ -n "$STATUS" ] && [ "$STATUS" != "Backlog" ] && [ "$STATUS" != "Next" ] && [ -z "$REMAINING_WORK" ]; then
+              if [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ -z "$REMAINING_WORK" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_REMAINING_WORK"
               fi
-              if [ "$STATUS" = "Done" ] && [ -z "$TIME_SPENT" ]; then
+              if [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ -z "$AREA" ]; then
+                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_AREA"
+              fi
+              if [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ -z "$PRIORITY" ]; then
+                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_PRIORITY"
+              fi
+              if [ "$STATUS_LC" = "done" ] && [ -z "$TIME_SPENT" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_TIME_SPENT"
               fi
-              if [ "$STATUS" = "Done" ] && [ -n "$REMAINING_WORK" ] && \
+              if [ "$STATUS_LC" = "done" ] && [ -n "$REMAINING_WORK" ] && \
                  [ "$(awk -v v="$REMAINING_WORK" 'BEGIN{print (v+0 > 0) ? "true" : "false"}')" = "true" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }REMAINING_WORK_NOT_ZERO"
               fi
               HAS_ASSIGNEE=$(echo "$item" | jq -r '(.content.assignees.nodes | length) > 0')
-              if { [ "$STATUS" = "In Progress" ] || [ "$STATUS" = "In Review" ] || [ "$STATUS" = "Done" ]; } && \
+              if { [ "$STATUS_LC" = "in progress" ] || [ "$STATUS_LC" = "in review" ] || [ "$STATUS_LC" = "done" ]; } && \
                  [ "$HAS_ASSIGNEE" != "true" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_ASSIGNEE"
               fi
@@ -135,12 +144,13 @@ jobs:
                     [ -z "$child_num" ] && continue
                     CHILD_STATUS="${ISSUE_STATUS[$child_num]:-}"
                     [ -z "$CHILD_STATUS" ] && continue  # child not in this project, skip
+                    CHILD_STATUS_LC=$(echo "$CHILD_STATUS" | tr '[:upper:]' '[:lower:]')
                     # Condition 1: parent Done but child not Done
-                    if [ "$STATUS" = "Done" ] && [ "$CHILD_STATUS" != "Done" ]; then
+                    if [ "$STATUS_LC" = "done" ] && [ "$CHILD_STATUS_LC" != "done" ]; then
                       MISMATCH=true
                     fi
                     # Condition 2: parent not Backlog/Next but child is Backlog
-                    if [ "$STATUS" != "Backlog" ] && [ "$STATUS" != "Next" ] && [ "$CHILD_STATUS" = "Backlog" ]; then
+                    if [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ "$CHILD_STATUS_LC" = "backlog" ]; then
                       MISMATCH=true
                     fi
                   done <<< "$SUB_NUMBERS"
@@ -151,7 +161,8 @@ jobs:
               fi
 
               # Skip if nothing has changed; still write Alerts to reflect current validation results
-              if [ "$STATUS"         = "$LAST_STATUS"         ] && \
+              if [ "$AREA"           = "$LAST_AREA"           ] && \
+                 [ "$STATUS"         = "$LAST_STATUS"         ] && \
                  [ "$PRIORITY"        = "$LAST_PRIORITY"        ] && \
                  [ "$ESTIMATE"        = "$LAST_ESTIMATE"        ] && \
                  [ "$REMAINING_WORK"  = "$LAST_REMAINING_WORK"  ] && \
@@ -177,8 +188,8 @@ jobs:
 
               echo "  → Change detected. Updating 'Reporting Date' and prepending to 'Reporting Log'."
 
-              # Build new entry: DATE, STATUS, PRIORITY, ESTIMATE, REMAINING_WORK, TIME_SPENT
-              NEW_ENTRY="${TODAY}, ${STATUS}, ${PRIORITY}, ${ESTIMATE}, ${REMAINING_WORK}, ${TIME_SPENT}"
+              # Build new entry: DATE, AREA, STATUS, PRIORITY, ESTIMATE, REMAINING_WORK, TIME_SPENT
+              NEW_ENTRY="${TODAY}, ${AREA}, ${STATUS}, ${PRIORITY}, ${ESTIMATE}, ${REMAINING_WORK}, ${TIME_SPENT}"
 
               # Prepend new entry and keep at most 5 entries total (discard oldest)
               if [ -z "$REPORTING_LOG" ]; then
@@ -246,17 +257,32 @@ jobs:
                     JIRA_ESTIMATE=$(weeks_to_jira "$ESTIMATE")
                     JIRA_REMAINING=$(weeks_to_jira "$REMAINING_WORK")
                     JIRA_TIME_SPENT=$(weeks_to_jira "$TIME_SPENT")
-                    echo "  → JIRA values: priority=$PRIORITY, estimate=$JIRA_ESTIMATE, remaining=$JIRA_REMAINING, timeSpent=$JIRA_TIME_SPENT"
 
-                    # Build update payload: priority + time tracking (estimate and remaining work)
+                    # Compute area label: lowercase area value prefixed with "area/", or empty string
+                    AREA_LABEL=""
+                    if [ -n "$AREA" ]; then
+                      AREA_LABEL="area/$(echo "$AREA" | tr '[:upper:]' '[:lower:]')"
+                    fi
+
+                    # Build new labels array: remove any existing area/* label, then add new one (if set)
+                    NEW_LABELS=$(jq -r --arg lbl "$AREA_LABEL" \
+                      '[.fields.labels[] | select(test("^area/") | not)] +
+                       (if $lbl != "" then [$lbl] else [] end)' \
+                      /tmp/jira_issue.json)
+
+                    echo "  → JIRA values: priority=$PRIORITY, estimate=$JIRA_ESTIMATE, remaining=$JIRA_REMAINING, timeSpent=$JIRA_TIME_SPENT, areaLabel=${AREA_LABEL:-none}"
+
+                    # Build update payload: priority + time tracking + area label
                     JIRA_PAYLOAD=$(jq -n \
                       --arg priority       "$PRIORITY" \
                       --arg estimate       "$JIRA_ESTIMATE" \
                       --arg remainingWork  "$JIRA_REMAINING" \
+                      --argjson labels     "$NEW_LABELS" \
                       '{
                         fields: {
                           priority:     {name: $priority},
-                          timetracking: {originalEstimate: $estimate, remainingEstimate: $remainingWork}
+                          timetracking: {originalEstimate: $estimate, remainingEstimate: $remainingWork},
+                          labels:       $labels
                         }
                       }')
 
@@ -376,7 +402,7 @@ jobs:
 
               # Write Alerts field (reflects validation violations and JIRA sync results)
               if [ -n "$SYNC_STATUS_FIELD_ID" ]; then
-                echo "  → Sync Status: ${SYNC_STATUS_CODES:-none}"
+                echo "  → Alerts: ${SYNC_STATUS_CODES:-none}"
                 gh api graphql -f query='
                   mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
                     updateProjectV2ItemFieldValue(input: {

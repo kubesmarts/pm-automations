@@ -7,7 +7,7 @@ This is an **automation workflow** designed to facilitate **progress reporting a
 1. Sets **`Reporting Date`** to today
 2. Prepends a new entry to **`Reporting Log`** in the format:
    ```
-   YYYY-MM-DD, Status, Priority, Estimate, Remaining Work, Time Spent
+   YYYY-MM-DD, Area, Status, Priority, Estimate, Remaining Work, Time Spent
    ```
 3. (Optional) Syncs **Priority**, **Estimate**, **Remaining Work**, and **Time Spent** to the linked JIRA ticket
 
@@ -30,6 +30,7 @@ In every GitHub Project you want to track, make sure the following fields exist 
 | `Estimate`           | Number        | Estimated effort in weeks (e.g. `2` = 2 weeks, `0.4` = 2 days, `0.1` = 4 hours)         |
 | `Remaining Work`     | Number        | Remaining effort in weeks                                                                 |
 | `Time Spent`         | Number        | Time already spent in weeks                                                               |
+| `Area`               | Single select | `Runtimes`, `Tooling`, `Cloud`, `CI`, `QE`, `Docs`. Synced to JIRA as `area/<value>` label. |
 | `External Reference` | Text          | Optional: JIRA ticket ID (e.g. `ISSUE-774`). When set, changes are synced to JIRA.    |
 
 **Workflow-managed fields** — updated automatically, do not edit manually:
@@ -43,12 +44,12 @@ In every GitHub Project you want to track, make sure the following fields exist 
 **Reporting Log entry format** — entries are separated by ` | `, ordered **newest first**:
 
 ```
-DATE, Status, Priority, Estimate, Remaining Work, Time Spent
+DATE, Area, Status, Priority, Estimate, Remaining Work, Time Spent
 ```
 
 Example (newest → oldest, max 5 entries):
 ```
-2026-03-03, In Progress, High, 8, 5, 3 | 2026-03-01, Backlog, High, 8, 8, 0
+2026-03-10, CI, In Progress, High, 8, 5, 3 | 2026-03-01, CI, Backlog, High, 8, 8, 0
 ```
 
 #### Alerts codes
@@ -59,6 +60,8 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 |------|----------|
 | `NO_ESTIMATE` | `Estimate` is empty and the item's `Status` is neither `Backlog` nor `Next` |
 | `NO_REMAINING_WORK` | `Remaining Work` is empty and `Status` is neither `Backlog` nor `Next` |
+| `NO_AREA` | `Area` is empty and `Status` is not `Backlog` |
+| `NO_PRIORITY` | `Priority` is empty and `Status` is not `Backlog` |
 | `NO_TIME_SPENT` | `Time Spent` is empty and `Status` is `Done` |
 | `REMAINING_WORK_NOT_ZERO` | `Remaining Work` is set and greater than zero when `Status` is `Done` |
 | `NO_ASSIGNEE` | Issue has no assignee and `Status` is `In Progress`, `In Review`, or `Done` |
@@ -135,6 +138,7 @@ When `External Reference` is set on a project item (e.g. `ISSUE-774`), the workf
 When this condition passes, the workflow will:
 - Update **Priority** and **time tracking** (Estimate → original estimate, Remaining Work → remaining estimate) on the JIRA ticket at `<JIRA_BASE_URL>/browse/<External Reference>`
 - Keep **Time Spent** in sync: first sync logs a `Copied time spent from GH #<issue>` worklog; subsequent increases log an `Increased time spent from GH #<issue>` worklog
+- Keep the **`area/*` label** in sync with the GH `Area` field: removes any existing `area/*` label and adds `area/<value>` (lowercase, e.g. `area/runtimes`, `area/ci`). If `Area` is empty, any existing `area/*` label is removed and none is added.
 
 If `JIRA_API_TOKEN` is not set, the JIRA sync step is skipped silently.
 
@@ -176,7 +180,7 @@ For JIRA sync testing also:
    - A per-project summary and a grand total at the end
 5. **Verify the project item**:
    - `Reporting Date` is set to today
-   - `Reporting Log` has a new entry prepended (`YYYY-MM-DD, Status, Priority, Estimate, Remaining Work, Time Spent`), max 5 entries total separated by ` | `
+   - `Reporting Log` has a new entry prepended (`YYYY-MM-DD, Area, Status, Priority, Estimate, Remaining Work, Time Spent`), max 5 entries total separated by ` | `
    - `Alerts` (if the field exists) is empty when all validation rules pass, or contains one or more codes (e.g. `NO_ESTIMATE`) when a rule is violated
 6. **Verify JIRA sync (if configured)** on the linked ticket:
    - The Actions log shows `Syncing to JIRA ticket: <id>` (confirming the `gh-issue-<number>` label is present)
@@ -200,6 +204,8 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **Project in a different org not processed** → the PAT owner must be a member of that org; for SAML SSO orgs the PAT must be authorized via **GitHub → Settings → Personal access tokens → Configure SSO → Authorize**
 - **`Alerts` field not updated** → the field name must be exactly `Alerts` (case-sensitive) and its type must be Text; if absent, the field is silently skipped and a note appears in the Actions log (`not configured`)
 - **`Alerts` shows `NO_ESTIMATE` or `NO_REMAINING_WORK`** → set the missing field on the project item, or move the item back to `Backlog` / `Next` status if estimation is not yet applicable
+- **`Alerts` shows `NO_AREA`** → set the `Area` field on the project item, or move it back to `Backlog` if area classification is not yet applicable
+- **`Alerts` shows `NO_PRIORITY`** → set the `Priority` field on the project item, or move it back to `Backlog` if prioritization is not yet applicable
 - **`Alerts` shows `NO_TIME_SPENT`** → the item is `Done` but `Time Spent` is empty; log the actual time spent
 - **`Alerts` shows `REMAINING_WORK_NOT_ZERO`** → the item is `Done` but `Remaining Work` is still greater than zero; set it to `0`
 - **`Alerts` shows `NO_ASSIGNEE`** → the item is `In Progress`, `In Review`, or `Done` but has no assignee; assign it to the responsible person
