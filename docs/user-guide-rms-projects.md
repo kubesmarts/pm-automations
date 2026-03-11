@@ -152,7 +152,7 @@ The `Alerts` field is updated on every workflow run. An empty value means everyt
 | `NO_AREA` | `Area` is empty and the issue is past `Backlog` | Set the `Area` field |
 | `NO_PRIORITY` | `Priority` is empty and the issue is past `Backlog` | Set the `Priority` field |
 | `NO_ESTIMATE` | `Estimate` is empty and status is past `Next` | Set the `Estimate` field |
-| `NO_REMAINING_WORK` | `Remaining Work` is empty and status is past `Next` | Set the `Remaining Work` field |
+| `NO_REMAINING_WORK` | `Remaining Work` is empty and status is `In Progress` or `In Review` | Set the `Remaining Work` field |
 | `NO_TIME_SPENT` | `Time Spent` is empty and status is `Done` | Enter the total time spent |
 | `NO_ASSIGNEE` | No assignee on the GH issue and status is `In Progress`, `In Review`, or `Done` | Assign the issue to the responsible person |
 | `CHILDREN_STATUS` | Parent/child status mismatch detected (see below) | Align child statuses with the parent |

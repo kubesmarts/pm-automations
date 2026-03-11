@@ -86,7 +86,7 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 | Code | When set |
 |------|----------|
 | `NO_ESTIMATE` | `Estimate` is empty and the item's `Status` is neither `Backlog` nor `Next` |
-| `NO_REMAINING_WORK` | `Remaining Work` is empty and `Status` is neither `Backlog` nor `Next` |
+| `NO_REMAINING_WORK` | `Remaining Work` is empty and `Status` is `In Progress` or `In Review` (not raised for `Done` — field is auto-cleared) |
 | `NO_AREA` | `Area` is empty and `Status` is not `Backlog` |
 | `NO_PRIORITY` | `Priority` is empty and `Status` is not `Backlog` |
 | `NO_TIME_SPENT` | `Time Spent` is empty and `Status` is `Done` |

@@ -187,7 +187,7 @@ jobs:
               if [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ -z "$ESTIMATE" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_ESTIMATE"
               fi
-              if [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ -z "$REMAINING_WORK" ]; then
+              if [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ "$STATUS_LC" != "done" ] && [ -z "$REMAINING_WORK" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_REMAINING_WORK"
               fi
               if [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ -z "$AREA" ]; then
@@ -342,6 +342,8 @@ jobs:
                     # Convert GH week-based values to JIRA time format (e.g. 2→"2w", 0.4→"2d", 0.1→"4h")
                     JIRA_ESTIMATE=$(weeks_to_jira "$ESTIMATE")
                     JIRA_REMAINING=$(weeks_to_jira "$REMAINING_WORK")
+                    # Done items always have empty Remaining Work; explicitly zero out JIRA's estimate
+                    [ "$STATUS_LC" = "done" ] && [ -z "$JIRA_REMAINING" ] && JIRA_REMAINING="0h"
                     JIRA_TIME_SPENT=$(weeks_to_jira "$TIME_SPENT")
 
                     # Compute area label: lowercase area value prefixed with "area/", or empty string
