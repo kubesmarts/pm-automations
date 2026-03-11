@@ -28,6 +28,9 @@ jobs:
         run: |
           set -e
 
+          # Clean up JIRA temp files on exit (covers normal completion and errors)
+          trap 'rm -f /tmp/jira_create.json /tmp/jira_issue.json /tmp/jira_resp.json /tmp/jira_wl_list.json /tmp/jira_wl.json' EXIT
+
           TODAY=$(date -u +%Y-%m-%d)
 
           # Convert a GH numeric value (in weeks) to JIRA time format.
@@ -79,6 +82,7 @@ jobs:
               ISSUE_TITLE=$(echo "$item" | jq -r '.content.title // ""')
               echo ""
               echo "Item $ITEM_ID${ISSUE_NUMBER:+ (GH #$ISSUE_NUMBER)}"
+              [ -z "$ISSUE_NUMBER" ] && echo "  (draft item — no linked GH issue)"
 
               STATUS=$(get_field         "$item" "Status")
               STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
@@ -147,12 +151,13 @@ jobs:
                         labels:      [$label]
                       } + (if $comp != "" then {components: [{name: $comp}]} else {} end))
                     }')
-                  JIRA_CREATE_HTTP=$(curl -s -o /tmp/jira_create.json -w "%{http_code}" \
+                  JIRA_CREATE_HTTP=$(curl -s --max-time 30 -o /tmp/jira_create.json -w "%{http_code}" \
                     -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
                     -H "Content-Type: application/json" \
                     -X POST \
                     -d "$JIRA_CREATE_PAYLOAD" \
                     "${JIRA_BASE_URL}/rest/api/2/issue")
+                  JIRA_CREATE_HTTP="${JIRA_CREATE_HTTP:-000}"
                   if [ "$JIRA_CREATE_HTTP" -ge 200 ] && [ "$JIRA_CREATE_HTTP" -lt 300 ]; then
                     NEW_JIRA_KEY=$(jq -r '.key' /tmp/jira_create.json)
                     echo "  → JIRA ticket $NEW_JIRA_KEY created (HTTP $JIRA_CREATE_HTTP)."
@@ -173,7 +178,7 @@ jobs:
                     LAST_STATUS=""
                   else
                     echo "  → Warning: Failed to create JIRA ticket (HTTP $JIRA_CREATE_HTTP)"
-                    cat /tmp/jira_create.json
+                    echo "  → JIRA error response:" && cat /tmp/jira_create.json
                     SYNC_STATUS_CODES="JIRA_CREATE_ERROR HTTP_${JIRA_CREATE_HTTP}"
                     EXTERNAL_REF=""
                   fi
@@ -300,16 +305,17 @@ jobs:
                 JIRA_ISSUE_URL="${JIRA_BASE_URL}/rest/api/2/issue/${EXTERNAL_REF}"
 
                 # Fetch JIRA issue upfront to verify sync conditions before making any changes
-                JIRA_GET_STATUS=$(curl -s -o /tmp/jira_issue.json -w "%{http_code}" \
+                JIRA_GET_STATUS=$(curl -s --max-time 30 -o /tmp/jira_issue.json -w "%{http_code}" \
                   -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
                   "${JIRA_ISSUE_URL}")
+                JIRA_GET_STATUS="${JIRA_GET_STATUS:-000}"
 
                 if [ "$JIRA_GET_STATUS" -eq 404 ]; then
                   echo "  → Warning: JIRA issue $EXTERNAL_REF not found (HTTP 404). Skipping JIRA sync."
                   SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_NOT_FOUND"
                 elif [ "$JIRA_GET_STATUS" -lt 200 ] || [ "$JIRA_GET_STATUS" -ge 300 ]; then
                   echo "  → Warning: Failed to fetch JIRA issue $EXTERNAL_REF (HTTP $JIRA_GET_STATUS). Skipping JIRA sync."
-                  cat /tmp/jira_issue.json
+                  echo "  → JIRA error response:" && cat /tmp/jira_issue.json
                   SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_SYNC_ERROR HTTP_${JIRA_GET_STATUS}"
                 else
                   EXPECTED_LABEL="gh-issue-${ISSUE_NUMBER}"
@@ -355,18 +361,19 @@ jobs:
                         }
                       }')
 
-                    HTTP_STATUS=$(curl -s -o /tmp/jira_resp.json -w "%{http_code}" \
+                    HTTP_STATUS=$(curl -s --max-time 30 -o /tmp/jira_resp.json -w "%{http_code}" \
                       -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
                       -X PUT \
                       -H "Content-Type: application/json" \
                       -d "$JIRA_PAYLOAD" \
                       "$JIRA_ISSUE_URL")
+                    HTTP_STATUS="${HTTP_STATUS:-000}"
 
                     if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
                       echo "  → JIRA $EXTERNAL_REF updated (HTTP $HTTP_STATUS)"
                     else
                       echo "  → Warning: JIRA update failed for $EXTERNAL_REF (HTTP $HTTP_STATUS)"
-                      cat /tmp/jira_resp.json
+                      echo "  → JIRA error response:" && cat /tmp/jira_resp.json
                       SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_SYNC_ERROR HTTP_${HTTP_STATUS}"
                     fi
 
@@ -388,9 +395,10 @@ jobs:
 
                       # Step 1: look for the managed worklog (identified by the copy comment or the legacy
                       # comment from earlier workflow versions) and try to update it in place.
-                      WL_LIST_STATUS=$(curl -s -o /tmp/jira_wl_list.json -w "%{http_code}" \
+                      WL_LIST_STATUS=$(curl -s --max-time 30 -o /tmp/jira_wl_list.json -w "%{http_code}" \
                         -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
                         "${JIRA_ISSUE_URL}/worklog")
+                      WL_LIST_STATUS="${WL_LIST_STATUS:-000}"
                       echo "  → GET worklogs HTTP $WL_LIST_STATUS"
 
                       if [ "$WL_LIST_STATUS" -ge 200 ] && [ "$WL_LIST_STATUS" -lt 300 ]; then
@@ -401,12 +409,13 @@ jobs:
                         if [ -n "$MANAGED_WL_ID" ]; then
                           WL_PAYLOAD=$(jq -n --arg ts "$JIRA_TIME_SPENT" --arg c "$WL_COPY_COMMENT" \
                             '{timeSpent: $ts, comment: $c}')
-                          WL_STATUS=$(curl -s -o /tmp/jira_wl.json -w "%{http_code}" \
+                          WL_STATUS=$(curl -s --max-time 30 -o /tmp/jira_wl.json -w "%{http_code}" \
                             -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
                             -X PUT \
                             -H "Content-Type: application/json" \
                             -d "$WL_PAYLOAD" \
                             "${JIRA_ISSUE_URL}/worklog/${MANAGED_WL_ID}?adjustEstimate=leave")
+                          WL_STATUS="${WL_STATUS:-000}"
                           if [ "$WL_STATUS" -ge 200 ] && [ "$WL_STATUS" -lt 300 ]; then
                             echo "  → Time Spent updated to $JIRA_TIME_SPENT on managed worklog $MANAGED_WL_ID (HTTP $WL_STATUS)."
                             TIME_SPENT_SYNCED=true
@@ -444,17 +453,18 @@ jobs:
                           echo "  → Logging worklog: $DELTA_JIRA ($WL_COMMENT)"
                           WL_PAYLOAD=$(jq -n --arg ts "$DELTA_JIRA" --arg c "$WL_COMMENT" \
                             '{timeSpent: $ts, comment: $c}')
-                          WL_STATUS=$(curl -s -o /tmp/jira_wl.json -w "%{http_code}" \
+                          WL_STATUS=$(curl -s --max-time 30 -o /tmp/jira_wl.json -w "%{http_code}" \
                             -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
                             -X POST \
                             -H "Content-Type: application/json" \
                             -d "$WL_PAYLOAD" \
                             "${JIRA_ISSUE_URL}/worklog?adjustEstimate=leave")
+                          WL_STATUS="${WL_STATUS:-000}"
                           if [ "$WL_STATUS" -ge 200 ] && [ "$WL_STATUS" -lt 300 ]; then
                             echo "  → $DELTA_JIRA logged (HTTP $WL_STATUS). JIRA total now ~${JIRA_TIME_SPENT}."
                           else
                             echo "  → Warning: Failed to log Time Spent worklog (HTTP $WL_STATUS)"
-                            cat /tmp/jira_wl.json
+                            echo "  → JIRA error response:" && cat /tmp/jira_wl.json
                             SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_SYNC_ERROR WORKLOG_HTTP_${WL_STATUS}"
                           fi
                         else
@@ -556,7 +566,20 @@ jobs:
               }
             ' -f owner="$PROJECT_OWNER" -F number=$PROJECT_NUMBER)
 
-            PROJECT_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.id')
+            # Check for GraphQL-level errors (HTTP 200 but with error payload)
+            GRAPHQL_ERRORS=$(echo "$PAGE_RESPONSE" | jq -r '.errors // empty')
+            if [ -n "$GRAPHQL_ERRORS" ]; then
+              echo "Error: GraphQL query failed for $PROJECT_OWNER #$PROJECT_NUMBER:"
+              echo "$GRAPHQL_ERRORS"
+              continue
+            fi
+
+            PROJECT_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.id // ""')
+            if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
+              echo "Error: Could not resolve project ID for $PROJECT_OWNER #$PROJECT_NUMBER. Check org name and project number. Skipping."
+              continue
+            fi
+
             REPORTING_DATE_FIELD_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Date") | .id')
             REPORTING_LOG_FIELD_ID=$(echo "$PAGE_RESPONSE"  | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Log")  | .id')
             SYNC_STATUS_FIELD_ID=$(echo "$PAGE_RESPONSE"    | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Alerts")              | .id')
@@ -569,6 +592,12 @@ jobs:
             if [ -z "$REPORTING_LOG_FIELD_ID" ]; then
               echo "Error: 'Reporting Log' field not found in project $PROJECT_OWNER #$PROJECT_NUMBER. Skipping."
               continue
+            fi
+
+            # Warn if the fields limit may have been hit (silently truncates fields beyond 30)
+            FIELD_COUNT=$(echo "$PAGE_RESPONSE" | jq '.data.organization.projectV2.fields.nodes | length')
+            if [ "$FIELD_COUNT" -ge 30 ]; then
+              echo "Warning: Project returned $FIELD_COUNT fields (query limit: 30). If required fields are missing above, increase the fields(first:) limit in the workflow."
             fi
 
             echo "Project ID             : $PROJECT_ID"
@@ -627,6 +656,13 @@ jobs:
                   }
                 }
               ' -f owner="$PROJECT_OWNER" -F number=$PROJECT_NUMBER -f cursor="$CURSOR")
+
+              GRAPHQL_ERRORS=$(echo "$PAGE_RESPONSE" | jq -r '.errors // empty')
+              if [ -n "$GRAPHQL_ERRORS" ]; then
+                echo "Error: GraphQL pagination query failed on page $PAGE:"
+                echo "$GRAPHQL_ERRORS"
+                break
+              fi
 
               echo "$PAGE_RESPONSE" | jq -c '.data.organization.projectV2.items.nodes[]' >> "$ITEMS_FILE"
 
