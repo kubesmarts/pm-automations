@@ -202,6 +202,24 @@ jobs:
               if [ "$STATUS_LC" = "done" ] && [ -n "$REMAINING_WORK" ] && \
                  [ "$(awk -v v="$REMAINING_WORK" 'BEGIN{print (v+0 > 0) ? "true" : "false"}')" = "true" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }REMAINING_WORK_NOT_ZERO"
+                # Auto-clear the field so it doesn't persist across runs.
+                # The alert above still fires this run as a signal; on the next run the
+                # field will be empty so the alert will not fire (unless someone sets it again).
+                if [ -n "$REMAINING_WORK_FIELD_ID" ]; then
+                  gh api graphql -f query='
+                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!) {
+                      clearProjectV2ItemFieldValue(input: {
+                        projectId: $projectId
+                        itemId: $itemId
+                        fieldId: $fieldId
+                      }) { projectV2Item { id } }
+                    }
+                  ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                    -f fieldId="$REMAINING_WORK_FIELD_ID"
+                  echo "  → Remaining Work auto-cleared (issue is Done)."
+                  # Update local value so the change is reflected in the log entry
+                  REMAINING_WORK=""
+                fi
               fi
               HAS_ASSIGNEE=$(echo "$item" | jq -r '(.content.assignees.nodes | length) > 0')
               if { [ "$STATUS_LC" = "in progress" ] || [ "$STATUS_LC" = "in review" ] || [ "$STATUS_LC" = "done" ]; } && \
@@ -580,10 +598,11 @@ jobs:
               continue
             fi
 
-            REPORTING_DATE_FIELD_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Date") | .id')
-            REPORTING_LOG_FIELD_ID=$(echo "$PAGE_RESPONSE"  | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Log")  | .id')
-            SYNC_STATUS_FIELD_ID=$(echo "$PAGE_RESPONSE"    | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Alerts")              | .id')
+            REPORTING_DATE_FIELD_ID=$(echo "$PAGE_RESPONSE"  | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Date")    | .id')
+            REPORTING_LOG_FIELD_ID=$(echo "$PAGE_RESPONSE"  | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Reporting Log")     | .id')
+            SYNC_STATUS_FIELD_ID=$(echo "$PAGE_RESPONSE"    | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Alerts")             | .id')
             EXTERNAL_REF_FIELD_ID=$(echo "$PAGE_RESPONSE"  | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "External Reference") | .id')
+            REMAINING_WORK_FIELD_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Remaining Work")     | .id')
 
             if [ -z "$REPORTING_DATE_FIELD_ID" ]; then
               echo "Error: 'Reporting Date' field not found in project $PROJECT_OWNER #$PROJECT_NUMBER. Skipping."
@@ -605,6 +624,7 @@ jobs:
             echo "Reporting Log field ID : $REPORTING_LOG_FIELD_ID"
             echo "Alerts field ID        : ${SYNC_STATUS_FIELD_ID:-not configured}"
             echo "External Ref field ID  : ${EXTERNAL_REF_FIELD_ID:-not configured}"
+            echo "Remaining Work field ID: ${REMAINING_WORK_FIELD_ID:-not configured}"
 
             PAGE=1
 
