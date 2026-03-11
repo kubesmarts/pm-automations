@@ -12,7 +12,7 @@ A collection of project management automations for GitHub Projects, covering pro
 
 | Guide | Description |
 |-------|-------------|
-| [RMS Projects User Guide](docs/user-guide-rms-projects.md) | How to work with GitHub Projects that use the reporting metrics structure: issue lifecycle, field requirements, alerts, and JIRA integration |
+| [Projects User Guide](docs/user-guide-rms-projects.md) | How to work with GitHub Projects that use the reporting metrics structure: issue lifecycle, field requirements, alerts, and JIRA integration |
 
 ## Adding new automations
 

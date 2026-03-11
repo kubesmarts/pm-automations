@@ -104,11 +104,11 @@ The issue is complete. Before closing it:
 | `Area` | **Yes** | Alerts: `NO_AREA` |
 | `Priority` | **Yes** | Alerts: `NO_PRIORITY` |
 | `Estimate` | **Yes** | Alerts: `NO_ESTIMATE` |
-| `Remaining Work` | **Must be `0`** | Alerts: `REMAINING_WORK_NOT_ZERO` if > 0 |
+| `Remaining Work` | **Auto-cleared** | The workflow sets this to empty automatically when the issue reaches `Done` |
 | `Time Spent` | **Yes** | Alerts: `NO_TIME_SPENT` |
 | Assignee | **Yes** | Alerts: `NO_ASSIGNEE` |
 
-Set `Remaining Work` to `0` and fill in the total `Time Spent` before or when you move the issue to `Done`.
+Fill in the total `Time Spent` before or when you move the issue to `Done`. `Remaining Work` is cleared automatically by the workflow.
 
 ---
 
@@ -119,7 +119,7 @@ Set `Remaining Work` to `0` and fill in the total `Time Spent` before or when yo
 | Area | — | Required | Required | Required | Required |
 | Priority | — | Required | Required | Required | Required |
 | Estimate | — | Recommended | Required | Required | Required |
-| Remaining Work | — | Recommended | Required | Required | Must be `0` |
+| Remaining Work | — | Recommended | Required | Required | Auto-cleared |
 | Time Spent | — | — | Update often | Update often | Required |
 | Assignee | — | — | Required | Required | Required |
 
@@ -154,7 +154,6 @@ The `Alerts` field is updated on every workflow run. An empty value means everyt
 | `NO_ESTIMATE` | `Estimate` is empty and status is past `Next` | Set the `Estimate` field |
 | `NO_REMAINING_WORK` | `Remaining Work` is empty and status is past `Next` | Set the `Remaining Work` field |
 | `NO_TIME_SPENT` | `Time Spent` is empty and status is `Done` | Enter the total time spent |
-| `REMAINING_WORK_NOT_ZERO` | `Remaining Work` is greater than 0 and status is `Done` | Set `Remaining Work` to `0` |
 | `NO_ASSIGNEE` | No assignee on the GH issue and status is `In Progress`, `In Review`, or `Done` | Assign the issue to the responsible person |
 | `CHILDREN_STATUS` | Parent/child status mismatch detected (see below) | Align child statuses with the parent |
 | `JIRA_NOT_FOUND` | `External Reference` points to a JIRA ticket that doesn't exist | Verify or correct the JIRA key |

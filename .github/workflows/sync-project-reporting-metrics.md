@@ -90,7 +90,6 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 | `NO_AREA` | `Area` is empty and `Status` is not `Backlog` |
 | `NO_PRIORITY` | `Priority` is empty and `Status` is not `Backlog` |
 | `NO_TIME_SPENT` | `Time Spent` is empty and `Status` is `Done` |
-| `REMAINING_WORK_NOT_ZERO` | `Remaining Work` is set and greater than zero when `Status` is `Done` |
 | `NO_ASSIGNEE` | Issue has no assignee and `Status` is `In Progress`, `In Review`, or `Done` |
 | `JIRA_NOT_FOUND` | `External Reference` is set but the JIRA ticket returned HTTP 404 |
 | `JIRA_SYNC_NOT_ALLOWED` | The JIRA ticket exists but does not carry the `gh-issue-<number>` label |
@@ -237,7 +236,6 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **`Alerts` shows `NO_AREA`** → set the `Area` field on the project item, or move it back to `Backlog` if area classification is not yet applicable
 - **`Alerts` shows `NO_PRIORITY`** → set the `Priority` field on the project item, or move it back to `Backlog` if prioritization is not yet applicable
 - **`Alerts` shows `NO_TIME_SPENT`** → the item is `Done` but `Time Spent` is empty; log the actual time spent
-- **`Alerts` shows `REMAINING_WORK_NOT_ZERO`** → the item is `Done` but `Remaining Work` is still greater than zero; set it to `0`
 - **`Alerts` shows `NO_ASSIGNEE`** → the item is `In Progress`, `In Review`, or `Done` but has no assignee; assign it to the responsible person
 - **`Alerts` shows `JIRA_NOT_FOUND`** → the ticket ID in `External Reference` does not exist or is not accessible with the provided credentials
 - **`Alerts` shows `JIRA_SYNC_NOT_ALLOWED`** → the JIRA ticket exists but lacks the `gh-issue-<number>` label; add it (e.g. `gh-issue-3`) to the JIRA ticket to opt it in to syncing
