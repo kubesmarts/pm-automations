@@ -78,11 +78,17 @@ jobs:
           process_items() {
             while IFS= read -r item; do
               ITEM_ID=$(echo "$item" | jq -r '.id')
+              IS_ARCHIVED=$(echo "$item" | jq -r '.isArchived')
               ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
               ISSUE_TITLE=$(echo "$item" | jq -r '.content.title // ""')
               echo ""
               echo "Item $ITEM_ID${ISSUE_NUMBER:+ (GH #$ISSUE_NUMBER)}"
               [ -z "$ISSUE_NUMBER" ] && echo "  (draft item — no linked GH issue)"
+              if [ "$IS_ARCHIVED" = "true" ]; then
+                echo "  → Skipping: item is archived."
+                SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+                continue
+              fi
 
               STATUS=$(get_field         "$item" "Status")
               STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
@@ -551,6 +557,7 @@ jobs:
                       pageInfo { hasNextPage endCursor }
                       nodes {
                         id
+                        isArchived
                         content { ... on Issue { number title url assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
                         fieldValues(first: 20) {
                           nodes {
@@ -644,6 +651,7 @@ jobs:
                         pageInfo { hasNextPage endCursor }
                         nodes {
                           id
+                          isArchived
                           content { ... on Issue { number title url assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
                           fieldValues(first: 20) {
                             nodes {
