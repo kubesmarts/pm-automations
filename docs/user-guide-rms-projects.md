@@ -257,7 +257,7 @@ Sub-issues that are **not** in the project are ignored.
 
 ## Multi-project support
 
-The workflow is not tied to a single project. It is configured with a list of projects via the `PROJECTS` variable (format: `org:project_number`, space-separated):
+The workflow is not tied to a single project. It is configured with a list of projects via the `PSYNC_PROJECTS` variable (format: `org:project_number`, space-separated):
 
 ```
 kubesmarts:1 kubesmarts:2 another-org:5
@@ -268,7 +268,7 @@ kubesmarts:1 kubesmarts:2 another-org:5
 To onboard a new project:
 
 1. Add the required fields to the project (see field list above).
-2. Add the project to the `PROJECTS` variable in the format `<org>:<project-number>`.
+2. Add the project to the `PSYNC_PROJECTS` variable in the format `<org>:<project-number>`.
 3. The next scheduled run will automatically include it.
 
 The project number is the integer visible in the project URL:

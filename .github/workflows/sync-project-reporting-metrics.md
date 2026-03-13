@@ -57,7 +57,7 @@ When the workflow detects this pattern it:
 2. Overwrites the `External Reference` field with the new JIRA key (e.g. `QUARKUS-42`)
 3. Immediately syncs all tracked fields (Priority, Area, Estimate, etc.) to the new ticket
 
-On subsequent runs the item is treated as a normal JIRA-synced issue. Requires the `JIRA_API_TOKEN` secret and `JIRA_BASE_URL` variable to be configured.
+On subsequent runs the item is treated as a normal JIRA-synced issue. Requires the `PSYNC_PAT_JIRA` secret and `PSYNC_JIRA_BASE_URL` variable to be configured.
 
 ---
 
@@ -128,7 +128,7 @@ The same PAT can access projects across multiple organizations as long as the to
 
 1. Go to **`Repository` → Settings → Secrets and variables → Actions**
 2. Click **"New repository secret"**
-3. Set **Name** to `GH_TOKEN` and paste the token as the **Secret**
+3. Set **Name** to `PSYNC_PAT_GH` and paste the token as the **Secret**
 4. Click **"Add secret"**
 
 ### 4. Configure repository variables
@@ -140,10 +140,10 @@ The workflow reads its project list and JIRA host from **GitHub Actions Variable
 
 | Variable name   | Example value               | Description |
 |-----------------|-----------------------------|-------------|
-| `PROJECTS`      | `orgA:1 orgB:3` | Space-separated `owner:project_number` pairs |
-| `JIRA_BASE_URL` | `https://issues.org.com` | Base URL of the JIRA instance (no trailing slash) |
+| `PSYNC_PROJECTS`      | `orgA:1 orgB:3` | Space-separated `owner:project_number` pairs |
+| `PSYNC_JIRA_BASE_URL` | `https://issues.org.com` | Base URL of the JIRA instance (no trailing slash) |
 
-**`PROJECTS` format:** each entry is `<org>:<project-number>`, separated by spaces. The project number is the integer in the project URL: `https://github.com/orgs/<org>/projects/<number>`.
+**`PSYNC_PROJECTS` format:** each entry is `<org>:<project-number>`, separated by spaces. The project number is the integer in the project URL: `https://github.com/orgs/<org>/projects/<number>`.
 
 Example with three projects across two organizations:
 ```
@@ -158,7 +158,7 @@ If you want changes to be synced to JIRA tickets, ensure the `External Reference
 
 1. Generate a JIRA Personal Access Token in JIRA at **Profile → Personal Access Tokens → Create token**
 2. Go to **`Repository` → Settings → Secrets and variables → Actions → New repository secret**
-3. Set **Name** to `JIRA_API_TOKEN` and paste the token as the **Secret**
+3. Set **Name** to `PSYNC_PAT_JIRA` and paste the token as the **Secret**
 
 > **Note:** JIRA Data Center (e.g. `issues.org.com`) uses PAT-based Bearer token authentication. Basic auth (username + password/API key) is not supported.
 
@@ -167,15 +167,15 @@ When `External Reference` is set on a project item (e.g. `ISSUE-774`), the workf
 1. **The JIRA ticket has the label `gh-issue-<number>`** — where `<number>` is the GitHub issue number linked to the project item (e.g. `gh-issue-3`). Tickets without this label are skipped.
 
 When this condition passes, the workflow will:
-- Update **Priority** and **time tracking** (Estimate → original estimate, Remaining Work → remaining estimate) on the JIRA ticket at `<JIRA_BASE_URL>/browse/<External Reference>`
+- Update **Priority** and **time tracking** (Estimate → original estimate, Remaining Work → remaining estimate) on the JIRA ticket at `<PSYNC_JIRA_BASE_URL>/browse/<External Reference>`
 - Keep **Time Spent** in sync: first sync logs a `Copied time spent from GH #<issue>` worklog; subsequent increases log an `Increased time spent from GH #<issue>` worklog
 - Keep the **`area/*` label** in sync with the GH `Area` field: removes any existing `area/*` label and adds `area/<value>` (lowercase, e.g. `area/runtimes`, `area/ci`). If `Area` is empty, any existing `area/*` label is removed and none is added.
 
-If `JIRA_API_TOKEN` is not set, the JIRA sync step is skipped silently.
+If `PSYNC_PAT_JIRA` is not set, the JIRA sync step is skipped silently.
 
 ---
 
-Once all steps are done, the workflow runs automatically once daily (00:00 UTC) across all projects listed in `PROJECTS`.
+Once all steps are done, the workflow runs automatically once daily (00:00 UTC) across all projects listed in `PSYNC_PROJECTS`.
 
 ---
 
@@ -183,14 +183,14 @@ Once all steps are done, the workflow runs automatically once daily (00:00 UTC) 
 
 ### Prerequisites
 
-- `GH_TOKEN` secret is set (PAT with `project` and `read:org` scopes)
-- `PROJECTS` variable is set (e.g. `orgA:1`) — **Settings → Secrets and variables → Actions → Variables**
-- `JIRA_BASE_URL` variable is set (e.g. `https://issues.org.com`) — same location
-- Each project in `PROJECTS` has `Reporting Date` and `Reporting Log` fields
+- `PSYNC_PAT_GH` secret is set (PAT with `project` and `read:org` scopes)
+- `PSYNC_PROJECTS` variable is set (e.g. `orgA:1`) — **Settings → Secrets and variables → Actions → Variables**
+- `PSYNC_JIRA_BASE_URL` variable is set (e.g. `https://issues.org.com`) — same location
+- Each project in `PSYNC_PROJECTS` has `Reporting Date` and `Reporting Log` fields
 - (Optional) Each project has a `Alerts` Text field to see validation codes
 
 For JIRA sync testing also:
-- `JIRA_API_TOKEN` secret is set
+- `PSYNC_PAT_JIRA` secret is set
 - The project has an `External Reference` field with a valid ticket ID on at least one item
 - The referenced JIRA ticket has the label `gh-issue-<number>` (e.g. `gh-issue-3` for GH issue #3)
 
@@ -198,11 +198,11 @@ For JIRA sync testing also:
 
 1. Go to **Actions → Sync Project Reporting Metrics → Run workflow**
 2. Click **"Run workflow"**
-3. The workflow runs immediately against all projects in `PROJECTS`
+3. The workflow runs immediately against all projects in `PSYNC_PROJECTS`
 
 ### Testing steps
 
-1. **Go to a project** listed in your `PROJECTS` variable and pick any issue/item
+1. **Go to a project** listed in your `PSYNC_PROJECTS` variable and pick any issue/item
 2. **Change one of the tracked fields**: Status, Priority, Version, Estimate, Remaining Work, or Time Spent
 3. **Trigger the workflow** manually (see above) or wait for 05:00 UTC
 4. **Check the Actions log** → open the latest run of `Sync Project Reporting Metrics`. You should see:
@@ -226,9 +226,9 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 
 ## Troubleshooting
 
-- **Workflow fails with auth error** → `GH_TOKEN` secret is missing or the PAT doesn't have `project` and `read:org` scopes
-- **No projects processed / empty run** → `PROJECTS` variable is not set; go to **Settings → Secrets and variables → Actions → Variables** and verify it exists
-- **`PROJECTS` or `JIRA_BASE_URL` not found** → make sure they are defined as **Variables** (not secrets)
+- **Workflow fails with auth error** → `PSYNC_PAT_GH` secret is missing or the PAT doesn't have `project` and `read:org` scopes
+- **No projects processed / empty run** → `PSYNC_PROJECTS` variable is not set; go to **Settings → Secrets and variables → Actions → Variables** and verify it exists
+- **`PSYNC_PROJECTS` or `PSYNC_JIRA_BASE_URL` not found** → make sure they are defined as **Variables** (not secrets)
 - **`Reporting Date` field not found** → field name in the project doesn't exactly match `Reporting Date` (case-sensitive); the project is skipped and the run continues
 - **`Reporting Log` field not found** → same as above
 - **Item not processed** → the workflow paginates (100 items per page); check the log to confirm the item's page was fetched
@@ -244,7 +244,7 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **`Alerts` shows `JIRA_SYNC_ERROR HTTP_<code>`** → a JIRA API call failed; check the Actions log for the response body and consult the JIRA troubleshooting entries below
 - **`Alerts` shows `CHILDREN_STATUS`** → resolve the status inconsistency: if the parent is `Done`, all children must also be `Done`; if the parent is active (not `Backlog`/`Next`), no child should still be in `Backlog`
 - **JIRA sync skipped with "does not have the 'gh-issue-<number>' label"** → add the label `gh-issue-<number>` to the JIRA ticket to opt it in to syncing
-- **JIRA update failed (HTTP 401)** → `JIRA_API_TOKEN` is missing, expired, or is not a JIRA PAT; basic auth is not supported on JIRA Data Center
+- **JIRA update failed (HTTP 401)** → `PSYNC_PAT_JIRA` is missing, expired, or is not a JIRA PAT; basic auth is not supported on JIRA Data Center
 - **JIRA update failed (HTTP 404)** → the ticket ID in `External Reference` does not exist or is not accessible with the provided credentials
 - **JIRA update failed (HTTP 400)** → a field value is in an unexpected format (e.g. Priority name doesn't match a valid JIRA priority, or time values are not in the expected format)
 
