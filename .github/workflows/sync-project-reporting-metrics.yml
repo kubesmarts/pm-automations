@@ -174,12 +174,14 @@ jobs:
                         labels:      [$label]
                       } + (if $comp != "" then {components: [{name: $comp}]} else {} end))
                     }')
+                  set +e
                   JIRA_CREATE_HTTP=$(curl -s --max-time 30 -o /tmp/jira_create.json -w "%{http_code}" \
                     -H "Authorization: ${JIRA_AUTH_HEADER}" \
                     -H "Content-Type: application/json" \
                     -X POST \
                     -d "$JIRA_CREATE_PAYLOAD" \
                     "${JIRA_BASE_URL}/rest/api/2/issue")
+                  set -e
                   JIRA_CREATE_HTTP="${JIRA_CREATE_HTTP:-000}"
                   if [ "$JIRA_CREATE_HTTP" -ge 200 ] && [ "$JIRA_CREATE_HTTP" -lt 300 ]; then
                     NEW_JIRA_KEY=$(jq -r '.key' /tmp/jira_create.json)
@@ -296,8 +298,8 @@ jobs:
                   ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
                     -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES"
                 fi
-                if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_NOT_FOUND|JIRA_CREATE_ERROR'; then
-                  record_error "${PROJECT_OWNER}:${PROJECT_NUMBER} #${ISSUE_NUMBER:-draft}" "$SYNC_STATUS_CODES"
+                if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_CREATE_ERROR|JIRA_ENDPOINT_ERROR'; then
+                  record_error "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$SYNC_STATUS_CODES"
                 fi
                 continue
               fi
@@ -346,14 +348,25 @@ jobs:
                 JIRA_ISSUE_URL="${JIRA_BASE_URL}/rest/api/2/issue/${EXTERNAL_REF}"
 
                 # Fetch JIRA issue upfront to verify sync conditions before making any changes
+                set +e
                 JIRA_GET_STATUS=$(curl -s --max-time 30 -o /tmp/jira_issue.json -w "%{http_code}" \
                   -H "Authorization: ${JIRA_AUTH_HEADER}" \
                   "${JIRA_ISSUE_URL}")
+                set -e
                 JIRA_GET_STATUS="${JIRA_GET_STATUS:-000}"
 
                 if [ "$JIRA_GET_STATUS" -eq 404 ]; then
-                  echo "  → Warning: JIRA issue $EXTERNAL_REF not found (HTTP 404). Skipping JIRA sync."
-                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_NOT_FOUND"
+                  # A real "ticket not found" returns a JIRA JSON body with errorMessages.
+                  # A 404 from a misconfigured or unreachable endpoint returns no such body.
+                  JIRA_ERROR_MSG=$(jq -r '.errorMessages[0] // ""' /tmp/jira_issue.json 2>/dev/null || true)
+                  if [ -n "$JIRA_ERROR_MSG" ]; then
+                    echo "  → Warning: JIRA issue $EXTERNAL_REF not found (HTTP 404). Skipping JIRA sync."
+                    SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_NOT_FOUND"
+                  else
+                    echo "  → Warning: JIRA endpoint not reachable or misconfigured (HTTP 404, no JIRA error body). Check PSYNC_JIRA_BASE_URL."
+                    echo "  → JIRA error response:" && cat /tmp/jira_issue.json
+                    SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }JIRA_ENDPOINT_ERROR HTTP_404"
+                  fi
                 elif [ "$JIRA_GET_STATUS" -lt 200 ] || [ "$JIRA_GET_STATUS" -ge 300 ]; then
                   echo "  → Warning: Failed to fetch JIRA issue $EXTERNAL_REF (HTTP $JIRA_GET_STATUS). Skipping JIRA sync."
                   echo "  → JIRA error response:" && cat /tmp/jira_issue.json
@@ -404,12 +417,14 @@ jobs:
                         }
                       }')
 
+                    set +e
                     HTTP_STATUS=$(curl -s --max-time 30 -o /tmp/jira_resp.json -w "%{http_code}" \
                       -H "Authorization: ${JIRA_AUTH_HEADER}" \
                       -X PUT \
                       -H "Content-Type: application/json" \
                       -d "$JIRA_PAYLOAD" \
                       "$JIRA_ISSUE_URL")
+                    set -e
                     HTTP_STATUS="${HTTP_STATUS:-000}"
 
                     if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
@@ -438,9 +453,11 @@ jobs:
 
                       # Step 1: look for the managed worklog (identified by the copy comment or the legacy
                       # comment from earlier workflow versions) and try to update it in place.
+                      set +e
                       WL_LIST_STATUS=$(curl -s --max-time 30 -o /tmp/jira_wl_list.json -w "%{http_code}" \
                         -H "Authorization: ${JIRA_AUTH_HEADER}" \
                         "${JIRA_ISSUE_URL}/worklog")
+                      set -e
                       WL_LIST_STATUS="${WL_LIST_STATUS:-000}"
                       echo "  → GET worklogs HTTP $WL_LIST_STATUS"
 
@@ -452,12 +469,14 @@ jobs:
                         if [ -n "$MANAGED_WL_ID" ]; then
                           WL_PAYLOAD=$(jq -n --arg ts "$JIRA_TIME_SPENT" --arg c "$WL_COPY_COMMENT" \
                             '{timeSpent: $ts, comment: $c}')
+                          set +e
                           WL_STATUS=$(curl -s --max-time 30 -o /tmp/jira_wl.json -w "%{http_code}" \
                             -H "Authorization: ${JIRA_AUTH_HEADER}" \
                             -X PUT \
                             -H "Content-Type: application/json" \
                             -d "$WL_PAYLOAD" \
                             "${JIRA_ISSUE_URL}/worklog/${MANAGED_WL_ID}?adjustEstimate=leave")
+                          set -e
                           WL_STATUS="${WL_STATUS:-000}"
                           if [ "$WL_STATUS" -ge 200 ] && [ "$WL_STATUS" -lt 300 ]; then
                             echo "  → Time Spent updated to $JIRA_TIME_SPENT on managed worklog $MANAGED_WL_ID (HTTP $WL_STATUS)."
@@ -496,12 +515,14 @@ jobs:
                           echo "  → Logging worklog: $DELTA_JIRA ($WL_COMMENT)"
                           WL_PAYLOAD=$(jq -n --arg ts "$DELTA_JIRA" --arg c "$WL_COMMENT" \
                             '{timeSpent: $ts, comment: $c}')
+                          set +e
                           WL_STATUS=$(curl -s --max-time 30 -o /tmp/jira_wl.json -w "%{http_code}" \
                             -H "Authorization: ${JIRA_AUTH_HEADER}" \
                             -X POST \
                             -H "Content-Type: application/json" \
                             -d "$WL_PAYLOAD" \
                             "${JIRA_ISSUE_URL}/worklog?adjustEstimate=leave")
+                          set -e
                           WL_STATUS="${WL_STATUS:-000}"
                           if [ "$WL_STATUS" -ge 200 ] && [ "$WL_STATUS" -lt 300 ]; then
                             echo "  → $DELTA_JIRA logged (HTTP $WL_STATUS). JIRA total now ~${JIRA_TIME_SPENT}."
@@ -537,8 +558,8 @@ jobs:
                 ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
                   -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES"
               fi
-              if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_NOT_FOUND|JIRA_CREATE_ERROR'; then
-                record_error "${PROJECT_OWNER}:${PROJECT_NUMBER} #${ISSUE_NUMBER:-draft}" "$SYNC_STATUS_CODES"
+              if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_CREATE_ERROR|JIRA_ENDPOINT_ERROR'; then
+                record_error "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$SYNC_STATUS_CODES"
               fi
 
             done
@@ -782,15 +803,19 @@ jobs:
           RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           printf '%s\n\nWorkflow run: %s\n' "$ERROR_SUMMARY" "$RUN_URL" > /tmp/psync_error_body.txt
 
+          # Ensure the label exists (no-op if already present)
+          gh label create "psync-error" --color "d73a4a" --description "Sync workflow error" \
+            --repo "${{ github.repository }}" 2>/dev/null || true
+
           OPEN_ISSUE=$(gh issue list --repo "${{ github.repository }}" --state open \
-            --search "bug: Error during project(s) sync workflow run in:title" \
-            --json number --jq '.[0].number // empty')
+            --label "psync-error" --json number --jq '.[0].number // ""')
 
           if [ -n "$OPEN_ISSUE" ]; then
             gh issue comment "$OPEN_ISSUE" --repo "${{ github.repository }}" --body-file /tmp/psync_error_body.txt
           else
             gh issue create --repo "${{ github.repository }}" \
-              --title "bug: Error during project(s) sync workflow run" \
+              --title "bug: Github project(s) sync workflow error" \
+              --label "psync-error" \
               --body-file /tmp/psync_error_body.txt
           fi
 
@@ -800,8 +825,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PSYNC_PAT_GH }}
         run: |
           OPEN_ISSUE=$(gh issue list --repo "${{ github.repository }}" --state open \
-            --search "bug: Error during project(s) sync workflow run in:title" \
-            --json number --jq '.[0].number // empty')
+            --label "psync-error" --json number --jq '.[0].number // ""')
 
           if [ -n "$OPEN_ISSUE" ]; then
             RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
