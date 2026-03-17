@@ -175,6 +175,14 @@ When this condition passes, the workflow will:
 
 If `PSYNC_PAT_JIRA` is not set, the JIRA sync step is skipped silently.
 
+### 6. Error notifications via GitHub issues
+
+When errors occur during a run (JIRA sync failures, GraphQL errors, unresolvable project IDs), the workflow automatically opens a GitHub issue in this repository titled **`bug: Error during project(s) sync workflow run`**. If an issue with that title is already open, a new comment is added instead of opening a duplicate.
+
+When a subsequent run completes without errors, the open issue is automatically closed with a resolution comment.
+
+No additional configuration is required — the workflow uses the existing `PSYNC_PAT_GH` token. Anyone watching this repository will receive a GitHub notification when the issue is opened or commented on.
+
 ---
 
 Once all steps are done, the workflow runs automatically once daily (00:00 UTC) across all projects listed in `PSYNC_PROJECTS`.
