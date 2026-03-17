@@ -13,6 +13,7 @@ on:
 
 # Requires a PAT with 'project' and 'read:org' scopes stored as secret PSYNC_PAT_GH.
 # The default GITHUB_TOKEN does not have write access to organization-level projects.
+# JIRA Cloud (Atlassian) uses Basic auth: PSYNC_JIRA_EMAIL (account email) + PSYNC_PAT_JIRA (API token).
 
 jobs:
   track-reporting-date:
@@ -21,6 +22,7 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.PSYNC_PAT_GH }}
       JIRA_API_TOKEN: ${{ secrets.PSYNC_PAT_JIRA }}
+      JIRA_EMAIL: ${{ vars.PSYNC_JIRA_EMAIL }}
       JIRA_BASE_URL: ${{ vars.PSYNC_JIRA_BASE_URL }}
       PROJECTS: ${{ vars.PSYNC_PROJECTS }}
     steps:
@@ -32,6 +34,10 @@ jobs:
           trap 'rm -f /tmp/jira_create.json /tmp/jira_issue.json /tmp/jira_resp.json /tmp/jira_wl_list.json /tmp/jira_wl.json' EXIT
 
           TODAY=$(date -u +%Y-%m-%d)
+
+          # Atlassian Cloud uses HTTP Basic auth: base64(email:api_token).
+          # Computed once here and reused for all JIRA API calls.
+          JIRA_AUTH_HEADER="Basic $(printf '%s:%s' "$JIRA_EMAIL" "$JIRA_API_TOKEN" | base64 -w 0)"
 
           # Convert a GH numeric value (in weeks) to JIRA time format.
           # Convention: 1 week = 5 days = 40 hours.
@@ -160,7 +166,7 @@ jobs:
                       } + (if $comp != "" then {components: [{name: $comp}]} else {} end))
                     }')
                   JIRA_CREATE_HTTP=$(curl -s --max-time 30 -o /tmp/jira_create.json -w "%{http_code}" \
-                    -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                    -H "Authorization: ${JIRA_AUTH_HEADER}" \
                     -H "Content-Type: application/json" \
                     -X POST \
                     -d "$JIRA_CREATE_PAYLOAD" \
@@ -329,7 +335,7 @@ jobs:
 
                 # Fetch JIRA issue upfront to verify sync conditions before making any changes
                 JIRA_GET_STATUS=$(curl -s --max-time 30 -o /tmp/jira_issue.json -w "%{http_code}" \
-                  -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                  -H "Authorization: ${JIRA_AUTH_HEADER}" \
                   "${JIRA_ISSUE_URL}")
                 JIRA_GET_STATUS="${JIRA_GET_STATUS:-000}"
 
@@ -387,7 +393,7 @@ jobs:
                       }')
 
                     HTTP_STATUS=$(curl -s --max-time 30 -o /tmp/jira_resp.json -w "%{http_code}" \
-                      -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                      -H "Authorization: ${JIRA_AUTH_HEADER}" \
                       -X PUT \
                       -H "Content-Type: application/json" \
                       -d "$JIRA_PAYLOAD" \
@@ -421,7 +427,7 @@ jobs:
                       # Step 1: look for the managed worklog (identified by the copy comment or the legacy
                       # comment from earlier workflow versions) and try to update it in place.
                       WL_LIST_STATUS=$(curl -s --max-time 30 -o /tmp/jira_wl_list.json -w "%{http_code}" \
-                        -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                        -H "Authorization: ${JIRA_AUTH_HEADER}" \
                         "${JIRA_ISSUE_URL}/worklog")
                       WL_LIST_STATUS="${WL_LIST_STATUS:-000}"
                       echo "  → GET worklogs HTTP $WL_LIST_STATUS"
@@ -435,7 +441,7 @@ jobs:
                           WL_PAYLOAD=$(jq -n --arg ts "$JIRA_TIME_SPENT" --arg c "$WL_COPY_COMMENT" \
                             '{timeSpent: $ts, comment: $c}')
                           WL_STATUS=$(curl -s --max-time 30 -o /tmp/jira_wl.json -w "%{http_code}" \
-                            -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                            -H "Authorization: ${JIRA_AUTH_HEADER}" \
                             -X PUT \
                             -H "Content-Type: application/json" \
                             -d "$WL_PAYLOAD" \
@@ -479,7 +485,7 @@ jobs:
                           WL_PAYLOAD=$(jq -n --arg ts "$DELTA_JIRA" --arg c "$WL_COMMENT" \
                             '{timeSpent: $ts, comment: $c}')
                           WL_STATUS=$(curl -s --max-time 30 -o /tmp/jira_wl.json -w "%{http_code}" \
-                            -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+                            -H "Authorization: ${JIRA_AUTH_HEADER}" \
                             -X POST \
                             -H "Content-Type: application/json" \
                             -d "$WL_PAYLOAD" \

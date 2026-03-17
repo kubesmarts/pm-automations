@@ -141,7 +141,8 @@ The workflow reads its project list and JIRA host from **GitHub Actions Variable
 | Variable name   | Example value               | Description |
 |-----------------|-----------------------------|-------------|
 | `PSYNC_PROJECTS`      | `orgA:1 orgB:3` | Space-separated `owner:project_number` pairs |
-| `PSYNC_JIRA_BASE_URL` | `https://issues.org.com` | Base URL of the JIRA instance (no trailing slash) |
+| `PSYNC_JIRA_BASE_URL` | `https://redhat.atlassian.net` | Base URL of the JIRA instance (no trailing slash) |
+| `PSYNC_JIRA_EMAIL`    | `user@redhat.com` | Atlassian account email used for JIRA API authentication |
 
 **`PSYNC_PROJECTS` format:** each entry is `<org>:<project-number>`, separated by spaces. The project number is the integer in the project URL: `https://github.com/orgs/<org>/projects/<number>`.
 
@@ -154,13 +155,14 @@ orgA:1 orgA:2 orgB:5
 
 ### 5. (Optional) Configure JIRA sync
 
-If you want changes to be synced to JIRA tickets, ensure the `External Reference` field is added to each project (step 1), then store one additional secret:
+If you want changes to be synced to JIRA tickets, ensure the `External Reference` field is added to each project (step 1), then configure the following:
 
-1. Generate a JIRA Personal Access Token in JIRA at **Profile → Personal Access Tokens → Create token**
+1. Generate an Atlassian Cloud API token at **[https://id.atlassian.com/manage-profile/security/api-tokens](https://id.atlassian.com/manage-profile/security/api-tokens)**
 2. Go to **`Repository` → Settings → Secrets and variables → Actions → New repository secret**
-3. Set **Name** to `PSYNC_PAT_JIRA` and paste the token as the **Secret**
+3. Set **Name** to `PSYNC_PAT_JIRA` and paste the API token as the **Secret**
+4. Go to **Variables tab** and add `PSYNC_JIRA_EMAIL` set to the Atlassian account email that owns the token (e.g. `user@redhat.com`)
 
-> **Note:** JIRA Data Center (e.g. `issues.org.com`) uses PAT-based Bearer token authentication. Basic auth (username + password/API key) is not supported.
+> **Note:** Atlassian Cloud uses HTTP Basic authentication (`email:api_token`). The workflow computes the `Authorization: Basic ...` header automatically from `PSYNC_JIRA_EMAIL` and `PSYNC_PAT_JIRA`.
 
 When `External Reference` is set on a project item (e.g. `ISSUE-774`), the workflow will sync to the JIRA ticket **only if the following condition is met**:
 
@@ -185,12 +187,13 @@ Once all steps are done, the workflow runs automatically once daily (00:00 UTC) 
 
 - `PSYNC_PAT_GH` secret is set (PAT with `project` and `read:org` scopes)
 - `PSYNC_PROJECTS` variable is set (e.g. `orgA:1`) — **Settings → Secrets and variables → Actions → Variables**
-- `PSYNC_JIRA_BASE_URL` variable is set (e.g. `https://issues.org.com`) — same location
+- `PSYNC_JIRA_BASE_URL` variable is set (e.g. `https://redhat.atlassian.net`) — same location
 - Each project in `PSYNC_PROJECTS` has `Reporting Date` and `Reporting Log` fields
 - (Optional) Each project has a `Alerts` Text field to see validation codes
 
 For JIRA sync testing also:
-- `PSYNC_PAT_JIRA` secret is set
+- `PSYNC_PAT_JIRA` secret is set (Atlassian Cloud API token)
+- `PSYNC_JIRA_EMAIL` variable is set (Atlassian account email that owns the token)
 - The project has an `External Reference` field with a valid ticket ID on at least one item
 - The referenced JIRA ticket has the label `gh-issue-<number>` (e.g. `gh-issue-3` for GH issue #3)
 
@@ -244,7 +247,7 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **`Alerts` shows `JIRA_SYNC_ERROR HTTP_<code>`** → a JIRA API call failed; check the Actions log for the response body and consult the JIRA troubleshooting entries below
 - **`Alerts` shows `CHILDREN_STATUS`** → resolve the status inconsistency: if the parent is `Done`, all children must also be `Done`; if the parent is active (not `Backlog`/`Next`), no child should still be in `Backlog`
 - **JIRA sync skipped with "does not have the 'gh-issue-<number>' label"** → add the label `gh-issue-<number>` to the JIRA ticket to opt it in to syncing
-- **JIRA update failed (HTTP 401)** → `PSYNC_PAT_JIRA` is missing, expired, or is not a JIRA PAT; basic auth is not supported on JIRA Data Center
+- **JIRA update failed (HTTP 401)** → `PSYNC_PAT_JIRA` is missing or expired, or `PSYNC_JIRA_EMAIL` is wrong; Atlassian Cloud uses Basic auth (`email:api_token`) — verify both are correctly configured
 - **JIRA update failed (HTTP 404)** → the ticket ID in `External Reference` does not exist or is not accessible with the provided credentials
 - **JIRA update failed (HTTP 400)** → a field value is in an unexpected format (e.g. Priority name doesn't match a valid JIRA priority, or time values are not in the expected format)
 
