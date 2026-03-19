@@ -196,7 +196,7 @@ jobs:
                         }) { projectV2Item { id } }
                       }
                     ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                      -f fieldId="$EXTERNAL_REF_FIELD_ID" -f text="$NEW_JIRA_KEY"
+                      -f fieldId="$EXTERNAL_REF_FIELD_ID" -f text="$NEW_JIRA_KEY" > /dev/null
                     echo "  → External Reference updated to $NEW_JIRA_KEY."
                     EXTERNAL_REF="$NEW_JIRA_KEY"
                     # Force the change-detected path so JIRA sync runs immediately after creation
@@ -238,11 +238,11 @@ jobs:
                     }) { projectV2Item { id } }
                   }
                 ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                  -f fieldId="$REMAINING_WORK_FIELD_ID"
+                  -f fieldId="$REMAINING_WORK_FIELD_ID" > /dev/null
                 echo "  → Remaining Work auto-cleared (issue is Done)."
                 REMAINING_WORK=""
               fi
-              HAS_ASSIGNEE=$(echo "$item" | jq -r '(.content.assignees.nodes | length) > 0')
+              HAS_ASSIGNEE=$(echo "$item" | jq -r '(.content.assignees.nodes // [] | length) > 0')
               if { [ "$STATUS_LC" = "in progress" ] || [ "$STATUS_LC" = "in review" ] || [ "$STATUS_LC" = "done" ]; } && \
                  [ "$HAS_ASSIGNEE" != "true" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_ASSIGNEE"
@@ -251,7 +251,7 @@ jobs:
               # Check CHILDREN_STATUS: detect parent/child status inconsistencies.
               # Only runs when the item is linked to a GH issue with sub-issues in this project.
               if [ -n "$ISSUE_NUMBER" ]; then
-                SUB_NUMBERS=$(echo "$item" | jq -r '.content.subIssues.nodes[].number // empty' 2>/dev/null)
+                SUB_NUMBERS=$(echo "$item" | jq -r '.content.subIssues.nodes[].number // empty' 2>/dev/null || true)
                 if [ -n "$SUB_NUMBERS" ]; then
                   MISMATCH=false
                   while IFS= read -r child_num; do
@@ -296,11 +296,11 @@ jobs:
                       }) { projectV2Item { id } }
                     }
                   ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                    -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES"
+                    -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES" > /dev/null
                 fi
                 if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_CREATE_ERROR|JIRA_ENDPOINT_ERROR'; then
                   record_error "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$SYNC_STATUS_CODES"
-                fi
+                fi || true
                 continue
               fi
 
@@ -328,7 +328,7 @@ jobs:
                   }) { projectV2Item { id } }
                 }
               ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                -f fieldId="$REPORTING_DATE_FIELD_ID" -f date="$TODAY"
+                -f fieldId="$REPORTING_DATE_FIELD_ID" -f date="$TODAY" > /dev/null
 
               # Append new entry to 'Reporting Log'
               gh api graphql -f query='
@@ -341,7 +341,7 @@ jobs:
                   }) { projectV2Item { id } }
                 }
               ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                -f fieldId="$REPORTING_LOG_FIELD_ID" -f text="$NEW_LOG"
+                -f fieldId="$REPORTING_LOG_FIELD_ID" -f text="$NEW_LOG" > /dev/null
 
               # Sync to JIRA if an External Reference is set
               if [ -n "$EXTERNAL_REF" ]; then
@@ -556,11 +556,11 @@ jobs:
                     }) { projectV2Item { id } }
                   }
                 ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                  -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES"
+                  -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES" > /dev/null
               fi
               if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_CREATE_ERROR|JIRA_ENDPOINT_ERROR'; then
                 record_error "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$SYNC_STATUS_CODES"
-              fi
+              fi || true
 
             done
           }
@@ -606,7 +606,21 @@ jobs:
                       nodes {
                         id
                         isArchived
-                        content { ... on Issue { number title url assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
+                        content {
+                          ... on Issue {
+                            number
+                            title
+                            url
+                            assignees(first: 5) { nodes { login } }
+                            subIssues(first: 50) { nodes { number } }
+                          }
+                          ... on PullRequest {
+                            number
+                            title
+                            url
+                            assignees(first: 5) { nodes { login } }
+                          }
+                        }
                         fieldValues(first: 20) {
                           nodes {
                             ... on ProjectV2ItemFieldTextValue {
@@ -712,7 +726,21 @@ jobs:
                         nodes {
                           id
                           isArchived
-                          content { ... on Issue { number title url assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
+                          content {
+                            ... on Issue {
+                              number
+                              title
+                              url
+                              assignees(first: 5) { nodes { login } }
+                              subIssues(first: 50) { nodes { number } }
+                            }
+                            ... on PullRequest {
+                              number
+                              title
+                              url
+                              assignees(first: 5) { nodes { login } }
+                            }
+                          }
                           fieldValues(first: 20) {
                             nodes {
                               ... on ProjectV2ItemFieldTextValue {
