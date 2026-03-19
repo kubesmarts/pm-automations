@@ -606,7 +606,21 @@ jobs:
                       nodes {
                         id
                         isArchived
-                        content { ... on Issue { number title url assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
+                        content {
+                          ... on Issue {
+                            number
+                            title
+                            url
+                            assignees(first: 5) { nodes { login } }
+                            subIssues(first: 50) { nodes { number } }
+                          }
+                          ... on PullRequest {
+                            number
+                            title
+                            url
+                            assignees(first: 5) { nodes { login } }
+                          }
+                        }
                         fieldValues(first: 20) {
                           nodes {
                             ... on ProjectV2ItemFieldTextValue {
@@ -712,7 +726,21 @@ jobs:
                         nodes {
                           id
                           isArchived
-                          content { ... on Issue { number title url assignees(first: 5) { nodes { login } } subIssues(first: 50) { nodes { number } } } }
+                          content {
+                            ... on Issue {
+                              number
+                              title
+                              url
+                              assignees(first: 5) { nodes { login } }
+                              subIssues(first: 50) { nodes { number } }
+                            }
+                            ... on PullRequest {
+                              number
+                              title
+                              url
+                              assignees(first: 5) { nodes { login } }
+                            }
+                          }
                           fieldValues(first: 20) {
                             nodes {
                               ... on ProjectV2ItemFieldTextValue {
