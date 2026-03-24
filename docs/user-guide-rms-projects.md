@@ -151,6 +151,32 @@ When synced to JIRA, the workflow automatically converts these values to JIRA's 
 
 The `Alerts` field is updated on every workflow run. An empty value means everything is healthy. When one or more rules are violated, comma-separated codes appear — for example: `NO_AREA, NO_ESTIMATE`.
 
+### Email notifications
+
+When validation alerts are detected on issues with assignees, the workflow automatically creates or updates a **GitHub issue** with the label `alerts-notification`. Each assignee is mentioned in a comment with their specific alerts grouped by project, which triggers GitHub's email notification system (based on the assignee's notification preferences).
+
+**How it works:**
+
+1. The workflow collects all validation alerts across all monitored projects
+2. Groups alerts by assignee
+3. Creates or updates a single issue titled "🚨 GitHub Projects Alerts Notification"
+4. Posts one comment per assignee mentioning them with their alerts
+5. Automatically closes the issue when all alerts are resolved
+
+**Example notification:**
+
+```
+@username You have validation alerts:
+
+**Project kubesmarts:1**
+- Issue #42 "Implement feature X": NO_AREA, NO_ESTIMATE
+- Issue #58 "Fix bug Y": NO_REMAINING_WORK
+
+Please review and resolve these alerts.
+```
+
+> **Note:** Only validation alerts (NO_AREA, NO_ESTIMATE, etc.) trigger assignee notifications. JIRA sync errors are tracked separately in the `psync-error` issue.
+
 ### What each code means and how to fix it
 
 | Code | What it means | How to fix |

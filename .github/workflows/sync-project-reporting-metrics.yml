@@ -31,10 +31,12 @@ jobs:
         run: |
           set -e
 
-          # Clean up JIRA and error temp files on exit (covers normal completion and errors)
+          # Clean up JIRA, error, and alert temp files on exit (covers normal completion and errors)
           WORKFLOW_ERRORS_FILE=/tmp/workflow_errors.txt
+          WORKFLOW_ALERTS_FILE=/tmp/workflow_alerts.txt
           > "$WORKFLOW_ERRORS_FILE"
-          trap 'rm -f /tmp/jira_create.json /tmp/jira_issue.json /tmp/jira_resp.json /tmp/jira_wl_list.json /tmp/jira_wl.json "$WORKFLOW_ERRORS_FILE"' EXIT
+          > "$WORKFLOW_ALERTS_FILE"
+          trap 'rm -f /tmp/jira_create.json /tmp/jira_issue.json /tmp/jira_resp.json /tmp/jira_wl_list.json /tmp/jira_wl.json "$WORKFLOW_ERRORS_FILE" "$WORKFLOW_ALERTS_FILE"' EXIT
 
           TODAY=$(date -u +%Y-%m-%d)
 
@@ -65,6 +67,13 @@ jobs:
           # $1 = context label (e.g. project:number or item ref), $2 = error message
           record_error() {
             printf '[%s] %s\n' "$1" "$2" >> "$WORKFLOW_ERRORS_FILE"
+          }
+
+          # Append an alert line to the workflow alerts file for assignee notification.
+          # Format: project_owner:project_number|issue_number|assignees|alerts|title
+          # $1 = project_owner:project_number, $2 = issue_number, $3 = assignees (comma-separated), $4 = alerts, $5 = title
+          record_alert() {
+            printf '%s|%s|%s|%s|%s\n' "$1" "$2" "$3" "$4" "$5" >> "$WORKFLOW_ALERTS_FILE"
           }
 
           # Extract a field value from a project item JSON blob by field name.
@@ -301,6 +310,17 @@ jobs:
                 if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_CREATE_ERROR|JIRA_ENDPOINT_ERROR'; then
                   record_error "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$SYNC_STATUS_CODES"
                 fi || true
+
+                # Collect validation alerts for skipped items too
+                if [ -n "$SYNC_STATUS_CODES" ] && [ -n "$ISSUE_NUMBER" ]; then
+                  VALIDATION_ALERTS=$(echo "$SYNC_STATUS_CODES" | sed -E 's/(JIRA_SYNC_ERROR[^,]*|JIRA_CREATE_ERROR[^,]*|JIRA_ENDPOINT_ERROR[^,]*),?\s*//g' | sed 's/^[, ]*//;s/[, ]*$//')
+                  if [ -n "$VALIDATION_ALERTS" ]; then
+                    ASSIGNEES_LIST=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
+                    if [ -n "$ASSIGNEES_LIST" ]; then
+                      record_alert "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$ISSUE_NUMBER" "$ASSIGNEES_LIST" "$VALIDATION_ALERTS" "$ISSUE_TITLE"
+                    fi
+                  fi
+                fi
                 continue
               fi
 
@@ -562,6 +582,19 @@ jobs:
                 record_error "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$SYNC_STATUS_CODES"
               fi || true
 
+              # Collect validation alerts (non-JIRA errors) for assignee notification
+              # Only record if: has alerts, has issue number, has assignees, and alerts are not just JIRA errors
+              if [ -n "$SYNC_STATUS_CODES" ] && [ -n "$ISSUE_NUMBER" ]; then
+                # Filter out JIRA-only errors - we want validation alerts
+                VALIDATION_ALERTS=$(echo "$SYNC_STATUS_CODES" | sed -E 's/(JIRA_SYNC_ERROR[^,]*|JIRA_CREATE_ERROR[^,]*|JIRA_ENDPOINT_ERROR[^,]*),?\s*//g' | sed 's/^[, ]*//;s/[, ]*$//')
+                if [ -n "$VALIDATION_ALERTS" ]; then
+                  ASSIGNEES_LIST=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
+                  if [ -n "$ASSIGNEES_LIST" ]; then
+                    record_alert "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$ISSUE_NUMBER" "$ASSIGNEES_LIST" "$VALIDATION_ALERTS" "$ISSUE_TITLE"
+                  fi
+                fi
+              fi
+
             done
           }
 
@@ -822,6 +855,19 @@ jobs:
             echo "has_errors=false" >> "$GITHUB_OUTPUT"
           fi
 
+          # Write alerts summary to GITHUB_OUTPUT for the assignee notification step
+          if [ -s "$WORKFLOW_ALERTS_FILE" ]; then
+            ALERT_COUNT=$(wc -l < "$WORKFLOW_ALERTS_FILE")
+            echo "has_alerts=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "alerts_summary<<PSYNC_ALERTS_EOF"
+              cat "$WORKFLOW_ALERTS_FILE"
+              echo "PSYNC_ALERTS_EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "has_alerts=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Open or update error issue
         if: always() && steps.sync.outputs.has_errors == 'true'
         env:
@@ -860,4 +906,117 @@ jobs:
             gh issue comment "$OPEN_ISSUE" --repo "${{ github.repository }}" \
               --body "Sync run completed without errors. Closing. Run: $RUN_URL"
             gh issue close "$OPEN_ISSUE" --repo "${{ github.repository }}"
+          fi
+
+      - name: Open or update alert notification issue
+        if: always() && steps.sync.outputs.has_alerts == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PSYNC_PAT_GH }}
+          ALERTS_DATA: ${{ steps.sync.outputs.alerts_summary }}
+        run: |
+          set -e
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M UTC')
+
+          # Ensure the label exists
+          gh label create "alerts-notification" --color "fbca04" \
+            --description "Validation alerts notification" \
+            --repo "${{ github.repository }}" 2>/dev/null || true
+
+          # Parse alerts data and group by assignee
+          # Format: project_owner:project_number|issue_number|assignees|alerts|title
+          echo "$ALERTS_DATA" > /tmp/alerts_data.txt
+
+          # Count total issues and projects
+          TOTAL_ISSUES=$(wc -l < /tmp/alerts_data.txt)
+          TOTAL_PROJECTS=$(cut -d'|' -f1 /tmp/alerts_data.txt | sort -u | wc -l)
+
+          # Build project summary
+          PROJECT_SUMMARY=""
+          for project in $(cut -d'|' -f1 /tmp/alerts_data.txt | sort -u); do
+            PROJECT_COUNT=$(grep -c "^${project}|" /tmp/alerts_data.txt)
+            PROJECT_SUMMARY="${PROJECT_SUMMARY}- **${project}** - ${PROJECT_COUNT} issue(s) with alerts"$'\n'
+          done
+
+          # Build issue body
+          ISSUE_BODY="# 🚨 GitHub Projects Alerts Notification
+
+          This issue tracks validation alerts across all monitored projects.
+          The issue will automatically close when all alerts are resolved.
+
+          **Last updated:** ${TIMESTAMP}
+          **Workflow run:** ${RUN_URL}
+          **Total alerts:** ${TOTAL_ISSUES} issue(s) across ${TOTAL_PROJECTS} project(s)
+
+          ## Summary by Project
+
+          ${PROJECT_SUMMARY}
+          Assignees are mentioned in comments below with detailed alert information."
+
+          # Find or create the alert notification issue
+          ALERT_ISSUE=$(gh issue list --repo "${{ github.repository }}" --state open \
+            --label "alerts-notification" --json number --jq '.[0].number // ""')
+
+          if [ -z "$ALERT_ISSUE" ]; then
+            echo "Creating new alert notification issue..."
+            ISSUE_URL=$(gh issue create --repo "${{ github.repository }}" \
+              --title "🚨 GitHub Projects Alerts Notification" \
+              --label "alerts-notification" \
+              --body "$ISSUE_BODY")
+            ALERT_ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
+            echo "Created issue #${ALERT_ISSUE} at ${ISSUE_URL}"
+          else
+            echo "Updating existing alert notification issue #${ALERT_ISSUE}..."
+            gh issue edit "$ALERT_ISSUE" --repo "${{ github.repository }}" --body "$ISSUE_BODY"
+          fi
+
+          # Group alerts by assignee
+          declare -A ASSIGNEE_ALERTS
+          while IFS='|' read -r project issue_num assignees alerts title; do
+            # Split comma-separated assignees
+            IFS=',' read -ra ASSIGNEE_ARRAY <<< "$assignees"
+            for assignee in "${ASSIGNEE_ARRAY[@]}"; do
+              assignee=$(echo "$assignee" | xargs)  # trim whitespace
+              if [ -z "${ASSIGNEE_ALERTS[$assignee]}" ]; then
+                ASSIGNEE_ALERTS[$assignee]="**Project ${project}**"$'\n'"- Issue #${issue_num} \"${title}\": ${alerts}"
+              else
+                # Check if we need to add a new project header
+                if ! echo "${ASSIGNEE_ALERTS[$assignee]}" | grep -q "**Project ${project}**"; then
+                  ASSIGNEE_ALERTS[$assignee]="${ASSIGNEE_ALERTS[$assignee]}"$'\n\n'"**Project ${project}**"$'\n'"- Issue #${issue_num} \"${title}\": ${alerts}"
+                else
+                  ASSIGNEE_ALERTS[$assignee]="${ASSIGNEE_ALERTS[$assignee]}"$'\n'"- Issue #${issue_num} \"${title}\": ${alerts}"
+                fi
+              fi
+            done
+          done < /tmp/alerts_data.txt
+
+          # Post comments for each assignee
+          for assignee in "${!ASSIGNEE_ALERTS[@]}"; do
+            COMMENT_BODY="@${assignee} You have validation alerts:
+
+          ${ASSIGNEE_ALERTS[$assignee]}
+
+          Please review and resolve these alerts."
+
+            echo "Posting comment for @${assignee}..."
+            gh issue comment "$ALERT_ISSUE" --repo "${{ github.repository }}" --body "$COMMENT_BODY"
+          done
+
+          rm -f /tmp/alerts_data.txt
+          echo "Alert notification issue updated successfully."
+
+      - name: Close alert notification issue on clean run
+        if: always() && steps.sync.outputs.has_alerts == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.PSYNC_PAT_GH }}
+        run: |
+          ALERT_ISSUE=$(gh issue list --repo "${{ github.repository }}" --state open \
+            --label "alerts-notification" --json number --jq '.[0].number // ""')
+
+          if [ -n "$ALERT_ISSUE" ]; then
+            RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            gh issue comment "$ALERT_ISSUE" --repo "${{ github.repository }}" \
+              --body "All validation alerts have been resolved. Closing. Run: $RUN_URL"
+            gh issue close "$ALERT_ISSUE" --repo "${{ github.repository }}"
+            echo "Closed alert notification issue #${ALERT_ISSUE}"
           fi
