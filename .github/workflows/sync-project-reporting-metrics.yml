@@ -959,10 +959,12 @@ jobs:
 
           if [ -z "$ALERT_ISSUE" ]; then
             echo "Creating new alert notification issue..."
-            ALERT_ISSUE=$(gh issue create --repo "${{ github.repository }}" \
+            gh issue create --repo "${{ github.repository }}" \
               --title "🚨 GitHub Projects Alerts Notification" \
               --label "alerts-notification" \
-              --body "$ISSUE_BODY" --json number --jq '.number')
+              --body "$ISSUE_BODY" > /tmp/issue_create_output.txt
+            ALERT_ISSUE=$(gh issue list --repo "${{ github.repository }}" --state open \
+              --label "alerts-notification" --json number --jq '.[0].number // ""')
             echo "Created issue #${ALERT_ISSUE}"
           else
             echo "Updating existing alert notification issue #${ALERT_ISSUE}..."
