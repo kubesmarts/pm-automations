@@ -7,6 +7,7 @@ A collection of project management automations for GitHub Projects, covering pro
 | Workflow | Description |
 |----------|-------------|
 | [Sync Project Reporting Metrics](.github/workflows/sync-project-reporting-metrics.md) | Tracks field changes across multiple GitHub Projects, maintains a reporting log, and optionally syncs progress to JIRA |
+| [Export Done Items](.github/workflows/export-done-items.md) | Exports completed items from GitHub Projects to CSV files with incremental weekly exports |
 
 ## User guides
 
