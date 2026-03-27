@@ -281,6 +281,96 @@ Sub-issues that are **not** in the project are ignored.
 
 ---
 
+## Working with Epics
+
+Epics are used to group related sub-issues that are part of the same feature or high-level task. Understanding how to properly track time and status for Epics is important for accurate project reporting.
+
+### Time Tracking for Epics
+
+#### When Epic is used as a grouping entity only
+
+Most Epics serve purely as organizational containers. In this case:
+
+- **Estimate**: `0`
+- **Remaining Work**: `0`
+- **Time Spent**: `0`
+
+All time tracking should be done in the sub-issues. The Epic itself has no work associated with it.
+
+**Example:**
+```
+Epic: Implement User Authentication (Estimate: 0)
+├─ Sub-issue 1: Design login UI (Estimate: 2 weeks)
+├─ Sub-issue 2: Implement OAuth integration (Estimate: 3 weeks)
+└─ Sub-issue 3: Add session management (Estimate: 1 week)
+
+Total feature estimate: 6 weeks (sum of sub-issues)
+```
+
+#### When Epic has specific work not covered by sub-issues
+
+Sometimes an Epic requires work that isn't captured in any sub-issue (e.g., minor coordination tasks, quick documentation updates). In this case:
+
+- **Estimate**: `> 0` (only for work specific to the Epic itself)
+- Track time for Epic-specific work separately from sub-issues
+
+**Important:** If the Epic-specific work has enough substance or complexity, **create a dedicated sub-issue for it** instead of tracking it directly on the Epic. This provides better granularity and makes the work more visible.
+
+**Example with Epic-level work:**
+```
+Epic: Implement User Authentication (Estimate: 0.5 weeks for coordination)
+├─ Sub-issue 1: Design login UI (Estimate: 2 weeks)
+└─ Sub-issue 2: Implement OAuth integration (Estimate: 3 weeks)
+
+Total feature estimate: 5.5 weeks (Epic + sub-issues)
+```
+
+**Better approach - create a sub-issue:**
+```
+Epic: Implement User Authentication (Estimate: 0)
+├─ Sub-issue 1: Design login UI (Estimate: 2 weeks)
+├─ Sub-issue 2: Implement OAuth integration (Estimate: 3 weeks)
+└─ Sub-issue 3: Architecture documentation and coordination (Estimate: 0.5 weeks)
+
+Total feature estimate: 5.5 weeks (sum of sub-issues)
+```
+
+> **Note:** This approach follows the same pattern as JIRA. JIRA's "Σ Original Estimate" field shows aggregated estimates from the Epic and its sub-issues, but this is purely a visualization convenience — not the source of truth. Each issue tracks its own time independently.
+
+### Status Management for Epics
+
+Epic status should reflect the collective state of its sub-issues:
+
+#### Status Rules
+
+- **If any sub-issue is `In Progress`** → Epic should be **`In Progress`**
+- **If Epic is `Done`** → All sub-issues **must be `Done`**
+- Epic status reflects the overall state of the grouped work
+
+#### Status Flow Example
+
+1. Epic created → Status: **`Backlog`**
+2. First sub-issue starts → Epic: **`In Progress`**
+3. Some sub-issues done, others in progress → Epic: **`In Progress`**
+4. All sub-issues done → Epic: **`Done`**
+
+**Example:**
+```
+Epic: Implement User Authentication (Status: In Progress)
+├─ Sub-issue 1: Design login UI (Status: Done)
+├─ Sub-issue 2: Implement OAuth integration (Status: In Progress)
+└─ Sub-issue 3: Add session management (Status: Backlog)
+```
+
+### Best Practice
+
+**When to create an Epic:**
+
+Whenever you have two or more tasks related to the same feature/story, consider creating an Epic to group them. This provides better organization and makes it easier to track the overall progress of a feature.
+
+
+---
+
 ## Multi-project support
 
 The workflow is not tied to a single project. It is configured with a list of projects via the `PSYNC_PROJECTS` variable (format: `org:project_number`, space-separated):
