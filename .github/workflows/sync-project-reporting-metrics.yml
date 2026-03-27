@@ -707,6 +707,11 @@ jobs:
             REMAINING_WORK_FIELD_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Remaining Work")     | .id')
             TIME_SPENT_FIELD_ID=$(echo "$PAGE_RESPONSE"     | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Time Spent")        | .id')
             VERSION_FIELD_ID=$(echo "$PAGE_RESPONSE"        | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Version")            | .id')
+            
+            # Check for Σ (sigma) aggregated fields
+            SIGMA_ESTIMATE_FIELD_ID=$(echo "$PAGE_RESPONSE"       | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Σ Estimate")          | .id')
+            SIGMA_REMAINING_FIELD_ID=$(echo "$PAGE_RESPONSE"      | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Σ Remaining Work")    | .id')
+            SIGMA_SPENT_FIELD_ID=$(echo "$PAGE_RESPONSE"          | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Σ Time Spent")        | .id')
 
             if [ -z "$REPORTING_DATE_FIELD_ID" ]; then
               echo "Error: 'Reporting Date' field not found in project $PROJECT_OWNER #$PROJECT_NUMBER. Skipping."
@@ -734,6 +739,9 @@ jobs:
             echo "Remaining Work field ID: ${REMAINING_WORK_FIELD_ID:-not configured}"
             echo "Time Spent field ID    : ${TIME_SPENT_FIELD_ID:-not configured}"
             echo "Version field ID       : ${VERSION_FIELD_ID:-not configured}"
+            echo "Σ Estimate field ID    : ${SIGMA_ESTIMATE_FIELD_ID:-not configured}"
+            echo "Σ Remaining field ID   : ${SIGMA_REMAINING_FIELD_ID:-not configured}"
+            echo "Σ Time Spent field ID  : ${SIGMA_SPENT_FIELD_ID:-not configured}"
 
             PAGE=1
 
@@ -828,6 +836,196 @@ jobs:
             UPDATED_COUNT=0
             SKIPPED_COUNT=0
             process_items < "$ITEMS_FILE"
+            
+            # Phase 4: Calculate Σ (sigma) aggregated fields for parent issues
+            # Only run if all three Σ fields exist in the project
+            if [ -n "$SIGMA_ESTIMATE_FIELD_ID" ] && [ -n "$SIGMA_REMAINING_FIELD_ID" ] && [ -n "$SIGMA_SPENT_FIELD_ID" ]; then
+              echo ""
+              echo "========================================"
+              echo "Calculating Σ aggregated fields for parent issues..."
+              echo "========================================"
+              
+              SIGMA_UPDATED_COUNT=0
+              SIGMA_SKIPPED_COUNT=0
+              
+              # Build a map of issue number to item data for quick lookup
+              declare -A ISSUE_ITEM_ID
+              declare -A ISSUE_ESTIMATE
+              declare -A ISSUE_REMAINING
+              declare -A ISSUE_SPENT
+              declare -A ISSUE_TITLE
+              
+              while IFS= read -r item; do
+                num=$(echo "$item" | jq -r '.content.number // ""')
+                [ -z "$num" ] && continue
+                
+                ISSUE_ITEM_ID["$num"]=$(echo "$item" | jq -r '.id')
+                ISSUE_ESTIMATE["$num"]=$(get_field "$item" "Estimate")
+                ISSUE_REMAINING["$num"]=$(get_field "$item" "Remaining Work")
+                ISSUE_SPENT["$num"]=$(get_field "$item" "Time Spent")
+                ISSUE_TITLE["$num"]=$(echo "$item" | jq -r '.content.title // ""')
+              done < "$ITEMS_FILE"
+              
+              # Function to recursively get all descendant sub-issues
+              # $1 = issue number, $2 = current depth, $3 = visited issues (for cycle detection)
+              get_all_descendants() {
+                local issue_num="$1"
+                local depth="$2"
+                local visited="$3"
+                local max_depth=10
+                
+                # Check for max depth
+                if [ "$depth" -ge "$max_depth" ]; then
+                  echo "Warning: Max recursion depth ($max_depth) reached for issue #$issue_num" >&2
+                  return
+                fi
+                
+                # Check for circular dependency
+                if echo "$visited" | grep -q "|$issue_num|"; then
+                  echo "Error: Circular dependency detected involving issue #$issue_num" >&2
+                  record_error "${PROJECT_OWNER}:${PROJECT_NUMBER}" "Circular dependency detected in issue #$issue_num"
+                  return
+                fi
+                
+                # Add current issue to visited list
+                visited="${visited}|${issue_num}|"
+                
+                # Query sub-issues for this issue
+                local sub_issues=$(gh api graphql -f query='
+                  query($owner: String!, $repo: String!, $number: Int!) {
+                    repository(owner: $owner, name: $repo) {
+                      issue(number: $number) {
+                        trackedInIssues(first: 100) {
+                          nodes { number }
+                        }
+                      }
+                    }
+                  }
+                ' -f owner="$PROJECT_OWNER" -f repo="${REPO_NAME:-$(echo "$PROJECT_OWNER" | tr '[:upper:]' '[:lower:]')}" -F number="$issue_num" 2>/dev/null | \
+                  jq -r '.data.repository.issue.trackedInIssues.nodes[]?.number // empty' 2>/dev/null || echo "")
+                
+                # Output direct sub-issues
+                for sub in $sub_issues; do
+                  echo "$sub"
+                  # Recursively get descendants of this sub-issue
+                  get_all_descendants "$sub" $((depth + 1)) "$visited"
+                done
+              }
+              
+              # Process each item to find parent issues (those with sub-issues)
+              while IFS= read -r item; do
+                ITEM_ID=$(echo "$item" | jq -r '.id')
+                ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
+                ISSUE_TITLE_VAL=$(echo "$item" | jq -r '.content.title // ""')
+                
+                # Skip if not a GitHub issue
+                [ -z "$ISSUE_NUMBER" ] && continue
+                
+                # Get direct sub-issues from the item data
+                SUB_ISSUES=$(echo "$item" | jq -r '.content.subIssues.nodes[]?.number // empty' 2>/dev/null || echo "")
+                
+                # Skip if no sub-issues (not a parent)
+                [ -z "$SUB_ISSUES" ] && continue
+                
+                echo ""
+                echo "Processing parent issue #$ISSUE_NUMBER: $ISSUE_TITLE_VAL"
+                
+                # Get all descendants recursively
+                ALL_DESCENDANTS=$(get_all_descendants "$ISSUE_NUMBER" 0 "")
+                
+                # Skip if no descendants found (shouldn't happen, but be safe)
+                if [ -z "$ALL_DESCENDANTS" ]; then
+                  echo "  → No descendants found, skipping"
+                  SIGMA_SKIPPED_COUNT=$((SIGMA_SKIPPED_COUNT + 1))
+                  continue
+                fi
+                
+                # Calculate Σ values: parent's value + sum of all descendants
+                PARENT_ESTIMATE=${ISSUE_ESTIMATE["$ISSUE_NUMBER"]:-0}
+                PARENT_REMAINING=${ISSUE_REMAINING["$ISSUE_NUMBER"]:-0}
+                PARENT_SPENT=${ISSUE_SPENT["$ISSUE_NUMBER"]:-0}
+                
+                # Convert empty strings to 0
+                [ -z "$PARENT_ESTIMATE" ] && PARENT_ESTIMATE=0
+                [ -z "$PARENT_REMAINING" ] && PARENT_REMAINING=0
+                [ -z "$PARENT_SPENT" ] && PARENT_SPENT=0
+                
+                SIGMA_EST="$PARENT_ESTIMATE"
+                SIGMA_REM="$PARENT_REMAINING"
+                SIGMA_SP="$PARENT_SPENT"
+                
+                DESCENDANT_COUNT=0
+                for desc in $ALL_DESCENDANTS; do
+                  desc_est=${ISSUE_ESTIMATE["$desc"]:-0}
+                  desc_rem=${ISSUE_REMAINING["$desc"]:-0}
+                  desc_sp=${ISSUE_SPENT["$desc"]:-0}
+                  
+                  [ -z "$desc_est" ] && desc_est=0
+                  [ -z "$desc_rem" ] && desc_rem=0
+                  [ -z "$desc_sp" ] && desc_sp=0
+                  
+                  SIGMA_EST=$(awk "BEGIN {print $SIGMA_EST + $desc_est}")
+                  SIGMA_REM=$(awk "BEGIN {print $SIGMA_REM + $desc_rem}")
+                  SIGMA_SP=$(awk "BEGIN {print $SIGMA_SP + $desc_sp}")
+                  
+                  DESCENDANT_COUNT=$((DESCENDANT_COUNT + 1))
+                done
+                
+                echo "  → Found $DESCENDANT_COUNT descendant(s)"
+                echo "  → Σ Estimate: $SIGMA_EST, Σ Remaining Work: $SIGMA_REM, Σ Time Spent: $SIGMA_SP"
+                
+                # Update Σ Estimate field
+                gh api graphql -f query='
+                  mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: Float!) {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: $projectId
+                      itemId: $itemId
+                      fieldId: $fieldId
+                      value: { number: $value }
+                    }) {
+                      projectV2Item { id }
+                    }
+                  }
+                ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" -f fieldId="$SIGMA_ESTIMATE_FIELD_ID" -F value="$SIGMA_EST" >/dev/null
+                
+                # Update Σ Remaining Work field
+                gh api graphql -f query='
+                  mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: Float!) {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: $projectId
+                      itemId: $itemId
+                      fieldId: $fieldId
+                      value: { number: $value }
+                    }) {
+                      projectV2Item { id }
+                    }
+                  }
+                ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" -f fieldId="$SIGMA_REMAINING_FIELD_ID" -F value="$SIGMA_REM" >/dev/null
+                
+                # Update Σ Time Spent field
+                gh api graphql -f query='
+                  mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: Float!) {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: $projectId
+                      itemId: $itemId
+                      fieldId: $fieldId
+                      value: { number: $value }
+                    }) {
+                      projectV2Item { id }
+                    }
+                  }
+                ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" -f fieldId="$SIGMA_SPENT_FIELD_ID" -F value="$SIGMA_SP" >/dev/null
+                
+                SIGMA_UPDATED_COUNT=$((SIGMA_UPDATED_COUNT + 1))
+              done < "$ITEMS_FILE"
+              
+              echo ""
+              echo "Σ aggregation summary: $SIGMA_UPDATED_COUNT parent issue(s) updated, $SIGMA_SKIPPED_COUNT skipped."
+            else
+              echo ""
+              echo "Σ aggregated fields not configured in project - skipping aggregation."
+            fi
+            
             rm -f "$ITEMS_FILE"
 
             echo ""
