@@ -337,6 +337,106 @@ Total feature estimate: 5.5 weeks (sum of sub-issues)
 
 > **Note:** This approach follows the same pattern as JIRA. JIRA's "Σ Original Estimate" field shows aggregated estimates from the Epic and its sub-issues, but this is purely a visualization convenience — not the source of truth. Each issue tracks its own time independently.
 
+### Σ (Sigma) Aggregated Fields
+
+The project includes three **system-managed** fields that automatically calculate aggregated time tracking totals for parent issues (Epics and any issue with sub-issues):
+
+- **Σ Estimate**: Sum of parent's Estimate + all descendant sub-issues' Estimates
+- **Σ Remaining Work**: Sum of parent's Remaining Work + all descendants' Remaining Work
+- **Σ Time Spent**: Sum of parent's Time Spent + all descendants' Time Spent
+
+#### Important Notes
+
+⚠️ **These are system fields - DO NOT edit them manually!**
+
+- Σ fields are automatically calculated by the sync workflow
+- Manual edits will be overwritten on the next sync run
+- The workflow runs daily at 00:00 UTC and can be triggered manually
+
+#### How It Works
+
+**Parent Issue Detection:**
+- Any issue that has one or more sub-issues linked via "Subtask of" relationship is considered a parent
+- No special labels or issue types required
+- Works for Epics and any hierarchical structure
+
+**Calculation Formula:**
+```
+Σ [Field] = Parent's [Field] + Σ(ALL descendant sub-issues' [Field])
+```
+
+**Recursive Calculation:**
+- The calculation includes ALL descendants, not just direct children
+- Supports nested hierarchies up to 10 levels deep
+- Example: Epic → Sub-issue → Sub-sub-issue (all included in Epic's Σ fields)
+
+#### Example
+
+```
+Epic: User Authentication
+  Estimate: 0.5 weeks (coordination work)
+  Remaining Work: 0.2 weeks
+  Time Spent: 0.3 weeks
+
+├─ Sub-issue 1: Design login UI
+│    Estimate: 2 weeks
+│    Remaining Work: 0 weeks
+│    Time Spent: 2 weeks
+│
+├─ Sub-issue 2: Implement OAuth (has sub-issues)
+│    Estimate: 0.5 weeks (coordination)
+│    Remaining Work: 0.1 weeks
+│    Time Spent: 0.4 weeks
+│    │
+│    ├─ Sub-sub-issue 2.1: OAuth provider integration
+│    │    Estimate: 1.5 weeks
+│    │    Remaining Work: 0.5 weeks
+│    │    Time Spent: 1 week
+│    │
+│    └─ Sub-sub-issue 2.2: Token management
+│         Estimate: 1 week
+│         Remaining Work: 0.4 weeks
+│         Time Spent: 0.6 weeks
+│
+└─ Sub-issue 3: Session management
+     Estimate: 1 week
+     Remaining Work: 1 week
+     Time Spent: 0 weeks
+
+Epic's Σ fields (automatically calculated):
+  Σ Estimate = 0.5 + 2 + 0.5 + 1.5 + 1 + 1 = 6.5 weeks
+  Σ Remaining Work = 0.2 + 0 + 0.1 + 0.5 + 0.4 + 1 = 2.2 weeks
+  Σ Time Spent = 0.3 + 2 + 0.4 + 1 + 0.6 + 0 = 4.3 weeks
+
+Sub-issue 2's Σ fields (also calculated):
+  Σ Estimate = 0.5 + 1.5 + 1 = 3 weeks
+  Σ Remaining Work = 0.1 + 0.5 + 0.4 = 1 week
+  Σ Time Spent = 0.4 + 1 + 0.6 = 2 weeks
+```
+
+#### Benefits
+
+- **Complete Visibility**: See total scope of work at Epic level
+- **Accurate Planning**: True feature estimates including all nested work
+- **Progress Tracking**: Monitor overall Epic progress automatically
+- **JIRA Compatibility**: Matches JIRA's Σ fields behavior
+
+#### Setup (Optional)
+
+Σ fields are **opt-in** - the workflow only calculates them if they exist in your project:
+
+1. Add three number fields to your GitHub Project:
+   - Name: `Σ Estimate`
+   - Name: `Σ Remaining Work`
+   - Name: `Σ Time Spent`
+
+2. Add field descriptions: "System field - automatically calculated, do not edit manually"
+
+3. The sync workflow will automatically start calculating these fields on the next run
+
+If these fields don't exist, the workflow skips Σ field calculation (no errors).
+
+
 ### Status Management for Epics
 
 Epic status should reflect the collective state of its sub-issues:

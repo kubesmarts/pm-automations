@@ -644,8 +644,13 @@ jobs:
                             number
                             title
                             url
+                            repository {
+                              owner { login }
+                              name
+                            }
                             assignees(first: 5) { nodes { login } }
                             subIssues(first: 50) { nodes { number } }
+                            trackedInIssues(first: 50) { nodes { number } }
                           }
                           ... on PullRequest {
                             number
@@ -707,6 +712,11 @@ jobs:
             REMAINING_WORK_FIELD_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Remaining Work")     | .id')
             TIME_SPENT_FIELD_ID=$(echo "$PAGE_RESPONSE"     | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Time Spent")        | .id')
             VERSION_FIELD_ID=$(echo "$PAGE_RESPONSE"        | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Version")            | .id')
+            
+            # Check for Σ (sigma) aggregated fields
+            SIGMA_ESTIMATE_FIELD_ID=$(echo "$PAGE_RESPONSE"       | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Σ Estimate")          | .id')
+            SIGMA_REMAINING_FIELD_ID=$(echo "$PAGE_RESPONSE"      | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Σ Remaining Work")    | .id')
+            SIGMA_SPENT_FIELD_ID=$(echo "$PAGE_RESPONSE"          | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Σ Time Spent")        | .id')
 
             if [ -z "$REPORTING_DATE_FIELD_ID" ]; then
               echo "Error: 'Reporting Date' field not found in project $PROJECT_OWNER #$PROJECT_NUMBER. Skipping."
@@ -734,6 +744,9 @@ jobs:
             echo "Remaining Work field ID: ${REMAINING_WORK_FIELD_ID:-not configured}"
             echo "Time Spent field ID    : ${TIME_SPENT_FIELD_ID:-not configured}"
             echo "Version field ID       : ${VERSION_FIELD_ID:-not configured}"
+            echo "Σ Estimate field ID    : ${SIGMA_ESTIMATE_FIELD_ID:-not configured}"
+            echo "Σ Remaining field ID   : ${SIGMA_REMAINING_FIELD_ID:-not configured}"
+            echo "Σ Time Spent field ID  : ${SIGMA_SPENT_FIELD_ID:-not configured}"
 
             PAGE=1
 
@@ -764,8 +777,13 @@ jobs:
                               number
                               title
                               url
+                              repository {
+                                owner { login }
+                                name
+                              }
                               assignees(first: 5) { nodes { login } }
                               subIssues(first: 50) { nodes { number } }
+                              trackedInIssues(first: 50) { nodes { number } }
                             }
                             ... on PullRequest {
                               number
@@ -828,6 +846,274 @@ jobs:
             UPDATED_COUNT=0
             SKIPPED_COUNT=0
             process_items < "$ITEMS_FILE"
+            
+            # Phase 4: Calculate Σ (sigma) aggregated fields for parent issues
+            # Only run if all three Σ fields exist in the project
+            if [ -n "$SIGMA_ESTIMATE_FIELD_ID" ] && [ -n "$SIGMA_REMAINING_FIELD_ID" ] && [ -n "$SIGMA_SPENT_FIELD_ID" ]; then
+              echo ""
+              echo "========================================"
+              echo "Calculating Σ aggregated fields for all issues..."
+              echo "========================================"
+              
+              SIGMA_UPDATED_COUNT=0
+              SIGMA_SKIPPED_COUNT=0
+              
+              # Build a map of issue number to item data for quick lookup
+              declare -A ISSUE_ITEM_ID
+              declare -A ISSUE_ESTIMATE
+              declare -A ISSUE_REMAINING
+              declare -A ISSUE_SPENT
+              declare -A ISSUE_TITLE
+              
+              while IFS= read -r item; do
+                num=$(echo "$item" | jq -r '.content.number // ""')
+                [ -z "$num" ] && continue
+                
+                ISSUE_ITEM_ID["$num"]=$(echo "$item" | jq -r '.id')
+                
+                # Extract field values - use get_field which handles all field types correctly
+                ISSUE_ESTIMATE["$num"]=$(get_field "$item" "Estimate")
+                ISSUE_REMAINING["$num"]=$(get_field "$item" "Remaining Work")
+                ISSUE_SPENT["$num"]=$(get_field "$item" "Time Spent")
+                ISSUE_TITLE["$num"]=$(echo "$item" | jq -r '.content.title // ""')
+              done < "$ITEMS_FILE"
+              
+              # Global visited set to prevent infinite loops and duplicate counting
+              declare -A VISITED_ISSUES
+              
+              # Function to recursively get all descendant sub-issues from the items file
+              # $1 = issue number, $2 = current depth
+              get_all_descendants() {
+                local issue_num="$1"
+                local depth="$2"
+                local max_depth=10
+                
+                # Check for max depth
+                if [ "$depth" -ge "$max_depth" ]; then
+                  return
+                fi
+                
+                # Check if already visited (prevents infinite loops)
+                if [ "${VISITED_ISSUES[$issue_num]}" = "1" ]; then
+                  return
+                fi
+                
+                # Mark as visited to prevent infinite loops
+                VISITED_ISSUES[$issue_num]=1
+                
+                # Get sub-issues using GitHub Issues API directly (more reliable than Projects API)
+                # First, get the repository and issue details from the items file
+                # Note: ITEMS_FILE contains newline-delimited JSON, so we use -s to slurp into array
+                local repo_owner=$(jq -rs --argjson issue_num "$issue_num" '
+                  .[] |
+                  select(.content.number == $issue_num) |
+                  .content.repository.owner.login // empty
+                ' "$ITEMS_FILE" 2>/dev/null || echo "")
+                
+                local repo_name=$(jq -rs --argjson issue_num "$issue_num" '
+                  .[] |
+                  select(.content.number == $issue_num) |
+                  .content.repository.name // empty
+                ' "$ITEMS_FILE" 2>/dev/null || echo "")
+                
+                local sub_issues=""
+                
+                # Skip GitHub Issues API - it's unreliable for cross-repo issues
+                # Use Projects API data directly (subIssues field)
+                sub_issues=$(jq -rs --argjson issue_num "$issue_num" '
+                  .[] |
+                  select(.content.number == $issue_num) |
+                  .content.subIssues.nodes[]?.number // empty
+                ' "$ITEMS_FILE" 2>/dev/null || echo "")
+                
+                # Process each sub-issue
+                for sub in $sub_issues; do
+                  # Output the sub-issue (will be checked for duplicates later)
+                  echo "$sub"
+                  # Recursively get descendants of this sub-issue
+                  get_all_descendants "$sub" $((depth + 1))
+                done
+              }
+              
+              # Process each item (all issues, not just parents)
+              while IFS= read -r item; do
+                ITEM_ID=$(echo "$item" | jq -r '.id')
+                ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
+                ISSUE_TITLE_VAL=$(echo "$item" | jq -r '.content.title // ""')
+                
+                # Skip if not a GitHub issue
+                [ -z "$ISSUE_NUMBER" ] && continue
+                
+                echo ""
+                echo "Processing issue #$ISSUE_NUMBER: $ISSUE_TITLE_VAL"
+                
+                # Reset visited set for this parent issue
+                unset VISITED_ISSUES
+                declare -A VISITED_ISSUES
+                
+                # Get all descendants recursively (may contain duplicates)
+                ALL_DESCENDANTS=$(get_all_descendants "$ISSUE_NUMBER" 0 | sort -u)
+                
+                # If no descendants found, use issue's own values for Σ fields
+                if [ -z "$ALL_DESCENDANTS" ]; then
+                  echo "  → No descendants found, using issue's own values"
+                  
+                  # Read values directly from the current item (not from arrays)
+                  PARENT_ESTIMATE=$(get_field "$item" "Estimate")
+                  PARENT_REMAINING=$(get_field "$item" "Remaining Work")
+                  PARENT_SPENT=$(get_field "$item" "Time Spent")
+                  
+                  # Convert empty strings to 0
+                  [ -z "$PARENT_ESTIMATE" ] && PARENT_ESTIMATE=0
+                  [ -z "$PARENT_REMAINING" ] && PARENT_REMAINING=0
+                  [ -z "$PARENT_SPENT" ] && PARENT_SPENT=0
+                  
+                  # Validate numbers
+                  SIGMA_EST=$(printf "%.10g" "$PARENT_ESTIMATE" 2>/dev/null || echo "0")
+                  SIGMA_REM=$(printf "%.10g" "$PARENT_REMAINING" 2>/dev/null || echo "0")
+                  SIGMA_SP=$(printf "%.10g" "$PARENT_SPENT" 2>/dev/null || echo "0")
+                  
+                  echo "  → Σ Estimate: $SIGMA_EST, Σ Remaining Work: $SIGMA_REM, Σ Time Spent: $SIGMA_SP"
+                  
+                  # Update the Σ fields with parent's values
+                  gh api graphql -f query="
+                    mutation {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: \"$PROJECT_ID\"
+                        itemId: \"$ITEM_ID\"
+                        fieldId: \"$SIGMA_ESTIMATE_FIELD_ID\"
+                        value: { number: $SIGMA_EST }
+                      }) {
+                        projectV2Item { id }
+                      }
+                    }
+                  " >/dev/null
+                  
+                  gh api graphql -f query="
+                    mutation {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: \"$PROJECT_ID\"
+                        itemId: \"$ITEM_ID\"
+                        fieldId: \"$SIGMA_REMAINING_FIELD_ID\"
+                        value: { number: $SIGMA_REM }
+                      }) {
+                        projectV2Item { id }
+                      }
+                    }
+                  " >/dev/null
+                  
+                  gh api graphql -f query="
+                    mutation {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: \"$PROJECT_ID\"
+                        itemId: \"$ITEM_ID\"
+                        fieldId: \"$SIGMA_SPENT_FIELD_ID\"
+                        value: { number: $SIGMA_SP }
+                      }) {
+                        projectV2Item { id }
+                      }
+                    }
+                  " >/dev/null
+                  
+                  SIGMA_UPDATED_COUNT=$((SIGMA_UPDATED_COUNT + 1))
+                  continue
+                fi
+                
+                # Calculate Σ values: parent's value + sum of all descendants
+                # Read parent values directly from the current item
+                PARENT_ESTIMATE=$(get_field "$item" "Estimate")
+                PARENT_REMAINING=$(get_field "$item" "Remaining Work")
+                PARENT_SPENT=$(get_field "$item" "Time Spent")
+                
+                # Convert empty strings to 0
+                [ -z "$PARENT_ESTIMATE" ] && PARENT_ESTIMATE=0
+                [ -z "$PARENT_REMAINING" ] && PARENT_REMAINING=0
+                [ -z "$PARENT_SPENT" ] && PARENT_SPENT=0
+                
+                SIGMA_EST="$PARENT_ESTIMATE"
+                SIGMA_REM="$PARENT_REMAINING"
+                SIGMA_SP="$PARENT_SPENT"
+                
+                DESCENDANT_COUNT=0
+                for desc in $ALL_DESCENDANTS; do
+                  desc_est=${ISSUE_ESTIMATE["$desc"]:-0}
+                  desc_rem=${ISSUE_REMAINING["$desc"]:-0}
+                  desc_sp=${ISSUE_SPENT["$desc"]:-0}
+                  
+                  [ -z "$desc_est" ] && desc_est=0
+                  [ -z "$desc_rem" ] && desc_rem=0
+                  [ -z "$desc_sp" ] && desc_sp=0
+                  
+                  SIGMA_EST=$(awk "BEGIN {print $SIGMA_EST + $desc_est}")
+                  SIGMA_REM=$(awk "BEGIN {print $SIGMA_REM + $desc_rem}")
+                  SIGMA_SP=$(awk "BEGIN {print $SIGMA_SP + $desc_sp}")
+                  
+                  DESCENDANT_COUNT=$((DESCENDANT_COUNT + 1))
+                done
+                
+                echo "  → Found $DESCENDANT_COUNT descendant(s)"
+                echo "  → Σ Estimate: $SIGMA_EST, Σ Remaining Work: $SIGMA_REM, Σ Time Spent: $SIGMA_SP"
+                
+                # Ensure values are valid numbers (convert empty or invalid to 0)
+                # Use printf to ensure proper numeric format
+                SIGMA_EST=$(printf "%.10g" "$SIGMA_EST" 2>/dev/null || echo "0")
+                SIGMA_REM=$(printf "%.10g" "$SIGMA_REM" 2>/dev/null || echo "0")
+                SIGMA_SP=$(printf "%.10g" "$SIGMA_SP" 2>/dev/null || echo "0")
+                
+                echo "  → Validated: Σ Estimate: $SIGMA_EST, Σ Remaining Work: $SIGMA_REM, Σ Time Spent: $SIGMA_SP"
+                
+                # Update Σ Estimate field - use inline value in mutation to avoid type issues
+                gh api graphql -f query="
+                  mutation {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: \"$PROJECT_ID\"
+                      itemId: \"$ITEM_ID\"
+                      fieldId: \"$SIGMA_ESTIMATE_FIELD_ID\"
+                      value: { number: $SIGMA_EST }
+                    }) {
+                      projectV2Item { id }
+                    }
+                  }
+                " >/dev/null
+                
+                # Update Σ Remaining Work field
+                gh api graphql -f query="
+                  mutation {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: \"$PROJECT_ID\"
+                      itemId: \"$ITEM_ID\"
+                      fieldId: \"$SIGMA_REMAINING_FIELD_ID\"
+                      value: { number: $SIGMA_REM }
+                    }) {
+                      projectV2Item { id }
+                    }
+                  }
+                " >/dev/null
+                
+                # Update Σ Time Spent field
+                gh api graphql -f query="
+                  mutation {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: \"$PROJECT_ID\"
+                      itemId: \"$ITEM_ID\"
+                      fieldId: \"$SIGMA_SPENT_FIELD_ID\"
+                      value: { number: $SIGMA_SP }
+                    }) {
+                      projectV2Item { id }
+                    }
+                  }
+                " >/dev/null
+                
+                SIGMA_UPDATED_COUNT=$((SIGMA_UPDATED_COUNT + 1))
+              done < "$ITEMS_FILE"
+              
+              echo ""
+              echo "Σ aggregation summary: $SIGMA_UPDATED_COUNT issue(s) updated, $SIGMA_SKIPPED_COUNT skipped."
+            else
+              echo ""
+              echo "Σ aggregated fields not configured in project - skipping aggregation."
+            fi
+            
             rm -f "$ITEMS_FILE"
 
             echo ""
@@ -990,7 +1276,7 @@ jobs:
             done
           done < /tmp/alerts_data.txt
 
-          # Post comments for each assignee
+          # Post comments for each assignee (avoid duplicates)
           for assignee in "${!ASSIGNEE_ALERTS[@]}"; do
             COMMENT_BODY="@${assignee} You have validation alerts:
 
@@ -998,8 +1284,27 @@ jobs:
 
           Please review and resolve these alerts."
 
-            echo "Posting comment for @${assignee}..."
-            gh issue comment "$ALERT_ISSUE" --repo "${{ github.repository }}" --body "$COMMENT_BODY"
+            # Create a hash of the comment content for comparison
+            COMMENT_HASH=$(echo "${ASSIGNEE_ALERTS[$assignee]}" | md5sum | cut -d' ' -f1)
+            
+            # Check if a comment with this hash already exists in the last 10 comments
+            # Get all recent comments that mention this assignee (regardless of author)
+            RECENT_COMMENTS=$(gh issue view "$ALERT_ISSUE" --repo "${{ github.repository }}" --json comments \
+              --jq ".comments[-10:] | .[] | select(.body | contains(\"@${assignee} You have validation alerts\")) | .body" \
+              2>/dev/null || echo "")
+            
+            # Extract hash from comments
+            EXISTING_HASH=$(echo "$RECENT_COMMENTS" | grep -oP '<!-- hash:\K[a-f0-9]+' | tail -1 || echo "")
+            
+            # Only post if no existing comment or if alerts have changed
+            if [ -z "$EXISTING_HASH" ] || [ "$EXISTING_HASH" != "$COMMENT_HASH" ]; then
+              echo "Posting comment for @${assignee}..."
+              # Add hash marker to comment for future comparison
+              COMMENT_WITH_HASH="${COMMENT_BODY}"$'\n\n'"<!-- hash:${COMMENT_HASH} -->"
+              gh issue comment "$ALERT_ISSUE" --repo "${{ github.repository }}" --body "$COMMENT_WITH_HASH"
+            else
+              echo "Skipping duplicate comment for @${assignee} (alerts unchanged)"
+            fi
           done
 
           rm -f /tmp/alerts_data.txt
