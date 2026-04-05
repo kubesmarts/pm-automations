@@ -1,4 +1,7 @@
 Issue Number,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1275,Fix static `ObjectMapper` initialization trap in `JsonUtils` and add native CloudEvents Jackson support,ricardozanini,,Runtimes,Blocker,,2026/Q1,S,1.0,0.8,2026-04-02,,
+1276,WorkflowModel.isNull should be ignored for JacksonObjectModel,fjtirado,,Runtimes,Major,,2026/Q1,XS,0.1,0.1,2026-03-31,,
+1280,[Experimental] Increase flexibility of posible output classses for outputAs after a listen one,fjtirado,,Runtimes,Major,,2026/Q1,S,0.2,0.2,2026-03-31,,
 10,Set up React Flow and add a base Diagram component,handreyrc,,Tooling,Normal,,2026/Q2,S,0.4,0.4,2026-03-27,,
 1251,"Add proper DSL schedule support ""on"" at workflow base and timeouts on tasks",ricardozanini,,Runtimes,Blocker,,2026/Q1,S,0.2,0.1,2026-03-27,,
 1271,Improve CustomObjectMarshaller resolution,fjtirado,,Runtimes,Major,,2026/Q1,S,0.2,0.2,2026-03-27,,
