@@ -84,7 +84,7 @@ exports/
 ### Header (fixed for all projects)
 
 ```csv
-Issue Number,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
 ```
 
 ### Field Descriptions
@@ -92,6 +92,8 @@ Issue Number,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate
 | Field | Description | Notes |
 |-------|-------------|-------|
 | Issue Number | GitHub issue number | Required (draft items skipped) |
+| Parent Issue | Parent issue number (if sub-issue) | Empty if no parent |
+| Issue URL | Direct link to GitHub issue | Full URL for quick navigation |
 | Title | Issue title | Escaped for CSV |
 | Assignees | Comma-separated list of assignees | Empty if no assignees |
 | Type | Issue type (Story, Bug, Task, etc.) | Empty if field not in project |
