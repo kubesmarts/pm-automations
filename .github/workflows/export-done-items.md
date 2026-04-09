@@ -13,6 +13,21 @@ This workflow:
 - New items are prepended at the beginning, sorted by Reporting Date (descending)
 - On first run, exports all historical Done items
 
+### Contributor Whitelist Filtering
+
+The workflow can be configured to export only items assigned to approved contributors. This is controlled by a `contributors.csv` file in the repository root.
+
+**When `contributors.csv` exists:**
+- Only items with at least one whitelisted assignee are exported
+- Items with no assignees or only non-whitelisted assignees are skipped
+- Skipped items are logged with reason "assignees not in contributor whitelist"
+
+**When `contributors.csv` doesn't exist:**
+- All items are exported (backward compatible behavior)
+
+See the [Contributor Access Management](../docs/user-guide-rms-projects.md#contributor-access-management) section in the user guide for details on managing the whitelist.
+
+
 ## Schedule
 
 ```yaml
@@ -45,8 +60,11 @@ An item is exported **only if ALL** conditions are met:
 3. ✅ **Not archived**
 4. ✅ **Reporting Date > last export date** (or first run)
 5. ✅ **Alerts field is empty** (no validation issues)
+6. ✅ **Assignee is in contributor whitelist** (if `contributors.csv` exists)
 
 Items with alerts are skipped and will be exported once the alerts are resolved.
+
+Items with non-whitelisted assignees (when whitelist is active) are skipped and logged.
 
 ## File Structure
 

@@ -1,0 +1,43 @@
+username,active,name,role
+# This file defines the whitelist of contributors whose issues will be processed
+# by the sync and export workflows.
+#
+# Format:
+#   username - GitHub username (required)
+#   active   - true/false (required, only 'true' entries are processed)
+#   name     - Full name (for documentation)
+#   role     - Role or position (for documentation)
+#
+# To grant access: Add a new line with username,true,Full Name,Role
+# To revoke access: Change 'true' to 'false' (preserves history)
+# To reactivate: Change 'false' back to 'true'
+#
+baldimir,true,Tibor Zimányi,Core team member
+cheryl7114,true,Cheryl Kong,Core team member
+dgutierr,true,David Gutierrez,Core team member
+domhanak,true,Dominik Hanák,Core team member
+fantonangeli,true,Fabrizio Antonangeli,Core team member
+fjtirado,true,Francisco Javier Tirado Sarti,Core team member
+gmunozfe,true,Gonzalo Muñoz,Core team member
+hellowdan,true,Daniel Rosa,Core team member
+jakubschwan,true,Jakub Schwan,Core team member
+jankrystof-ibm,true,jankrystof-ibm,Core team member
+handreyrc,true,Handreyrc,Core team member
+kumaradityaraj,true,Kumar Aditya Raj,Core team member
+lornakelly,true,lornakelly,Core team member
+mareknovotny,true,Marek Novotný,Core team member
+mcruzdev,true,Matheus Cruz,Core team member
+mdproctor,true,Mark Proctor,Core team member
+pibizza,true,Paolo Bizzarri,Core team member
+rgolangh,true,Roy Golan,Core team member
+ricardozanini,true,Ricardo Zanini,Core team member
+Rikkola,true,Toni Rikkola,Core team member
+saumya1singh,true,Saumya Singh,Core team member
+tkobayas,true,Toshiya Kobayashi,Core team member
+treblereel,true,Dmitrii Tikhomirov,Core team member
+wmedvede,true,Walter Medvedeo,Core team member
+
+# Skip issue processing from the following members (they are kept for reporting purposes)
+tiagobento,false,Tiago Bento,Former team member (BAMOE team)
+matheusandre1,false,Matheus André,External contributor
+Retektor,false,Eugene Volokitin,External contributor

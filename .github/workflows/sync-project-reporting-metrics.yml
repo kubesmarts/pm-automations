@@ -26,6 +26,9 @@ jobs:
       JIRA_BASE_URL: ${{ vars.PSYNC_JIRA_BASE_URL }}
       PROJECTS: ${{ vars.PSYNC_PROJECTS }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Sync project reporting metrics across all configured projects
         id: sync
         run: |
@@ -95,6 +98,64 @@ jobs:
             '
           }
 
+          # Load contributor whitelist from CSV file
+          load_contributor_whitelist() {
+            WHITELIST_FILE="contributors.csv"
+            
+            if [ ! -f "$WHITELIST_FILE" ]; then
+              echo "Warning: $WHITELIST_FILE not found. Processing all contributors."
+              echo ""
+              return
+            fi
+            
+            # Parse CSV and extract active usernames (skip header, comments, and inactive)
+            CONTRIBUTOR_WHITELIST=$(awk -F',' '
+              NR > 1 &&           # Skip header
+              !/^#/ &&            # Skip comments
+              !/^[[:space:]]*$/ && # Skip empty lines
+              $2 == "true" {      # Only active contributors
+                gsub(/^[[:space:]]+|[[:space:]]+$/, "", $1);  # Trim whitespace
+                print $1
+              }
+            ' "$WHITELIST_FILE" | paste -sd',' -)
+            
+            if [ -z "$CONTRIBUTOR_WHITELIST" ]; then
+              echo "Warning: No active contributors found in $WHITELIST_FILE. Processing all contributors."
+            else
+              ACTIVE_COUNT=$(echo "$CONTRIBUTOR_WHITELIST" | tr ',' '\n' | wc -l)
+              echo "Loaded contributor whitelist: $ACTIVE_COUNT active contributor(s)"
+              echo "Active usernames: $CONTRIBUTOR_WHITELIST"
+            fi
+            echo ""
+          }
+
+          # Check if assignee is in whitelist
+          is_whitelisted() {
+            local assignees="$1"
+            
+            # If no whitelist configured, allow all
+            [ -z "$CONTRIBUTOR_WHITELIST" ] && return 0
+            
+            # If no assignees, reject
+            [ -z "$assignees" ] && return 1
+            
+            # Check if any assignee is in whitelist
+            IFS=',' read -ra ASSIGNEE_ARRAY <<< "$assignees"
+            IFS=',' read -ra WHITELIST <<< "$CONTRIBUTOR_WHITELIST"
+            
+            for assignee in "${ASSIGNEE_ARRAY[@]}"; do
+              assignee="${assignee// /}"  # Trim spaces
+              for allowed in "${WHITELIST[@]}"; do
+                allowed="${allowed// /}"  # Trim spaces
+                if [ "$assignee" = "$allowed" ]; then
+                  return 0  # Match found
+                fi
+              done
+            done
+            
+            return 1  # No match
+          }
+
           # process_items reads one compact JSON item per line from stdin.
           # Reads PROJECT_ID, REPORTING_DATE_FIELD_ID, REPORTING_LOG_FIELD_ID, SYNC_STATUS_FIELD_ID,
           # EXTERNAL_REF_FIELD_ID, ISSUE_STATUS (associative array), TODAY from outer scope.
@@ -110,6 +171,14 @@ jobs:
               [ -z "$ISSUE_NUMBER" ] && echo "  (draft item — no linked GH issue)"
               if [ "$IS_ARCHIVED" = "true" ]; then
                 echo "  → Skipping: item is archived."
+                SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+                continue
+              fi
+
+              # Check contributor whitelist
+              ASSIGNEES_LIST=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
+              if ! is_whitelisted "$ASSIGNEES_LIST"; then
+                echo "  → Skipping: assignees not in contributor whitelist"
                 SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
                 continue
               fi
@@ -597,6 +666,11 @@ jobs:
 
             done
           }
+
+          # ---------------------------------------------------------------------------
+          # Load contributor whitelist
+          # ---------------------------------------------------------------------------
+          load_contributor_whitelist
 
           # ---------------------------------------------------------------------------
           # Iterate over all configured projects

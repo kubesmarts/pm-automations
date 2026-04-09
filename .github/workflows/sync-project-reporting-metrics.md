@@ -13,6 +13,21 @@ This is an **automation workflow** designed to facilitate **progress reporting a
 
 No action is taken when non-tracked fields change (e.g. title, assignee).
 
+### Contributor Whitelist Filtering
+
+The workflow can be configured to process only issues assigned to approved contributors. This is controlled by a `contributors.csv` file in the repository root.
+
+**When `contributors.csv` exists:**
+- Only issues with at least one whitelisted assignee are processed
+- Issues with no assignees or only non-whitelisted assignees are skipped
+- Skipped issues are logged with reason "assignees not in contributor whitelist"
+
+**When `contributors.csv` doesn't exist:**
+- All issues are processed (backward compatible behavior)
+
+See the [Contributor Access Management](../docs/user-guide-rms-projects.md#contributor-access-management) section in the user guide for details on managing the whitelist.
+
+
 ---
 
 ## Setup
