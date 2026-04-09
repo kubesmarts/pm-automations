@@ -489,6 +489,150 @@ To onboard a new project:
 
 The project number is the integer visible in the project URL:
 `https://github.com/orgs/<org>/projects/<number>`
+---
+
+## Contributor Access Management
+
+The automation workflows (sync and export) can be configured to process only issues assigned to approved contributors. This is managed through a whitelist file in the repository.
+
+### How It Works
+
+When the `contributors.csv` file exists in the repository root, the workflows will:
+
+1. Load the list of active contributors on startup
+2. Check each issue's assignees against the whitelist
+3. Skip issues where none of the assignees are in the whitelist
+4. Log skipped issues with the reason "assignees not in contributor whitelist"
+
+**If the `contributors.csv` file doesn't exist**, the workflows process all issues (backward compatible).
+
+### The contributors.csv File
+
+The file uses a simple CSV format with four columns:
+
+```csv
+username,active,name,role
+alice,true,Alice Smith,Senior Developer
+bob,true,Bob Johnson,External Consultant
+charlie,false,Charlie Brown,Former Team Member
+```
+
+**Column descriptions:**
+
+| Column | Required | Description |
+|--------|----------|-------------|
+| `username` | Yes | GitHub username (case-sensitive) |
+| `active` | Yes | `true` or `false` - only `true` entries are processed |
+| `name` | Yes | Full name (for documentation) |
+| `role` | Yes | Role or position (for documentation) |
+
+**File rules:**
+
+- First line must be the header: `username,active,name,role`
+- Lines starting with `#` are comments and ignored
+- Empty lines are ignored
+- Only contributors with `active=true` are included in the whitelist
+
+### Granting Access to a Contributor
+
+To allow a contributor's issues to be processed by the workflows:
+
+1. Open `contributors.csv` in the repository root
+2. Add a new line with the contributor's information:
+   ```csv
+   username,true,Full Name,Role
+   ```
+3. Commit and push the change
+4. The change takes effect on the next workflow run (no restart needed)
+
+**Example:**
+```csv
+username,active,name,role
+jsmith,true,John Smith,Tech Lead
+```
+
+### Revoking Access from a Contributor
+
+To stop processing a contributor's issues **without losing their history**:
+
+1. Open `contributors.csv`
+2. Find the contributor's line
+3. Change `true` to `false` in the `active` column:
+   ```csv
+   jsmith,false,John Smith,Former Tech Lead
+   ```
+4. Commit and push the change
+
+**Why not delete the line?** Keeping the entry with `active=false` preserves the history of who had access and when it was revoked (visible in git history).
+
+### Reactivating a Contributor
+
+To restore access for a previously deactivated contributor:
+
+1. Open `contributors.csv`
+2. Find the contributor's line
+3. Change `false` to `true` in the `active` column
+4. Commit and push the change
+
+### Checking Current Access
+
+To see who currently has access:
+
+1. Open `contributors.csv`
+2. Look for all lines where `active=true`
+
+Or use this command in the repository:
+```bash
+awk -F',' 'NR > 1 && !/^#/ && $2 == "true" {print $1, "-", $3}' contributors.csv
+```
+
+### Workflow Behavior
+
+**When whitelist is active:**
+- Issues with at least one whitelisted assignee → processed normally
+- Issues with no assignees → skipped
+- Issues with only non-whitelisted assignees → skipped
+- Skipped issues are logged in the workflow output
+
+**When whitelist is not configured:**
+- All issues are processed (backward compatible)
+- No filtering occurs
+
+**Workflow output example:**
+```
+Loaded contributor whitelist: 3 active contributor(s)
+Active usernames: alice,bob,dave
+
+Processing items...
+Item ABC123 (GH #42)
+  → Skipping: assignees not in contributor whitelist
+```
+
+### Best Practices
+
+1. **Use descriptive names and roles** - helps identify contributors when reviewing the file
+2. **Don't delete entries** - set `active=false` instead to preserve history
+3. **Review access regularly** - ensure the whitelist reflects current team composition
+4. **Document role changes** - update the `role` column when contributors change positions
+5. **Use git history** - leverage git blame/log to track access changes over time
+
+### Example contributors.csv
+
+```csv
+username,active,name,role
+# Core Team
+jsmith,true,John Smith,Tech Lead
+mjones,true,Mary Jones,Senior Engineer
+agarcia,true,Ana Garcia,Developer
+
+# External Contributors
+bwilson,true,Bob Wilson,Consultant - Q1 2026
+clee,true,Carol Lee,Partner Team
+
+# Inactive
+dchen,false,David Chen,Former Developer - Left Dec 2025
+```
+
 
 ---
 
