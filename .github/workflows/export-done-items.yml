@@ -159,7 +159,7 @@ jobs:
             else
               # Get Reporting Date from first data line (line 2, after header)
               # Use Python to properly parse CSV with quoted fields
-              LAST_EXPORT_DATE=$(python3 -c "import csv; f = open('$EXPORT_FILE', 'r'); reader = csv.reader(f); next(reader); row = next(reader, None); print(row[11].strip() if row and len(row) >= 12 else '')" 2>/dev/null || echo "")
+              LAST_EXPORT_DATE=$(python3 -c "import csv; f = open('$EXPORT_FILE', 'r'); reader = csv.reader(f); next(reader); row = next(reader, None); print(row[13].strip() if row and len(row) >= 14 else '')" 2>/dev/null || echo "")
               if [ -z "$LAST_EXPORT_DATE" ]; then
                 echo "Warning: Could not read last export date, treating as first export"
                 LAST_EXPORT_DATE="1970-01-01"
@@ -199,6 +199,7 @@ jobs:
                             url
                             body
                             assignees(first: 10) { nodes { login } }
+                            subIssues(first: 50) { nodes { number } }
                           }
                         }
                         fieldValues(first: 30) {
@@ -273,6 +274,7 @@ jobs:
                               url
                               body
                               assignees(first: 10) { nodes { login } }
+                              subIssues(first: 50) { nodes { number } }
                             }
                           }
                           fieldValues(first: 30) {
@@ -313,6 +315,20 @@ jobs:
               HAS_NEXT=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.items.pageInfo.hasNextPage')
               CURSOR=$(echo "$PAGE_RESPONSE"   | jq -r '.data.organization.projectV2.items.pageInfo.endCursor')
             done
+
+            # Build parent-child mapping from subIssues field
+            # This allows us to find the parent issue for any child issue
+            declare -A PARENT_MAP
+            while IFS= read -r item; do
+              PARENT_NUM=$(echo "$item" | jq -r '.content.number // ""')
+              [ -z "$PARENT_NUM" ] && continue
+              
+              # Get all sub-issues for this parent
+              SUB_ISSUES=$(echo "$item" | jq -r '.content.subIssues.nodes[].number // empty' 2>/dev/null || echo "")
+              for child_num in $SUB_ISSUES; do
+                PARENT_MAP[$child_num]=$PARENT_NUM
+              done
+            done < "$ITEMS_FILE"
 
             # Collect new items to export
             NEW_ITEMS_FILE=$(mktemp)
@@ -360,6 +376,9 @@ jobs:
 
               # Extract all fields
               TITLE=$(echo "$item" | jq -r '.content.title // ""')
+              ISSUE_URL=$(echo "$item" | jq -r '.content.url // ""')
+              # Look up parent issue from the mapping built from subIssues
+              PARENT_ISSUE="${PARENT_MAP[$ISSUE_NUMBER]:-}"
               ASSIGNEES=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
 
               # Check whitelist
@@ -382,6 +401,8 @@ jobs:
 
               # Build CSV line with proper escaping
               CSV_LINE="${ISSUE_NUMBER},"
+              CSV_LINE+="$(escape_csv "$PARENT_ISSUE"),"
+              CSV_LINE+="$(escape_csv "$ISSUE_URL"),"
               CSV_LINE+="$(escape_csv "$TITLE"),"
               CSV_LINE+="$(escape_csv "$ASSIGNEES"),"
               CSV_LINE+="$(escape_csv "$TYPE"),"
@@ -413,7 +434,7 @@ jobs:
               # Create or update export file
               if [ ! -f "$EXPORT_FILE" ] || [ ! -s "$EXPORT_FILE" ]; then
                 # First export - create file with header and new items
-                echo "Issue Number,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
+                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
                 cat "$SORTED_NEW_ITEMS" >> "$EXPORT_FILE"
               else
                 # Incremental export - prepend new items after header
