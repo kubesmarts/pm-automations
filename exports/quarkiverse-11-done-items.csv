@@ -1,4 +1,12 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1296,,https://github.com/serverlessworkflow/sdk-java/issues/1296,Prevent loading the same process instance twice,fjtirado,,Runtimes,Major,,2026/Q1,S,0.2,0.2,2026-04-11,,
+15,2,https://github.com/serverlessworkflow/editor/issues/15,Add localization (i18n) support,kumaradityaraj,,Tooling,Normal,,2026/Q2,S,1.0,1.0,2026-04-11,,
+30,3,https://github.com/serverlessworkflow/editor/issues/30,feat: Add GitHub Action to publish Storybook preview for every PR via Netlify,fantonangeli,,Tooling,Major,,2026/Q2,M,0.6,0.8,2026-04-11,,
+444,,https://github.com/quarkiverse/quarkus-flow/issues/444,feat: Update Quarkus Flow in Quarkus Platform to 0.8.0.,baldimir,,Runtimes,Normal,,2026/Q2,S,0.2,0.2,2026-04-11,,
+290,226,https://github.com/quarkiverse/quarkus-flow/issues/290,docs: Add documentation about how-to deal with data transformations in practice,mcruzdev,,Docs,Normal,,2026/Q1,S,0.4,0.4,2026-04-10,,
+369,,https://github.com/quarkiverse/quarkus-flow/issues/369,Add a CONTRIBUTING.md file to guide new contributors,mcruzdev,,Docs,Normal,,2026/Q2,S,0.2,0.2,2026-04-10,,
+373,,https://github.com/quarkiverse/quarkus-flow/issues/373,Prepare for Quarkus Insights,ricardozanini,,Runtimes,Normal,,2026/Q2,M,0.2,0.2,2026-04-10,,
+396,,https://github.com/quarkiverse/quarkus-flow/issues/396,Flaky test on FlowAgentServicesFailedTest and FlowPlannerSessionsConcurrencyTest,mcruzdev,,CI,Normal,,2026/Q2,S,0.2,0.2,2026-04-10,,
 1292,,https://github.com/serverlessworkflow/sdk-java/issues/1292,WriteInstant write seconds when it should write milliseconds,fjtirado,,Runtimes,Major,,2026/Q1,XS,0.2,0.2,2026-04-09,,
 16,2,https://github.com/serverlessworkflow/editor/issues/16,Set up context and global context provider component for state management,handreyrc,,Tooling,Major,,2026/Q2,S,0.7,0.8,2026-04-09,,
 421,,https://github.com/quarkiverse/quarkus-flow/issues/421,FlowSchedulerTest fails intermittently due to sub-second interval limitation,ricardozanini,,Runtimes,Blocker,,2026/Q2,XS,0.1,0.1,2026-04-09,,

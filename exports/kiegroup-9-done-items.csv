@@ -1,0 +1,2 @@
+Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+25,,https://github.com/casehubio/engine/issues/25,Add GitHub Action to run Maven tests for pull requests,treblereel,,Runtimes,Normal,,Future,S,0.2,0.0,2026-04-11,,
