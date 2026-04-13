@@ -753,7 +753,7 @@ jobs:
                             assignees(first: 5) { nodes { login } }
                           }
                         }
-                        fieldValues(first: 20) {
+                        fieldValues(first: 50) {
                           nodes {
                             ... on ProjectV2ItemFieldTextValue {
                               text
@@ -894,7 +894,7 @@ jobs:
                               assignees(first: 5) { nodes { login } }
                             }
                           }
-                          fieldValues(first: 20) {
+                          fieldValues(first: 50) {
                             nodes {
                               ... on ProjectV2ItemFieldTextValue {
                                 text
