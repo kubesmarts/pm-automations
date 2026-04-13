@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Issues Dashboard - PM Automations</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎯 Active Issues Dashboard</h1>
+            <p class="subtitle">Real-time project metrics, capacity planning, and velocity tracking</p>
+            <div class="last-updated">
+                Last updated: <span id="lastUpdated">Loading...</span>
+            </div>
+        </header>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading project data...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error" class="error" style="display: none;">
+            <h3>⚠️ Error Loading Data</h3>
+            <p id="errorMessage"></p>
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div id="dashboard" style="display: none;">
+            
+            <!-- Filters Section -->
+            <section class="filters-section">
+                <h2>🔍 Filters</h2>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Projects</label>
+                        <div id="projectFilters" class="filter-checkboxes"></div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Versions</label>
+                        <div id="versionFilters" class="filter-checkboxes"></div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Areas</label>
+                        <div id="areaFilters" class="filter-checkboxes"></div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Priorities</label>
+                        <div id="priorityFilters" class="filter-checkboxes"></div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Assignees</label>
+                        <div id="assigneeFilters" class="filter-checkboxes"></div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <div id="statusFilters" class="filter-checkboxes"></div>
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button id="clearFilters" class="btn btn-secondary">Clear All Filters</button>
+                    <button id="exportFiltered" class="btn btn-primary">Export Filtered Data</button>
+                </div>
+            </section>
+
+            <!-- Global Summary -->
+            <section class="summary-section">
+                <h2>📊 Global Summary</h2>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <div class="card-icon">📝</div>
+                        <div class="card-content">
+                            <div class="card-label">Total Issues</div>
+                            <div class="card-value" id="totalIssues">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">⏱️</div>
+                        <div class="card-content">
+                            <div class="card-label">Σ Remaining Work</div>
+                            <div class="card-value" id="totalRemaining">0 weeks</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">📈</div>
+                        <div class="card-content">
+                            <div class="card-label">Σ Estimate</div>
+                            <div class="card-value" id="totalEstimate">0 weeks</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">✅</div>
+                        <div class="card-content">
+                            <div class="card-label">Σ Time Spent</div>
+                            <div class="card-value" id="totalSpent">0 weeks</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">📊</div>
+                        <div class="card-content">
+                            <div class="card-label">Progress</div>
+                            <div class="card-value" id="totalProgress">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <h2>📈 Visualizations</h2>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Remaining Work by Project</h3>
+                        <canvas id="projectChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Distribution by Area</h3>
+                        <canvas id="areaChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Remaining Work by Version</h3>
+                        <canvas id="versionChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Distribution by Priority</h3>
+                        <canvas id="priorityChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Breakdown Tables -->
+            <section class="breakdown-section">
+                <h2>📋 Detailed Breakdowns</h2>
+                
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="project">By Project</button>
+                    <button class="tab-button" data-tab="version">By Version</button>
+                    <button class="tab-button" data-tab="area">By Area</button>
+                    <button class="tab-button" data-tab="priority">By Priority</button>
+                    <button class="tab-button" data-tab="assignee">By Assignee</button>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <div id="projectTab" class="tab-pane active">
+                        <table id="projectTable" class="breakdown-table">
+                            <thead>
+                                <tr>
+                                    <th>Project</th>
+                                    <th>Issues</th>
+                                    <th>Σ Remaining</th>
+                                    <th>Σ Estimate</th>
+                                    <th>Progress</th>
+                                    <th>% of Total</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="versionTab" class="tab-pane">
+                        <table id="versionTable" class="breakdown-table">
+                            <thead>
+                                <tr>
+                                    <th>Version</th>
+                                    <th>Issues</th>
+                                    <th>Σ Remaining</th>
+                                    <th>Σ Estimate</th>
+                                    <th>Progress</th>
+                                    <th>% of Total</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="areaTab" class="tab-pane">
+                        <table id="areaTable" class="breakdown-table">
+                            <thead>
+                                <tr>
+                                    <th>Area</th>
+                                    <th>Issues</th>
+                                    <th>Σ Remaining</th>
+                                    <th>Σ Estimate</th>
+                                    <th>Progress</th>
+                                    <th>% of Total</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="priorityTab" class="tab-pane">
+                        <table id="priorityTable" class="breakdown-table">
+                            <thead>
+                                <tr>
+                                    <th>Priority</th>
+                                    <th>Issues</th>
+                                    <th>Σ Remaining</th>
+                                    <th>Σ Estimate</th>
+                                    <th>Progress</th>
+                                    <th>% of Total</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="assigneeTab" class="tab-pane">
+                        <table id="assigneeTable" class="breakdown-table">
+                            <thead>
+                                <tr>
+                                    <th>Assignee</th>
+                                    <th>Issues</th>
+                                    <th>Σ Remaining</th>
+                                    <th>Σ Estimate</th>
+                                    <th>Progress</th>
+                                    <th>Areas</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Capacity Planning -->
+            <section class="capacity-section">
+                <h2>🎯 Capacity Planning</h2>
+                <div class="capacity-inputs">
+                    <div class="input-group">
+                        <label for="targetDate">Target Date</label>
+                        <input type="date" id="targetDate" class="form-input">
+                    </div>
+                    <div class="input-group">
+                        <label for="teamSize">Team Size</label>
+                        <input type="number" id="teamSize" class="form-input" value="3" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="availability">Availability (%)</label>
+                        <input type="number" id="availability" class="form-input" value="100" min="1" max="100">
+                    </div>
+                    <button id="calculateCapacity" class="btn btn-primary">Calculate Feasibility</button>
+                </div>
+                <div id="capacityResults" class="capacity-results" style="display: none;">
+                    <div class="feasibility-card">
+                        <h3>Feasibility Analysis</h3>
+                        <div id="feasibilityContent"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Velocity Tracking -->
+            <section class="velocity-section">
+                <h2>🚀 Velocity Tracking</h2>
+                <div class="velocity-content">
+                    <div class="velocity-summary">
+                        <h3>Team Velocity (Last 4 Weeks)</h3>
+                        <div id="velocitySummary">
+                            <p>Loading velocity data...</p>
+                        </div>
+                    </div>
+                    <div class="velocity-chart">
+                        <canvas id="velocityChart"></canvas>
+                    </div>
+                </div>
+                <div class="forecast-section">
+                    <h3>Velocity-Based Forecast</h3>
+                    <div id="forecastContent">
+                        <p>Calculate capacity to see forecast...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Issue List -->
+            <section class="issues-section">
+                <h2>📝 Filtered Issues (<span id="issueCount">0</span> items)</h2>
+                <div class="table-container">
+                    <table id="issuesTable" class="issues-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="number">#</th>
+                                <th class="sortable" data-sort="title">Title</th>
+                                <th class="sortable" data-sort="status">Status</th>
+                                <th class="sortable" data-sort="area">Area</th>
+                                <th class="sortable" data-sort="priority">Priority</th>
+                                <th class="sortable" data-sort="version">Version</th>
+                                <th class="sortable" data-sort="assignees">Assignees</th>
+                                <th class="sortable" data-sort="remaining">Σ Remaining</th>
+                                <th class="sortable" data-sort="progress">Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/dashboard.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/capacity.js"></script>
+    <script src="js/velocity.js"></script>
+</body>
+</html>
