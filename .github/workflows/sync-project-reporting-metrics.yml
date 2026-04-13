@@ -167,7 +167,7 @@ jobs:
               ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
               ISSUE_TITLE=$(echo "$item" | jq -r '.content.title // ""')
               echo ""
-              echo "Item $ITEM_ID${ISSUE_NUMBER:+ (GH #$ISSUE_NUMBER)}"
+              echo "Item $ITEM_ID${ISSUE_NUMBER:+ (GH #$ISSUE_NUMBER)}${ISSUE_TITLE:+: $ISSUE_TITLE}"
               [ -z "$ISSUE_NUMBER" ] && echo "  (draft item — no linked GH issue)"
               if [ "$IS_ARCHIVED" = "true" ]; then
                 echo "  → Skipping: item is archived."
@@ -735,7 +735,15 @@ jobs:
                               name
                             }
                             assignees(first: 5) { nodes { login } }
-                            subIssues(first: 50) { nodes { number } }
+                            subIssues(first: 50) {
+                              nodes {
+                                number
+                                repository {
+                                  owner { login }
+                                  name
+                                }
+                              }
+                            }
                             trackedInIssues(first: 50) { nodes { number } }
                           }
                           ... on PullRequest {
@@ -868,7 +876,15 @@ jobs:
                                 name
                               }
                               assignees(first: 5) { nodes { login } }
-                              subIssues(first: 50) { nodes { number } }
+                              subIssues(first: 50) {
+                                nodes {
+                                  number
+                                  repository {
+                                    owner { login }
+                                    name
+                                  }
+                                }
+                              }
                               trackedInIssues(first: 50) { nodes { number } }
                             }
                             ... on PullRequest {
@@ -945,6 +961,7 @@ jobs:
               SIGMA_SKIPPED_COUNT=0
               
               # Build a map of issue number to item data for quick lookup
+              # Use composite key: "repo_owner/repo_name#issue_number" to handle issues with same number from different repos
               declare -A ISSUE_ITEM_ID
               declare -A ISSUE_ESTIMATE
               declare -A ISSUE_REMAINING
@@ -955,13 +972,19 @@ jobs:
                 num=$(echo "$item" | jq -r '.content.number // ""')
                 [ -z "$num" ] && continue
                 
-                ISSUE_ITEM_ID["$num"]=$(echo "$item" | jq -r '.id')
+                repo_owner=$(echo "$item" | jq -r '.content.repository.owner.login // ""')
+                repo_name=$(echo "$item" | jq -r '.content.repository.name // ""')
+                
+                # Create composite key: owner/repo#number
+                key="${repo_owner}/${repo_name}#${num}"
+                
+                ISSUE_ITEM_ID["$key"]=$(echo "$item" | jq -r '.id')
                 
                 # Extract field values - use get_field which handles all field types correctly
-                ISSUE_ESTIMATE["$num"]=$(get_field "$item" "Estimate")
-                ISSUE_REMAINING["$num"]=$(get_field "$item" "Remaining Work")
-                ISSUE_SPENT["$num"]=$(get_field "$item" "Time Spent")
-                ISSUE_TITLE["$num"]=$(echo "$item" | jq -r '.content.title // ""')
+                ISSUE_ESTIMATE["$key"]=$(get_field "$item" "Estimate")
+                ISSUE_REMAINING["$key"]=$(get_field "$item" "Remaining Work")
+                ISSUE_SPENT["$key"]=$(get_field "$item" "Time Spent")
+                ISSUE_TITLE["$key"]=$(echo "$item" | jq -r '.content.title // ""')
               done < "$ITEMS_FILE"
               
               # Global visited set to prevent infinite loops and duplicate counting
@@ -990,34 +1013,43 @@ jobs:
                 # Get sub-issues using GitHub Issues API directly (more reliable than Projects API)
                 # First, get the repository and issue details from the items file
                 # Note: ITEMS_FILE contains newline-delimited JSON, so we use -s to slurp into array
+                # Get repository info for this issue - use first match only to avoid ambiguity
                 local repo_owner=$(jq -rs --argjson issue_num "$issue_num" '
-                  .[] |
-                  select(.content.number == $issue_num) |
-                  .content.repository.owner.login // empty
+                  [.[] | select(.content.number == $issue_num)] |
+                  if length > 0 then .[0].content.repository.owner.login // empty else empty end
                 ' "$ITEMS_FILE" 2>/dev/null || echo "")
                 
                 local repo_name=$(jq -rs --argjson issue_num "$issue_num" '
-                  .[] |
-                  select(.content.number == $issue_num) |
-                  .content.repository.name // empty
+                  [.[] | select(.content.number == $issue_num)] |
+                  if length > 0 then .[0].content.repository.name // empty else empty end
                 ' "$ITEMS_FILE" 2>/dev/null || echo "")
                 
                 local sub_issues=""
                 
                 # Skip GitHub Issues API - it's unreliable for cross-repo issues
                 # Use Projects API data directly (subIssues field)
-                sub_issues=$(jq -rs --argjson issue_num "$issue_num" '
+                # IMPORTANT: Filter by both issue number AND repository to avoid matching issues
+                # with the same number from different repositories
+                # Now subIssues includes repository info, so we can get composite keys directly
+                local sub_issue_keys=$(jq -rs --argjson issue_num "$issue_num" --arg owner "$repo_owner" --arg repo "$repo_name" '
                   .[] |
-                  select(.content.number == $issue_num) |
-                  .content.subIssues.nodes[]?.number // empty
+                  select(.content.number == $issue_num and
+                         .content.repository.owner.login == $owner and
+                         .content.repository.name == $repo) |
+                  .content.subIssues.nodes[]? |
+                  "\(.repository.owner.login)/\(.repository.name)#\(.number)"
                 ' "$ITEMS_FILE" 2>/dev/null || echo "")
                 
-                # Process each sub-issue
-                for sub in $sub_issues; do
-                  # Output the sub-issue (will be checked for duplicates later)
-                  echo "$sub"
+                # Process each sub-issue (now using composite keys directly)
+                for sub_key in $sub_issue_keys; do
+                  # Output the composite key
+                  echo "$sub_key"
+                  
+                  # Extract issue number from composite key for recursive call
+                  sub_num=$(echo "$sub_key" | sed 's/.*#//')
+                  
                   # Recursively get descendants of this sub-issue
-                  get_all_descendants "$sub" $((depth + 1))
+                  get_all_descendants "$sub_num" $((depth + 1))
                 done
               }
               
@@ -1026,18 +1058,20 @@ jobs:
                 ITEM_ID=$(echo "$item" | jq -r '.id')
                 ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
                 ISSUE_TITLE_VAL=$(echo "$item" | jq -r '.content.title // ""')
+                REPO_OWNER=$(echo "$item" | jq -r '.content.repository.owner.login // ""')
+                REPO_NAME=$(echo "$item" | jq -r '.content.repository.name // ""')
                 
                 # Skip if not a GitHub issue
                 [ -z "$ISSUE_NUMBER" ] && continue
                 
                 echo ""
-                echo "Processing issue #$ISSUE_NUMBER: $ISSUE_TITLE_VAL"
+                echo "Processing issue $REPO_OWNER/$REPO_NAME#$ISSUE_NUMBER: $ISSUE_TITLE_VAL"
                 
                 # Reset visited set for this parent issue
                 unset VISITED_ISSUES
                 declare -A VISITED_ISSUES
                 
-                # Get all descendants recursively (may contain duplicates)
+                # Get all descendants recursively (returns composite keys: owner/repo#number)
                 ALL_DESCENDANTS=$(get_all_descendants "$ISSUE_NUMBER" 0 | sort -u)
                 
                 # If no descendants found, use issue's own values for Σ fields
@@ -1121,10 +1155,11 @@ jobs:
                 SIGMA_SP="$PARENT_SPENT"
                 
                 DESCENDANT_COUNT=0
-                for desc in $ALL_DESCENDANTS; do
-                  desc_est=${ISSUE_ESTIMATE["$desc"]:-0}
-                  desc_rem=${ISSUE_REMAINING["$desc"]:-0}
-                  desc_sp=${ISSUE_SPENT["$desc"]:-0}
+                for desc_key in $ALL_DESCENDANTS; do
+                  # desc_key is now in format: owner/repo#number
+                  desc_est=${ISSUE_ESTIMATE["$desc_key"]:-0}
+                  desc_rem=${ISSUE_REMAINING["$desc_key"]:-0}
+                  desc_sp=${ISSUE_SPENT["$desc_key"]:-0}
                   
                   [ -z "$desc_est" ] && desc_est=0
                   [ -z "$desc_rem" ] && desc_rem=0
