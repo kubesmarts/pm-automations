@@ -1,0 +1,452 @@
+name: Export Active Items
+
+# ---------------------------------------------------------------------------
+# Schedule configuration
+# Runs daily at 00:00 UTC to export active (non-Done, non-Backlog) items
+# ---------------------------------------------------------------------------
+on:
+  schedule:
+    - cron: '0 0 * * *'   # Daily at 00:00 UTC
+  workflow_dispatch:
+
+# Requires a PAT with 'project' and 'read:org' scopes stored as secret PSYNC_PAT_GH.
+# Uses the same PSYNC_PROJECTS variable as the sync workflow.
+
+jobs:
+  export-active-items:
+    name: Export active items to CSV
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PSYNC_PAT_GH }}
+      PROJECTS: ${{ vars.PSYNC_PROJECTS }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper git operations
+
+      - name: Pull latest exports
+        run: |
+          git pull origin main
+
+      - name: Export active items for all projects
+        id: export
+        run: |
+          set -e
+
+          TODAY=$(date -u +%Y-%m-%d)
+          EXPORT_BASE_DIR="exports"
+
+          # Extract a field value from a project item JSON blob by field name.
+          # Handles text, number, single-select and date field types.
+          get_field() {
+            local item_json="$1"
+            local field_name="$2"
+            echo "$item_json" | jq -r --arg n "$field_name" '
+              [ .fieldValues.nodes[] | select(.field.name == $n) ] |
+              if length == 0 then ""
+              else .[0] |
+                if .text != null then .text
+                elif .number != null then (.number | tostring)
+                elif .["name"] != null then .["name"]
+                elif .date != null then .date
+                else ""
+                end
+              end
+            '
+          }
+
+          # Escape CSV field value (handle quotes and commas)
+          escape_csv() {
+            local value="$1"
+            # Replace " with ""
+            value="${value//\"/\"\"}"
+            # If contains comma, newline, or quote, wrap in quotes
+            if [[ "$value" =~ [,\"$'\n'] ]]; then
+              echo "\"$value\""
+            else
+              echo "$value"
+            fi
+          }
+
+          # ---------------------------------------------------------------------------
+          # Iterate over all configured projects
+          # ---------------------------------------------------------------------------
+          TOTAL_EXPORTED=0
+
+          for PROJECT_ENTRY in $PROJECTS; do
+            PROJECT_OWNER="${PROJECT_ENTRY%%:*}"
+            PROJECT_NUMBER="${PROJECT_ENTRY##*:}"
+
+            echo ""
+            echo "========================================"
+            echo "Project: $PROJECT_OWNER #$PROJECT_NUMBER"
+            echo "========================================"
+
+            # Create export directory
+            mkdir -p "$EXPORT_BASE_DIR"
+
+            # Export file per project
+            EXPORT_FILE="${EXPORT_BASE_DIR}/${PROJECT_OWNER}-${PROJECT_NUMBER}-active-items.csv"
+
+            # Fetch project metadata and first page of items
+            echo "Fetching project metadata and page 1..."
+            PAGE_RESPONSE=$(gh api graphql -f query='
+              query($owner: String!, $number: Int!) {
+                organization(login: $owner) {
+                  projectV2(number: $number) {
+                    id
+                    title
+                    fields(first: 50) {
+                      nodes {
+                        ... on ProjectV2Field {
+                          id
+                          name
+                        }
+                        ... on ProjectV2SingleSelectField {
+                          id
+                          name
+                        }
+                      }
+                    }
+                    items(first: 100) {
+                      pageInfo { hasNextPage endCursor }
+                      nodes {
+                        id
+                        isArchived
+                        content {
+                          ... on Issue {
+                            number
+                            title
+                            url
+                            body
+                            assignees(first: 10) { nodes { login } }
+                            repository {
+                              owner { login }
+                              name
+                            }
+                            subIssues(first: 50) {
+                              nodes {
+                                number
+                                repository {
+                                  owner { login }
+                                  name
+                                }
+                              }
+                            }
+                          }
+                        }
+                        fieldValues(first: 50) {
+                          nodes {
+                            ... on ProjectV2ItemFieldTextValue {
+                              text
+                              field { ... on ProjectV2Field { name } }
+                            }
+                            ... on ProjectV2ItemFieldNumberValue {
+                              number
+                              field { ... on ProjectV2Field { name } }
+                            }
+                            ... on ProjectV2ItemFieldSingleSelectValue {
+                              name
+                              field { ... on ProjectV2SingleSelectField { name } }
+                            }
+                            ... on ProjectV2ItemFieldDateValue {
+                              date
+                              field { ... on ProjectV2Field { name } }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ' -f owner="$PROJECT_OWNER" -F number=$PROJECT_NUMBER)
+
+            # Check for GraphQL errors
+            GRAPHQL_ERRORS=$(echo "$PAGE_RESPONSE" | jq -r '.errors // empty')
+            if [ -n "$GRAPHQL_ERRORS" ]; then
+              echo "Error: GraphQL query failed for $PROJECT_OWNER #$PROJECT_NUMBER:"
+              echo "$GRAPHQL_ERRORS"
+              continue
+            fi
+
+            PROJECT_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.id // ""')
+            PROJECT_TITLE=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.title // ""')
+            
+            if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
+              echo "Error: Could not resolve project ID. Skipping."
+              continue
+            fi
+
+            echo "Project ID: $PROJECT_ID"
+            echo "Project Title: $PROJECT_TITLE"
+
+            # Collect all items across all pages
+            ITEMS_FILE=$(mktemp)
+            echo "$PAGE_RESPONSE" | jq -c '.data.organization.projectV2.items.nodes[]' >> "$ITEMS_FILE"
+
+            # Paginate through remaining pages
+            HAS_NEXT=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.items.pageInfo.hasNextPage')
+            CURSOR=$(echo "$PAGE_RESPONSE"   | jq -r '.data.organization.projectV2.items.pageInfo.endCursor')
+            PAGE=1
+
+            while [ "$HAS_NEXT" = "true" ]; do
+              PAGE=$((PAGE + 1))
+              echo "Fetching page $PAGE..."
+
+              PAGE_RESPONSE=$(gh api graphql -f query='
+                query($owner: String!, $number: Int!, $cursor: String!) {
+                  organization(login: $owner) {
+                    projectV2(number: $number) {
+                      items(first: 100, after: $cursor) {
+                        pageInfo { hasNextPage endCursor }
+                        nodes {
+                          id
+                          isArchived
+                          content {
+                            ... on Issue {
+                              number
+                              title
+                              url
+                              body
+                              assignees(first: 10) { nodes { login } }
+                              repository {
+                                owner { login }
+                                name
+                              }
+                              subIssues(first: 50) {
+                                nodes {
+                                  number
+                                  repository {
+                                    owner { login }
+                                    name
+                                  }
+                                }
+                              }
+                            }
+                          }
+                          fieldValues(first: 50) {
+                            nodes {
+                              ... on ProjectV2ItemFieldTextValue {
+                                text
+                                field { ... on ProjectV2Field { name } }
+                              }
+                              ... on ProjectV2ItemFieldNumberValue {
+                                number
+                                field { ... on ProjectV2Field { name } }
+                              }
+                              ... on ProjectV2ItemFieldSingleSelectValue {
+                                name
+                                field { ... on ProjectV2SingleSelectField { name } }
+                              }
+                              ... on ProjectV2ItemFieldDateValue {
+                                date
+                                field { ... on ProjectV2Field { name } }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ' -f owner="$PROJECT_OWNER" -F number=$PROJECT_NUMBER -f cursor="$CURSOR")
+
+              GRAPHQL_ERRORS=$(echo "$PAGE_RESPONSE" | jq -r '.errors // empty')
+              if [ -n "$GRAPHQL_ERRORS" ]; then
+                echo "Error: GraphQL pagination failed on page $PAGE"
+                break
+              fi
+
+              echo "$PAGE_RESPONSE" | jq -c '.data.organization.projectV2.items.nodes[]' >> "$ITEMS_FILE"
+
+              HAS_NEXT=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.items.pageInfo.hasNextPage')
+              CURSOR=$(echo "$PAGE_RESPONSE"   | jq -r '.data.organization.projectV2.items.pageInfo.endCursor')
+            done
+
+            # Build parent-child mapping from subIssues field using composite keys
+            declare -A PARENT_MAP
+            while IFS= read -r item; do
+              PARENT_NUM=$(echo "$item" | jq -r '.content.number // ""')
+              [ -z "$PARENT_NUM" ] && continue
+              
+              PARENT_REPO_OWNER=$(echo "$item" | jq -r '.content.repository.owner.login // ""')
+              PARENT_REPO_NAME=$(echo "$item" | jq -r '.content.repository.name // ""')
+              
+              # Get all sub-issues for this parent with repository info
+              while IFS='|' read -r child_num child_owner child_repo; do
+                [ -z "$child_num" ] && continue
+                # Use composite key for child: owner/repo#number
+                child_key="${child_owner}/${child_repo}#${child_num}"
+                # Store parent as composite key too
+                PARENT_MAP[$child_key]="${PARENT_REPO_OWNER}/${PARENT_REPO_NAME}#${PARENT_NUM}"
+              done < <(echo "$item" | jq -r '.content.subIssues.nodes[]? | "\(.number)|\(.repository.owner.login)|\(.repository.name)"' 2>/dev/null || echo "")
+            done < "$ITEMS_FILE"
+
+            # Collect active items to export
+            ACTIVE_ITEMS_FILE=$(mktemp)
+            EXPORTED_COUNT=0
+            SKIPPED_DONE=0
+            SKIPPED_BACKLOG=0
+            SKIPPED_CANCELLED=0
+            SKIPPED_DRAFT=0
+
+            while IFS= read -r item; do
+              IS_ARCHIVED=$(echo "$item" | jq -r '.isArchived')
+              ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
+              
+              # Skip archived items and draft items (no issue number)
+              if [ "$IS_ARCHIVED" = "true" ]; then
+                continue
+              fi
+              
+              if [ -z "$ISSUE_NUMBER" ]; then
+                SKIPPED_DRAFT=$((SKIPPED_DRAFT + 1))
+                continue
+              fi
+
+              # Get status and check if active (not Done, Backlog, or Cancelled)
+              STATUS=$(get_field "$item" "Status")
+              STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
+              
+              if [ "$STATUS_LC" = "done" ]; then
+                SKIPPED_DONE=$((SKIPPED_DONE + 1))
+                continue
+              fi
+              
+              if [ "$STATUS_LC" = "backlog" ]; then
+                SKIPPED_BACKLOG=$((SKIPPED_BACKLOG + 1))
+                continue
+              fi
+              
+              if [ "$STATUS_LC" = "cancelled" ]; then
+                SKIPPED_CANCELLED=$((SKIPPED_CANCELLED + 1))
+                continue
+              fi
+
+              # Extract all fields
+              TITLE=$(echo "$item" | jq -r '.content.title // ""')
+              ISSUE_URL=$(echo "$item" | jq -r '.content.url // ""')
+              
+              # Get repository info for composite key
+              REPO_OWNER=$(echo "$item" | jq -r '.content.repository.owner.login // ""')
+              REPO_NAME=$(echo "$item" | jq -r '.content.repository.name // ""')
+              COMPOSITE_KEY="${REPO_OWNER}/${REPO_NAME}#${ISSUE_NUMBER}"
+              
+              # Look up parent issue from the mapping (returns composite key or empty)
+              PARENT_ISSUE_KEY="${PARENT_MAP[$COMPOSITE_KEY]:-}"
+              # Extract just the issue number from parent composite key for CSV
+              PARENT_ISSUE=""
+              if [ -n "$PARENT_ISSUE_KEY" ]; then
+                PARENT_ISSUE=$(echo "$PARENT_ISSUE_KEY" | sed 's/.*#//')
+              fi
+              
+              ASSIGNEES=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
+              TYPE=$(get_field "$item" "Type")
+              AREA=$(get_field "$item" "Area")
+              PRIORITY=$(get_field "$item" "Priority")
+              INITIATIVE=$(get_field "$item" "Initiative")
+              VERSION=$(get_field "$item" "Version")
+              SIZE=$(get_field "$item" "Size")
+              ESTIMATE=$(get_field "$item" "Estimate")
+              TIME_SPENT=$(get_field "$item" "Time Spent")
+              
+              # Calculate Remaining Work
+              REMAINING_WORK=""
+              if [ -n "$ESTIMATE" ] && [ -n "$TIME_SPENT" ]; then
+                REMAINING_WORK=$(awk "BEGIN {printf \"%.10g\", $ESTIMATE - $TIME_SPENT}")
+              elif [ -n "$ESTIMATE" ]; then
+                REMAINING_WORK="$ESTIMATE"
+              fi
+              
+              # Get Σ (Sigma) fields
+              SIGMA_ESTIMATE=$(get_field "$item" "Σ Estimate")
+              SIGMA_TIME_SPENT=$(get_field "$item" "Σ Time Spent")
+              SIGMA_REMAINING=$(get_field "$item" "Σ Remaining Work")
+              
+              EXTERNAL_REF=$(get_field "$item" "External Reference")
+              COMMENTS=$(get_field "$item" "Comments")
+
+              # Build CSV line with proper escaping
+              # Format: Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
+              CSV_LINE="${ISSUE_NUMBER},"
+              CSV_LINE+="$(escape_csv "$PARENT_ISSUE"),"
+              CSV_LINE+="$(escape_csv "$ISSUE_URL"),"
+              CSV_LINE+="$(escape_csv "$TITLE"),"
+              CSV_LINE+="$(escape_csv "$ASSIGNEES"),"
+              CSV_LINE+="$(escape_csv "$STATUS"),"
+              CSV_LINE+="$(escape_csv "$TYPE"),"
+              CSV_LINE+="$(escape_csv "$AREA"),"
+              CSV_LINE+="$(escape_csv "$PRIORITY"),"
+              CSV_LINE+="$(escape_csv "$INITIATIVE"),"
+              CSV_LINE+="$(escape_csv "$VERSION"),"
+              CSV_LINE+="$(escape_csv "$SIZE"),"
+              CSV_LINE+="$(escape_csv "$ESTIMATE"),"
+              CSV_LINE+="$(escape_csv "$TIME_SPENT"),"
+              CSV_LINE+="$(escape_csv "$REMAINING_WORK"),"
+              CSV_LINE+="$(escape_csv "$SIGMA_ESTIMATE"),"
+              CSV_LINE+="$(escape_csv "$SIGMA_TIME_SPENT"),"
+              CSV_LINE+="$(escape_csv "$SIGMA_REMAINING"),"
+              CSV_LINE+="$(escape_csv "$EXTERNAL_REF"),"
+              CSV_LINE+="$(escape_csv "$COMMENTS")"
+
+              echo "$CSV_LINE" >> "$ACTIVE_ITEMS_FILE"
+              EXPORTED_COUNT=$((EXPORTED_COUNT + 1))
+
+            done < "$ITEMS_FILE"
+
+            rm -f "$ITEMS_FILE"
+
+            # Create or overwrite export file with all active items
+            if [ $EXPORTED_COUNT -gt 0 ]; then
+              # Create file with header and items
+              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments" > "$EXPORT_FILE"
+              
+              # Sort by Issue Number descending
+              sort -t',' -k1,1nr "$ACTIVE_ITEMS_FILE" >> "$EXPORT_FILE"
+            else
+              # No active items - create empty file with header only
+              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments" > "$EXPORT_FILE"
+            fi
+            
+            rm -f "$ACTIVE_ITEMS_FILE"
+
+            echo ""
+            echo "✓ Exported $EXPORTED_COUNT active item(s) to ${EXPORT_FILE}"
+            TOTAL_EXPORTED=$((TOTAL_EXPORTED + EXPORTED_COUNT))
+            
+            if [ $SKIPPED_DONE -gt 0 ]; then
+              echo "  Skipped $SKIPPED_DONE Done item(s)"
+            fi
+            if [ $SKIPPED_BACKLOG -gt 0 ]; then
+              echo "  Skipped $SKIPPED_BACKLOG Backlog item(s)"
+            fi
+            if [ $SKIPPED_CANCELLED -gt 0 ]; then
+              echo "  Skipped $SKIPPED_CANCELLED Cancelled item(s)"
+            fi
+            if [ $SKIPPED_DRAFT -gt 0 ]; then
+              echo "  Skipped $SKIPPED_DRAFT draft item(s)"
+            fi
+
+          done
+
+          echo ""
+          echo "========================================"
+          echo "Total: $TOTAL_EXPORTED active item(s) exported across all projects"
+          echo "========================================"
+
+          # Always commit since we're doing full export (not incremental)
+          echo "has_exports=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push exports
+        if: steps.export.outputs.has_exports == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add exports/
+          git commit -m "Export active items $(date -u +%Y-%m-%d)" || echo "No changes to commit"
+          git pull --rebase origin main
+          git push
+
+# Made with Bob
