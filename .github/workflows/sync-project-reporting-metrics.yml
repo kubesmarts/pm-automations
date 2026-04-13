@@ -386,8 +386,13 @@ jobs:
                   if [ -n "$VALIDATION_ALERTS" ]; then
                     ASSIGNEES_LIST=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
                     ISSUE_URL=$(echo "$item" | jq -r '.content.url // ""')
+                    # Build project item URL: https://github.com/orgs/{org}/projects/{num}?pane=issue&itemId={itemId}&issue={org}%7C{repo}%7C{issueNum}
+                    REPO_FULL=$(echo "$ISSUE_URL" | sed -E 's|https://github.com/([^/]+/[^/]+)/.*|\1|')
+                    REPO_ORG=$(echo "$REPO_FULL" | cut -d'/' -f1)
+                    REPO_NAME=$(echo "$REPO_FULL" | cut -d'/' -f2)
+                    PROJECT_ITEM_URL="https://github.com/orgs/${PROJECT_OWNER}/projects/${PROJECT_NUMBER}?pane=issue&itemId=${ITEM_ID}&issue=${REPO_ORG}%7C${REPO_NAME}%7C${ISSUE_NUMBER}"
                     if [ -n "$ASSIGNEES_LIST" ]; then
-                      record_alert "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$ISSUE_NUMBER" "$ASSIGNEES_LIST" "$VALIDATION_ALERTS" "$ISSUE_TITLE" "$ISSUE_URL"
+                      record_alert "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$ISSUE_NUMBER" "$ASSIGNEES_LIST" "$VALIDATION_ALERTS" "$ISSUE_TITLE" "$PROJECT_ITEM_URL"
                     fi
                   fi
                 fi
@@ -660,8 +665,13 @@ jobs:
                 if [ -n "$VALIDATION_ALERTS" ]; then
                   ASSIGNEES_LIST=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
                   ISSUE_URL=$(echo "$item" | jq -r '.content.url // ""')
+                  # Build project item URL: https://github.com/orgs/{org}/projects/{num}?pane=issue&itemId={itemId}&issue={org}%7C{repo}%7C{issueNum}
+                  REPO_FULL=$(echo "$ISSUE_URL" | sed -E 's|https://github.com/([^/]+/[^/]+)/.*|\1|')
+                  REPO_ORG=$(echo "$REPO_FULL" | cut -d'/' -f1)
+                  REPO_NAME=$(echo "$REPO_FULL" | cut -d'/' -f2)
+                  PROJECT_ITEM_URL="https://github.com/orgs/${PROJECT_OWNER}/projects/${PROJECT_NUMBER}?pane=issue&itemId=${ITEM_ID}&issue=${REPO_ORG}%7C${REPO_NAME}%7C${ISSUE_NUMBER}"
                   if [ -n "$ASSIGNEES_LIST" ]; then
-                    record_alert "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$ISSUE_NUMBER" "$ASSIGNEES_LIST" "$VALIDATION_ALERTS" "$ISSUE_TITLE" "$ISSUE_URL"
+                    record_alert "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$ISSUE_NUMBER" "$ASSIGNEES_LIST" "$VALIDATION_ALERTS" "$ISSUE_TITLE" "$PROJECT_ITEM_URL"
                   fi
                 fi
               fi
@@ -1286,7 +1296,7 @@ jobs:
             --repo "${{ github.repository }}" 2>/dev/null || true
 
           # Parse alerts data and group by assignee
-          # Format: project_owner:project_number|issue_number|assignees|alerts|title|issue_url
+          # Format: project_owner:project_number|issue_number|assignees|alerts|title|project_item_url
           echo "$ALERTS_DATA" > /tmp/alerts_data.txt
 
           # Count total issues and projects
@@ -1334,19 +1344,19 @@ jobs:
 
           # Group alerts by assignee
           declare -A ASSIGNEE_ALERTS
-          while IFS='|' read -r project issue_num assignees alerts title issue_url; do
+          while IFS='|' read -r project issue_num assignees alerts title project_item_url; do
             # Split comma-separated assignees
             IFS=',' read -ra ASSIGNEE_ARRAY <<< "$assignees"
             for assignee in "${ASSIGNEE_ARRAY[@]}"; do
               assignee=$(echo "$assignee" | xargs)  # trim whitespace
               if [ -z "${ASSIGNEE_ALERTS[$assignee]}" ]; then
-                ASSIGNEE_ALERTS[$assignee]="**Project ${project}**"$'\n'"- Issue [${issue_url}](${issue_url}) \"${title}\": ${alerts}"
+                ASSIGNEE_ALERTS[$assignee]="**Project ${project}**"$'\n'"- Issue [${title}](${project_item_url}): ${alerts}"
               else
                 # Check if we need to add a new project header
                 if ! echo "${ASSIGNEE_ALERTS[$assignee]}" | grep -q "**Project ${project}**"; then
-                  ASSIGNEE_ALERTS[$assignee]="${ASSIGNEE_ALERTS[$assignee]}"$'\n\n'"**Project ${project}**"$'\n'"- Issue [${issue_url}](${issue_url}) \"${title}\": ${alerts}"
+                  ASSIGNEE_ALERTS[$assignee]="${ASSIGNEE_ALERTS[$assignee]}"$'\n\n'"**Project ${project}**"$'\n'"- Issue [${title}](${project_item_url}): ${alerts}"
                 else
-                  ASSIGNEE_ALERTS[$assignee]="${ASSIGNEE_ALERTS[$assignee]}"$'\n'"- Issue [${issue_url}](${issue_url}) \"${title}\": ${alerts}"
+                  ASSIGNEE_ALERTS[$assignee]="${ASSIGNEE_ALERTS[$assignee]}"$'\n'"- Issue [${title}](${project_item_url}): ${alerts}"
                 fi
               fi
             done
