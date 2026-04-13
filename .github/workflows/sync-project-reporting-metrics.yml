@@ -991,9 +991,9 @@ jobs:
               declare -A VISITED_ISSUES
               
               # Function to recursively get all descendant sub-issues from the items file
-              # $1 = issue number, $2 = current depth
+              # $1 = composite key (owner/repo#number), $2 = current depth
               get_all_descendants() {
-                local issue_num="$1"
+                local composite_key="$1"
                 local depth="$2"
                 local max_depth=10
                 
@@ -1003,31 +1003,20 @@ jobs:
                 fi
                 
                 # Check if already visited (prevents infinite loops)
-                if [ "${VISITED_ISSUES[$issue_num]}" = "1" ]; then
+                if [ "${VISITED_ISSUES[$composite_key]}" = "1" ]; then
                   return
                 fi
                 
                 # Mark as visited to prevent infinite loops
-                VISITED_ISSUES[$issue_num]=1
+                VISITED_ISSUES[$composite_key]=1
                 
-                # Get sub-issues using GitHub Issues API directly (more reliable than Projects API)
-                # First, get the repository and issue details from the items file
-                # Note: ITEMS_FILE contains newline-delimited JSON, so we use -s to slurp into array
-                # Get repository info for this issue - use first match only to avoid ambiguity
-                local repo_owner=$(jq -rs --argjson issue_num "$issue_num" '
-                  [.[] | select(.content.number == $issue_num)] |
-                  if length > 0 then .[0].content.repository.owner.login // empty else empty end
-                ' "$ITEMS_FILE" 2>/dev/null || echo "")
+                # Extract components from composite key: owner/repo#number
+                local repo_owner=$(echo "$composite_key" | cut -d'/' -f1)
+                local repo_and_num=$(echo "$composite_key" | cut -d'/' -f2)
+                local repo_name=$(echo "$repo_and_num" | cut -d'#' -f1)
+                local issue_num=$(echo "$repo_and_num" | cut -d'#' -f2)
                 
-                local repo_name=$(jq -rs --argjson issue_num "$issue_num" '
-                  [.[] | select(.content.number == $issue_num)] |
-                  if length > 0 then .[0].content.repository.name // empty else empty end
-                ' "$ITEMS_FILE" 2>/dev/null || echo "")
-                
-                local sub_issues=""
-                
-                # Skip GitHub Issues API - it's unreliable for cross-repo issues
-                # Use Projects API data directly (subIssues field)
+                # Get sub-issues using Projects API data directly (subIssues field)
                 # IMPORTANT: Filter by both issue number AND repository to avoid matching issues
                 # with the same number from different repositories
                 # Now subIssues includes repository info, so we can get composite keys directly
@@ -1045,11 +1034,8 @@ jobs:
                   # Output the composite key
                   echo "$sub_key"
                   
-                  # Extract issue number from composite key for recursive call
-                  sub_num=$(echo "$sub_key" | sed 's/.*#//')
-                  
-                  # Recursively get descendants of this sub-issue
-                  get_all_descendants "$sub_num" $((depth + 1))
+                  # Recursively get descendants of this sub-issue using composite key
+                  get_all_descendants "$sub_key" $((depth + 1))
                 done
               }
               
@@ -1067,12 +1053,15 @@ jobs:
                 echo ""
                 echo "Processing issue $REPO_OWNER/$REPO_NAME#$ISSUE_NUMBER: $ISSUE_TITLE_VAL"
                 
+                # Create composite key for this issue
+                COMPOSITE_KEY="${REPO_OWNER}/${REPO_NAME}#${ISSUE_NUMBER}"
+                
                 # Reset visited set for this parent issue
                 unset VISITED_ISSUES
                 declare -A VISITED_ISSUES
                 
                 # Get all descendants recursively (returns composite keys: owner/repo#number)
-                ALL_DESCENDANTS=$(get_all_descendants "$ISSUE_NUMBER" 0 | sort -u)
+                ALL_DESCENDANTS=$(get_all_descendants "$COMPOSITE_KEY" 0 | sort -u)
                 
                 # If no descendants found, use issue's own values for Σ fields
                 if [ -z "$ALL_DESCENDANTS" ]; then
