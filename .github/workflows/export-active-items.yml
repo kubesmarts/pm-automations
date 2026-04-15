@@ -2,7 +2,9 @@ name: Export Active Items
 
 # ---------------------------------------------------------------------------
 # Schedule configuration
-# Runs daily at 00:00 UTC to export active (non-Done, non-Backlog) items
+# Runs daily at 00:00 UTC to export active items:
+# - All non-Done, non-Cancelled items
+# - Backlog items that have a target version set (excluding "Future")
 # ---------------------------------------------------------------------------
 on:
   schedule:
@@ -306,7 +308,8 @@ jobs:
                 continue
               fi
 
-              # Get status and check if active (not Done, Backlog, or Cancelled)
+              # Get status and check if active (not Done or Cancelled)
+              # Backlog items are included only if they have a target version
               STATUS=$(get_field "$item" "Status")
               STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
               
@@ -315,14 +318,19 @@ jobs:
                 continue
               fi
               
-              if [ "$STATUS_LC" = "backlog" ]; then
-                SKIPPED_BACKLOG=$((SKIPPED_BACKLOG + 1))
-                continue
-              fi
-              
               if [ "$STATUS_LC" = "cancelled" ]; then
                 SKIPPED_CANCELLED=$((SKIPPED_CANCELLED + 1))
                 continue
+              fi
+              
+              # For Backlog items, check if they have a target version (excluding "Future")
+              if [ "$STATUS_LC" = "backlog" ]; then
+                VERSION=$(get_field "$item" "Version")
+                if [ -z "$VERSION" ] || [ "$VERSION" = "Future" ]; then
+                  SKIPPED_BACKLOG=$((SKIPPED_BACKLOG + 1))
+                  continue
+                fi
+                # If we reach here, it's a Backlog item with a specific version - include it
               fi
 
               # Extract all fields
