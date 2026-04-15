@@ -340,6 +340,16 @@ function createVelocityChart(velocityData) {
     const ctx = document.getElementById('velocityChart');
     if (!ctx) return;
     
+    // If chart exists, update it instead of creating new one
+    if (charts.velocity) {
+        charts.velocity.data.labels = velocityData.weeks;
+        charts.velocity.data.datasets[0].data = velocityData.values;
+        charts.velocity.data.datasets[1].data = velocityData.average;
+        charts.velocity.update();
+        return;
+    }
+    
+    // Create new chart
     charts.velocity = new Chart(ctx, {
         type: 'line',
         data: {

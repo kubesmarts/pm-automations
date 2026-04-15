@@ -10,66 +10,84 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <h1>🎯 Active Issues Dashboard</h1>
-            <p class="subtitle">Real-time project metrics, capacity planning, and velocity tracking</p>
-            <div class="last-updated">
-                Last updated: <span id="lastUpdated">Loading...</span>
-            </div>
-        </header>
-
-        <!-- Loading Indicator -->
-        <div id="loading" class="loading">
-            <div class="spinner"></div>
-            <p>Loading project data...</p>
+    <!-- Header -->
+    <header class="header">
+        <h1>🎯 ABLE Team Projects Metrics</h1>
+        <p class="subtitle">Real-time project metrics, capacity planning, and velocity tracking</p>
+        <div class="last-updated">
+            Last updated: <span id="lastUpdated">Loading...</span>
         </div>
+    </header>
 
-        <!-- Error Message -->
-        <div id="error" class="error" style="display: none;">
-            <h3>⚠️ Error Loading Data</h3>
-            <p id="errorMessage"></p>
-        </div>
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading project data...</p>
+    </div>
 
-        <!-- Main Dashboard Content -->
-        <div id="dashboard" style="display: none;">
-            
-            <!-- Filters Section -->
-            <section class="filters-section">
-                <h2>🔍 Filters</h2>
-                <div class="filters-grid">
+    <!-- Error Message -->
+    <div id="error" class="error" style="display: none;">
+        <h3>⚠️ Error Loading Data</h3>
+        <p id="errorMessage"></p>
+    </div>
+
+    <!-- Main Dashboard Content -->
+    <div id="dashboard" class="dashboard-content" style="display: none;">
+        
+        <!-- Left Sidebar - Filters -->
+        <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>🔍 Filters</h2>
+                    <button id="toggleSidebar" class="btn-icon" title="Toggle Sidebar">◀</button>
+                </div>
+                <div class="sidebar-content">
                     <div class="filter-group">
                         <label>Projects</label>
-                        <div id="projectFilters" class="filter-checkboxes"></div>
+                        <div id="projectFilters" class="filter-select"></div>
                     </div>
                     <div class="filter-group">
                         <label>Versions</label>
-                        <div id="versionFilters" class="filter-checkboxes"></div>
+                        <div id="versionFilters" class="filter-select"></div>
                     </div>
                     <div class="filter-group">
                         <label>Areas</label>
-                        <div id="areaFilters" class="filter-checkboxes"></div>
+                        <div id="areaFilters" class="filter-select"></div>
                     </div>
                     <div class="filter-group">
                         <label>Priorities</label>
-                        <div id="priorityFilters" class="filter-checkboxes"></div>
+                        <div id="priorityFilters" class="filter-select"></div>
                     </div>
                     <div class="filter-group">
                         <label>Assignees</label>
-                        <div id="assigneeFilters" class="filter-checkboxes"></div>
+                        <div id="assigneeFilters" class="filter-select"></div>
                     </div>
-                    <div class="filter-group">
+                    <div class="filter-group" id="statusFilterGroup">
                         <label>Status</label>
-                        <div id="statusFilters" class="filter-checkboxes"></div>
+                        <div id="statusFilters" class="filter-select"></div>
+                    </div>
+                    <div class="filter-actions">
+                        <button id="clearFilters" class="btn btn-secondary btn-block">Clear All</button>
+                        <button id="exportFiltered" class="btn btn-primary btn-block">Export Data</button>
                     </div>
                 </div>
-                <div class="filter-actions">
-                    <button id="clearFilters" class="btn btn-secondary">Clear All Filters</button>
-                    <button id="exportFiltered" class="btn btn-primary">Export Filtered Data</button>
-                </div>
-            </section>
+            </aside>
 
+            <!-- Main Content Area -->
+            <main class="main-content">
+
+            <!-- Main Navigation Tabs -->
+            <div class="main-tabs">
+                <button class="main-tab-button active" data-main-tab="summary">📊 Global Summary</button>
+                <button class="main-tab-button" data-main-tab="capacity">🎯 Capacity Planning</button>
+                <button class="main-tab-button" data-main-tab="performance">📈 Historic Performance</button>
+            </div>
+
+            <!-- Tab Content Container -->
+            <div class="main-tab-content">
+                
+                <!-- Global Summary Tab -->
+                <div id="summaryTab" class="main-tab-pane active">
+                    
             <!-- Global Summary -->
             <section class="summary-section">
                 <h2>📊 Global Summary</h2>
@@ -228,6 +246,76 @@
                 </div>
             </section>
 
+            <!-- Active Issues List -->
+            <section class="issues-section">
+                <h2>📝 Active Issues (<span id="issueCount">0</span> items)</h2>
+                <div class="table-container">
+                    <table id="issuesTable" class="issues-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="number">#</th>
+                                <th class="sortable" data-sort="title">Title</th>
+                                <th class="sortable" data-sort="status">Status</th>
+                                <th class="sortable" data-sort="area">Area</th>
+                                <th class="sortable" data-sort="priority">Priority</th>
+                                <th class="sortable" data-sort="version">Version</th>
+                                <th class="sortable" data-sort="assignees">Assignees</th>
+                                <th class="sortable" data-sort="remaining">Σ Remaining</th>
+                                <th class="sortable" data-sort="progress">Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+                </div>
+                <!-- End Global Summary Tab -->
+
+                <!-- Capacity Planning Tab -->
+                <div id="capacityTab" class="main-tab-pane">
+
+            <!-- Summary Cards for Capacity Tab -->
+            <section class="summary-section">
+                <h2>📊 Current Workload Summary</h2>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <div class="card-icon">📝</div>
+                        <div class="card-content">
+                            <div class="card-label">Total Issues</div>
+                            <div class="card-value" id="capacityTotalIssues">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">⏱️</div>
+                        <div class="card-content">
+                            <div class="card-label">Σ Remaining Work</div>
+                            <div class="card-value" id="capacityTotalRemaining">0 weeks</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">📈</div>
+                        <div class="card-content">
+                            <div class="card-label">Σ Estimate</div>
+                            <div class="card-value" id="capacityTotalEstimate">0 weeks</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">✅</div>
+                        <div class="card-content">
+                            <div class="card-label">Σ Time Spent</div>
+                            <div class="card-value" id="capacityTotalSpent">0 weeks</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">📊</div>
+                        <div class="card-content">
+                            <div class="card-label">Progress</div>
+                            <div class="card-value" id="capacityTotalProgress">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Capacity Planning -->
             <section class="capacity-section">
                 <h2>🎯 Capacity Planning</h2>
@@ -257,54 +345,235 @@
             <!-- Velocity Tracking -->
             <section class="velocity-section">
                 <h2>🚀 Velocity Tracking</h2>
-                <div class="velocity-content">
+                <div class="velocity-summary-row">
                     <div class="velocity-summary">
-                        <h3>Team Velocity (Last 4 Weeks)</h3>
+                        <h3 id="velocityTitle">Team Velocity</h3>
                         <div id="velocitySummary">
                             <p>Loading velocity data...</p>
                         </div>
                     </div>
-                    <div class="velocity-chart">
-                        <canvas id="velocityChart"></canvas>
+                    <div class="forecast-section">
+                        <h3>Velocity-Based Forecast</h3>
+                        <div id="forecastContent">
+                            <p>Calculate capacity to see forecast...</p>
+                        </div>
                     </div>
                 </div>
-                <div class="forecast-section">
-                    <h3>Velocity-Based Forecast</h3>
-                    <div id="forecastContent">
-                        <p>Calculate capacity to see forecast...</p>
-                    </div>
+                <div class="velocity-chart-container">
+                    <canvas id="velocityChart"></canvas>
                 </div>
             </section>
+                </div>
+                <!-- End Capacity Planning Tab -->
 
-            <!-- Issue List -->
-            <section class="issues-section">
-                <h2>📝 Filtered Issues (<span id="issueCount">0</span> items)</h2>
-                <div class="table-container">
-                    <table id="issuesTable" class="issues-table">
-                        <thead>
-                            <tr>
-                                <th class="sortable" data-sort="number">#</th>
-                                <th class="sortable" data-sort="title">Title</th>
-                                <th class="sortable" data-sort="status">Status</th>
-                                <th class="sortable" data-sort="area">Area</th>
-                                <th class="sortable" data-sort="priority">Priority</th>
-                                <th class="sortable" data-sort="version">Version</th>
-                                <th class="sortable" data-sort="assignees">Assignees</th>
-                                <th class="sortable" data-sort="remaining">Σ Remaining</th>
-                                <th class="sortable" data-sort="progress">Progress</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                <!-- Historic Performance Tab -->
+                <div id="performanceTab" class="main-tab-pane">
+                    <section class="performance-section">
+                        <h2>📈 Historic Performance Metrics</h2>
+                        <p class="section-description">Analysis of completed work based on historical data from done items</p>
+                        
+                        <!-- Performance Summary Cards -->
+                        <div class="performance-summary">
+                            <div class="summary-cards">
+                                <div class="summary-card">
+                                    <div class="card-icon">📦</div>
+                                    <div class="card-content">
+                                        <div class="card-label">Total Items Completed</div>
+                                        <div class="card-value" id="perfTotalItems">0</div>
+                                    </div>
+                                </div>
+                                <div class="summary-card">
+                                    <div class="card-icon">⏱️</div>
+                                    <div class="card-content">
+                                        <div class="card-label">Total Work Completed</div>
+                                        <div class="card-value" id="perfTotalWork">0 weeks</div>
+                                    </div>
+                                </div>
+                                <div class="summary-card">
+                                    <div class="card-icon">📊</div>
+                                    <div class="card-content">
+                                        <div class="card-label">Avg Estimate Velocity</div>
+                                        <div class="card-value" id="perfEstVelocity">0 weeks/week</div>
+                                    </div>
+                                </div>
+                                <div class="summary-card">
+                                    <div class="card-icon">🚀</div>
+                                    <div class="card-content">
+                                        <div class="card-label">Avg Actual Velocity</div>
+                                        <div class="card-value" id="perfActualVelocity">0 weeks/week</div>
+                                    </div>
+                                </div>
+                                <div class="summary-card">
+                                    <div class="card-icon">🎯</div>
+                                    <div class="card-content">
+                                        <div class="card-label">Avg Estimate Deviation</div>
+                                        <div class="card-value" id="perfAccuracy">0%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Burndown Charts -->
+                        <div class="performance-charts">
+                            <h3>📉 Burndown Analysis</h3>
+                            <div class="charts-grid-2col">
+                                <div class="chart-container">
+                                    <h4>Item Count Burndown</h4>
+                                    <canvas id="itemBurndownChart"></canvas>
+                                </div>
+                                <div class="chart-container">
+                                    <h4>Work Weeks Burndown</h4>
+                                    <canvas id="workBurndownChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Velocity Comparison -->
+                        <div class="velocity-comparison">
+                            <h3>⚡ Velocity Comparison</h3>
+                            <div class="chart-container">
+                                <h4>Estimate vs Actual Velocity</h4>
+                                <canvas id="velocityComparisonChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Estimation Deviation Over Time -->
+                        <div class="accuracy-analysis">
+                            <h3>🎯 Estimation Deviation Trend</h3>
+                            <div class="chart-container">
+                                <h4>Deviation % Over Time</h4>
+                                <canvas id="accuracyTrendChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Breakdowns for Completed Items -->
+                        <div class="performance-breakdowns">
+                            <h3>📋 Detailed Breakdowns</h3>
+                            
+                            <!-- Tabs -->
+                            <div class="tabs">
+                                <button class="tab-button active" data-tab="perf-project">By Project</button>
+                                <button class="tab-button" data-tab="perf-version">By Version</button>
+                                <button class="tab-button" data-tab="perf-area">By Area</button>
+                                <button class="tab-button" data-tab="perf-priority">By Priority</button>
+                                <button class="tab-button" data-tab="perf-assignee">By Assignee</button>
+                            </div>
+
+                            <!-- Tab Content -->
+                            <div class="tab-content">
+                                <div id="perf-projectTab" class="tab-pane active">
+                                    <table id="perfProjectTable" class="breakdown-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Project</th>
+                                                <th>Items</th>
+                                                <th>Σ Estimate</th>
+                                                <th>Σ Time Spent</th>
+                                                <th>Velocity</th>
+                                                <th>Deviation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div id="perf-versionTab" class="tab-pane">
+                                    <table id="perfVersionTable" class="breakdown-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Version</th>
+                                                <th>Items</th>
+                                                <th>Σ Estimate</th>
+                                                <th>Σ Time Spent</th>
+                                                <th>Velocity</th>
+                                                <th>Deviation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div id="perf-areaTab" class="tab-pane">
+                                    <table id="perfAreaTable" class="breakdown-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Area</th>
+                                                <th>Items</th>
+                                                <th>Σ Estimate</th>
+                                                <th>Σ Time Spent</th>
+                                                <th>Velocity</th>
+                                                <th>Deviation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div id="perf-priorityTab" class="tab-pane">
+                                    <table id="perfPriorityTable" class="breakdown-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Priority</th>
+                                                <th>Items</th>
+                                                <th>Σ Estimate</th>
+                                                <th>Σ Time Spent</th>
+                                                <th>Velocity</th>
+                                                <th>Deviation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div id="perf-assigneeTab" class="tab-pane">
+                                    <table id="perfAssigneeTable" class="breakdown-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Assignee</th>
+                                                <th>Items</th>
+                                                <th>Σ Estimate</th>
+                                                <th>Σ Time Spent</th>
+                                                <th>Velocity</th>
+                                                <th>Deviation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Completed Items Table -->
+                        <div class="completed-items">
+                            <h3>📋 Completed Items</h3>
+                            <div class="table-container">
+                                <table id="completedItemsTable" class="issues-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="sortable" data-sort="number">#</th>
+                                            <th class="sortable" data-sort="title">Title</th>
+                                            <th class="sortable" data-sort="project">Project</th>
+                                            <th class="sortable" data-sort="area">Area</th>
+                                            <th class="sortable" data-sort="version">Version</th>
+                                            <th class="sortable" data-sort="estimate">Estimate</th>
+                                            <th class="sortable" data-sort="timeSpent">Time Spent</th>
+                                            <th class="sortable" data-sort="reportingDate">Completed Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </section>
-        </div>
+                <!-- End Historic Performance Tab -->
+
+            </div>
+            <!-- End Tab Content Container -->
+        </main>
     </div>
 
     <!-- Scripts -->
     <script src="js/dashboard.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/capacity.js"></script>
-    <script src="js/velocity.js"></script>
+    <script src="js/velocity.js?v=2.3"></script>
+    <script src="js/performance.js?v=2.3"></script>
 </body>
 </html>

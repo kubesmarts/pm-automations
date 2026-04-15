@@ -94,6 +94,11 @@ function calculateCapacity() {
     
     // Show results section
     document.getElementById('capacityResults').style.display = 'block';
+    
+    // Render velocity-based forecast if available
+    if (window.renderForecast) {
+        window.renderForecast(totalRemaining, targetDate);
+    }
 }
 
 // ============================================
@@ -286,31 +291,31 @@ function generateRecommendations(data) {
         .reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
     
     if (unassignedWork > 0) {
-        recommendations.push(`• Assign ${unassignedWork.toFixed(1)} weeks of unassigned work`);
+        recommendations.push(`Assign ${unassignedWork.toFixed(1)} weeks of unassigned work`);
     }
     
     // Check if more people are needed
     if (data.buffer < 0) {
         const additionalPeople = Math.ceil(Math.abs(data.buffer) / data.weeksAvailable);
-        recommendations.push(`• Add ${additionalPeople} more person(s) to the team`);
+        recommendations.push(`Add ${additionalPeople} more person(s) to the team`);
     }
     
     // Check utilization
     if (data.utilization > 90) {
-        recommendations.push('• Team is at >90% utilization - consider reducing scope or extending deadline');
+        recommendations.push('Team is at >90% utilization - consider reducing scope or extending deadline');
     } else if (data.utilization > 80) {
-        recommendations.push('• Team is at >80% utilization - monitor workload closely');
+        recommendations.push('Team is at >80% utilization - monitor workload closely');
     }
     
     // Check for high-priority items
     const blockers = data.issues.filter(i => i.Priority === 'Blocker');
     if (blockers.length > 0) {
         const blockerWork = blockers.reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
-        recommendations.push(`• Focus on ${blockers.length} Blocker item(s) (${blockerWork.toFixed(1)} weeks)`);
+        recommendations.push(`Focus on ${blockers.length} Blocker item(s) (${blockerWork.toFixed(1)} weeks)`);
     }
     
     if (recommendations.length === 0) {
-        recommendations.push('• Current capacity looks good - continue monitoring progress');
+        recommendations.push('Current capacity looks good - continue monitoring progress');
     }
     
     return '<ul class="recommendations-list">' + 
