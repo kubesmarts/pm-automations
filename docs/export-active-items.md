@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **Export Active Items** workflow automatically exports active project items from GitHub Projects to CSV files for tracking, reporting, and capacity planning purposes.
+The **Export Active Items** workflow automatically exports active project items from GitHub Projects to CSV files for tracking, reporting, and capacity planning purposes. Items are filtered by status, version, and contributor whitelist.
 
 ## Schedule
 
@@ -13,7 +13,7 @@ The **Export Active Items** workflow automatically exports active project items 
 
 ### Included Items
 
-The workflow exports items that meet the following criteria:
+The workflow exports items that meet **all** of the following criteria:
 
 1. **Active Status Items**
    - Items with any status **except**: Done, Cancelled, or Backlog (with exceptions below)
@@ -26,6 +26,11 @@ The workflow exports items that meet the following criteria:
    - Examples of included versions: "1.38.0 OSL", "10.1.0 Apache", "1.36.0 OSL"
    - This ensures only planned work with concrete release targets is tracked
 
+3. **Contributor Whitelist**
+   - Items must be assigned to at least one **active contributor** listed in `contributors.csv`
+   - If `contributors.csv` is missing or has no active contributors, all items are included
+   - Items without assignees are excluded when whitelist is active
+
 ### Excluded Items
 
 The following items are **NOT** exported:
@@ -34,6 +39,8 @@ The following items are **NOT** exported:
 - ❌ Items with status "Cancelled"
 - ❌ Backlog items without a target version
 - ❌ Backlog items with version "Future"
+- ❌ Items not assigned to active contributors (when whitelist is configured)
+- ❌ Items without assignees (when whitelist is configured)
 - ❌ Archived items
 - ❌ Draft items (items without an issue number)
 
@@ -112,6 +119,20 @@ The exported CSV files are consumed by the project metrics dashboard for visuali
 - `PSYNC_PROJECTS`: Space-separated list of projects in format `owner:number`
   - Example: `kiegroup:8 kubesmarts:1 quarkiverse:11`
 
+### Optional Configuration
+
+- `contributors.csv`: Contributor whitelist file (optional)
+  - Format: `username,active`
+  - Only items assigned to contributors with `active=true` are exported
+  - If file is missing or empty, all contributors are processed
+  - Example:
+    ```csv
+    username,active
+    ricardozanini,true
+    fjtirado,true
+    wmedvede,false
+    ```
+
 ## Workflow Execution
 
 ### Automatic Execution
@@ -156,6 +177,7 @@ Project Title: KIE Group Project
   Skipped 35 Backlog item(s)
   Skipped 5 Cancelled item(s)
   Skipped 2 draft item(s)
+  Skipped 8 item(s) (not in contributor whitelist)
 
 ========================================
 Total: 45 active item(s) exported across all projects
@@ -177,6 +199,14 @@ If some fields are empty:
 - Verify the project has the corresponding custom fields configured
 - Check field names match exactly (case-sensitive)
 - Ensure field types are supported (text, number, single-select, date)
+
+### Items Not Being Exported
+
+If expected items are not in the export:
+- Check if items are assigned to active contributors in `contributors.csv`
+- Verify Backlog items have a specific version (not "Future" or empty)
+- Ensure items are not in Done, Cancelled, or Archived status
+- Check that items have assignees (required when whitelist is active)
 
 ### Authentication Errors
 

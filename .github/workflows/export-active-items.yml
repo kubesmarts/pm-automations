@@ -71,6 +71,69 @@ jobs:
             fi
           }
 
+          # Load contributor whitelist from CSV file
+          load_contributor_whitelist() {
+            WHITELIST_FILE="contributors.csv"
+            
+            if [ ! -f "$WHITELIST_FILE" ]; then
+              echo "Warning: $WHITELIST_FILE not found. Processing all contributors."
+              echo ""
+              return
+            fi
+            
+            # Parse CSV and extract active usernames (skip header, comments, and inactive)
+            CONTRIBUTOR_WHITELIST=$(awk -F',' '
+              NR > 1 &&           # Skip header
+              !/^#/ &&            # Skip comments
+              !/^[[:space:]]*$/ && # Skip empty lines
+              $2 == "true" {      # Only active contributors
+                gsub(/^[[:space:]]+|[[:space:]]+$/, "", $1);  # Trim whitespace
+                print $1
+              }
+            ' "$WHITELIST_FILE" | paste -sd',' -)
+            
+            if [ -z "$CONTRIBUTOR_WHITELIST" ]; then
+              echo "Warning: No active contributors found in $WHITELIST_FILE. Processing all contributors."
+            else
+              ACTIVE_COUNT=$(echo "$CONTRIBUTOR_WHITELIST" | tr ',' '\n' | wc -l)
+              echo "Loaded contributor whitelist: $ACTIVE_COUNT active contributor(s)"
+              echo "Active usernames: $CONTRIBUTOR_WHITELIST"
+            fi
+            echo ""
+          }
+
+          # Check if assignee is in whitelist
+          is_whitelisted() {
+            local assignees="$1"
+            
+            # If no whitelist configured, allow all
+            [ -z "$CONTRIBUTOR_WHITELIST" ] && return 0
+            
+            # If no assignees, reject
+            [ -z "$assignees" ] && return 1
+            
+            # Check if any assignee is in whitelist
+            IFS=',' read -ra ASSIGNEE_ARRAY <<< "$assignees"
+            IFS=',' read -ra WHITELIST <<< "$CONTRIBUTOR_WHITELIST"
+            
+            for assignee in "${ASSIGNEE_ARRAY[@]}"; do
+              assignee="${assignee// /}"  # Trim spaces
+              for allowed in "${WHITELIST[@]}"; do
+                allowed="${allowed// /}"  # Trim spaces
+                if [ "$assignee" = "$allowed" ]; then
+                  return 0
+                fi
+              done
+            done
+            
+            return 1
+          }
+
+          # ---------------------------------------------------------------------------
+          # Load contributor whitelist
+          # ---------------------------------------------------------------------------
+          load_contributor_whitelist
+
           # ---------------------------------------------------------------------------
           # Iterate over all configured projects
           # ---------------------------------------------------------------------------
@@ -293,6 +356,7 @@ jobs:
             SKIPPED_BACKLOG=0
             SKIPPED_CANCELLED=0
             SKIPPED_DRAFT=0
+            SKIPPED_CONTRIBUTOR=0
 
             while IFS= read -r item; do
               IS_ARCHIVED=$(echo "$item" | jq -r '.isArchived')
@@ -351,6 +415,13 @@ jobs:
               fi
               
               ASSIGNEES=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
+              
+              # Check contributor whitelist
+              if ! is_whitelisted "$ASSIGNEES"; then
+                SKIPPED_CONTRIBUTOR=$((SKIPPED_CONTRIBUTOR + 1))
+                continue
+              fi
+              
               TYPE=$(get_field "$item" "Type")
               AREA=$(get_field "$item" "Area")
               PRIORITY=$(get_field "$item" "Priority")
@@ -435,6 +506,9 @@ jobs:
             fi
             if [ $SKIPPED_DRAFT -gt 0 ]; then
               echo "  Skipped $SKIPPED_DRAFT draft item(s)"
+            fi
+            if [ $SKIPPED_CONTRIBUTOR -gt 0 ]; then
+              echo "  Skipped $SKIPPED_CONTRIBUTOR item(s) (not in contributor whitelist)"
             fi
 
           done
