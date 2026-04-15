@@ -989,6 +989,75 @@ section h3 {
     margin-top: var(--spacing-xl);
 }
 
+/* Prevent line breaks in active issues table */
+#issuesTable td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+/* Specific column widths for Active Issues table */
+#issuesTable th:nth-child(1),
+#issuesTable td:nth-child(1) {
+    width: 60px;
+    max-width: 60px;
+}
+
+#issuesTable th:nth-child(2),
+#issuesTable td:nth-child(2) {
+    width: 300px;
+    max-width: 300px;
+}
+
+#issuesTable th:nth-child(3),
+#issuesTable td:nth-child(3) {
+    width: 100px;
+    max-width: 100px;
+}
+
+#issuesTable th:nth-child(4),
+#issuesTable td:nth-child(4) {
+    width: 100px;
+    max-width: 100px;
+}
+
+#issuesTable th:nth-child(5),
+#issuesTable td:nth-child(5) {
+    width: 90px;
+    max-width: 90px;
+}
+
+#issuesTable th:nth-child(6),
+#issuesTable td:nth-child(6) {
+    width: 120px;
+    max-width: 120px;
+}
+
+#issuesTable th:nth-child(7),
+#issuesTable td:nth-child(7) {
+    width: 150px;
+    max-width: 150px;
+}
+
+#issuesTable th:nth-child(8),
+#issuesTable td:nth-child(8) {
+    width: 90px;
+    max-width: 90px;
+}
+
+#issuesTable th:nth-child(9),
+#issuesTable td:nth-child(9) {
+    width: 100px;
+    max-width: 100px;
+}
+
+#issuesTable th:nth-child(10),
+#issuesTable td:nth-child(10) {
+    width: 80px;
+    max-width: 80px;
+}
+
 /* Prevent line breaks in completed items table */
 #completedItemsTable td {
     white-space: nowrap;

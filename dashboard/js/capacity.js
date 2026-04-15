@@ -44,9 +44,9 @@ function calculateCapacity() {
     }
     
     // Calculate metrics
-    const totalRemaining = issues.reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
-    const totalEstimate = issues.reduce((sum, i) => sum + i['Σ Estimate'], 0);
-    const totalSpent = issues.reduce((sum, i) => sum + i['Σ Time Spent'], 0);
+    const totalRemaining = issues.reduce((sum, i) => sum + i['Remaining Work'], 0);
+    const totalEstimate = issues.reduce((sum, i) => sum + i['Estimate'], 0);
+    const totalSpent = issues.reduce((sum, i) => sum + i['Time Spent'], 0);
     
     // Calculate available time
     const today = new Date();
@@ -180,7 +180,7 @@ function renderAreaCapacity(issues, weeksAvailable, teamSize) {
             areaMap.set(area, { remaining: 0, issues: [] });
         }
         const data = areaMap.get(area);
-        data.remaining += issue['Σ Remaining Work'];
+        data.remaining += issue['Remaining Work'];
         data.issues.push(issue);
     });
     
@@ -234,7 +234,7 @@ function renderPersonCapacity(issues, weeksAvailable) {
                 assigneeMap.set(assignee, { remaining: 0, issues: [] });
             }
             const data = assigneeMap.get(assignee);
-            data.remaining += issue['Σ Remaining Work'];
+            data.remaining += issue['Remaining Work'];
             data.issues.push(issue);
         });
     });
@@ -288,7 +288,7 @@ function generateRecommendations(data) {
     // Check for unassigned work
     const unassignedWork = data.issues
         .filter(i => !i.Assignees || i.Assignees.trim() === '')
-        .reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
+        .reduce((sum, i) => sum + i['Remaining Work'], 0);
     
     if (unassignedWork > 0) {
         recommendations.push(`Assign ${unassignedWork.toFixed(1)} weeks of unassigned work`);
@@ -310,7 +310,7 @@ function generateRecommendations(data) {
     // Check for high-priority items
     const blockers = data.issues.filter(i => i.Priority === 'Blocker');
     if (blockers.length > 0) {
-        const blockerWork = blockers.reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
+        const blockerWork = blockers.reduce((sum, i) => sum + i['Remaining Work'], 0);
         recommendations.push(`Focus on ${blockers.length} Blocker item(s) (${blockerWork.toFixed(1)} weeks)`);
     }
     

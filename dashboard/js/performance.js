@@ -301,11 +301,30 @@ function renderCompletedItemsTable() {
     
     if (completedItems.length === 0) {
         tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 2rem;">No completed items found</td></tr>';
+        // Reset totals
+        const estimateTotalEl = document.getElementById('completedItemsTableEstimateTotal');
+        const timeSpentTotalEl = document.getElementById('completedItemsTableTimeSpentTotal');
+        if (estimateTotalEl) estimateTotalEl.textContent = '(0w)';
+        if (timeSpentTotalEl) timeSpentTotalEl.textContent = '(0w)';
         return;
     }
     
     // Sort items based on current sort column and direction
     const sortedItems = sortCompletedItems([...completedItems]);
+    
+    // Calculate totals for displayed items
+    let totalEstimate = 0;
+    let totalTimeSpent = 0;
+    sortedItems.forEach(item => {
+        totalEstimate += parseFloat(item['Estimate']) || 0;
+        totalTimeSpent += parseFloat(item['Time Spent']) || 0;
+    });
+    
+    // Update totals in table headers
+    const estimateTotalEl = document.getElementById('completedItemsTableEstimateTotal');
+    const timeSpentTotalEl = document.getElementById('completedItemsTableTimeSpentTotal');
+    if (estimateTotalEl) estimateTotalEl.textContent = `(${totalEstimate.toFixed(1)}w)`;
+    if (timeSpentTotalEl) timeSpentTotalEl.textContent = `(${totalTimeSpent.toFixed(1)}w)`;
     
     tbody.innerHTML = sortedItems.map(item => {
         const estimate = parseFloat(item['Estimate']) || 0;

@@ -615,9 +615,9 @@ function renderDashboard() {
 
 function renderSummary() {
     const totalIssues = state.filteredIssues.length;
-    const totalRemaining = state.filteredIssues.reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
-    const totalEstimate = state.filteredIssues.reduce((sum, i) => sum + i['Σ Estimate'], 0);
-    const totalSpent = state.filteredIssues.reduce((sum, i) => sum + i['Σ Time Spent'], 0);
+    const totalRemaining = state.filteredIssues.reduce((sum, i) => sum + i['Remaining Work'], 0);
+    const totalEstimate = state.filteredIssues.reduce((sum, i) => sum + i['Estimate'], 0);
+    const totalSpent = state.filteredIssues.reduce((sum, i) => sum + i['Time Spent'], 0);
     const progress = totalEstimate > 0 ? (totalSpent / totalEstimate * 100) : 0;
     
     // Update Global Summary tab
@@ -672,20 +672,20 @@ function renderBreakdownTable(tableId, groupBy, label) {
     console.log(`Rendering ${tableId}: ${groups.size} groups from ${state.filteredIssues.length} issues`);
     
     // Calculate totals
-    const totalRemaining = state.filteredIssues.reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
+    const totalRemaining = state.filteredIssues.reduce((sum, i) => sum + i['Remaining Work'], 0);
     
     // Sort by remaining work descending
     const sorted = Array.from(groups.entries()).sort((a, b) => {
-        const aSum = a[1].reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
-        const bSum = b[1].reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
+        const aSum = a[1].reduce((sum, i) => sum + i['Remaining Work'], 0);
+        const bSum = b[1].reduce((sum, i) => sum + i['Remaining Work'], 0);
         return bSum - aSum;
     });
     
     // Render rows
     sorted.forEach(([key, issues]) => {
-        const remaining = issues.reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
-        const estimate = issues.reduce((sum, i) => sum + i['Σ Estimate'], 0);
-        const spent = issues.reduce((sum, i) => sum + i['Σ Time Spent'], 0);
+        const remaining = issues.reduce((sum, i) => sum + i['Remaining Work'], 0);
+        const estimate = issues.reduce((sum, i) => sum + i['Estimate'], 0);
+        const spent = issues.reduce((sum, i) => sum + i['Time Spent'], 0);
         const progress = estimate > 0 ? (spent / estimate * 100) : 0;
         const percentage = totalRemaining > 0 ? (remaining / totalRemaining * 100) : 0;
         
@@ -724,16 +724,16 @@ function renderAssigneeBreakdown() {
     
     // Sort by remaining work
     const sorted = Array.from(assigneeMap.entries()).sort((a, b) => {
-        const aSum = a[1].issues.reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
-        const bSum = b[1].issues.reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
+        const aSum = a[1].issues.reduce((sum, i) => sum + i['Remaining Work'], 0);
+        const bSum = b[1].issues.reduce((sum, i) => sum + i['Remaining Work'], 0);
         return bSum - aSum;
     });
     
     // Render rows
     sorted.forEach(([assignee, data]) => {
-        const remaining = data.issues.reduce((sum, i) => sum + i['Σ Remaining Work'], 0);
-        const estimate = data.issues.reduce((sum, i) => sum + i['Σ Estimate'], 0);
-        const spent = data.issues.reduce((sum, i) => sum + i['Σ Time Spent'], 0);
+        const remaining = data.issues.reduce((sum, i) => sum + i['Remaining Work'], 0);
+        const estimate = data.issues.reduce((sum, i) => sum + i['Estimate'], 0);
+        const spent = data.issues.reduce((sum, i) => sum + i['Time Spent'], 0);
         const progress = estimate > 0 ? (spent / estimate * 100) : 0;
         const areas = Array.from(data.areas).join(', ') || '(none)';
         
@@ -757,6 +757,21 @@ function renderIssuesList() {
     tbody.innerHTML = '';
     
     document.getElementById('issueCount').textContent = state.filteredIssues.length;
+    
+    // Calculate totals for displayed/filtered issues
+    let totalEstimate = 0;
+    let totalRemaining = 0;
+    
+    state.filteredIssues.forEach(issue => {
+        totalEstimate += parseFloat(issue['Estimate']) || 0;
+        totalRemaining += parseFloat(issue['Remaining Work']) || 0;
+    });
+    
+    // Update totals in table headers
+    const estimateTotalEl = document.getElementById('issuesTableEstimateTotal');
+    const remainingTotalEl = document.getElementById('issuesTableRemainingTotal');
+    if (estimateTotalEl) estimateTotalEl.textContent = `(${totalEstimate.toFixed(1)}w)`;
+    if (remainingTotalEl) remainingTotalEl.textContent = `(${totalRemaining.toFixed(1)}w)`;
     
     // Sort issues
     const sorted = [...state.filteredIssues].sort((a, b) => {
@@ -792,13 +807,17 @@ function renderIssuesList() {
                 aVal = (a['Assignees'] || '').toLowerCase();
                 bVal = (b['Assignees'] || '').toLowerCase();
                 break;
+            case 'estimate':
+                aVal = parseFloat(a['Estimate']) || 0;
+                bVal = parseFloat(b['Estimate']) || 0;
+                break;
             case 'remaining':
-                aVal = parseFloat(a['Σ Remaining Work']) || 0;
-                bVal = parseFloat(b['Σ Remaining Work']) || 0;
+                aVal = parseFloat(a['Remaining Work']) || 0;
+                bVal = parseFloat(b['Remaining Work']) || 0;
                 break;
             case 'progress':
-                aVal = a['Σ Estimate'] > 0 ? (a['Σ Time Spent'] / a['Σ Estimate'] * 100) : 0;
-                bVal = b['Σ Estimate'] > 0 ? (b['Σ Time Spent'] / b['Σ Estimate'] * 100) : 0;
+                aVal = a['Estimate'] > 0 ? (a['Time Spent'] / a['Estimate'] * 100) : 0;
+                bVal = b['Estimate'] > 0 ? (b['Time Spent'] / b['Estimate'] * 100) : 0;
                 break;
             default:
                 aVal = a[state.sortColumn];
@@ -812,8 +831,8 @@ function renderIssuesList() {
     
     // Render rows
     sorted.forEach(issue => {
-        const progress = issue['Σ Estimate'] > 0 
-            ? (issue['Σ Time Spent'] / issue['Σ Estimate'] * 100) 
+        const progress = issue['Estimate'] > 0
+            ? (issue['Time Spent'] / issue['Estimate'] * 100)
             : 0;
         
         const row = tbody.insertRow();
@@ -825,7 +844,8 @@ function renderIssuesList() {
             <td><span class="badge badge-${issue.Priority.toLowerCase()}">${escapeHtml(issue.Priority)}</span></td>
             <td>${escapeHtml(issue.Version)}</td>
             <td>${escapeHtml(issue.Assignees)}</td>
-            <td>${issue['Σ Remaining Work'].toFixed(1)}w</td>
+            <td>${(parseFloat(issue['Estimate']) || 0).toFixed(1)}w</td>
+            <td>${(parseFloat(issue['Remaining Work']) || 0).toFixed(1)}w</td>
             <td>${progress.toFixed(0)}%</td>
         `;
         

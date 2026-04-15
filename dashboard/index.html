@@ -100,17 +100,17 @@
                         </div>
                     </div>
                     <div class="summary-card">
-                        <div class="card-icon">⏱️</div>
-                        <div class="card-content">
-                            <div class="card-label">Σ Remaining Work</div>
-                            <div class="card-value" id="totalRemaining">0 weeks</div>
-                        </div>
-                    </div>
-                    <div class="summary-card">
                         <div class="card-icon">📈</div>
                         <div class="card-content">
                             <div class="card-label">Σ Estimate</div>
                             <div class="card-value" id="totalEstimate">0 weeks</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">⏱️</div>
+                        <div class="card-content">
+                            <div class="card-label">Σ Remaining Work</div>
+                            <div class="card-value" id="totalRemaining">0 weeks</div>
                         </div>
                     </div>
                     <div class="summary-card">
@@ -260,7 +260,8 @@
                                 <th class="sortable" data-sort="priority">Priority</th>
                                 <th class="sortable" data-sort="version">Version</th>
                                 <th class="sortable" data-sort="assignees">Assignees</th>
-                                <th class="sortable" data-sort="remaining">Σ Remaining</th>
+                                <th class="sortable" data-sort="estimate">Estimate<br><small id="issuesTableEstimateTotal" style="font-weight: normal; color: var(--text-secondary);">(0w)</small></th>
+                                <th class="sortable" data-sort="remaining">Remaining<br><small id="issuesTableRemainingTotal" style="font-weight: normal; color: var(--text-secondary);">(0w)</small></th>
                                 <th class="sortable" data-sort="progress">Progress</th>
                             </tr>
                         </thead>
@@ -286,17 +287,17 @@
                         </div>
                     </div>
                     <div class="summary-card">
-                        <div class="card-icon">⏱️</div>
-                        <div class="card-content">
-                            <div class="card-label">Σ Remaining Work</div>
-                            <div class="card-value" id="capacityTotalRemaining">0 weeks</div>
-                        </div>
-                    </div>
-                    <div class="summary-card">
                         <div class="card-icon">📈</div>
                         <div class="card-content">
                             <div class="card-label">Σ Estimate</div>
                             <div class="card-value" id="capacityTotalEstimate">0 weeks</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">⏱️</div>
+                        <div class="card-content">
+                            <div class="card-label">Σ Remaining Work</div>
+                            <div class="card-value" id="capacityTotalRemaining">0 weeks</div>
                         </div>
                     </div>
                     <div class="summary-card">
@@ -556,8 +557,8 @@
                                             <th class="sortable" data-sort="area">Area</th>
                                             <th class="sortable" data-sort="version">Version</th>
                                             <th class="sortable" data-sort="assignees">Assignees</th>
-                                            <th class="sortable" data-sort="estimate">Estimate</th>
-                                            <th class="sortable" data-sort="timeSpent">Time Spent</th>
+                                            <th class="sortable" data-sort="estimate">Estimate<br><small id="completedItemsTableEstimateTotal" style="font-weight: normal; color: var(--text-secondary);">(0w)</small></th>
+                                            <th class="sortable" data-sort="timeSpent">Time Spent<br><small id="completedItemsTableTimeSpentTotal" style="font-weight: normal; color: var(--text-secondary);">(0w)</small></th>
                                             <th class="sortable" data-sort="reportingDate">Completed Date</th>
                                         </tr>
                                     </thead>

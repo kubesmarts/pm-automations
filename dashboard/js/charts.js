@@ -105,7 +105,7 @@ function updateProjectChart(issues) {
         if (!groups.has(key)) {
             groups.set(key, 0);
         }
-        groups.set(key, groups.get(key) + issue['Σ Remaining Work']);
+        groups.set(key, groups.get(key) + issue['Remaining Work']);
     });
     
     // Sort by value descending
@@ -172,7 +172,7 @@ function updateAreaChart(issues) {
         if (!groups.has(key)) {
             groups.set(key, 0);
         }
-        groups.set(key, groups.get(key) + issue['Σ Remaining Work']);
+        groups.set(key, groups.get(key) + issue['Remaining Work']);
     });
     
     // Sort by value descending
@@ -242,7 +242,7 @@ function updateVersionChart(issues) {
         if (!groups.has(key)) {
             groups.set(key, 0);
         }
-        groups.set(key, groups.get(key) + issue['Σ Remaining Work']);
+        groups.set(key, groups.get(key) + issue['Remaining Work']);
     });
     
     // Sort by value descending
@@ -314,7 +314,7 @@ function updatePriorityChart(issues) {
         if (!groups.has(key)) {
             groups.set(key, 0);
         }
-        groups.set(key, groups.get(key) + issue['Σ Remaining Work']);
+        groups.set(key, groups.get(key) + issue['Remaining Work']);
     });
     
     // Sort by priority order: Blocker, Major, Normal, Minor
