@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-1317,,https://github.com/serverlessworkflow/sdk-java/issues/1317,Wrong field usage on FAult lifecycle cloud event,fjtirado,In review,,Runtimes,Normal,,2026/Q1,S,0.2,0.2,0,,,,,
+1317,,https://github.com/serverlessworkflow/sdk-java/issues/1317,Wrong field usage on FAult lifecycle cloud event,fjtirado,In review,,Runtimes,Normal,,2026/Q2,S,0.2,0.2,0,,,,,
 1206,,https://github.com/serverlessworkflow/sdk-java/issues/1206,Feat: Implement correlation on event filter,fjtirado,Next,,Runtimes,Normal,,2026/Q2,L,1.0,,1.0,1.0,0.0,1.0,,
 1087,,https://github.com/serverlessworkflow/sdk-java/issues/1087,Add support to a2a,fjtirado,Next,,Runtimes,Minor,,2026/Q2,L,1.0,,1.0,1.0,0.0,0.0,,
 455,,https://github.com/quarkiverse/quarkus-flow/issues/455,Add support to IBM Bob,mcruzdev,In progress,,,,,,,,,,,,,,
