@@ -6,6 +6,7 @@ let performanceData = null;
 let performanceCharts = {
     itemBurndown: null,
     workBurndown: null,
+    weeklyVelocity: null,
     velocityComparison: null,
     accuracyTrend: null
 };
@@ -117,11 +118,13 @@ async function loadPerformanceData() {
 }
 
 function calculatePerformanceMetrics(doneItems) {
-    // Filter items with valid data
-    const validItems = doneItems.filter(item => 
-        item['Reporting Date'] && 
-        (item['Estimate'] > 0 || item['Time Spent'] > 0)
-    );
+    console.log('calculatePerformanceMetrics called with', doneItems.length, 'items');
+    
+    // Filter items with valid reporting date (completed items)
+    // We keep all items with a reporting date, even if estimate/time spent are 0
+    const validItems = doneItems.filter(item => item['Reporting Date']);
+    
+    console.log('After filtering for Reporting Date:', validItems.length, 'valid items');
     
     if (validItems.length === 0) {
         return null;
@@ -155,8 +158,11 @@ function calculatePerformanceMetrics(doneItems) {
         itemCounts.push(weekData.items.length);
     });
     
-    const avgEstimateVelocity = average(estimateVelocities);
-    const avgActualVelocity = average(actualVelocities);
+    // Calculate overall velocity using the same method as breakdown table
+    // Get all reporting dates for velocity calculation
+    const allDates = validItems.map(item => new Date(item['Reporting Date'])).filter(d => !isNaN(d.getTime()));
+    const avgEstimateVelocity = calculateMonthlyVelocity(allDates, totalEstimate);
+    const avgActualVelocity = calculateMonthlyVelocity(allDates, totalTimeSpent);
     
     // Calculate estimation deviation (positive = under budget, negative = over budget)
     const deviations = validItems
@@ -255,20 +261,20 @@ function renderPerformanceMetrics() {
     const accuracyElement = document.getElementById('perfAccuracy');
     
     if (!performanceData) {
-        document.getElementById('perfTotalItems').textContent = 'N/A';
-        document.getElementById('perfTotalWork').textContent = 'N/A';
-        document.getElementById('perfEstVelocity').textContent = 'N/A';
-        document.getElementById('perfActualVelocity').textContent = 'N/A';
+        document.getElementById('perfTotalItems').textContent = '0';
+        document.getElementById('perfTotalWork').textContent = '0 weeks';
+        document.getElementById('perfEstVelocity').textContent = '0 weeks/month';
+        document.getElementById('perfActualVelocity').textContent = '0 weeks/month';
         accuracyElement.textContent = 'N/A';
-        accuracyElement.style.color = ''; // Clear color style
+        accuracyElement.style.color = '#9ca3af';
         return;
     }
     
     document.getElementById('perfTotalItems').textContent = performanceData.totalItems;
     document.getElementById('perfTotalWork').textContent = `${performanceData.totalTimeSpent.toFixed(1)} weeks`;
-    // Convert weekly velocity to monthly (multiply by ~4.33 weeks/month)
-    document.getElementById('perfEstVelocity').textContent = `${(performanceData.avgEstimateVelocity * 4.33).toFixed(1)} weeks/month`;
-    document.getElementById('perfActualVelocity').textContent = `${(performanceData.avgActualVelocity * 4.33).toFixed(1)} weeks/month`;
+    // Velocities are already in weeks/month from calculateMonthlyVelocity
+    document.getElementById('perfEstVelocity').textContent = `${performanceData.avgEstimateVelocity.toFixed(1)} weeks/month`;
+    document.getElementById('perfActualVelocity').textContent = `${performanceData.avgActualVelocity.toFixed(1)} weeks/month`;
     
     // Display average deviation (positive = under budget, negative = over budget)
     const avgDeviation = performanceData.accuracy; // This is actually deviation now
@@ -341,17 +347,25 @@ function getProjectName(projectId) {
 // ============================================
 
 function createPerformanceCharts() {
-    if (!performanceData) return;
-    
+    // Always call chart functions - they handle null data by destroying existing charts
     createItemBurndownChart();
     createWorkBurndownChart();
+    createWeeklyVelocityChart();
     createVelocityComparisonChart();
     createAccuracyTrendChart();
 }
 
 function createItemBurndownChart() {
     const ctx = document.getElementById('itemBurndownChart');
-    if (!ctx || !performanceData) return;
+    if (!ctx) return;
+    
+    // Destroy existing chart
+    if (performanceCharts.itemBurndown) {
+        performanceCharts.itemBurndown.destroy();
+        performanceCharts.itemBurndown = null;
+    }
+    
+    if (!performanceData) return;
     
     const labels = performanceData.weeks.map(w => formatWeekLabel(new Date(w)));
     
@@ -396,7 +410,15 @@ function createItemBurndownChart() {
 
 function createWorkBurndownChart() {
     const ctx = document.getElementById('workBurndownChart');
-    if (!ctx || !performanceData) return;
+    if (!ctx) return;
+    
+    // Destroy existing chart
+    if (performanceCharts.workBurndown) {
+        performanceCharts.workBurndown.destroy();
+        performanceCharts.workBurndown = null;
+    }
+    
+    if (!performanceData) return;
     
     const labels = performanceData.weeks.map(w => formatWeekLabel(new Date(w)));
     
@@ -439,9 +461,64 @@ function createWorkBurndownChart() {
     });
 }
 
+function createWeeklyVelocityChart() {
+    const ctx = document.getElementById('weeklyVelocityChart');
+    if (!ctx) return;
+    
+    // Destroy existing chart
+    if (performanceCharts.weeklyVelocity) {
+        performanceCharts.weeklyVelocity.destroy();
+        performanceCharts.weeklyVelocity = null;
+    }
+    
+    if (!performanceData) return;
+    
+    const labels = performanceData.weeks.map(w => formatWeekLabel(new Date(w)));
+    
+    performanceCharts.weeklyVelocity = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Weeks Completed',
+                data: performanceData.actualVelocities,
+                backgroundColor: '#8b5cf6',
+                borderColor: '#7c3aed',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => `${context.parsed.y.toFixed(1)} weeks completed`
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Weeks Completed' }
+                }
+            }
+        }
+    });
+}
+
 function createVelocityComparisonChart() {
     const ctx = document.getElementById('velocityComparisonChart');
-    if (!ctx || !performanceData) return;
+    if (!ctx) return;
+    
+    // Destroy existing chart
+    if (performanceCharts.velocityComparison) {
+        performanceCharts.velocityComparison.destroy();
+        performanceCharts.velocityComparison = null;
+    }
+    
+    if (!performanceData) return;
     
     const labels = performanceData.weeks.map(w => formatWeekLabel(new Date(w)));
     
@@ -493,7 +570,15 @@ function createVelocityComparisonChart() {
 
 function createAccuracyTrendChart() {
     const ctx = document.getElementById('accuracyTrendChart');
-    if (!ctx || !performanceData) return;
+    if (!ctx) return;
+    
+    // Destroy existing chart
+    if (performanceCharts.accuracyTrend) {
+        performanceCharts.accuracyTrend.destroy();
+        performanceCharts.accuracyTrend = null;
+    }
+    
+    if (!performanceData) return;
     
     const labels = performanceData.weeks.map(w => formatWeekLabel(new Date(w)));
     
@@ -642,11 +727,16 @@ function renderPerformanceBreakdowns() {
     const completedItems = window.getCompletedItems();
     console.log('renderPerformanceBreakdowns called, items count:', completedItems.length);
     
-    if (completedItems.length === 0) {
-        console.warn('No completed items available for performance breakdowns');
-        return;
+    // Log first few items to see their project
+    if (completedItems.length > 0) {
+        console.log('Sample breakdown items:', completedItems.slice(0, 3).map(item => ({
+            project: item.Project,
+            timeSpent: item['Time Spent'],
+            reportingDate: item['Reporting Date']
+        })));
     }
-
+    
+    // Always render breakdowns (they will show "No data available" if empty)
     renderBreakdownByProject(completedItems);
     renderBreakdownByVersion(completedItems);
     renderBreakdownByArea(completedItems);
@@ -655,27 +745,37 @@ function renderPerformanceBreakdowns() {
 }
 
 function renderBreakdownByProject(items) {
-    const breakdown = aggregateByField(items, 'Project', getProjectName);
+    // Filter to only items with Reporting Date (same as summary metrics)
+    const validItems = items.filter(item => item['Reporting Date']);
+    const breakdown = validItems.length > 0 ? aggregateByField(validItems, 'Project', getProjectName) : [];
     renderPerformanceBreakdownTable('perfProjectTable', breakdown);
 }
 
 function renderBreakdownByVersion(items) {
-    const breakdown = aggregateByField(items, 'Version');
+    // Filter to only items with Reporting Date (same as summary metrics)
+    const validItems = items.filter(item => item['Reporting Date']);
+    const breakdown = validItems.length > 0 ? aggregateByField(validItems, 'Version') : [];
     renderPerformanceBreakdownTable('perfVersionTable', breakdown);
 }
 
 function renderBreakdownByArea(items) {
-    const breakdown = aggregateByField(items, 'Area');
+    // Filter to only items with Reporting Date (same as summary metrics)
+    const validItems = items.filter(item => item['Reporting Date']);
+    const breakdown = validItems.length > 0 ? aggregateByField(validItems, 'Area') : [];
     renderPerformanceBreakdownTable('perfAreaTable', breakdown);
 }
 
 function renderBreakdownByPriority(items) {
-    const breakdown = aggregateByField(items, 'Priority');
+    // Filter to only items with Reporting Date (same as summary metrics)
+    const validItems = items.filter(item => item['Reporting Date']);
+    const breakdown = validItems.length > 0 ? aggregateByField(validItems, 'Priority') : [];
     renderPerformanceBreakdownTable('perfPriorityTable', breakdown);
 }
 
 function renderBreakdownByAssignee(items) {
-    const breakdown = aggregateByField(items, 'Assignees');
+    // Filter to only items with Reporting Date (same as summary metrics)
+    const validItems = items.filter(item => item['Reporting Date']);
+    const breakdown = validItems.length > 0 ? aggregateByField(validItems, 'Assignees') : [];
     renderPerformanceBreakdownTable('perfAssigneeTable', breakdown);
 }
 

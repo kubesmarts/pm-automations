@@ -12,7 +12,7 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <h1>🎯 ABLE Team Projects Metrics</h1>
+        <h1>🤖 ABLE Team Projects Metrics</h1>
         <p class="subtitle">Real-time project metrics, capacity planning, and velocity tracking</p>
         <div class="last-updated">
             Last updated: <span id="lastUpdated">Loading...</span>
@@ -416,7 +416,7 @@
                         <!-- Burndown Charts -->
                         <div class="performance-charts">
                             <h3>📉 Burndown Analysis</h3>
-                            <div class="charts-grid-2col">
+                            <div class="charts-grid-3col">
                                 <div class="chart-container">
                                     <h4>Item Count Burndown</h4>
                                     <canvas id="itemBurndownChart"></canvas>
@@ -424,6 +424,10 @@
                                 <div class="chart-container">
                                     <h4>Work Weeks Burndown</h4>
                                     <canvas id="workBurndownChart"></canvas>
+                                </div>
+                                <div class="chart-container">
+                                    <h4>Weekly Velocity</h4>
+                                    <canvas id="weeklyVelocityChart"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -573,7 +577,7 @@
     <script src="js/dashboard.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/capacity.js"></script>
-    <script src="js/velocity.js?v=2.3"></script>
-    <script src="js/performance.js?v=2.3"></script>
+    <script src="js/velocity.js?v=3.1"></script>
+    <script src="js/performance.js?v=3.1"></script>
 </body>
 </html>

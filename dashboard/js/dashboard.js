@@ -208,12 +208,8 @@ function initializeFilters() {
     // Get available options based on selected projects
     const availableOptions = getAvailableFilterOptions();
     
-    // Initialize all other filters with all available options selected
-    availableOptions.versions.forEach(item => state.filters.versions.add(item));
-    availableOptions.areas.forEach(item => state.filters.areas.add(item));
-    availableOptions.priorities.forEach(item => state.filters.priorities.add(item));
-    availableOptions.assignees.forEach(item => state.filters.assignees.add(item));
-    availableOptions.statuses.forEach(item => state.filters.statuses.add(item));
+    // DO NOT auto-select other filters - leave them empty so all items are shown
+    // Users can manually select specific filters if they want to narrow down results
     
     // Render filter groups
     renderFilterGroup('projectFilters', availableOptions.projects, 'projects', true);
@@ -310,7 +306,7 @@ function renderFilterGroup(containerId, items, filterKey, isProjectFilter = fals
 }
 
 function updateCascadingFilters() {
-    // Clear all non-project filters first
+    // Clear all non-project filters (reset them when project changes)
     state.filters.versions.clear();
     state.filters.areas.clear();
     state.filters.priorities.clear();
@@ -320,14 +316,10 @@ function updateCascadingFilters() {
     // Get available options based on currently selected projects
     const availableOptions = getAvailableFilterOptions();
     
-    // Select all available options for each filter
-    availableOptions.versions.forEach(item => state.filters.versions.add(item));
-    availableOptions.areas.forEach(item => state.filters.areas.add(item));
-    availableOptions.priorities.forEach(item => state.filters.priorities.add(item));
-    availableOptions.assignees.forEach(item => state.filters.assignees.add(item));
-    availableOptions.statuses.forEach(item => state.filters.statuses.add(item));
+    // DO NOT auto-select options - leave filters empty so all items are shown
+    // Users can manually select specific versions/areas/etc if they want to filter further
     
-    // Update all non-project filters
+    // Update all non-project filter dropdowns with available options
     renderFilterGroup('versionFilters', availableOptions.versions, 'versions');
     renderFilterGroup('areaFilters', availableOptions.areas, 'areas');
     renderFilterGroup('priorityFilters', availableOptions.priorities, 'priorities');
