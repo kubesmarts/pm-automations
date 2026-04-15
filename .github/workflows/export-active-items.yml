@@ -430,14 +430,7 @@ jobs:
               SIZE=$(get_field "$item" "Size")
               ESTIMATE=$(get_field "$item" "Estimate")
               TIME_SPENT=$(get_field "$item" "Time Spent")
-              
-              # Calculate Remaining Work
-              REMAINING_WORK=""
-              if [ -n "$ESTIMATE" ] && [ -n "$TIME_SPENT" ]; then
-                REMAINING_WORK=$(awk "BEGIN {printf \"%.10g\", $ESTIMATE - $TIME_SPENT}")
-              elif [ -n "$ESTIMATE" ]; then
-                REMAINING_WORK="$ESTIMATE"
-              fi
+              REMAINING_WORK=$(get_field "$item" "Remaining Work")
               
               # Get Σ (Sigma) fields
               SIGMA_ESTIMATE=$(get_field "$item" "Σ Estimate")
