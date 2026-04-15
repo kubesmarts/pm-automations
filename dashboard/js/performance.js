@@ -300,7 +300,7 @@ function renderCompletedItemsTable() {
     console.log('Rendering completed items, count:', completedItems.length);
     
     if (completedItems.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem;">No completed items found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 2rem;">No completed items found</td></tr>';
         return;
     }
     
@@ -311,6 +311,7 @@ function renderCompletedItemsTable() {
         const estimate = parseFloat(item['Estimate']) || 0;
         const timeSpent = parseFloat(item['Time Spent']) || 0;
         const reportingDate = item['Reporting Date'] ? new Date(item['Reporting Date']).toLocaleDateString() : 'N/A';
+        const assignees = item['Assignees'] || 'N/A';
         
         return `
             <tr>
@@ -319,6 +320,7 @@ function renderCompletedItemsTable() {
                 <td>${getProjectName(item['Project'])}</td>
                 <td>${item['Area'] || 'N/A'}</td>
                 <td>${item['Version'] || 'N/A'}</td>
+                <td>${assignees}</td>
                 <td>${estimate.toFixed(1)} weeks</td>
                 <td>${timeSpent.toFixed(1)} weeks</td>
                 <td>${reportingDate}</td>
@@ -952,6 +954,10 @@ function sortCompletedItems(items) {
             case 'version':
                 aVal = (a['Version'] || '').toLowerCase();
                 bVal = (b['Version'] || '').toLowerCase();
+                break;
+            case 'assignees':
+                aVal = (a['Assignees'] || '').toLowerCase();
+                bVal = (b['Assignees'] || '').toLowerCase();
                 break;
             case 'estimate':
                 aVal = parseFloat(a['Estimate']) || 0;
