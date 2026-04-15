@@ -1,4 +1,13 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+22,3,https://github.com/serverlessworkflow/editor/issues/22,Run Playwright E2E tests in CI,kumaradityaraj,,Tooling,Normal,,2026/Q2,S,0.1,0.1,2026-04-15,,
+367,,https://github.com/quarkiverse/quarkus-flow/issues/367,Standardize API mocking across the codebase by adopting a single library,mcruzdev,,Runtimes,Normal,,2026/Q2,S,0.4,0.4,2026-04-15,,
+427,,https://github.com/quarkiverse/quarkus-flow/issues/427,bug: 404 on discussion page,mcruzdev,,Docs,Normal,,2026/Q2,S,0.2,0.2,2026-04-15,,
+282,48,https://github.com/quarkiverse/quarkus-flow/issues/282,feat: add suspend/resume example with persistence enabled,fjtirado,,Docs,Normal,,2026/Q1,M,0.6,0.6,2026-04-14,,
+400,,https://github.com/quarkiverse/quarkus-flow/issues/400,Workflow restarting without or with wrong started time,fjtirado,,Runtimes,Major,,2026/Q1,S,0.2,0.2,2026-04-14,,
+433,,https://github.com/quarkiverse/quarkus-flow/issues/433,bug: JPA transaction not closed at scanAll,fjtirado,,Runtimes,Major,,2026/Q1,S,0.2,0.2,2026-04-14,,
+48,4,https://github.com/quarkiverse/quarkus-flow/issues/48,epic: Persistence Integration Model,fjtirado,,Runtimes,Critical,,2026/Q1,L,0.0,0.0,2026-04-14,,
+48,4,https://github.com/serverlessworkflow/editor/issues/48,Spike: Investigate SDK graph output for diagram model,"lornakelly,handreyrc",,Tooling,Major,,2026/Q2,M,0.4,0.7,2026-04-14,,
+391,,https://github.com/quarkiverse/quarkus-flow/issues/391,bug: Durable workflows in devmode are timing out,ricardozanini,,Runtimes,Blocker,,2026/Q2,M,0.3,0.3,2026-04-13,,
 1296,,https://github.com/serverlessworkflow/sdk-java/issues/1296,Prevent loading the same process instance twice,fjtirado,,Runtimes,Major,,2026/Q1,S,0.2,0.2,2026-04-11,,
 15,2,https://github.com/serverlessworkflow/editor/issues/15,Add localization (i18n) support,kumaradityaraj,,Tooling,Normal,,2026/Q2,S,1.0,1.0,2026-04-11,,
 30,3,https://github.com/serverlessworkflow/editor/issues/30,feat: Add GitHub Action to publish Storybook preview for every PR via Netlify,fantonangeli,,Tooling,Major,,2026/Q2,M,0.6,0.8,2026-04-11,,

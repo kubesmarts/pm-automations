@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+38,,https://github.com/kubesmarts/pm-automations/issues/38,"Still receiveing the email with the alerts, even when my issue was fixed and configured correctly",dgutierr,,PM,Major,,,,0.1,0.1,2026-04-13,,
+45,,https://github.com/kubesmarts/pm-automations/issues/45,🚨 GitHub Projects Alerts Notification,dgutierr,,PM,Critical,,,,0.0,0.0,2026-04-13,,
+48,,https://github.com/kubesmarts/pm-automations/issues/48,feat: Add parent issue and URL columns to export workflow,dgutierr,,PM,Major,,,,0.1,0.1,2026-04-13,,
+50,,https://github.com/kubesmarts/pm-automations/issues/50,🚨 GitHub Projects Alerts Notification,dgutierr,,PM,Major,,,,0.0,0.0,2026-04-13,,
 46,,https://github.com/kubesmarts/pm-automations/issues/46,feat: Implement contributor whitelist filtering for sync and export workflows,dgutierr,,PM,Major,,,,0.2,0.1,2026-04-09,,
 44,,https://github.com/kubesmarts/pm-automations/issues/44,🚨 GitHub Projects Alerts Notification,dgutierr,,PM,Critical,,,,0.0,0.0,2026-04-08,,
 12,1,https://github.com/kubesmarts/pm-automations/issues/12,subissue,dgutierr,,PM,Normal,,,,1.0,1.0,2026-03-27,,
