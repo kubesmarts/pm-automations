@@ -1,13 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
 1317,,https://github.com/serverlessworkflow/sdk-java/issues/1317,Wrong field usage on FAult lifecycle cloud event,fjtirado,In review,,Runtimes,Normal,,2026/Q1,S,0.2,0.2,0,,,,,
-1303,,https://github.com/serverlessworkflow/sdk-java/issues/1303,JsonQueryException when using FuncDSL.openapi,,In progress,,Runtimes,,,,,,,,0.0,0.0,0.0,,
-1295,,https://github.com/serverlessworkflow/sdk-java/issues/1295,Feat: add sub workflows run on `FuncDSL`,,In progress,,Runtimes,,,,,,,,0.0,0.0,0.0,,
 1206,,https://github.com/serverlessworkflow/sdk-java/issues/1206,Feat: Implement correlation on event filter,fjtirado,Next,,Runtimes,Normal,,2026/Q2,L,1.0,,1.0,1.0,0.0,1.0,,
 1087,,https://github.com/serverlessworkflow/sdk-java/issues/1087,Add support to a2a,fjtirado,Next,,Runtimes,Minor,,2026/Q2,L,1.0,,1.0,1.0,0.0,0.0,,
 455,,https://github.com/quarkiverse/quarkus-flow/issues/455,Add support to IBM Bob,mcruzdev,In progress,,,,,,,,,,,,,,
 450,112,https://github.com/quarkiverse/quarkus-flow/issues/450,docs: Add a reference page for Performance Results,gmunozfe,In progress,,,,,,,,,,0.0,0.0,0.0,,
 448,,https://github.com/quarkiverse/quarkus-flow/issues/448,Add Structured Logging Listener for Workflow Lifecycle Events,ricardozanini,In review,,Runtimes,Normal,,2026/Q2,M,0.1,,0.1,0.1,0.0,0.0,,
-428,,https://github.com/quarkiverse/quarkus-flow/issues/428,docs: Add documentation on how to use sub-workflows with Java.,tanmaykadam1533,In progress,,,,,,,,,,0.0,0.0,0.0,,
 425,,https://github.com/quarkiverse/quarkus-flow/issues/425,docs: Improve docs module to execute tests during maven build,domhanak,Backlog,,Docs,Major,,2026/Q2,M,0.6,0.0,0.6,0.6,0.0,0.6,,
 393,,https://github.com/quarkiverse/quarkus-flow/issues/393,docs: Implementation of Java DSL Cookbook,domhanak,In progress,,Docs,Major,,2026/Q2,M,0.4,0.3,0.1,0.4,0.3,0.3,,
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mcruzdev,Next,,Tooling,Major,,2026/Q2,M,1.0,,1.0,1.0,0.0,0.8,,
