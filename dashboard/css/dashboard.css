@@ -1117,6 +1117,12 @@ section h3 {
 
 #completedItemsTable th:nth-child(9),
 #completedItemsTable td:nth-child(9) {
+    width: 90px;
+    max-width: 90px;
+}
+
+#completedItemsTable th:nth-child(10),
+#completedItemsTable td:nth-child(10) {
     width: 110px;
     max-width: 110px;
 }

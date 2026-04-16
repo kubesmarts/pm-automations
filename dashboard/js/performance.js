@@ -299,8 +299,12 @@ function renderCompletedItemsTable() {
     const completedItems = window.getCompletedItems();
     console.log('Rendering completed items, count:', completedItems.length);
     
+    // Update item count
+    const itemCountEl = document.getElementById('completedItemsCount');
+    if (itemCountEl) itemCountEl.textContent = completedItems.length;
+    
     if (completedItems.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 2rem;">No completed items found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 2rem;">No completed items found</td></tr>';
         // Reset totals
         const estimateTotalEl = document.getElementById('completedItemsTableEstimateTotal');
         const timeSpentTotalEl = document.getElementById('completedItemsTableTimeSpentTotal');
@@ -332,6 +336,11 @@ function renderCompletedItemsTable() {
         const reportingDate = item['Reporting Date'] ? new Date(item['Reporting Date']).toLocaleDateString() : 'N/A';
         const assignees = item['Assignees'] || 'N/A';
         
+        // Calculate deviation: positive = under budget (good), negative = over budget (bad)
+        const deviation = estimate > 0 ? ((estimate - timeSpent) / estimate) * 100 : 0;
+        const deviationSign = deviation > 0 ? '+' : '';
+        const deviationColor = getAccuracyColor(deviation);
+        
         return `
             <tr>
                 <td><a href="${item['Issue URL']}" target="_blank">${item['Issue Number']}</a></td>
@@ -342,6 +351,7 @@ function renderCompletedItemsTable() {
                 <td>${assignees}</td>
                 <td>${estimate.toFixed(1)} weeks</td>
                 <td>${timeSpent.toFixed(1)} weeks</td>
+                <td style="color: ${deviationColor}; font-weight: 500;">${deviationSign}${deviation.toFixed(1)}%</td>
                 <td>${reportingDate}</td>
             </tr>
         `;
@@ -985,6 +995,14 @@ function sortCompletedItems(items) {
             case 'timeSpent':
                 aVal = parseFloat(a['Time Spent']) || 0;
                 bVal = parseFloat(b['Time Spent']) || 0;
+                break;
+            case 'deviation':
+                const aEstimate = parseFloat(a['Estimate']) || 0;
+                const aTimeSpent = parseFloat(a['Time Spent']) || 0;
+                const bEstimate = parseFloat(b['Estimate']) || 0;
+                const bTimeSpent = parseFloat(b['Time Spent']) || 0;
+                aVal = aEstimate > 0 ? ((aEstimate - aTimeSpent) / aEstimate) * 100 : 0;
+                bVal = bEstimate > 0 ? ((bEstimate - bTimeSpent) / bEstimate) * 100 : 0;
                 break;
             case 'reportingDate':
                 aVal = new Date(a['Reporting Date']).getTime() || 0;
