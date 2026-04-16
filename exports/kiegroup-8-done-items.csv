@@ -94,7 +94,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 3059,,https://github.com/apache/incubator-kie-tools/issues/3059,[sonataflow-operator] Review dependencies required to run workflows in devmode and build,ricardozanini,,Cloud,Normal,Apache,1.37.0 OSL,S,0.3,0.5,2025-05-20,,
 3124,,https://github.com/apache/incubator-kie-tools/issues/3124,[sonataflow-builder-image] - Support offline Quarkus registry configuration and local cache in builder image (with build-time override),ricardozanini,,Cloud,Normal,Backstage,1.37.0 OSL,S,0.2,0.1,2025-05-20,,
 1952,,https://github.com/apache/incubator-kie-issues/issues/1952,Identify the workflow instance that was started because reception of a CloudEvent,fjtirado,,Runtimes,Normal,Backstage,1.37.0 OSL,S,0.4,0.4,2025-05-07,,
-2641,,https://github.com/apache/incubator-kie-tools/issues/2641,Upgrade PatternFly to v5 in all `kie-tools` packages,kumaradityaraj,,Tooling,Normal,Apache,10.1.0 Apache,XL,8.34,8.34,2025-05-06,,
 2641,,https://github.com/apache/incubator-kie-tools/issues/2641,Upgrade PatternFly to v5 in all `kie-tools` packages,kumaradityaraj,,Tooling,Normal,OSL,1.36.0 OSL,XL,19.46,19.46,2025-05-06,,
 3905,,https://github.com/apache/incubator-kie-kogito-runtimes/issues/3905,"Event data should be object or string, not just object",fjtirado,,Tooling,Normal,Backstage,1.37.0 OSL,S,0.3,0.3,2025-04-29,,
 555,,https://github.com/serverlessworkflow/sdk-java/issues/555,Change generator to properly handle new schema,fjtirado,,Runtimes,Normal,CNCF Spec,,S,0.4,0.4,2025-04-29,,
