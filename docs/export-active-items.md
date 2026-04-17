@@ -105,8 +105,8 @@ Monitor work in progress and time spent vs. estimates for better forecasting.
 ### 4. Reporting
 Generate reports on active work distribution by area, priority, assignee, or version.
 
-### 5. Dashboard Integration
-The exported CSV files are consumed by the project metrics dashboard for visualization and analysis.
+### 5. Downstream Data Consumption
+The exported CSV files can be consumed by downstream reporting and analytics tooling.
 
 ## Configuration
 
@@ -219,7 +219,7 @@ If the workflow fails with authentication errors:
 
 - [Export Done Items Workflow](./export-done-items.md) - For completed items
 - [Project Sync Workflow](./sync-project-reporting-metrics.md) - For syncing reporting metrics
-- [Dashboard User Guide](./user-guide-rms-projects.md) - For using the metrics dashboard
+- [Projects User Guide](./user-guide-rms-projects.md) - For working with reporting-metrics-based GitHub Projects
 
 ---
 
