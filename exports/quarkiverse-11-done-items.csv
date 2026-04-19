@@ -1,4 +1,13 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1303,,https://github.com/serverlessworkflow/sdk-java/issues/1303,JsonQueryException when using FuncDSL.openapi,"mcruzdev,fjtirado",,Runtimes,Normal,,2026/Q1,S,0.2,0.3,2026-04-18,,
+448,,https://github.com/quarkiverse/quarkus-flow/issues/448,Add Structured Logging Listener for Workflow Lifecycle Events,ricardozanini,,Runtimes,Normal,,2026/Q2,M,0.1,0.1,2026-04-18,,
+458,,https://github.com/quarkiverse/quarkus-flow/issues/458,HTTP workflows hang: Missing ManagedExecutor integration for SDK's ExecutorServiceFactory,ricardozanini,,Runtimes,Blocker,,2026/Q2,S,0.1,0.1,2026-04-18,,
+65,3,https://github.com/serverlessworkflow/editor/issues/65,feat: create a package.json validation CI,"lornakelly,fantonangeli",,Tooling,Normal,,2026/Q3,S,0.3,0.1,2026-04-18,,
+1314,,https://github.com/serverlessworkflow/sdk-java/issues/1314,Make CloudEvent type constants in AbstractLifeCyclePublisher public,ricardozanini,,Runtimes,Normal,,2026/Q2,XS,0.1,0.1,2026-04-17,,
+1317,,https://github.com/serverlessworkflow/sdk-java/issues/1317,Wrong field usage on FAult lifecycle cloud event,fjtirado,,Runtimes,Normal,,2026/Q2,S,0.2,0.2,2026-04-17,,
+9,2,https://github.com/serverlessworkflow/editor/issues/9,Update readme with folder structure,lornakelly,,Tooling,Normal,,2026/Q2,S,0.1,0.1,2026-04-17,,
+1315,,https://github.com/serverlessworkflow/sdk-java/issues/1315,NullPointer if Subflow is running wihtout specifiying input,fjtirado,,Runtimes,Normal,,2026/Q1,XS,0.1,0.1,2026-04-16,,
+49,4,https://github.com/serverlessworkflow/editor/issues/49,feat: Add model to store as source of truth,lornakelly,,Tooling,Major,,2026/Q2,S,0.4,0.3,2026-04-16,,
 22,3,https://github.com/serverlessworkflow/editor/issues/22,Run Playwright E2E tests in CI,kumaradityaraj,,Tooling,Normal,,2026/Q2,S,0.1,0.1,2026-04-15,,
 367,,https://github.com/quarkiverse/quarkus-flow/issues/367,Standardize API mocking across the codebase by adopting a single library,mcruzdev,,Runtimes,Normal,,2026/Q2,S,0.4,0.4,2026-04-15,,
 427,,https://github.com/quarkiverse/quarkus-flow/issues/427,bug: 404 on discussion page,mcruzdev,,Docs,Normal,,2026/Q2,S,0.2,0.2,2026-04-15,,

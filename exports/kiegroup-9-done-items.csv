@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+413,,https://github.com/mvel/mvel/issues/413,MVEL3: Add optional class allowlist/blocklist to CompilerParameters,tkobayas,,Runtimes,Major,,Future,S,0.3,0.2,2026-04-17,,
+6,2,https://github.com/casehubio/engine/issues/6,Java Predicate Expression,treblereel,,Runtimes,Normal,,Future,S,0.3,0.3,2026-04-17,,
 6659,,https://github.com/apache/incubator-kie-drools/issues/6659,PseudoClockScheduler may retain 1000 canceled jobs at most,tkobayas,,Runtimes,Major,,Future,S,0.3,0.3,2026-04-15,,
 7,2,https://github.com/casehubio/engine/issues/7,Pre-validation of expressions during definition registration,treblereel,,Runtimes,Normal,,Future,M,0.4,0.0,2026-04-15,,
 27,,https://github.com/casehubio/engine/issues/27,Improve build configuration and code quality enforcement,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-04-14,,
