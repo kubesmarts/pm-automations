@@ -47,7 +47,7 @@ In every GitHub Project you want to track, make sure the following fields exist 
 | `Remaining Work`     | Number        | Remaining effort in weeks                                                                 |
 | `Time Spent`         | Number        | Time already spent in weeks                                                               |
 | `Area`               | Single select | `Runtimes`, `Tooling`, `Cloud`, `CI`, `QE`, `Docs`. Synced to JIRA as `area/<value>` label. |
-| `External Reference` | Text          | JIRA ticket ID (e.g. `ISSUE-774`) for sync, **or** a `CREATE` directive (see below). |
+| `External Reference` | Text          | JIRA ticket ID (e.g. `ISSUE-774`) for sync, **or** a `CREATE` directive (see below). Changes trigger reporting log update and JIRA sync. |
 
 #### Auto-creating JIRA tickets via the `CREATE` directive
 
@@ -87,13 +87,15 @@ On subsequent runs the item is treated as a normal JIRA-synced issue. Requires t
 **Reporting Log entry format** — entries are separated by ` | `, ordered **newest first**:
 
 ```
-DATE, Area, Status, Priority, Version, Estimate, Remaining Work, Time Spent
+DATE, Area, Status, Priority, Version, Estimate, Remaining Work, Time Spent, External Reference
 ```
 
 Example (newest → oldest, max 5 entries):
 ```
-2026-03-10, CI, In Progress, Major, 3.20, 8, 5, 3 | 2026-03-01, CI, Backlog, Major, 3.20, 8, 8, 0
+2026-03-10, CI, In Progress, Major, 3.20, 8, 5, 3, ISSUE-774 | 2026-03-01, CI, Backlog, Major, 3.20, 8, 8, 0,
 ```
+
+> **Note:** Older log entries created before this field was tracked will have 8 fields instead of 9. The workflow handles both formats gracefully.
 
 #### Alerts codes
 
