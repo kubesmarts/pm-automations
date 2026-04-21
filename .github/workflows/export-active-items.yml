@@ -523,5 +523,3 @@ jobs:
           git commit -m "Export active items $(date -u +%Y-%m-%d)" || echo "No changes to commit"
           git pull --rebase origin main
           git push
-
-# Made with Bob

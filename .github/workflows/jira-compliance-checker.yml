@@ -1,0 +1,52 @@
+name: JIRA Issues Compliance Checker
+
+on:
+  schedule:
+    # Run daily at 06:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run mode (no JIRA updates)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+jobs:
+  check-compliance:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          npm install node-fetch@2
+
+      - name: Run compliance checker
+        env:
+          JIRA_TOKEN: ${{ secrets.PSYNC_PAT_JIRA }}
+          JIRA_BASE_URL: ${{ vars.PSYNC_JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ vars.PSYNC_JIRA_EMAIL }}
+          JIRA_FILTERS: ${{ vars.PSYNC_JIRA_FILTERS }}
+          JIRA_JQL: ${{ vars.PSYNC_JIRA_JQL }}
+          JIRA_PROJECTS: ${{ vars.PSYNC_JIRA_PROJECTS }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: node .github/workflows/scripts/jira-compliance-checker.js
+
+      - name: Upload compliance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compliance-report-${{ github.run_number }}
+          path: compliance-report.json
+          retention-days: 30
