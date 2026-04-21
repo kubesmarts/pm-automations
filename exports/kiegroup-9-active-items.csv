@@ -3,5 +3,5 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 2281,,https://github.com/apache/incubator-kie-issues/issues/2281,DRLGEN Second level of DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,1.0,0.2,0.8,1.0,0.2,0.8,,
 2110,,https://github.com/apache/incubator-kie-issues/issues/2110,Drools bi-linear networks,Rikkola,In review,,Runtimes,Normal,,Future,L,5.0,4.0,1.0,5.0,4.0,1.0,,
 169,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/169,EDA : Add more load test for HA,tkobayas,In progress,,QE,Major,,Future,M,0.5,0.3,0.2,0.5,0.3,0.2,,
-168,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/168,EDA : Details for the 1st HA release,tkobayas,In progress,,Runtimes,Major,,Future,L,3.0,1.0,2.0,3.0,1.0,2.0,,perfomance improvement
-167,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/167,DrlxCompiler enhancement round 1,tkobayas,In progress,,Runtimes,Major,,Future,L,3.0,0.3,2.7,3.0,0.3,2.7,,inline cast : done
+168,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/168,EDA : Details for the 1st HA release,tkobayas,In progress,,Runtimes,Major,,Future,L,3.0,1.0,2.0,3.0,1.0,2.0,,
+4,,https://github.com/tkobayas/drlx-parser/issues/4,DrlxCompiler enhancement round 1,tkobayas,In progress,,Runtimes,Major,,Future,L,3.0,0.4,2.6,3.0,0.4,2.6,,
