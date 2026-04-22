@@ -29,6 +29,10 @@ class JiraClient {
                 throw new Error(`JIRA API error (${response.status}): ${errorText}`);
             }
 
+            if (response.status === 204 || response.headers.get('content-length') === '0') {
+                return null;
+            }
+
             return await response.json();
         } catch (error) {
             console.error(`Error making request to ${url}:`, error.message);
@@ -38,13 +42,13 @@ class JiraClient {
 
     async fetchFilter(filterId) {
         console.log(`Fetching filter ${filterId}...`);
-        return await this.makeRequest(`/rest/api/2/filter/${filterId}`);
+        return await this.makeRequest(`/rest/api/3/filter/${filterId}`);
     }
 
     async searchIssues(jql, startAt = 0, maxResults = 100) {
         const encodedJql = encodeURIComponent(jql);
-        const fields = 'key,status,priority,fixVersions,timetracking,worklog,assignee,labels';
-        const endpoint = `/rest/api/2/search?jql=${encodedJql}&fields=${fields}&maxResults=${maxResults}&startAt=${startAt}`;
+        const fields = 'summary,key,status,priority,fixVersions,timetracking,worklog,assignee,labels,components';
+        const endpoint = `/rest/api/3/search/jql?jql=${encodedJql}&fields=${fields}&maxResults=${maxResults}&startAt=${startAt}`;
         
         console.log(`Searching issues with JQL: ${jql} (startAt: ${startAt})`);
         return await this.makeRequest(endpoint);
@@ -68,27 +72,21 @@ class JiraClient {
     }
 
     async fetchIssue(issueKey) {
-        const fields = 'key,status,priority,fixVersions,timetracking,worklog,assignee,labels';
-        return await this.makeRequest(`/rest/api/2/issue/${issueKey}?fields=${fields}`);
+        const fields = 'summary,key,status,priority,fixVersions,timetracking,worklog,assignee,labels,components';
+        return await this.makeRequest(`/rest/api/3/issue/${issueKey}?fields=${fields}`);
     }
 
     async updateIssueLabels(issueKey, labelsToAdd, labelsToRemove) {
-        const update = {
-            update: {
-                labels: []
-            }
-        };
+        const issue = await this.fetchIssue(issueKey);
+        const currentLabels = this.extractLabels(issue);
 
-        labelsToAdd.forEach(label => {
-            update.update.labels.push({ add: label });
-        });
-
-        labelsToRemove.forEach(label => {
-            update.update.labels.push({ remove: label });
-        });
+        const newLabels = [
+            ...currentLabels.filter(l => !labelsToRemove.includes(l)),
+            ...labelsToAdd.filter(l => !currentLabels.includes(l))
+        ];
 
         console.log(`Updating labels for ${issueKey}: +${labelsToAdd.length} -${labelsToRemove.length}`);
-        return await this.makeRequest(`/rest/api/2/issue/${issueKey}`, 'PUT', update);
+        return await this.makeRequest(`/rest/api/2/issue/${issueKey}`, 'PUT', { fields: { labels: newLabels } });
     }
 
     extractStatus(issue) {
@@ -104,19 +102,72 @@ class JiraClient {
     }
 
     extractOriginalEstimate(issue) {
-        return issue.fields.timetracking?.originalEstimate || null;
+        const seconds = issue.fields.timetracking?.originalEstimateSeconds;
+        return seconds > 0 ? issue.fields.timetracking.originalEstimate : null;
     }
 
     extractRemainingEstimate(issue) {
-        return issue.fields.timetracking?.remainingEstimate || null;
+        const seconds = issue.fields.timetracking?.remainingEstimateSeconds;
+        return seconds > 0 ? issue.fields.timetracking.remainingEstimate : null;
     }
 
     extractTimeSpent(issue) {
-        return issue.fields.timetracking?.timeSpent || null;
+        const seconds = issue.fields.timetracking?.timeSpentSeconds;
+        return seconds > 0 ? issue.fields.timetracking.timeSpent : null;
     }
 
     extractAssignee(issue) {
         return issue.fields.assignee?.displayName || null;
+    }
+
+    extractAssigneeAccountId(issue) {
+        return issue.fields.assignee?.accountId || null;
+    }
+
+    buildComplianceCommentBody(violations, assigneeAccountId, assigneeDisplayName) {
+        const violationText = violations.join(', ');
+        const contentNodes = [];
+
+        if (assigneeAccountId) {
+            contentNodes.push({
+                type: 'mention',
+                attrs: { id: assigneeAccountId, text: `@${assigneeDisplayName}` }
+            });
+            contentNodes.push({ type: 'text', text: ' ' });
+        }
+
+        contentNodes.push({
+            type: 'text',
+            text: `Compliance violations detected: ${violationText}. Please review and resolve.`
+        });
+
+        return {
+            version: 1,
+            type: 'doc',
+            content: [{ type: 'paragraph', content: contentNodes }]
+        };
+    }
+
+    async upsertComplianceComment(issueKey, violations, assigneeAccountId, assigneeDisplayName) {
+        const existing = await this.makeRequest(`/rest/api/3/issue/${issueKey}/comment?maxResults=100&orderBy=-created`);
+        const existingComment = existing.comments?.find(c =>
+            JSON.stringify(c.body).includes('Compliance violations detected:')
+        );
+
+        const newBody = this.buildComplianceCommentBody(violations, assigneeAccountId, assigneeDisplayName);
+        const violationText = violations.join(', ');
+
+        if (existingComment) {
+            const existingText = JSON.stringify(existingComment.body);
+            if (existingText.includes(violationText)) {
+                return { action: 'skipped' };
+            }
+            await this.makeRequest(`/rest/api/3/issue/${issueKey}/comment/${existingComment.id}`, 'PUT', { body: newBody });
+            return { action: 'updated' };
+        }
+
+        await this.makeRequest(`/rest/api/3/issue/${issueKey}/comment`, 'POST', { body: newBody });
+        return { action: 'created' };
     }
 
     extractAreaLabel(issue) {
@@ -127,6 +178,20 @@ class JiraClient {
 
     extractLabels(issue) {
         return issue.fields.labels || [];
+    }
+
+    extractComponents(issue) {
+        return issue.fields.components?.map(c => c.name) || [];
+    }
+
+    extractFirstComponent(issue) {
+        const components = this.extractComponents(issue);
+        return components.length > 0 ? components[0] : null;
+    }
+
+    extractAreaLabels(issue) {
+        const labels = issue.fields.labels || [];
+        return labels.filter(label => label.startsWith('area/'));
     }
 }
 

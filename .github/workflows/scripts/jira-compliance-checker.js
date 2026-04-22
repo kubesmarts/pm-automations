@@ -86,36 +86,54 @@ async function main() {
                 console.log(`  Violations: ${validationResult.violations.join(', ')}`);
                 issuesWithViolations++;
 
-                // Update labels
-                try {
-                    const labelUpdate = await labelManager.updateLabels(
-                        issue,
-                        validationResult.violations,
-                        config.dryRun
-                    );
+                // Update labels (errors handled gracefully inside labelManager)
+                const labelUpdate = await labelManager.updateLabels(
+                    issue,
+                    ['compliance-violation'],
+                    config.dryRun,
+                    validationResult.componentAreaSync
+                );
 
-                    // Add to report
-                    reportGenerator.addViolation(validationResult, labelUpdate, config.jiraBaseUrl);
-                } catch (error) {
-                    console.error(`  Error updating labels: ${error.message}`);
-                    // Continue processing other issues
+                // Add to report (including any errors)
+                reportGenerator.addViolation(validationResult, labelUpdate, config.jiraBaseUrl);
+
+                // Log if label update failed
+                if (labelUpdate.error) {
+                    console.log(`  ⚠️  Label update skipped due to JIRA restrictions`);
+                }
+
+                // Upsert compliance comment (create on first detection, update if violations changed)
+                if (!config.dryRun) {
+                    const assigneeAccountId = jiraClient.extractAssigneeAccountId(issue);
+                    const assigneeDisplayName = jiraClient.extractAssignee(issue);
+                    try {
+                        const result = await jiraClient.upsertComplianceComment(issue.key, validationResult.violations, assigneeAccountId, assigneeDisplayName);
+                        if (result.action === 'created') {
+                            console.log(`  ✓ Comment added${assigneeDisplayName ? ` (notified ${assigneeDisplayName})` : ''}`);
+                        } else if (result.action === 'updated') {
+                            console.log(`  ✓ Comment updated with new violations`);
+                        } else {
+                            console.log(`  ℹ  Comment unchanged, skipped`);
+                        }
+                    } catch (error) {
+                        console.log(`  ⚠️  Comment failed: ${error.message}`);
+                    }
                 }
             } else {
                 console.log(`  ✓ No violations`);
                 
-                // Remove any existing violation labels
-                try {
-                    const labelUpdate = await labelManager.updateLabels(
-                        issue,
-                        [],
-                        config.dryRun
-                    );
-                    
-                    if (labelUpdate.changed) {
-                        console.log(`  Removed resolved violation labels`);
-                    }
-                } catch (error) {
-                    console.error(`  Error removing labels: ${error.message}`);
+                // Remove any existing violation labels and sync area labels if needed
+                const labelUpdate = await labelManager.updateLabels(
+                    issue,
+                    [],
+                    config.dryRun,
+                    validationResult.componentAreaSync
+                );
+                
+                if (labelUpdate.changed && !labelUpdate.error) {
+                    console.log(`  Removed resolved violation labels or synced area labels`);
+                } else if (labelUpdate.error) {
+                    console.log(`  ⚠️  Label update skipped due to JIRA restrictions`);
                 }
             }
         }

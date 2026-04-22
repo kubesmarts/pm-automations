@@ -29,12 +29,40 @@ class PolicyValidator {
             'originalEstimate': 'NO_ESTIMATE',
             'remainingEstimate': 'NO_REMAINING_WORK',
             'timeSpent': 'NO_TIME_SPENT',
-            'assignee': 'NO_ASSIGNEE'
+            'assignee': 'NO_ASSIGNEE',
+            'component': 'NO_COMPONENT'
+        };
+
+        // Component-to-Area label mapping (for SRVLOGIC issues only)
+        this.componentAreaMapping = {
+            'CI:Midstream': 'area/ci',
+            'Documentation': 'area/docs',
+            'Productization': 'area/productization',
+            'Agile': 'area/pm',
+            'Cloud:CLI': 'area/cloud',
+            'Cloud:Images': 'area/cloud',
+            'Cloud:Operator': 'area/cloud',
+            'Event Orchestration': 'area/runtimes',
+            'Integration': 'area/runtimes',
+            'Job Service': 'area/runtimes',
+            'Persistence': 'area/runtimes',
+            'Service Orchestration': 'area/runtimes',
+            'Security': 'area/runtimes',
+            'Getting Started': 'area/docs',
+            'Migration': 'area/runtimes',
+            'Installation': 'area/docs',
+            'Management Console': 'area/tooling',
+            'Tooling:DataIndexWebapp': 'area/tooling',
+            'Tooling:Editor': 'area/tooling',
+            'Tooling:VSCode': 'area/tooling',
+            'Tooling:WebTools': 'area/tooling',
+            'QE Test Suite': 'area/qe',
+            'serverless workflow': 'area/runtimes'
         };
     }
 
     mapStatusToPolicyStage(jiraStatus) {
-        const stage = this.statusMapping[jiraStatus];
+        const stage = this.statusMapping[jiraStatus?.toUpperCase()];
         if (!stage) {
             console.warn(`Unknown JIRA status: ${jiraStatus}, defaulting to Backlog`);
             return 'Backlog';
@@ -57,8 +85,15 @@ class PolicyValidator {
             originalEstimate: jiraClient.extractOriginalEstimate(issue),
             remainingEstimate: jiraClient.extractRemainingEstimate(issue),
             timeSpent: jiraClient.extractTimeSpent(issue),
-            assignee: jiraClient.extractAssignee(issue)
+            assignee: jiraClient.extractAssignee(issue),
+            component: jiraClient.extractFirstComponent(issue)
         };
+
+        // Component/Area validation for SRVLOGIC issues only
+        const componentAreaResult = this.validateComponentAndArea(issue, jiraClient);
+        if (componentAreaResult.violations.length > 0) {
+            violations.push(...componentAreaResult.violations);
+        }
 
         // Check each required field
         for (const field of requiredFields) {
@@ -77,7 +112,8 @@ class PolicyValidator {
             status: status,
             policyStage: policyStage,
             violations: violations,
-            fields: fieldValues
+            fields: fieldValues,
+            componentAreaSync: componentAreaResult.sync
         };
     }
 
@@ -95,12 +131,62 @@ class PolicyValidator {
         return fieldValue !== null && fieldValue !== undefined && fieldValue !== '';
     }
 
+    validateComponentAndArea(issue, jiraClient) {
+        const issueKey = issue.key;
+        const violations = [];
+        const sync = {
+            shouldSync: false,
+            labelsToAdd: [],
+            labelsToRemove: []
+        };
+
+        // Only apply to SRVLOGIC issues
+        if (!issueKey.startsWith('SRVLOGIC-')) {
+            return { violations, sync };
+        }
+
+        const component = jiraClient.extractFirstComponent(issue);
+        const currentAreaLabels = jiraClient.extractAreaLabels(issue);
+
+        // Check if component is set
+        if (!component) {
+            violations.push('NO_COMPONENT');
+            return { violations, sync };
+        }
+
+        // Get expected area label from mapping
+        const expectedAreaLabel = this.componentAreaMapping[component];
+        
+        if (!expectedAreaLabel) {
+            console.warn(`  ⚠️  Component "${component}" not in mapping`);
+            return { violations, sync };
+        }
+
+        // Check if area label needs to be synced
+        const hasExpectedArea = currentAreaLabels.includes(expectedAreaLabel);
+        const hasOtherAreas = currentAreaLabels.some(label => label !== expectedAreaLabel);
+
+        if (!hasExpectedArea || hasOtherAreas) {
+            sync.shouldSync = true;
+            
+            // Add expected area label if missing
+            if (!hasExpectedArea) {
+                sync.labelsToAdd.push(expectedAreaLabel);
+            }
+            
+            // Remove other area labels
+            if (hasOtherAreas) {
+                const labelsToRemove = currentAreaLabels.filter(label => label !== expectedAreaLabel);
+                sync.labelsToRemove.push(...labelsToRemove);
+            }
+        }
+
+        return { violations, sync };
+    }
+
     getViolationLabels(issue) {
         const labels = issue.fields.labels || [];
-        const violationLabels = Object.values(this.violationCodes);
-        violationLabels.push('REMAINING_WORK_NOT_CLEARED');
-        
-        return labels.filter(label => violationLabels.includes(label));
+        return labels.includes('compliance-violation') ? ['compliance-violation'] : [];
     }
 }
 

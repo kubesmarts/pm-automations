@@ -1,7 +1,7 @@
 # JIRA Issues Compliance Checker Workflow
 
 ## Overview
-Automated GitHub Actions workflow that validates JIRA issues against ABLE team's software development lifecycle policies and adds granular violation labels for tracking.
+Automated GitHub Actions workflow that validates JIRA issues against ABLE team's software development lifecycle policies. When violations are detected, a single `compliance-violation` label is added to the issue and a comment is posted listing the specific violations and mentioning the assignee (if set).
 
 ## Quick Start
 
@@ -55,11 +55,21 @@ Each issue is validated based on its JIRA status:
 | CORE_REVIEW, ON_QA | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
 | RELEASE PENDING, CLOSED | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
 
-### 3. Violation Labels
-One label is added per violation type:
+### 3. Violation Label and Comment
+When one or more violations are detected a single `compliance-violation` label is added to the issue. The specific violations are listed in the workflow report and in a JIRA comment.
 
-| Label | Meaning |
-|-------|---------|
+**Label:**
+- `compliance-violation` — added on first detection, removed when all violations are resolved
+
+**Comment** (posted once, on first detection):
+- Mentions the assignee if one is set, so they receive a JIRA notification
+- Lists all current violations: e.g., `Compliance violations detected: NO_ESTIMATE, NO_ASSIGNEE. Please review and resolve.`
+
+Detected violation types:
+
+| Code | Meaning |
+|------|---------|
+| `NO_COMPONENT` | Missing component (SRVLOGIC issues only) |
 | `NO_AREA` | Missing area/* label |
 | `NO_PRIORITY` | Missing priority |
 | `NO_VERSION` | Missing fix versions |
@@ -68,10 +78,6 @@ One label is added per violation type:
 | `NO_TIME_SPENT` | Missing time spent |
 | `NO_ASSIGNEE` | Missing assignee |
 | `REMAINING_WORK_NOT_CLEARED` | Remaining work not cleared when Done |
-
-Labels are automatically:
-- **Added** when violations are detected
-- **Removed** when violations are resolved
 
 ### 4. Compliance Report
 A JSON report is generated with:
@@ -88,22 +94,17 @@ Report is uploaded as a workflow artifact.
 
 **All violations:**
 ```jql
-labels IN (NO_AREA, NO_PRIORITY, NO_VERSION, NO_ESTIMATE, NO_REMAINING_WORK, NO_TIME_SPENT, NO_ASSIGNEE, REMAINING_WORK_NOT_CLEARED)
+labels = compliance-violation
 ```
 
 **My violations:**
 ```jql
-assignee = currentUser() AND labels IN (NO_ESTIMATE, NO_ASSIGNEE)
+assignee = currentUser() AND labels = compliance-violation
 ```
 
-**Critical violations:**
+**By status:**
 ```jql
-labels IN (NO_ESTIMATE, NO_ASSIGNEE, NO_TIME_SPENT) AND status != Backlog
-```
-
-**Specific violation type:**
-```jql
-labels = NO_ESTIMATE ORDER BY priority DESC
+labels = compliance-violation AND status IN ("IN PROGRESS", "CORE_REVIEW") ORDER BY priority DESC
 ```
 
 ### Saved Filters
@@ -111,17 +112,12 @@ Create and save these filters in JIRA for quick access:
 
 1. **🚨 All Compliance Violations**
    ```jql
-   labels IN (NO_AREA, NO_PRIORITY, NO_VERSION, NO_ESTIMATE, NO_REMAINING_WORK, NO_TIME_SPENT, NO_ASSIGNEE, REMAINING_WORK_NOT_CLEARED) ORDER BY priority DESC, updated DESC
+   labels = compliance-violation ORDER BY priority DESC, updated DESC
    ```
 
 2. **👤 My Compliance Violations**
    ```jql
-   assignee = currentUser() AND labels IN (NO_AREA, NO_PRIORITY, NO_VERSION, NO_ESTIMATE, NO_REMAINING_WORK, NO_TIME_SPENT, NO_ASSIGNEE) ORDER BY status
-   ```
-
-3. **📊 Missing Estimates**
-   ```jql
-   labels = NO_ESTIMATE AND status IN ("IN PROGRESS", "CORE_REVIEW") ORDER BY priority DESC
+   assignee = currentUser() AND labels = compliance-violation ORDER BY status
    ```
 
 ## Dry Run Mode

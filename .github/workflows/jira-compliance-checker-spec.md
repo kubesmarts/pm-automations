@@ -17,13 +17,50 @@ A GitHub Actions workflow that validates JIRA issues against ABLE team's softwar
 ### Field Definitions
 | Field Name | JIRA Field | Type | Validation |
 |------------|------------|------|------------|
-| Area | area/\<value\> label | Label | Must have one label matching pattern `area/*` (e.g., area/ci, area/runtimes, area/tooling, area/cloud, area/qe, area/docs) |
+| Component | Component | Single select | Must be set (SRVLOGIC issues only) |
+| Area | area/\<value\> label | Label | Must have one label matching pattern `area/*` (e.g., area/ci, area/runtimes, area/tooling, area/cloud, area/qe, area/docs). For SRVLOGIC issues, automatically synced with Component field |
 | Priority | Priority | Single select | Must be set to one of: Blocker, Critical, Major, Normal, Minor |
 | Version | Fix Versions | Array | Must have at least one version set |
 | Estimate | Original Estimate | Time tracking | Must be set (any positive value) |
 | Remaining Work | Remaining Estimate | Time tracking | Must be set (any positive value) |
 | Time Spent | Time Spent (worklog sum) | Time tracking | Must be set (can be 0, but field must exist/not be null) |
 | Assignee | Assignee | User | Must have at least one assignee |
+
+### Component-to-Area Label Mapping (SRVLOGIC Issues Only)
+
+For issues with keys starting with `SRVLOGIC-`, the Area label is automatically synchronized with the Component field according to this mapping:
+
+| JIRA Component | Area Label |
+|----------------|------------|
+| CI:Midstream | area/ci |
+| Documentation | area/docs |
+| Productization | area/productization |
+| Agile | area/pm |
+| Cloud:CLI | area/cloud |
+| Cloud:Images | area/cloud |
+| Cloud:Operator | area/cloud |
+| Event Orchestration | area/runtimes |
+| Integration | area/runtimes |
+| Job Service | area/runtimes |
+| Persistence | area/runtimes |
+| Service Orchestration | area/runtimes |
+| Security | area/runtimes |
+| Getting Started | area/docs |
+| Migration | area/runtimes |
+| Installation | area/docs |
+| Management Console | area/tooling |
+| Tooling:DataIndexWebapp | area/tooling |
+| Tooling:Editor | area/tooling |
+| Tooling:VSCode | area/tooling |
+| Tooling:WebTools | area/tooling |
+| QE Test Suite | area/qe |
+| serverless workflow | area/runtimes |
+
+**Synchronization Behavior:**
+- If Component is set and Area label is missing → Area label is automatically added
+- If Component is set and wrong Area label exists → Wrong Area label is removed and correct one is added
+- If Component changes → Old Area label is removed and new Area label is added
+- Only one Area label should exist per issue (matching the Component)
 
 ### Policy Rules by Status
 
@@ -104,20 +141,39 @@ PSYNC_JIRA_PROJECTS: "ISSUE"
 ## Validation Logic
 
 ### For Each JIRA Issue:
-1. **Fetch JIRA issue** via REST API
+1. **Fetch JIRA issue** via REST API (including components field)
 2. **Extract status** from issue.fields.status.name
-3. **Determine policy stage** based on status mapping
-4. **Validate required fields** for that stage
-5. **Generate violation codes**
-6. **Update JIRA ticket labels:**
-   - Add specific violation labels (e.g., `NO_ESTIMATE`, `NO_ASSIGNEE`)
+3. **Check if SRVLOGIC issue** (key starts with `SRVLOGIC-`)
+   - If YES: Validate Component field and sync Area label
+   - If NO: Skip Component/Area validation
+4. **Component/Area Validation (SRVLOGIC only):**
+   - Check if Component is set → Add `NO_COMPONENT` if missing
+   - If Component is set and in mapping:
+     - Check if correct Area label exists
+     - Add correct Area label if missing
+     - Remove incorrect Area labels
+5. **Determine policy stage** based on status mapping
+6. **Validate required fields** for that stage
+7. **Generate violation codes**
+8. **Update JIRA ticket labels:**
+   - Add specific violation labels (e.g., `NO_ESTIMATE`, `NO_ASSIGNEE`, `NO_COMPONENT`)
    - Remove violation labels that are now resolved
+   - Sync Area labels for SRVLOGIC issues
 
 ### Label Management Logic
 ```javascript
 // For each issue
 currentViolations = validateIssue(issue)
 existingViolationLabels = getViolationLabels(issue)
+
+// For SRVLOGIC issues: Check Component/Area sync
+if (issue.key.startsWith('SRVLOGIC-')) {
+  componentAreaSync = validateComponentAndArea(issue)
+  if (componentAreaSync.shouldSync) {
+    labelsToAdd.push(...componentAreaSync.labelsToAdd)
+    labelsToRemove.push(...componentAreaSync.labelsToRemove)
+  }
+}
 
 // Add new violation labels
 labelsToAdd = currentViolations - existingViolationLabels
@@ -135,7 +191,8 @@ for (label in labelsToRemove) {
 ### Violation Codes (Now Used as Labels)
 | Code/Label | Description | When Raised |
 |------------|-------------|-------------|
-| `NO_AREA` | No area/* label found | Required for Next, In Progress, In Review, Done |
+| `NO_COMPONENT` | Component field is not set | SRVLOGIC issues only - Component field is empty/null |
+| `NO_AREA` | No area/* label found | Required for Next, In Progress, In Review, Done (after Component/Area sync for SRVLOGIC) |
 | `NO_PRIORITY` | Priority field is empty | Required for Next, In Progress, In Review, Done |
 | `NO_VERSION` | Fix Versions is empty | Required for Next, In Progress, In Review, Done |
 | `NO_ESTIMATE` | Original Estimate is empty | Required for In Progress, In Review, Done |
@@ -153,20 +210,22 @@ for (label in labelsToRemove) {
 
 ### API Endpoints
 
+**Note:** Using JIRA REST API v3 (v2 has been deprecated). The `/rest/api/3/search` endpoint has been removed and replaced with `/rest/api/3/search/jql` (GET method with query parameters).
+
 #### Get Filter and Execute
 ```
-GET {JIRA_BASE_URL}/rest/api/2/filter/{filterId}
-GET {JIRA_BASE_URL}/rest/api/2/search?jql={filter.jql}&fields=key,status,priority,fixVersions,timetracking,worklog,assignee,labels&maxResults=100&startAt=0
+GET {JIRA_BASE_URL}/rest/api/3/filter/{filterId}
+GET {JIRA_BASE_URL}/rest/api/3/search/jql?jql={filter.jql}&fields=key,status,priority,fixVersions,timetracking,worklog,assignee,labels,components&maxResults=100&startAt=0
 ```
 
 #### Execute JQL Query
 ```
-GET {JIRA_BASE_URL}/rest/api/2/search?jql={encodedJQL}&fields=key,status,priority,fixVersions,timetracking,worklog,assignee,labels&maxResults=100&startAt=0
+GET {JIRA_BASE_URL}/rest/api/3/search/jql?jql={encodedJQL}&fields=key,status,priority,fixVersions,timetracking,worklog,assignee,labels,components&maxResults=100&startAt=0
 ```
 
 #### Update Issue Labels (Add/Remove)
 ```
-PUT {JIRA_BASE_URL}/rest/api/2/issue/{issueKey}
+PUT {JIRA_BASE_URL}/rest/api/3/issue/{issueKey}
 Body: {
   "update": {
     "labels": [
