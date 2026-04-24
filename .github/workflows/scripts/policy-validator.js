@@ -127,6 +127,11 @@ class PolicyValidator {
             return fieldValue !== null && fieldValue !== undefined;
         }
 
+        if (fieldName === 'priority') {
+            // Priority must be set and not be "Undefined" (JIRA's way of saying no priority)
+            return fieldValue !== null && fieldValue !== undefined && fieldValue !== '' && fieldValue !== 'Undefined';
+        }
+
         // For other fields, check if they exist and are not empty
         return fieldValue !== null && fieldValue !== undefined && fieldValue !== '';
     }
