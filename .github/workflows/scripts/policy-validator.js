@@ -2,6 +2,7 @@ class PolicyValidator {
     constructor() {
         // JIRA Status to Policy Stage mapping
         this.statusMapping = {
+            'BACKLOG': 'Backlog',
             'NEW': 'Next',
             'REFINEMENT': 'Next',
             'IN PROGRESS': 'In Progress',
@@ -145,8 +146,13 @@ class PolicyValidator {
             labelsToRemove: []
         };
 
-        // Only apply to SRVLOGIC issues
+        // Only apply to SRVLOGIC issues that are not in Backlog
         if (!issueKey.startsWith('SRVLOGIC-')) {
+            return { violations, sync };
+        }
+
+        const status = jiraClient.extractStatus(issue);
+        if (this.mapStatusToPolicyStage(status) === 'Backlog') {
             return { violations, sync };
         }
 
