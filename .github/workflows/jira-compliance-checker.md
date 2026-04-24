@@ -77,7 +77,7 @@ Detected violation types:
 | `NO_REMAINING_WORK` | Missing remaining estimate |
 | `NO_TIME_SPENT` | Missing time spent |
 | `NO_ASSIGNEE` | Missing assignee |
-| `REMAINING_WORK_NOT_CLEARED` | Remaining work not cleared when Done |
+| `REMAINING_WORK_NOT_CLEARED` | Remaining work not cleared when Done (auto-cleared by the workflow) |
 
 ### 4. Compliance Report
 A JSON report is generated with:

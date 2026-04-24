@@ -170,6 +170,12 @@ class JiraClient {
         return { action: 'created' };
     }
 
+    async clearRemainingEstimate(issueKey, originalEstimate) {
+        return await this.makeRequest(`/rest/api/2/issue/${issueKey}`, 'PUT', {
+            fields: { timetracking: { originalEstimate: originalEstimate || '0h', remainingEstimate: '0h' } }
+        });
+    }
+
     async deleteComplianceComment(issueKey) {
         const existing = await this.makeRequest(`/rest/api/3/issue/${issueKey}/comment?maxResults=100&orderBy=-created`);
         const existingComment = existing.comments?.find(c =>

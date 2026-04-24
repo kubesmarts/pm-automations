@@ -81,7 +81,18 @@ async function main() {
             // Validate issue
             const validationResult = policyValidator.validateIssue(issue, jiraClient);
             console.log(`  Status: ${validationResult.status} (${validationResult.policyStage})`);
-            
+
+            // Auto-clear remaining estimate for Done issues
+            if (!config.dryRun && validationResult.policyStage === 'Done' && validationResult.fields.remainingEstimate) {
+                try {
+                    await jiraClient.clearRemainingEstimate(issue.key, validationResult.fields.originalEstimate);
+                    console.log(`  ✓ Remaining estimate auto-cleared`);
+                    validationResult.violations = validationResult.violations.filter(v => v !== 'REMAINING_WORK_NOT_CLEARED');
+                } catch (error) {
+                    console.log(`  ⚠️  Could not clear remaining estimate: ${error.message}`);
+                }
+            }
+
             if (validationResult.violations.length > 0) {
                 console.log(`  Violations: ${validationResult.violations.join(', ')}`);
                 issuesWithViolations++;

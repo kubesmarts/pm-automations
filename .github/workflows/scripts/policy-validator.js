@@ -7,7 +7,7 @@ class PolicyValidator {
             'REFINEMENT': 'Next',
             'IN PROGRESS': 'In Progress',
             'ON_DEV': 'In Progress',
-            'CORE_REVIEW': 'In Review',
+            'CODE REVIEW': 'In Review',
             'ON_QA': 'In Review',
             'RELEASE PENDING': 'Done',
             'CLOSED': 'Done'
@@ -104,7 +104,7 @@ class PolicyValidator {
         }
 
         // Special check: Remaining Work should be cleared when Done
-        if (policyStage === 'Done' && fieldValues.remainingEstimate && fieldValues.remainingEstimate !== '0m') {
+        if (policyStage === 'Done' && fieldValues.remainingEstimate) {
             violations.push('REMAINING_WORK_NOT_CLEARED');
         }
 
