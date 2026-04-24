@@ -170,6 +170,28 @@ class JiraClient {
         return { action: 'created' };
     }
 
+    async deleteComplianceComment(issueKey) {
+        const existing = await this.makeRequest(`/rest/api/3/issue/${issueKey}/comment?maxResults=100&orderBy=-created`);
+        const existingComment = existing.comments?.find(c =>
+            JSON.stringify(c.body).includes('Compliance violations detected:')
+        );
+
+        if (existingComment) {
+            try {
+                await this.makeRequest(`/rest/api/3/issue/${issueKey}/comment/${existingComment.id}`, 'DELETE');
+                return { action: 'deleted', commentId: existingComment.id };
+            } catch (error) {
+                // Handle permission errors gracefully
+                if (error.message.includes('permission')) {
+                    return { action: 'permission_denied', commentId: existingComment.id, error: error.message };
+                }
+                throw error;
+            }
+        }
+
+        return { action: 'not_found' };
+    }
+
     extractAreaLabel(issue) {
         const labels = issue.fields.labels || [];
         const areaLabel = labels.find(label => label.startsWith('area/'));

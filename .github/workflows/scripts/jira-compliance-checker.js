@@ -135,6 +135,20 @@ async function main() {
                 } else if (labelUpdate.error) {
                     console.log(`  ⚠️  Label update skipped due to JIRA restrictions`);
                 }
+
+                // Delete compliance comment when all violations are resolved
+                if (!config.dryRun) {
+                    try {
+                        const result = await jiraClient.deleteComplianceComment(issue.key);
+                        if (result.action === 'deleted') {
+                            console.log(`  ✓ Compliance comment deleted (violations resolved)`);
+                        } else if (result.action === 'permission_denied') {
+                            console.log(`  ⚠️  Cannot delete comment (permission denied)`);
+                        }
+                    } catch (error) {
+                        console.log(`  ⚠️  Comment deletion failed: ${error.message}`);
+                    }
+                }
             }
         }
 
