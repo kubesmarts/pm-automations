@@ -18,7 +18,7 @@ class PolicyValidator {
             'Backlog': [],
             'Next': ['area', 'priority', 'fixVersions'],
             'In Progress': ['area', 'priority', 'fixVersions', 'originalEstimate', 'remainingEstimate', 'assignee'],
-            'In Review': ['area', 'priority', 'fixVersions', 'originalEstimate', 'remainingEstimate', 'assignee'],
+            'In Review': ['area', 'priority', 'fixVersions', 'originalEstimate', 'assignee'],
             'Done': ['area', 'priority', 'fixVersions', 'originalEstimate', 'timeSpent', 'assignee']
         };
 
@@ -56,8 +56,9 @@ class PolicyValidator {
             'Tooling:DataIndexWebapp': 'area/tooling',
             'Tooling:Editor': 'area/tooling',
             'Tooling:VSCode': 'area/tooling',
-            'Tooling:WebTools': 'area/tooling',
+            'Tooling:Web Tools': 'area/tooling',
             'QE Test Suite': 'area/qe',
+            'Runtimes': 'area/runtimes',
             'serverless workflow': 'area/runtimes'
         };
     }
@@ -96,8 +97,12 @@ class PolicyValidator {
             violations.push(...componentAreaResult.violations);
         }
 
-        // Check each required field
-        for (const field of requiredFields) {
+        // For SRVLOGIC issues area is validated via component mapping — skip it here
+        const fieldsToCheck = issue.key.startsWith('SRVLOGIC-')
+            ? requiredFields.filter(f => f !== 'area')
+            : requiredFields;
+
+        for (const field of fieldsToCheck) {
             if (!this.isFieldValid(field, fieldValues[field])) {
                 violations.push(this.violationCodes[field]);
             }
