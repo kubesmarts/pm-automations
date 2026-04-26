@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+3471,3507,https://github.com/apache/incubator-kie-tools/issues/3471,[sonataflow-operator] Implement nativelly PDB support for SonataFlow workflows and Data Index service deployments,wmedvede,,Cloud,Major,OSL,1.38.0 OSL,,2.6,2.6,2026-04-25,SRVLOGIC-769,
+3507,,https://github.com/apache/incubator-kie-tools/issues/3507,[sonataflow-operator] Epic: Implement nativelly PDB support for SonataFlow workflows and Data Index service deployments,wmedvede,,Cloud,Major,OSL,1.38.0 OSL,,0.0,0.0,2026-04-25,,
+4252,,https://github.com/apache/incubator-kie-kogito-runtimes/issues/4252,Cancelling a workflow does not cancel its subflows,fjtirado,,Runtimes,Major,OSL,1.38.0 OSL,M,0.6,0.5,2026-04-21,SRVLOGIC-953,
 3496,,https://github.com/apache/incubator-kie-tools/issues/3496,[sonataflow-operator] Ensure DB Mibrator Job is executed when upgrading the operator from version N to N+1,wmedvede,,Cloud,Blocker,OSL,1.38.0 OSL,M,0.8,0.8,2026-04-16,SRVLOGIC-865,
 3400,,https://github.com/apache/incubator-kie-tools/issues/3400,Data Index - Display version information and link to graphql ui from data index webapp.,kumaradityaraj,,Tooling,Normal,Apache,10.1.0 Apache,M,1.0,1.0,2026-04-13,,
 221,,https://github.com/serverlessworkflow/sdk-go/issues/221,Add an implementation reference to the DSL 1.0.0,ricardozanini,,Cloud,Normal,CNCF Spec,Future,XL,0.0,0.0,2026-03-27,,
