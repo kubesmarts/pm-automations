@@ -1,7 +1,7 @@
 # JIRA Issues Compliance Checker Workflow
 
 ## Overview
-Automated GitHub Actions workflow that validates JIRA issues against [ABLE team's software development lifecycle policies](../../docs/user-guide-rms-projects.md). When violations are detected, a single `compliance-violation` label is added to the issue and a comment is posted listing the specific violations and mentioning the assignee (if set).
+Automated GitHub Actions workflow that validates JIRA issues against [ABLE team's software development lifecycle policies](../../docs/user-guide-rms-projects.md). When violations are detected, a single `compliance-alerts` label is added to the issue and a comment is posted listing the specific violations and mentioning the assignee (if set).
 
 ## Quick Start
 
@@ -57,10 +57,10 @@ Each issue is validated based on its JIRA status:
 | RELEASE PENDING, CLOSED | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
 
 ### 3. Violation Label and Comment
-When one or more violations are detected a single `compliance-violation` label is added to the issue. The specific violations are listed in the workflow report and in a JIRA comment.
+When one or more violations are detected a single `compliance-alerts` label is added to the issue. The specific violations are listed in the workflow report and in a JIRA comment.
 
 **Label:**
-- `compliance-violation` — added on first detection, removed when all violations are resolved
+- `compliance-alerts` — added on first detection, removed when all violations are resolved
 
 **Comment** (posted once, on first detection):
 - Mentions the assignee if one is set, so they receive a JIRA notification
@@ -95,17 +95,17 @@ Report is uploaded as a workflow artifact.
 
 **All violations:**
 ```jql
-labels = compliance-violation
+labels = compliance-alerts
 ```
 
 **My violations:**
 ```jql
-assignee = currentUser() AND labels = compliance-violation
+assignee = currentUser() AND labels = compliance-alerts
 ```
 
 **By status:**
 ```jql
-labels = compliance-violation AND status IN ("IN PROGRESS", "CORE_REVIEW") ORDER BY priority DESC
+labels = compliance-alerts AND status IN ("IN PROGRESS", "CORE_REVIEW") ORDER BY priority DESC
 ```
 
 ### Saved Filters
@@ -113,12 +113,12 @@ Create and save these filters in JIRA for quick access:
 
 1. **🚨 All Compliance Violations**
    ```jql
-   labels = compliance-violation ORDER BY priority DESC, updated DESC
+   labels = compliance-alerts ORDER BY priority DESC, updated DESC
    ```
 
 2. **👤 My Compliance Violations**
    ```jql
-   assignee = currentUser() AND labels = compliance-violation ORDER BY status
+   assignee = currentUser() AND labels = compliance-alerts ORDER BY status
    ```
 
 ## Dry Run Mode

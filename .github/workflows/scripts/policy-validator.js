@@ -202,7 +202,7 @@ class PolicyValidator {
 
     getViolationLabels(issue) {
         const labels = issue.fields.labels || [];
-        return labels.includes('compliance-violation') ? ['compliance-violation'] : [];
+        return labels.includes('compliance-alerts') ? ['compliance-alerts'] : [];
     }
 }
 

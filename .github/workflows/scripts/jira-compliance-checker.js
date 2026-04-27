@@ -100,7 +100,7 @@ async function main() {
                 // Update labels (errors handled gracefully inside labelManager)
                 const labelUpdate = await labelManager.updateLabels(
                     issue,
-                    ['compliance-violation'],
+                    ['compliance-alerts'],
                     config.dryRun,
                     validationResult.componentAreaSync
                 );
