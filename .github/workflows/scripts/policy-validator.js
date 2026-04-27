@@ -59,7 +59,7 @@ class PolicyValidator {
             'Tooling:Web Tools': 'area/tooling',
             'QE Test Suite': 'area/qe',
             'Runtimes': 'area/runtimes',
-            'serverless workflow': 'area/runtimes'
+            'serverless-workflow': 'area/runtimes'
         };
     }
 

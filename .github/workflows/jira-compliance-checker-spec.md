@@ -54,7 +54,7 @@ For issues with keys starting with `SRVLOGIC-`, the Area label is automatically 
 | Tooling:VSCode | area/tooling |
 | Tooling:WebTools | area/tooling |
 | QE Test Suite | area/qe |
-| serverless workflow | area/runtimes |
+| serverless-workflow | area/runtimes |
 
 **Synchronization Behavior:**
 - If Component is set and Area label is missing → Area label is automatically added
