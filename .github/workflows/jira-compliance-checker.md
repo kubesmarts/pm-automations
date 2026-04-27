@@ -1,7 +1,7 @@
 # JIRA Issues Compliance Checker Workflow
 
 ## Overview
-Automated GitHub Actions workflow that validates JIRA issues against ABLE team's software development lifecycle policies. When violations are detected, a single `compliance-violation` label is added to the issue and a comment is posted listing the specific violations and mentioning the assignee (if set).
+Automated GitHub Actions workflow that validates JIRA issues against [ABLE team's software development lifecycle policies](../../docs/user-guide-rms-projects.md). When violations are detected, a single `compliance-violation` label is added to the issue and a comment is posted listing the specific violations and mentioning the assignee (if set).
 
 ## Quick Start
 
@@ -50,9 +50,10 @@ Each issue is validated based on its JIRA status:
 
 | JIRA Status | Policy Stage | Required Fields |
 |-------------|--------------|-----------------|
+| BACKLOG | Backlog | (none) |
 | NEW, REFINEMENT | Next | Area, Priority, Fix Versions |
 | IN PROGRESS, ON_DEV | In Progress | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
-| CORE_REVIEW, ON_QA | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
+| CODE_REVIEW, ON_QA | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
 | RELEASE PENDING, CLOSED | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
 
 ### 3. Violation Label and Comment

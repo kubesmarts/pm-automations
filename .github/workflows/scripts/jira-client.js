@@ -103,7 +103,8 @@ class JiraClient {
 
     extractOriginalEstimate(issue) {
         const seconds = issue.fields.timetracking?.originalEstimateSeconds;
-        return seconds > 0 ? issue.fields.timetracking.originalEstimate : null;
+        if (seconds === undefined || seconds === null) return null;
+        return seconds > 0 ? issue.fields.timetracking.originalEstimate : '0m';
     }
 
     extractRemainingEstimate(issue) {
@@ -113,7 +114,8 @@ class JiraClient {
 
     extractTimeSpent(issue) {
         const seconds = issue.fields.timetracking?.timeSpentSeconds;
-        return seconds > 0 ? issue.fields.timetracking.timeSpent : null;
+        if (seconds === undefined || seconds === null) return null;
+        return seconds > 0 ? issue.fields.timetracking.timeSpent : 0;
     }
 
     extractAssignee(issue) {

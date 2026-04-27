@@ -49,14 +49,16 @@ jobs:
 
           # Convert a GH numeric value (in weeks) to JIRA time format.
           # Convention: 1 week = 5 days = 40 hours.
-          # Examples: 2 → "2w", 0.4 → "2d", 0.1 → "4h".
-          # Returns empty string if input is empty.
+          # Examples: 2 → "2w", 0.4 → "2d", 0.1 → "4h", 0 or empty → "0m".
+          # Returns "0m" if input is empty or zero so JIRA fields are explicitly set.
           weeks_to_jira() {
             local val="$1"
-            [ -z "$val" ] && echo "" && return
+            [ -z "$val" ] && echo "0m" && return
             awk -v v="$val" 'BEGIN {
               h1000 = int(v * 40000 + 0.5)
-              if (h1000 % 40000 == 0) {
+              if (h1000 == 0) {
+                print "0m"
+              } else if (h1000 % 40000 == 0) {
                 printf "%dw\n", h1000 / 40000
               } else if (h1000 % 8000 == 0) {
                 printf "%dd\n", h1000 / 8000
@@ -535,7 +537,9 @@ jobs:
                     # 2. If editing is not permitted, fall back to the delta approach:
                     #    GET JIRA issue timespent, compute GH - JIRA, POST a new worklog for the difference.
                     # GH stores time in weeks (1w = 5d = 40h); JIRA stores timespent in seconds.
-                    if [ -n "$JIRA_TIME_SPENT" ]; then
+                    # Only sync when GH time spent is actually > 0 (JIRA timespent is managed via worklogs;
+                    # a 0-minute worklog would be rejected; 0 time spent is handled by the compliance checker).
+                    if awk -v v="$TIME_SPENT" 'BEGIN { exit !(v + 0 > 0) }'; then
                       # Build worklog comments referencing the GH issue number when available
                       if [ -n "$ISSUE_NUMBER" ]; then
                         WL_COPY_COMMENT="Copied time spent from GH #${ISSUE_NUMBER}"
