@@ -5,6 +5,4 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 182,169,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/182,Re-organize load tests,tkobayas,In progress,,QE,Major,,Future,M,0.7,0.6,0.1,0.7,0.6,0.1,,
 169,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/169,EDA : Add more load test for HA,tkobayas,In progress,,QE,Major,,Future,M,0.7,0.6,0.1,1.4,1.2,0.2,,
 168,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/168,EDA : Details for the 1st HA release,tkobayas,In progress,,Runtimes,Major,,Future,L,3.0,1.0,2.0,3.0,1.0,2.0,,
-14,,https://github.com/casehubio/engine/issues/14,Case Lifecycle Management (Suspend / Resume / Cancel),treblereel,In progress,,Runtimes,Normal,,Future,L,1.0,0.0,,1.0,0.0,0.0,,
-12,4,https://github.com/tkobayas/drlx-parser/issues/12,Add `if` / `else` branching in rule body,tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
-4,,https://github.com/tkobayas/drlx-parser/issues/4,DrlxCompiler enhancement round 1,tkobayas,In progress,,Runtimes,Major,,Future,L,3.0,2.4,0.6,4.44,3.74,0.7,,
+2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,,,,4.2,0.3,2.0,,
