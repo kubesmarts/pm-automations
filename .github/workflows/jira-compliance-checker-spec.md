@@ -1,7 +1,7 @@
 # JIRA Status Compliance Checker - Specification
 
 ## Overview
-A GitHub Actions workflow that validates JIRA issues against ABLE team's software development lifecycle policies. The workflow uses a hybrid approach to discover issues from multiple sources (Filters, JQL, Projects) and reports violations using granular JIRA labels for precise filtering.
+A GitHub Actions workflow that validates JIRA issues against ABLE team's software development lifecycle policies. The workflow uses a hybrid approach to discover issues from multiple sources (Filters, JQL, Projects) and reports compliance issues using granular JIRA labels for precise filtering.
 
 ## JIRA Status to Policy Stage Mapping
 
@@ -10,7 +10,9 @@ A GitHub Actions workflow that validates JIRA issues against ABLE team's softwar
 | NEW, REFINEMENT | Next | Area, Priority, Fix Versions |
 | IN PROGRESS, ON_DEV | In Progress | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
 | CORE_REVIEW, ON_QA | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
-| RELEASE PENDING, CLOSED | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
+| RELEASE PENDING | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
+| CLOSED (resolution: Done) | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
+| CLOSED (other resolution) | Skipped | No checks — no work was done or planned |
 
 ## JIRA Field Validation Rules
 
@@ -80,9 +82,14 @@ For issues with keys starting with `SRVLOGIC-`, the Area label is automatically 
 - **Required:** Area (area/* label), Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee
 - **Update Often:** Time Spent
 
-#### Done (JIRA: RELEASE PENDING, CLOSED)
+#### Done (JIRA: RELEASE PENDING, CLOSED with resolution Done)
 - **Required:** Area (area/* label), Priority, Fix Versions, Original Estimate, Time Spent (must be set, can be 0), Assignee
 - **Auto-cleared:** Remaining Estimate (should be 0 or empty)
+
+#### Skipped (JIRA: CLOSED with resolution other than Done)
+- Issues closed as Duplicate, Won't Fix, Obsolete, or any non-Done resolution are skipped entirely.
+- No compliance checks are performed since no work was done or planned.
+- Any existing `compliance-alerts` label and compliance comment are cleaned up automatically.
 
 ## Hybrid Issue Discovery Approach
 
@@ -141,30 +148,32 @@ PSYNC_JIRA_PROJECTS: "ISSUE"
 ## Validation Logic
 
 ### For Each JIRA Issue:
-1. **Fetch JIRA issue** via REST API (including components field)
+1. **Fetch JIRA issue** via REST API (including components and resolution fields)
 2. **Extract status** from issue.fields.status.name
-3. **Check if SRVLOGIC issue** (key starts with `SRVLOGIC-`)
+3. **Check if CLOSED with non-Done resolution** (Duplicate, Won't Fix, Obsolete, etc.)
+   - If YES: skip all compliance checks, clean up any existing `compliance-alerts` label and comment, continue to next issue
+4. **Check if SRVLOGIC issue** (key starts with `SRVLOGIC-`)
    - If YES: Validate Component field and sync Area label
    - If NO: Skip Component/Area validation
-4. **Component/Area Validation (SRVLOGIC only):**
+5. **Component/Area Validation (SRVLOGIC only):**
    - Check if Component is set → Add `NO_COMPONENT` if missing
    - If Component is set and in mapping:
      - Check if correct Area label exists
      - Add correct Area label if missing
      - Remove incorrect Area labels
-5. **Determine policy stage** based on status mapping
-6. **Validate required fields** for that stage
-7. **Generate violation codes**
-8. **Update JIRA ticket labels:**
-   - Add specific violation labels (e.g., `NO_ESTIMATE`, `NO_ASSIGNEE`, `NO_COMPONENT`)
-   - Remove violation labels that are now resolved
+6. **Determine policy stage** based on status mapping
+7. **Validate required fields** for that stage
+8. **Generate alert codes**
+9. **Update JIRA ticket labels:**
+   - Add specific alert labels (e.g., `NO_ESTIMATE`, `NO_ASSIGNEE`, `NO_COMPONENT`)
+   - Remove alert labels that are now resolved
    - Sync Area labels for SRVLOGIC issues
 
 ### Label Management Logic
 ```javascript
 // For each issue
-currentViolations = validateIssue(issue)
-existingViolationLabels = getViolationLabels(issue)
+currentAlerts = validateIssue(issue)
+existingAlertLabels = getAlertLabels(issue)
 
 // For SRVLOGIC issues: Check Component/Area sync
 if (issue.key.startsWith('SRVLOGIC-')) {
@@ -175,20 +184,20 @@ if (issue.key.startsWith('SRVLOGIC-')) {
   }
 }
 
-// Add new violation labels
-labelsToAdd = currentViolations - existingViolationLabels
+// Add new alert labels
+labelsToAdd = currentAlerts - existingAlertLabels
 for (label in labelsToAdd) {
   addLabel(issue, label)
 }
 
-// Remove resolved violation labels
-labelsToRemove = existingViolationLabels - currentViolations
+// Remove resolved alert labels
+labelsToRemove = existingAlertLabels - currentAlerts
 for (label in labelsToRemove) {
   removeLabel(issue, label)
 }
 ```
 
-### Violation Codes (Now Used as Labels)
+### Alert Codes (Used as Labels)
 | Code/Label | Description | When Raised |
 |------------|-------------|-------------|
 | `NO_COMPONENT` | Component field is not set | SRVLOGIC issues only - Component field is empty/null |
@@ -254,16 +263,16 @@ Body: {
    - Fetch full issue details including existing labels
    - Extract status and map to policy stage
    - Validate required fields
-   - Determine current violations
-   - Compare with existing violation labels
-   - Add new violation labels
-   - Remove resolved violation labels
+   - Determine current compliance alerts
+   - Compare with existing alert labels
+   - Add new alert labels
+   - Remove resolved alert labels
 3. **Generate compliance report**
 4. **Create/update GitHub issue** with summary and JIRA filter links
 
 ### Reporting
-- **JSON artifact:** Detailed violations per issue with label changes
-- **GitHub issue:** Summary with links to JIRA filters for each violation type
+- **JSON artifact:** Detailed compliance alerts per issue with label changes
+- **GitHub issue:** Summary with links to JIRA filters for each alert type
 - **JIRA labels:** Granular marking on tickets
 
 ### Report Structure
@@ -381,18 +390,19 @@ Body: {
 - ✅ Gracefully handle missing configuration variables
 - ✅ Deduplicate issues from multiple sources
 - ✅ Validate all required fields per status
-- ✅ Add granular violation labels (one per violation type)
-- ✅ Remove violation labels when resolved
-- ✅ Generate comprehensive report with per-violation-type statistics
-- ✅ Provide JIRA filter URLs for each violation type
+- ✅ Add granular alert labels (one per alert type)
+- ✅ Remove alert labels when resolved
+- ✅ Generate comprehensive report with per-alert-type statistics
+- ✅ Provide JIRA filter URLs for each alert type
+- ✅ Skip CLOSED tickets with non-Done resolution (Duplicate, Won't Fix, Obsolete, etc.)
 - ✅ Handle JIRA API errors gracefully
 - ✅ Support dry-run mode (no JIRA updates)
 
-## Finding Violations - Quick Reference Card
+## Finding Compliance Alerts - Quick Reference Card
 
 ### For Developers
 ```jql
-# My violations
+# My compliance alerts
 assignee = currentUser() AND labels IN (NO_AREA, NO_PRIORITY, NO_VERSION, NO_ESTIMATE, NO_REMAINING_WORK, NO_TIME_SPENT, NO_ASSIGNEE)
 
 # My missing estimates
@@ -401,27 +411,27 @@ assignee = currentUser() AND labels = NO_ESTIMATE
 
 ### For Team Leads
 ```jql
-# All team violations
+# All team compliance alerts
 project = ISSUE AND labels IN (NO_AREA, NO_PRIORITY, NO_VERSION, NO_ESTIMATE, NO_REMAINING_WORK, NO_TIME_SPENT, NO_ASSIGNEE) ORDER BY priority DESC
 
-# Critical violations only
+# Critical alerts only
 labels IN (NO_ESTIMATE, NO_ASSIGNEE, NO_TIME_SPENT) AND status != Backlog
 ```
 
 ### For Project Managers
 ```jql
-# All violations by type
+# All alerts by type
 labels = NO_ESTIMATE  # or NO_ASSIGNEE, NO_AREA, etc.
 
-# Violations in active work
+# Alerts in active work
 labels IN (NO_ESTIMATE, NO_REMAINING_WORK, NO_ASSIGNEE) AND status IN ("IN PROGRESS", "CORE_REVIEW")
 ```
 
 ### GitHub Issue
 The automated GitHub issue includes:
-- Summary statistics per violation type
-- Direct JIRA filter links for each violation type
-- Top violators list
+- Summary statistics per alert type
+- Direct JIRA filter links for each alert type
+- Top issues list
 - Link to full JSON report
 
 ## Next Steps
@@ -430,7 +440,7 @@ The automated GitHub issue includes:
 3. Implement JIRA client with label management
 4. Implement policy validator
 5. Implement granular label manager
-6. Implement report generator with per-violation-type URLs
+6. Implement report generator with per-alert-type URLs
 7. Add error handling and pagination
 8. Create user documentation with JQL filter examples
 9. Test with all three discovery methods

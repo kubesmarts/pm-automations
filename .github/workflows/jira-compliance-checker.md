@@ -1,7 +1,7 @@
 # JIRA Issues Compliance Checker Workflow
 
 ## Overview
-Automated GitHub Actions workflow that validates JIRA issues against [ABLE team's software development lifecycle policies](../../docs/user-guide-rms-projects.md). When violations are detected, a single `compliance-alerts` label is added to the issue and a comment is posted listing the specific violations and mentioning the assignee (if set).
+Automated GitHub Actions workflow that validates JIRA issues against [ABLE team's software development lifecycle policies](../../docs/user-guide-rms-projects.md). When compliance issues are detected, a single `compliance-alerts` label is added to the issue and a comment is posted listing the specific issues and mentioning the assignee (if set).
 
 ## Quick Start
 
@@ -54,19 +54,21 @@ Each issue is validated based on its JIRA status:
 | NEW, REFINEMENT | Next | Area, Priority, Fix Versions |
 | IN PROGRESS, ON_DEV | In Progress | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
 | CODE_REVIEW, ON_QA | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
-| RELEASE PENDING, CLOSED | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
+| RELEASE PENDING | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
+| CLOSED (resolution: Done) | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
+| CLOSED (other resolution) | Skipped | No checks — no work was done or planned |
 
-### 3. Violation Label and Comment
-When one or more violations are detected a single `compliance-alerts` label is added to the issue. The specific violations are listed in the workflow report and in a JIRA comment.
+### 3. Compliance Alert Label and Comment
+When one or more compliance issues are detected a single `compliance-alerts` label is added to the issue. The specific issues are listed in the workflow report and in a JIRA comment.
 
 **Label:**
-- `compliance-alerts` — added on first detection, removed when all violations are resolved
+- `compliance-alerts` — added on first detection, removed when all issues are resolved
 
 **Comment** (posted once, on first detection):
 - Mentions the assignee if one is set, so they receive a JIRA notification
-- Lists all current violations: e.g., `Compliance violations detected: NO_ESTIMATE, NO_ASSIGNEE. Please review and resolve.`
+- Lists all current compliance issues: e.g., `Compliance issues detected: NO_ESTIMATE, NO_ASSIGNEE. Please review and resolve.`
 
-Detected violation types:
+Compliance alert codes:
 
 | Code | Meaning |
 |------|---------|
@@ -83,22 +85,22 @@ Detected violation types:
 ### 4. Compliance Report
 A JSON report is generated with:
 - Total issues checked
-- Issues with violations
-- Violations by type and status
-- JIRA filter URLs for each violation type
+- Issues with compliance alerts
+- Alerts by type and status
+- JIRA filter URLs for each alert type
 
 Report is uploaded as a workflow artifact.
 
-## Finding Violations in JIRA
+## Finding Compliance Alerts in JIRA
 
 ### Quick Filters
 
-**All violations:**
+**All compliance alerts:**
 ```jql
 labels = compliance-alerts
 ```
 
-**My violations:**
+**My compliance alerts:**
 ```jql
 assignee = currentUser() AND labels = compliance-alerts
 ```
@@ -111,12 +113,12 @@ labels = compliance-alerts AND status IN ("IN PROGRESS", "CORE_REVIEW") ORDER BY
 ### Saved Filters
 Create and save these filters in JIRA for quick access:
 
-1. **🚨 All Compliance Violations**
+1. **🚨 All Compliance Alerts**
    ```jql
    labels = compliance-alerts ORDER BY priority DESC, updated DESC
    ```
 
-2. **👤 My Compliance Violations**
+2. **👤 My Compliance Alerts**
    ```jql
    assignee = currentUser() AND labels = compliance-alerts ORDER BY status
    ```

@@ -63,6 +63,14 @@ class PolicyValidator {
         };
     }
 
+    // Returns true for CLOSED tickets whose resolution is not "Done" — no work was done/planned.
+    isSkippedIssue(issue, jiraClient) {
+        const status = jiraClient.extractStatus(issue);
+        if (status?.toUpperCase() !== 'CLOSED') return false;
+        const resolution = jiraClient.extractResolution(issue);
+        return resolution !== 'Done';
+    }
+
     mapStatusToPolicyStage(jiraStatus) {
         const stage = this.statusMapping[jiraStatus?.toUpperCase()];
         if (!stage) {

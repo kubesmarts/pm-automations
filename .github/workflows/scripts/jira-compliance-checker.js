@@ -77,7 +77,26 @@ async function main() {
 
         for (const issue of issues) {
             console.log(`\nProcessing ${issue.key}: ${issue.fields.summary}`);
-            
+
+            // Skip CLOSED tickets whose resolution is not Done (Duplicate, Won't Fix, Obsolete, etc.)
+            if (policyValidator.isSkippedIssue(issue, jiraClient)) {
+                const resolution = jiraClient.extractResolution(issue);
+                console.log(`  Skipped (CLOSED / ${resolution}) — no compliance check needed`);
+
+                if (!config.dryRun) {
+                    await labelManager.updateLabels(issue, [], false, { shouldSync: false, labelsToAdd: [], labelsToRemove: [] });
+                    try {
+                        const result = await jiraClient.deleteComplianceComment(issue.key);
+                        if (result.action === 'deleted') {
+                            console.log(`  ✓ Stale compliance comment removed`);
+                        }
+                    } catch (error) {
+                        console.log(`  ⚠️  Comment cleanup failed: ${error.message}`);
+                    }
+                }
+                continue;
+            }
+
             // Validate issue
             const validationResult = policyValidator.validateIssue(issue, jiraClient);
             console.log(`  Status: ${validationResult.status} (${validationResult.policyStage})`);
