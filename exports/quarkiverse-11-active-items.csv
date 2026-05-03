@@ -4,7 +4,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1343,,https://github.com/serverlessworkflow/sdk-java/issues/1343,Feat: Enhance FuncDSL to support top-level fork() method for parallel execution,fjtirado,Next,,Runtimes,Major,,2026/Q2,S,0.2,0.1,,0.2,0.1,0.0,,
 1206,,https://github.com/serverlessworkflow/sdk-java/issues/1206,Feat: Implement correlation on event filter,fjtirado,Backlog,,Runtimes,Normal,,2026/Q2,L,1.0,,1.0,1.0,0.0,1.0,,
 1087,,https://github.com/serverlessworkflow/sdk-java/issues/1087,Add support to a2a,fjtirado,Backlog,,Runtimes,Minor,,2026/Q2,L,1.0,,,1.0,0.0,0.0,,
-497,,https://github.com/quarkiverse/quarkus-flow/issues/497,bug: Cannot to inject a Flow bean using a normal identifier,mcruzdev,In progress,,Runtimes,Critical,,2026/Q2,,0.6,0.1,0.5,0.0,0.0,0.0,,
+497,,https://github.com/quarkiverse/quarkus-flow/issues/497,bug: Cannot to inject a Flow bean using a normal identifier,mcruzdev,In progress,,Runtimes,Critical,,2026/Q2,,0.6,0.1,0.5,0.6,0.1,0.5,,
 490,,https://github.com/quarkiverse/quarkus-flow/issues/490,Review `FlowSession` after LCF4J upgrade,ricardozanini,Next,,Runtimes,Major,,2026/Q2,S,0.1,,,0.1,0.0,0.0,,
 488,,https://github.com/quarkiverse/quarkus-flow/issues/488,task: Refactor docs module: Reorganize DSL examples and enable Maven test execution,domhanak,Backlog,,Docs,Major,,2026/Q2,M,0.6,,0.6,0.6,0.0,0.6,,
 487,,https://github.com/quarkiverse/quarkus-flow/issues/487,docs: Expand Java DLS Cookbook with additional examples,domhanak,Backlog,,Docs,Major,,2026/Q2,M,0.6,,0.6,0.6,0.0,0.6,,
