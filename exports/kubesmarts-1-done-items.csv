@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+57,,https://github.com/kubesmarts/pm-automations/issues/57,JIRA checker: only validate CLOSED tickets with resolution 'Done',dgutierr,,PM,Critical,,,,0.1,0.1,2026-04-30,,
 9,,https://github.com/kubesmarts/pm-automations/issues/9,Harden workflow against network failures and GraphQL errors,dgutierr,,Core,Blocker,,,,1.0,0.4,2026-04-23,SRVLOGIC-883,
 53,,https://github.com/kubesmarts/pm-automations/issues/53,Track External Reference field changes to trigger JIRA sync,dgutierr,,PM,Normal,,,,0.1,0.1,2026-04-22,,
 54,,https://github.com/kubesmarts/pm-automations/issues/54,feat: JIRA Issues Compliance Checker Workflow,dgutierr,,PM,Normal,,,,0.4,0.3,2026-04-22,,
