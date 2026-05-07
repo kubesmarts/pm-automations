@@ -4,7 +4,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 25,26,https://github.com/tkobayas/drlx-parser/issues/25,Add benchmark measuring KieSession execution (fireAllRules) - DrlxCompiler vs Executable-model,tkobayas,,QE,Normal,,Future,XS,0.05,0.05,2026-05-01,,
 12,4,https://github.com/tkobayas/drlx-parser/issues/12,Add `if` / `else` branching in rule body,tkobayas,,Runtimes,Major,,Future,S,0.1,0.0,2026-04-29,,
 14,4,https://github.com/casehubio/engine/issues/14,Case Lifecycle Management (Suspend / Resume / Cancel),treblereel,,Runtimes,Normal,,Future,L,1.0,1.0,2026-04-29,,
-4,2,https://github.com/tkobayas/drlx-parser/issues/4,DrlxCompiler enhancement round 1,tkobayas,,Runtimes,Major,,Future,L,3.0,3.0,2026-04-29,,
+4,,https://github.com/tkobayas/drlx-parser/issues/4,DrlxCompiler enhancement round 1,tkobayas,,Runtimes,Major,,Future,L,3.0,3.0,2026-04-29,,
 425,,https://github.com/mvel/mvel/issues/425,MVEL.map: bean-getter rewrite skipped inside !(...) — private field access leaks into generated source,tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-04-29,,
 19,4,https://github.com/tkobayas/drlx-parser/issues/19,DrlxLambdaConstraint should implement getListenedPropertyMask,tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-04-28,,
 23,4,https://github.com/tkobayas/drlx-parser/issues/23,Implement DRLXXXX 'test' construct (eval-style guard),tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-04-28,,

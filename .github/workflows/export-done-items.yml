@@ -316,18 +316,24 @@ jobs:
               CURSOR=$(echo "$PAGE_RESPONSE"   | jq -r '.data.organization.projectV2.items.pageInfo.endCursor')
             done
 
-            # Build parent-child mapping from subIssues field
+            # Build parent-child mapping from subIssues field using composite keys
             # This allows us to find the parent issue for any child issue
             declare -A PARENT_MAP
             while IFS= read -r item; do
               PARENT_NUM=$(echo "$item" | jq -r '.content.number // ""')
               [ -z "$PARENT_NUM" ] && continue
               
-              # Get all sub-issues for this parent
-              SUB_ISSUES=$(echo "$item" | jq -r '.content.subIssues.nodes[].number // empty' 2>/dev/null || echo "")
-              for child_num in $SUB_ISSUES; do
-                PARENT_MAP[$child_num]=$PARENT_NUM
-              done
+              PARENT_REPO_OWNER=$(echo "$item" | jq -r '.content.repository.owner.login // ""')
+              PARENT_REPO_NAME=$(echo "$item" | jq -r '.content.repository.name // ""')
+              
+              # Get all sub-issues for this parent with repository info
+              while IFS='|' read -r child_num child_owner child_repo; do
+                [ -z "$child_num" ] && continue
+                # Use composite key for child: owner/repo#number
+                child_key="${child_owner}/${child_repo}#${child_num}"
+                # Store parent as composite key too
+                PARENT_MAP[$child_key]="${PARENT_REPO_OWNER}/${PARENT_REPO_NAME}#${PARENT_NUM}"
+              done < <(echo "$item" | jq -r '.content.subIssues.nodes[]? | "\(.number)|\(.repository.owner.login)|\(.repository.name)"' 2>/dev/null || echo "")
             done < "$ITEMS_FILE"
 
             # Collect new items to export
@@ -377,8 +383,14 @@ jobs:
               # Extract all fields
               TITLE=$(echo "$item" | jq -r '.content.title // ""')
               ISSUE_URL=$(echo "$item" | jq -r '.content.url // ""')
+              
+              # Build composite key for this issue to look up parent
+              REPO_OWNER=$(echo "$item" | jq -r '.content.repository.owner.login // ""')
+              REPO_NAME=$(echo "$item" | jq -r '.content.repository.name // ""')
+              COMPOSITE_KEY="${REPO_OWNER}/${REPO_NAME}#${ISSUE_NUMBER}"
+              
               # Look up parent issue from the mapping built from subIssues
-              PARENT_ISSUE="${PARENT_MAP[$ISSUE_NUMBER]:-}"
+              PARENT_ISSUE="${PARENT_MAP[$COMPOSITE_KEY]:-}"
               ASSIGNEES=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
 
               # Check whitelist

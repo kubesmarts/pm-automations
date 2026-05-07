@@ -330,12 +330,19 @@ jobs:
               # Check CHILDREN_STATUS: detect parent/child status inconsistencies.
               # Only runs when the item is linked to a GH issue with sub-issues in this project.
               if [ -n "$ISSUE_NUMBER" ]; then
-                SUB_NUMBERS=$(echo "$item" | jq -r '.content.subIssues.nodes[].number // empty' 2>/dev/null || true)
-                if [ -n "$SUB_NUMBERS" ]; then
+                # Get parent repository info for composite key building
+                PARENT_REPO_OWNER=$(echo "$item" | jq -r '.content.repository.owner.login // ""')
+                PARENT_REPO_NAME=$(echo "$item" | jq -r '.content.repository.name // ""')
+                
+                # Get sub-issues with repository info using composite keys
+                SUB_ISSUES=$(echo "$item" | jq -r '.content.subIssues.nodes[]? | "\(.number)|\(.repository.owner.login)|\(.repository.name)"' 2>/dev/null || true)
+                if [ -n "$SUB_ISSUES" ]; then
                   MISMATCH=false
-                  while IFS= read -r child_num; do
+                  while IFS='|' read -r child_num child_owner child_repo; do
                     [ -z "$child_num" ] && continue
-                    CHILD_STATUS="${ISSUE_STATUS[$child_num]:-}"
+                    # Build composite key for child lookup
+                    child_key="${child_owner}/${child_repo}#${child_num}"
+                    CHILD_STATUS="${ISSUE_STATUS[$child_key]:-}"
                     [ -z "$CHILD_STATUS" ] && continue  # child not in this project, skip
                     CHILD_STATUS_LC=$(echo "$CHILD_STATUS" | tr '[:upper:]' '[:lower:]')
                     # Condition 1: parent Done but child not Done
@@ -346,7 +353,7 @@ jobs:
                     if [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ "$CHILD_STATUS_LC" = "backlog" ]; then
                       MISMATCH=true
                     fi
-                  done <<< "$SUB_NUMBERS"
+                  done <<< "$SUB_ISSUES"
                   if [ "$MISMATCH" = "true" ]; then
                     SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }CHILDREN_STATUS"
                   fi
@@ -939,13 +946,16 @@ jobs:
               CURSOR=$(echo "$PAGE_RESPONSE"   | jq -r '.data.organization.projectV2.items.pageInfo.endCursor')
             done
 
-            # Phase 2: build issue→status map for CHILDREN_STATUS checks
+            # Phase 2: build issue→status map for CHILDREN_STATUS checks using composite keys
             unset ISSUE_STATUS
             declare -A ISSUE_STATUS
             while IFS= read -r item; do
               num=$(echo "$item" | jq -r '.content.number // ""')
               [ -z "$num" ] && continue
-              ISSUE_STATUS["$num"]=$(get_field "$item" "Status")
+              repo_owner=$(echo "$item" | jq -r '.content.repository.owner.login // ""')
+              repo_name=$(echo "$item" | jq -r '.content.repository.name // ""')
+              composite_key="${repo_owner}/${repo_name}#${num}"
+              ISSUE_STATUS["$composite_key"]=$(get_field "$item" "Status")
             done < "$ITEMS_FILE"
 
             # Phase 3: process all items
