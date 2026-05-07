@@ -27,9 +27,11 @@ The workflow exports items that meet **all** of the following criteria:
    - This ensures only planned work with concrete release targets is tracked
 
 3. **Contributor Whitelist**
-   - Items must be assigned to at least one **active contributor** listed in `contributors.csv`
    - If `contributors.csv` is missing or has no active contributors, all items are included
-   - Items without assignees are excluded when whitelist is active
+   - **When assignee is set**: Items must be assigned to at least one **active contributor** listed in `contributors.csv` (applies to ALL statuses)
+   - **When no assignee is set**: Only Backlog items with a specific version set (not "Future") are exported
+     - This ensures planned work with concrete release targets is tracked before assignment
+     - All other items without assignees are excluded
 
 ### Excluded Items
 
@@ -40,7 +42,7 @@ The following items are **NOT** exported:
 - ❌ Backlog items without a target version
 - ❌ Backlog items with version "Future"
 - ❌ Items not assigned to active contributors (when whitelist is configured)
-- ❌ Items without assignees (when whitelist is configured)
+- ❌ Items without assignees (when whitelist is configured), **except** Backlog items with specific versions
 - ❌ Archived items
 - ❌ Draft items (items without an issue number)
 

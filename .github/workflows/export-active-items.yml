@@ -388,13 +388,15 @@ jobs:
               fi
               
               # For Backlog items, check if they have a target version (excluding "Future")
+              IS_BACKLOG_WITH_VERSION=false
               if [ "$STATUS_LC" = "backlog" ]; then
                 VERSION=$(get_field "$item" "Version")
                 if [ -z "$VERSION" ] || [ "$VERSION" = "Future" ]; then
                   SKIPPED_BACKLOG=$((SKIPPED_BACKLOG + 1))
                   continue
                 fi
-                # If we reach here, it's a Backlog item with a specific version - include it
+                # If we reach here, it's a Backlog item with a specific version
+                IS_BACKLOG_WITH_VERSION=true
               fi
 
               # Extract all fields
@@ -416,10 +418,21 @@ jobs:
               
               ASSIGNEES=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
               
-              # Check contributor whitelist
-              if ! is_whitelisted "$ASSIGNEES"; then
-                SKIPPED_CONTRIBUTOR=$((SKIPPED_CONTRIBUTOR + 1))
-                continue
+              # Contributor whitelist logic:
+              # - If assignee is set: always check whitelist (for all statuses)
+              # - If no assignee: only allow Backlog items with specific versions
+              if [ -n "$ASSIGNEES" ]; then
+                # Has assignee - check whitelist
+                if ! is_whitelisted "$ASSIGNEES"; then
+                  SKIPPED_CONTRIBUTOR=$((SKIPPED_CONTRIBUTOR + 1))
+                  continue
+                fi
+              else
+                # No assignee - only allow Backlog items with specific versions
+                if [ "$IS_BACKLOG_WITH_VERSION" = "false" ]; then
+                  SKIPPED_CONTRIBUTOR=$((SKIPPED_CONTRIBUTOR + 1))
+                  continue
+                fi
               fi
               
               TYPE=$(get_field "$item" "Type")
