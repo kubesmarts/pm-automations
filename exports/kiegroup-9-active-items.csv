@@ -1,5 +1,4 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-6696,,https://github.com/apache/incubator-kie-drools/issues/6696,DRL10 rejects diamond operators in function body,tkobayas,In progress,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 6683,,https://github.com/apache/incubator-kie-drools/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,4.0,,3.0,4.0,0.0,3.0,,
 2282,,https://github.com/apache/incubator-kie-issues/issues/2282,Droolsvol2 bilinear cache,Rikkola,In review,,Runtimes,Normal,,Future,XS,1.0,0.9,0.1,1.0,0.9,0.1,,
 2281,,https://github.com/apache/incubator-kie-issues/issues/2281,DRLGEN Second level of DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,1.0,0.2,0.8,1.0,0.2,0.8,,
@@ -24,6 +23,5 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 30,26,https://github.com/tkobayas/drlx-parser/issues/30,Match (switch) conditional element,tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 26,,https://github.com/tkobayas/drlx-parser/issues/26,DrlxCompiler enhancement round 2,tkobayas,In progress,,Runtimes,Major,,Future,L,3.0,0.1,2.9,4.65,0.15,4.5,,
 22,26,https://github.com/tkobayas/drlx-parser/issues/22,Form B: if/else with per-branch consequences,tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
-5,1,https://github.com/casehubio/flow/issues/5,Implement REST API v1 — signal endpoint for external events,treblereel,In progress,,Runtimes,Normal,,Future,M,0.6,0.0,0.6,0.6,0.0,0.6,,
 2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,12.0,6.0,6.0,16.2,6.3,8.0,,
 2,1,https://github.com/casehubio/flow/issues/2,Implement REST API v1 — case definition discovery endpoints,treblereel,In progress,,Runtimes,Normal,,Future,M,0.6,0.6,,0.6,0.6,0.0,,
