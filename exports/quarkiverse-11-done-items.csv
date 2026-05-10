@@ -1,4 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+125,,https://github.com/serverlessworkflow/editor/issues/125,feat: Define local integration testing strategy,fantonangeli,,Tooling,Major,,2026/Q2,M,0.6,0.0,2026-05-09,,
+497,,https://github.com/quarkiverse/quarkus-flow/issues/497,bug: Cannot to inject a Flow bean using a normal identifier,mcruzdev,,Runtimes,Critical,,2026/Q2,,0.6,0.1,2026-05-08,,
+103,,https://github.com/serverlessworkflow/editor/issues/103,Spike: Define local integration testing strategy,fantonangeli,,Tooling,Normal,,2026/Q2,S,0.2,0.2,2026-05-06,,
+1354,,https://github.com/serverlessworkflow/sdk-java/issues/1354,ForExecutor race condition: shared TaskContext causes wrong items to be processed in async loops,"ricardozanini,fjtirado",,Runtimes,Normal,,2026/Q2,S,0.1,0.1,2026-05-06,,
+273,,https://github.com/quarkiverse/quarkus-flow/issues/273,docs: Add an instance correlation pattern,mcruzdev,,Runtimes,Blocker,,2026/Q2,M,3.0,2.0,2026-05-06,,
 1349,,https://github.com/serverlessworkflow/sdk-java/issues/1349,Allow set workflow version with FuncWorkflowBuilder,mcruzdev,,Runtimes,Minor,,2026/Q2,XS,0.1,0.1,2026-05-02,,
 495,,https://github.com/quarkiverse/quarkus-flow/issues/495,Add Configuration Options for EVENT_FLOW Handler: Disable and Containers Mode,ricardozanini,,Runtimes,Major,,2026/Q2,S,0.1,0.2,2026-05-02,,
 129,,https://github.com/serverlessworkflow/editor/issues/129,feat: Structure tailwind CSS styling for reusability,handreyrc,,Tooling,Normal,,2026/Q2,XS,0.2,0.2,2026-05-01,,

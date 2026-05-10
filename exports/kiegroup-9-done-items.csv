@@ -1,4 +1,13 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+2,,https://github.com/casehubio/flow/issues/2,Implement REST API v1 — case definition discovery endpoints,treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-05-09,,
+3,,https://github.com/casehubio/engine/issues/3,ExpressionEngine SPI and Registry,treblereel,,Runtimes,Normal,,Future,M,0.5,0.5,2026-05-09,,
+3,,https://github.com/casehubio/flow/issues/3,Implement case definition loading — CDI bean discovery and classpath YAML scanning,treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-05-09,,
+4,,https://github.com/casehubio/engine/issues/4,Refactor ExpressionEvaluator hierarchy,treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-05-09,,
+4,,https://github.com/casehubio/flow/issues/4,"Implement REST API v1 — case lifecycle endpoints (start, status, context queries)",treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-05-09,,
+5,,https://github.com/casehubio/flow/issues/5,Implement REST API v1 — signal endpoint for external events,treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-05-09,,
+6,,https://github.com/casehubio/flow/issues/6,"Implement REST API v1 — case control operations (suspend, resume, cancel)",treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-05-09,,
+6696,,https://github.com/apache/incubator-kie-drools/issues/6696,DRL10 rejects diamond operators in function body,tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-05-09,,
+7,,https://github.com/casehubio/flow/issues/7,Implement REST API v1 — event log/audit trail endpoint,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-05-09,,
 4,1,https://github.com/casehubio/flow/issues/4,"Implement REST API v1 — case lifecycle endpoints (start, status, context queries)",treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-05-07,,
 3,1,https://github.com/casehubio/flow/issues/3,Implement case definition loading — CDI bean discovery and classpath YAML scanning,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-05-06,,
 25,26,https://github.com/tkobayas/drlx-parser/issues/25,Add benchmark measuring KieSession execution (fireAllRules) - DrlxCompiler vs Executable-model,tkobayas,,QE,Normal,,Future,XS,0.05,0.05,2026-05-01,,

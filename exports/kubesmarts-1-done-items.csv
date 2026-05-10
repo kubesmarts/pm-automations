@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+58,,https://github.com/kubesmarts/pm-automations/issues/58,Bug: Issue number collisions cause incorrect parent-child mappings in export-done-items and sync workflows,dgutierr,,PM,Critical,,,,0.1,0.1,2026-05-08,,
+59,,https://github.com/kubesmarts/pm-automations/issues/59,Export Backlog items with version set (not 'Future') even without assignees,dgutierr,,PM,Critical,,,,0.05,0.05,2026-05-08,,
 57,,https://github.com/kubesmarts/pm-automations/issues/57,JIRA checker: only validate CLOSED tickets with resolution 'Done',dgutierr,,PM,Critical,,,,0.1,0.1,2026-04-30,,
 9,,https://github.com/kubesmarts/pm-automations/issues/9,Harden workflow against network failures and GraphQL errors,dgutierr,,Core,Blocker,,,,1.0,0.4,2026-04-23,SRVLOGIC-883,
 53,,https://github.com/kubesmarts/pm-automations/issues/53,Track External Reference field changes to trigger JIRA sync,dgutierr,,PM,Normal,,,,0.1,0.1,2026-04-22,,
