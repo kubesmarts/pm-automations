@@ -24,4 +24,4 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 30,26,https://github.com/tkobayas/drlx-parser/issues/30,Match (switch) conditional element,tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 26,,https://github.com/tkobayas/drlx-parser/issues/26,DrlxCompiler enhancement round 2,tkobayas,In progress,,Runtimes,Major,,Future,L,3.0,0.1,2.9,4.65,0.15,4.5,,
 22,26,https://github.com/tkobayas/drlx-parser/issues/22,Form B: if/else with per-branch consequences,tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
-2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,12.0,10.0,2.0,12.0,10.0,2.0,,
+2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,12.0,10.0,2.0,16.2,11.4,4.0,,
