@@ -10,7 +10,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 52,26,https://github.com/tkobayas/drlx-parser/issues/52,Accumulate: multi-pattern source via and(...),tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 51,26,https://github.com/tkobayas/drlx-parser/issues/51,"Accumulate: acc() keyword forms (2-, 3-, and 5-param)",tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 50,26,https://github.com/tkobayas/drlx-parser/issues/50,Accumulate: inline-from form (avg(/persons.age)),tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
-49,26,https://github.com/tkobayas/drlx-parser/issues/49,Accumulate: MultiAccumulate folding (N SingleAccumulates → one node),tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 44,26,https://github.com/tkobayas/drlx-parser/issues/44,ExistenceDriven execution mode,tkobayas,Next,,Runtimes,Normal,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 43,26,https://github.com/tkobayas/drlx-parser/issues/43,"Pluggable operators (temporal, fuzzy)",tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 42,26,https://github.com/tkobayas/drlx-parser/issues/42,Windows (temporal and length-based),tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
