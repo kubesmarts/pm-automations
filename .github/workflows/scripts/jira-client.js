@@ -58,16 +58,46 @@ class JiraClient {
         const allIssues = [];
         let startAt = 0;
         const maxResults = 100;
-        let total = 0;
+        let isLast = false;
 
         do {
             const result = await this.searchIssues(jql, startAt, maxResults);
             allIssues.push(...result.issues);
-            total = result.total;
+            // JIRA API v3 uses 'isLast' instead of 'total'
+            isLast = result.isLast || result.issues.length < maxResults;
             startAt += maxResults;
-        } while (startAt < total);
+        } while (!isLast);
 
         console.log(`Fetched ${allIssues.length} issues from JQL`);
+        return allIssues;
+    }
+
+    async fetchAllIssuesFromJqlWithSplit(jql, projectKey) {
+        console.log(`Using key-prefix split workaround for project ${projectKey}`);
+        const allIssues = [];
+        const issueKeys = new Set(); // Track unique issue keys to avoid duplicates
+
+        // Split by key prefix 0-9 to work around JIRA API pagination bug
+        for (let digit = 0; digit <= 9; digit++) {
+            const splitJql = `${jql} AND key ~ "${projectKey}-${digit}*"`;
+            console.log(`  Fetching issues with key prefix ${projectKey}-${digit}*`);
+            
+            const issues = await this.fetchAllIssuesFromJql(splitJql);
+            
+            // Add only unique issues
+            let addedCount = 0;
+            for (const issue of issues) {
+                if (!issueKeys.has(issue.key)) {
+                    issueKeys.add(issue.key);
+                    allIssues.push(issue);
+                    addedCount++;
+                }
+            }
+            
+            console.log(`    Found ${issues.length} issues, added ${addedCount} unique`);
+        }
+
+        console.log(`Total unique issues fetched with split: ${allIssues.length}`);
         return allIssues;
     }
 
