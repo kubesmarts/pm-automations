@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-1395,,https://github.com/serverlessworkflow/sdk-java/issues/1395,AllStrategyCorrelationInfo persistence default implementation,fjtirado,In progress,,Runtimes,,,,,,,,0.0,0.0,0.0,,
+1395,,https://github.com/serverlessworkflow/sdk-java/issues/1395,AllStrategyCorrelationInfo persistence default implementation,fjtirado,In progress,,Runtimes,Major,,2026/Q2,M,0.6,,0.3,0.6,0.0,0.3,,
 1206,,https://github.com/serverlessworkflow/sdk-java/issues/1206,Feat: Implement correlation on event filter,fjtirado,In progress,,Runtimes,Normal,,2026/Q2,L,1.0,,1.0,1.0,0.0,1.0,,
 1087,,https://github.com/serverlessworkflow/sdk-java/issues/1087,Add support to a2a,fjtirado,Backlog,,Runtimes,Minor,,2026/Q2,L,1.0,,,1.0,0.0,0.0,,
 547,,https://github.com/quarkiverse/quarkus-flow/issues/547,Enhance Quarkus LangChain4j Workshop with Flow capabilities,ricardozanini,In progress,,Runtimes,Critical,,2026/Q2,L,2.0,,2.0,2.0,0.0,2.0,,
