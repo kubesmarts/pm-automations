@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+557,,https://github.com/quarkiverse/quarkus-flow/issues/557,bug: examples/durable-workflow-k8s/README.md has incorrect steps,domhanak,,Docs,Normal,,2026/Q2,XS,0.1,0.1,2026-05-23,,
+52,,https://github.com/serverlessworkflow/editor/issues/52,feat: Define edge types and create React Flow edge components,handreyrc,,Tooling,Normal,,2026/Q2,M,0.8,0.7,2026-05-21,,
+393,,https://github.com/quarkiverse/quarkus-flow/issues/393,docs: Implementation of Java DSL Cookbook,domhanak,,Docs,Critical,,2026/Q2,M,0.4,2.5,2026-05-20,,
 496,,https://github.com/quarkiverse/quarkus-flow/issues/496,feat: Should be able to inject a workflow per version,mcruzdev,,Runtimes,Major,,2026/Q2,M,0.6,0.5,2026-05-16,,
 88,,https://github.com/serverlessworkflow/editor/issues/88,Spike: Define Storybook structure and styling approach,cheryl7114,,Tooling,Minor,,2026/Q3,M,1.0,1.0,2026-05-16,,
 103,,https://github.com/serverlessworkflow/editor/issues/103,Spike: Define local integration testing strategy,fantonangeli,,Tooling,Normal,,2026/Q2,S,0.2,0.4,2026-05-15,,
