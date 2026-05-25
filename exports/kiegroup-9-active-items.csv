@@ -3,7 +3,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 2315,,https://github.com/apache/incubator-kie-issues/issues/2315,Quarkus AI,Rikkola,In review,,Docs,Major,,Future,L,3.0,1.0,2.0,3.0,1.0,2.0,,
 2314,,https://github.com/apache/incubator-kie-issues/issues/2314,DRLGEN Investigate best plain English formats for DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,2.0,1.0,1.0,2.0,1.0,1.0,,
 2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools sequential,Rikkola,In progress,,Runtimes,Major,,Future,L,4.0,2.0,2.0,4.0,2.0,2.0,,
-297,,https://github.com/apache/incubator-kie-benchmarks/issues/297,Enable exec-model benchmark for KBaseCreationFromDrlBenchmark and BuildDRLWithoutKieBaseBenchmark,tkobayas,In progress,,QE,Normal,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 194,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/194,Backport commits to 2.0.x after 2.0.0-beta2,tkobayas,In progress,,Runtimes,Major,,Ansible EDA 2.8.x,S,0.2,0.05,0.15,0.2,0.05,0.15,,
 182,169,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/182,Re-organize load tests,tkobayas,In progress,,QE,Major,,Ansible EDA 2.8.x,M,0.7,0.6,0.1,0.7,0.6,0.1,,
 169,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/169,EDA : Add more load test for HA,tkobayas,In progress,,QE,Major,,Ansible EDA 2.8.x,M,0.4,0.3,0.1,1.1,0.9,0.2,,
