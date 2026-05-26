@@ -387,16 +387,19 @@ jobs:
                 continue
               fi
               
-              # For Backlog items, check if they have a target version (excluding "Future")
-              IS_BACKLOG_WITH_VERSION=false
+              # Check if item has a specific version (for any status)
+              VERSION=$(get_field "$item" "Version")
+              HAS_SPECIFIC_VERSION=false
+              if [ -n "$VERSION" ] && [ "$VERSION" != "Future" ]; then
+                HAS_SPECIFIC_VERSION=true
+              fi
+              
+              # For Backlog items, version is required
               if [ "$STATUS_LC" = "backlog" ]; then
-                VERSION=$(get_field "$item" "Version")
-                if [ -z "$VERSION" ] || [ "$VERSION" = "Future" ]; then
+                if [ "$HAS_SPECIFIC_VERSION" = "false" ]; then
                   SKIPPED_BACKLOG=$((SKIPPED_BACKLOG + 1))
                   continue
                 fi
-                # If we reach here, it's a Backlog item with a specific version
-                IS_BACKLOG_WITH_VERSION=true
               fi
 
               # Extract all fields
@@ -420,7 +423,7 @@ jobs:
               
               # Contributor whitelist logic:
               # - If assignee is set: always check whitelist (for all statuses)
-              # - If no assignee: only allow Backlog items with specific versions
+              # - If no assignee: allow items with specific versions (any status)
               if [ -n "$ASSIGNEES" ]; then
                 # Has assignee - check whitelist
                 if ! is_whitelisted "$ASSIGNEES"; then
@@ -428,8 +431,8 @@ jobs:
                   continue
                 fi
               else
-                # No assignee - only allow Backlog items with specific versions
-                if [ "$IS_BACKLOG_WITH_VERSION" = "false" ]; then
+                # No assignee - allow if item has specific version
+                if [ "$HAS_SPECIFIC_VERSION" = "false" ]; then
                   SKIPPED_CONTRIBUTOR=$((SKIPPED_CONTRIBUTOR + 1))
                   continue
                 fi
