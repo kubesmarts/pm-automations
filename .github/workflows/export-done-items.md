@@ -221,11 +221,11 @@ Example: `Export Done items 2026-03-30`
 
 **Expected behavior:** Items with validation alerts are intentionally skipped. They will be exported once the alerts are resolved and the Reporting Date is updated.
 
-## Integration with Sync Workflow
+## Integration with Compliance Checker Workflow
 
-This workflow complements the [Sync Project Reporting Metrics](.github/workflows/sync-project-reporting-metrics.md) workflow:
+This workflow complements the [GH Issues Compliance Checker](.github/workflows/gh-issues-compliance-checker.md) workflow:
 
-- **Sync workflow** (daily): Updates project fields, validates data, syncs to JIRA
+- **Compliance checker workflow** (daily): Updates project fields, validates data, syncs to JIRA
 - **Export workflow** (weekly): Exports clean, validated Done items to CSV
 
 Both workflows:

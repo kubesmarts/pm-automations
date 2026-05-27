@@ -190,4 +190,4 @@ Combines all three methods. Issues are automatically deduplicated.
 ## Related Documentation
 - [Full Specification](jira-compliance-checker-spec.md)
 - [GitHub Issue #54](https://github.com/kubesmarts/pm-automations/issues/54)
-- [Policy Source](https://github.com/kubesmarts/pm-automations/blob/main/.github/workflows/sync-project-reporting-metrics.md)
+- [Policy Source](https://github.com/kubesmarts/pm-automations/blob/main/.github/workflows/gh-issues-compliance-checker.md)

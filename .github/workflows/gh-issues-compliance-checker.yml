@@ -1,4 +1,4 @@
-name: Sync Project Reporting Metrics
+name: GH Issues Compliance Checker
 
 # ---------------------------------------------------------------------------
 # Schedule configuration
@@ -10,14 +10,20 @@ on:
   schedule:
     - cron: '0 0 * * *'   # once daily at 00:00 UTC
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no changes will be made)'
+        required: false
+        type: boolean
+        default: false
 
 # Requires a PAT with 'project' and 'read:org' scopes stored as secret PSYNC_PAT_GH.
 # The default GITHUB_TOKEN does not have write access to organization-level projects.
 # JIRA Cloud (Atlassian) uses Basic auth: PSYNC_JIRA_EMAIL (account email) + PSYNC_PAT_JIRA (API token).
 
 jobs:
-  track-reporting-date:
-    name: Sync project reporting metrics
+  check-compliance:
+    name: Check GH issues compliance
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.PSYNC_PAT_GH }}
@@ -25,12 +31,13 @@ jobs:
       JIRA_EMAIL: ${{ vars.PSYNC_JIRA_EMAIL }}
       JIRA_BASE_URL: ${{ vars.PSYNC_JIRA_BASE_URL }}
       PROJECTS: ${{ vars.PSYNC_PROJECTS }}
+      DRY_RUN: ${{ inputs.dry_run || 'false' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Sync project reporting metrics across all configured projects
-        id: sync
+      - name: Check GH issues compliance across all configured projects
+        id: check
         run: |
           set -e
 

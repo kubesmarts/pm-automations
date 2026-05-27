@@ -56,7 +56,7 @@ class LabelManager {
                     error: null
                 };
             } catch (error) {
-                // Handle errors gracefully like sync-project-reporting-metrics workflow
+                // Handle errors gracefully like gh-issues-compliance-checker workflow
                 console.error(`  ✗ Warning: Label update failed: ${error.message}`);
                 return {
                     changed: false,

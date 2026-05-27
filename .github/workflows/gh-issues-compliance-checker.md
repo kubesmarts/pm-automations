@@ -1,8 +1,8 @@
-# Sync Project Reporting Metrics
+# GH Issues Compliance Checker
 
 ## What it does
 
-This is an **automation workflow** designed to facilitate **progress reporting and sync across multiple GitHub Projects**. It runs **once daily at 00:00 UTC** and checks **all items across all configured projects**. For each item it compares the current values of the tracked fields (**Status**, **Priority**, **Version**, **Estimate**, **Remaining Work**, **Time Spent**) against the last entry in the item's **`Reporting Log`** field. If a change is detected (or the log is empty), the workflow:
+This is an **automation workflow** designed to **validate GitHub issues compliance** with project field requirements and facilitate **progress reporting and sync across multiple GitHub Projects**. It runs **once daily at 00:00 UTC** and checks **all items across all configured projects**. For each item it compares the current values of the tracked fields (**Status**, **Priority**, **Version**, **Estimate**, **Remaining Work**, **Time Spent**) against the last entry in the item's **`Reporting Log`** field. If a change is detected (or the log is empty), the workflow:
 
 1. Sets **`Reporting Date`** to today
 2. Prepends a new entry to **`Reporting Log`** in the format:
@@ -225,16 +225,47 @@ For JIRA sync testing also:
 
 ### Manual trigger (skip the scheduled wait)
 
-1. Go to **Actions → Sync Project Reporting Metrics → Run workflow**
-2. Click **"Run workflow"**
-3. The workflow runs immediately against all projects in `PSYNC_PROJECTS`
+1. Go to **Actions → GH Issues Compliance Checker → Run workflow**
+2. (Optional) Check **"Run in dry-run mode"** to preview changes without making any modifications
+3. Click **"Run workflow"**
+4. The workflow runs immediately against all projects in `PSYNC_PROJECTS`
+
+### Dry-run mode
+
+The workflow supports a **dry-run mode** for safe testing and validation:
+
+**When to use dry-run mode:**
+- Testing workflow changes before deploying to production
+- Previewing what would change without affecting project data
+- Debugging and troubleshooting issues
+- Validating configuration changes
+
+**What dry-run mode does:**
+- ✅ Performs all validation checks and compliance rules
+- ✅ Logs all actions that would be taken with `[DRY-RUN]` prefix
+- ✅ Shows what fields would be updated and their new values
+- ❌ Does NOT write to GitHub Project fields (Reporting Date, Reporting Log, Alerts, Σ fields)
+- ❌ Does NOT sync to JIRA
+- ❌ Does NOT create or update GitHub issues for errors/alerts
+
+**How to enable:**
+- **Manual runs:** Check the "Run in dry-run mode" checkbox when triggering the workflow
+- **Scheduled runs:** Always run with dry-run disabled (default behavior)
+
+**Example dry-run log output:**
+```
+[DRY-RUN] Would update Reporting Date to 2026-05-27
+[DRY-RUN] Would prepend to Reporting Log: 2026-05-27, CI, In Progress, Major, 3.20, 2, 1, 1
+[DRY-RUN] Would set Alerts to: NO_ASSIGNEE
+[DRY-RUN] Would sync to JIRA ticket ISSUE-774
+```
 
 ### Testing steps
 
 1. **Go to a project** listed in your `PSYNC_PROJECTS` variable and pick any issue/item
 2. **Change one of the tracked fields**: Status, Priority, Version, Estimate, Remaining Work, or Time Spent
-3. **Trigger the workflow** manually (see above) or wait for 05:00 UTC
-4. **Check the Actions log** → open the latest run of `Sync Project Reporting Metrics`. You should see:
+3. **Trigger the workflow** manually (see above) or wait for 00:00 UTC
+4. **Check the Actions log** → open the latest run of `GH Issues Compliance Checker`. You should see:
    - A `========` header per project with the org and project number
    - The item listed with a change detected and an update confirmation
    - A per-project summary and a grand total at the end
