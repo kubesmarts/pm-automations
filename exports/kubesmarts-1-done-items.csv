@@ -1,4 +1,4 @@
-Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
 60,,https://github.com/kubesmarts/pm-automations/issues/60,JIRA compliance checker only processes first 100 issues,dgutierr,,PM,Critical,,,,0.1,0.1,2026-05-20,,
 58,,https://github.com/kubesmarts/pm-automations/issues/58,Bug: Issue number collisions cause incorrect parent-child mappings in export-done-items and sync workflows,dgutierr,,PM,Critical,,,,0.1,0.1,2026-05-08,,
 59,,https://github.com/kubesmarts/pm-automations/issues/59,Export Backlog items with version set (not 'Future') even without assignees,dgutierr,,PM,Critical,,,,0.05,0.05,2026-05-08,,

@@ -437,26 +437,38 @@ jobs:
 
             rm -f "$ITEMS_FILE"
 
+            # Ensure export file header is always normalized to current format
+            if [ -f "$EXPORT_FILE" ] && [ -s "$EXPORT_FILE" ]; then
+              CURRENT_HEADER=$(head -n 1 "$EXPORT_FILE")
+              EXPECTED_HEADER="Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments"
+              if [ "$CURRENT_HEADER" != "$EXPECTED_HEADER" ]; then
+                TEMP_FILE=$(mktemp)
+                echo "$EXPECTED_HEADER" > "$TEMP_FILE"
+                tail -n +2 "$EXPORT_FILE" >> "$TEMP_FILE"
+                mv "$TEMP_FILE" "$EXPORT_FILE"
+              fi
+            fi
+
             # Process and update export file if we have new items
             if [ $EXPORTED_COUNT -gt 0 ]; then
               # Sort new items by Reporting Date in descending order
               SORTED_NEW_ITEMS=$(mktemp)
               sort -t'|' -k1,1r "$NEW_ITEMS_FILE" | cut -d'|' -f2- > "$SORTED_NEW_ITEMS"
-              
+
               # Create or update export file
               if [ ! -f "$EXPORT_FILE" ] || [ ! -s "$EXPORT_FILE" ]; then
                 # First export - create file with header and new items
                 echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
                 cat "$SORTED_NEW_ITEMS" >> "$EXPORT_FILE"
               else
-                # Incremental export - prepend new items after header
+                # Incremental export - rewrite header to current format, prepend new items, then keep existing data rows
                 TEMP_FILE=$(mktemp)
-                head -n 1 "$EXPORT_FILE" > "$TEMP_FILE"  # Keep header
-                cat "$SORTED_NEW_ITEMS" >> "$TEMP_FILE"  # Add new items
-                tail -n +2 "$EXPORT_FILE" >> "$TEMP_FILE"  # Add existing items
+                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$TEMP_FILE"
+                cat "$SORTED_NEW_ITEMS" >> "$TEMP_FILE"
+                tail -n +2 "$EXPORT_FILE" >> "$TEMP_FILE"
                 mv "$TEMP_FILE" "$EXPORT_FILE"
               fi
-              
+
               rm -f "$SORTED_NEW_ITEMS"
             fi
             

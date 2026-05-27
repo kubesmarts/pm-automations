@@ -1,4 +1,4 @@
-Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
 196,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/196,EDA : Add migration tests sub-module for HA persistence compatibility,tkobayas,,QE,Major,,,M,0.2,0.2,2026-05-27,,
 33,,https://github.com/tkobayas/drlx-parser/issues/33,Java++ property accessors in consequences (setter desugaring),tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-27,,
 35,,https://github.com/tkobayas/drlx-parser/issues/35,Java++ List and Map access — integration tests,tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-27,,

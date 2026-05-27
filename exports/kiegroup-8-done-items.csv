@@ -1,4 +1,4 @@
-Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
 1149,,https://github.com/serverlessworkflow/specification/issues/1149,Proposal: Official Migration Tool for 0.8/0.9 to 1.0.0 Workflows,ricardozanini,,Cloud,Major,CNCF Spec,Future,M,0.1,0.1,2026-05-08,,
 2770,,https://github.com/apache/incubator-kie-tools/issues/2770,Migrate `kie-samples` to `kie-tools` as a new package `serverless-logic-web-tools-samples`,fantonangeli,,Tooling,Normal,Apache,10.2.0. Apache,M,1.0,0.0,2026-05-08,,
 1640,,https://github.com/apache/incubator-kie-issues/issues/1640,EPIC - Migrate `kie-samples` to `kie-tools` and rename to `serverless-logic-web-tools-samples`,fantonangeli,,Tooling,Normal,Apache,10.0.0 Apache,M,2.6,0.0,2026-05-06,,

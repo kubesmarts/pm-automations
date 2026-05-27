@@ -1,4 +1,4 @@
-Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
 100,,https://github.com/serverlessworkflow/editor/issues/100,feat: Configure CI for npm package publishing,fantonangeli,,Tooling,Normal,,,M,0.6,0.1,2026-05-27,,
 126,,https://github.com/serverlessworkflow/editor/issues/126,feat: Implement release and changelog process,fantonangeli,,Tooling,Major,,,M,0.8,1.0,2026-05-27,,
 127,,https://github.com/serverlessworkflow/editor/issues/127,feat: Implement Storybook structure and styling,cheryl7114,,Tooling,Normal,,,M,1.0,0.7,2026-05-27,,Rough estimate
