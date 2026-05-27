@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **Export Active Items** workflow automatically exports active project items from GitHub Projects to CSV files for tracking, reporting, and capacity planning purposes. Items are filtered by status, version, and contributor whitelist.
+The **Export Active Items** workflow automatically exports active project items from GitHub Projects to CSV files for tracking, reporting, and capacity planning purposes. Items are filtered by status, target milestone, and contributor whitelist.
 
 ## Schedule
 
@@ -19,19 +19,19 @@ The workflow exports items that meet **all** of the following criteria:
    - Items with any status **except**: Done, Cancelled, or Backlog (with exceptions below)
    - Examples: In Progress, To Do, In Review, Blocked, etc.
 
-2. **Backlog Items with Specific Versions**
+2. **Backlog Items with Specific Target Milestones**
    - Backlog items are included **only if**:
-     - They have a target version set, AND
-     - The version is NOT "Future"
-   - Examples of included versions: "1.38.0 OSL", "10.1.0 Apache", "1.36.0 OSL"
+     - They have a target milestone set, AND
+     - The target milestone is NOT "Future"
+    - Examples of included target milestones: "1.38.0 OSL", "10.1.0 Apache", "1.36.0 OSL"
    - This ensures only planned work with concrete release targets is tracked
 
 3. **Contributor Whitelist**
    - If `contributors.csv` is missing or has no active contributors, all items are included
    - **When assignee is set**: Items must be assigned to at least one **active contributor** listed in `contributors.csv` (applies to ALL statuses)
-   - **When no assignee is set**: Items with a specific version set (not "Future") are exported (applies to ALL statuses)
+   - **When no assignee is set**: Items with a specific target milestone set (not "Future") are exported (applies to ALL statuses)
      - This ensures planned work with concrete release targets is tracked before assignment
-     - Items without assignees and without a specific version are excluded
+     - Items without assignees and without a specific target milestone are excluded
 
 ### Excluded Items
 
@@ -39,10 +39,10 @@ The following items are **NOT** exported:
 
 - ❌ Items with status "Done"
 - ❌ Items with status "Cancelled"
-- ❌ Backlog items without a target version
-- ❌ Backlog items with version "Future"
+- ❌ Backlog items without a target milestone
+- ❌ Backlog items with target milestone "Future"
 - ❌ Items not assigned to active contributors (when whitelist is configured)
-- ❌ Items without assignees and without a specific version (when whitelist is configured)
+- ❌ Items without assignees and without a specific target milestone (when whitelist is configured)
 - ❌ Archived items
 - ❌ Draft items (items without an issue number)
 
@@ -76,7 +76,7 @@ Each export file contains the following columns:
 | Area | Project area (e.g., Cloud, Runtimes, Tooling) |
 | Priority | Priority level (e.g., High, Normal, Low) |
 | Initiative | Associated initiative |
-| Version | Target version/release |
+| Target Milestone | Target milestone/release |
 | Size | Size estimate (e.g., S, M, L, XL) |
 | Estimate | Estimated effort in weeks |
 | Time Spent | Actual time spent in weeks |
@@ -99,13 +99,13 @@ Each export file contains the following columns:
 Track active work and remaining effort across teams and projects to plan resource allocation.
 
 ### 2. Sprint Planning
-Identify items ready for upcoming sprints, especially Backlog items with specific version targets.
+Identify items ready for upcoming sprints, especially Backlog items with specific target milestone targets.
 
 ### 3. Progress Tracking
 Monitor work in progress and time spent vs. estimates for better forecasting.
 
 ### 4. Reporting
-Generate reports on active work distribution by area, priority, assignee, or version.
+Generate reports on active work distribution by area, priority, assignee, or target milestone.
 
 ### 5. Downstream Data Consumption
 The exported CSV files can be consumed by downstream reporting and analytics tooling.
@@ -191,8 +191,8 @@ Total: 45 active item(s) exported across all projects
 ### No Items Exported
 
 If no items are exported:
-- Check that items have the correct status (not Done, Cancelled, or Backlog without version)
-- Verify Backlog items have a specific version set (not "Future" or empty)
+- Check that items have the correct status (not Done, Cancelled, or Backlog without a target milestone)
+- Verify Backlog items have a specific target milestone set (not "Future" or empty)
 - Ensure items are not archived
 
 ### Missing Fields
@@ -206,9 +206,9 @@ If some fields are empty:
 
 If expected items are not in the export:
 - Check if items are assigned to active contributors in `contributors.csv`
-- Verify items without assignees have a specific version set (not "Future" or empty)
+- Verify items without assignees have a specific target milestone set (not "Future" or empty)
 - Ensure items are not in Done, Cancelled, or Archived status
-- For Backlog items specifically, a version is always required
+- For Backlog items specifically, a target milestone is always required
 
 ### Authentication Errors
 

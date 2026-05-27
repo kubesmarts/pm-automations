@@ -84,7 +84,7 @@ exports/
 ### Header (fixed for all projects)
 
 ```csv
-Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
 ```
 
 ### Field Descriptions
@@ -100,7 +100,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 | Area | Area field value | Empty if field not in project |
 | Priority | Priority field value | Empty if field not in project |
 | Initiative | Initiative field value | Empty if field not in project |
-| Version | Version field value | Empty if field not in project |
+| Target Milestone | Target milestone field value | Empty if field not in project |
 | Size | Size field value (S, M, L, etc.) | Empty if field not in project |
 | Estimate | Estimate in weeks | Empty if field not in project |
 | Time Spent | Time spent in weeks | Empty if field not in project |

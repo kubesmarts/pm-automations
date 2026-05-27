@@ -387,10 +387,10 @@ jobs:
                 continue
               fi
               
-              # Check if item has a specific version (for any status)
-              VERSION=$(get_field "$item" "Version")
+              # Check if item has a specific target milestone (for any status)
+              TARGET_MILESTONE=$(get_field "$item" "Target Milestone")
               HAS_SPECIFIC_VERSION=false
-              if [ -n "$VERSION" ] && [ "$VERSION" != "Future" ]; then
+              if [ -n "$TARGET_MILESTONE" ] && [ "$TARGET_MILESTONE" != "Future" ]; then
                 HAS_SPECIFIC_VERSION=true
               fi
               
@@ -442,7 +442,7 @@ jobs:
               AREA=$(get_field "$item" "Area")
               PRIORITY=$(get_field "$item" "Priority")
               INITIATIVE=$(get_field "$item" "Initiative")
-              VERSION=$(get_field "$item" "Version")
+              TARGET_MILESTONE=$(get_field "$item" "Target Milestone")
               SIZE=$(get_field "$item" "Size")
               ESTIMATE=$(get_field "$item" "Estimate")
               TIME_SPENT=$(get_field "$item" "Time Spent")
@@ -468,7 +468,7 @@ jobs:
               CSV_LINE+="$(escape_csv "$AREA"),"
               CSV_LINE+="$(escape_csv "$PRIORITY"),"
               CSV_LINE+="$(escape_csv "$INITIATIVE"),"
-              CSV_LINE+="$(escape_csv "$VERSION"),"
+              CSV_LINE+="$(escape_csv "$TARGET_MILESTONE"),"
               CSV_LINE+="$(escape_csv "$SIZE"),"
               CSV_LINE+="$(escape_csv "$ESTIMATE"),"
               CSV_LINE+="$(escape_csv "$TIME_SPENT"),"
