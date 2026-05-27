@@ -1,4 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+100,,https://github.com/serverlessworkflow/editor/issues/100,feat: Configure CI for npm package publishing,fantonangeli,,Tooling,Normal,,,M,0.6,0.1,2026-05-27,,
+126,,https://github.com/serverlessworkflow/editor/issues/126,feat: Implement release and changelog process,fantonangeli,,Tooling,Major,,,M,0.8,1.0,2026-05-27,,
+127,,https://github.com/serverlessworkflow/editor/issues/127,feat: Implement Storybook structure and styling,cheryl7114,,Tooling,Normal,,,M,1.0,0.7,2026-05-27,,Rough estimate
+545,,https://github.com/quarkiverse/quarkus-flow/issues/545,feat: Load all Langchain4J Agentic Workflows eagerly,ricardozanini,,Runtimes,Critical,,,L,2.0,1.7,2026-05-27,,
+1395,,https://github.com/serverlessworkflow/sdk-java/issues/1395,AllStrategyCorrelationInfo persistence default implementation,fjtirado,,Runtimes,Major,,,M,0.6,0.6,2026-05-26,,
+54,,https://github.com/serverlessworkflow/editor/issues/54,feat: Integrate ELKjs for automatic diagram layout,handreyrc,,Tooling,Normal,,,M,0.8,0.8,2026-05-26,,
 557,,https://github.com/quarkiverse/quarkus-flow/issues/557,bug: examples/durable-workflow-k8s/README.md has incorrect steps,domhanak,,Docs,Normal,,2026/Q2,XS,0.1,0.1,2026-05-23,,
 52,,https://github.com/serverlessworkflow/editor/issues/52,feat: Define edge types and create React Flow edge components,handreyrc,,Tooling,Normal,,2026/Q2,M,0.8,0.7,2026-05-21,,
 393,,https://github.com/quarkiverse/quarkus-flow/issues/393,docs: Implementation of Java DSL Cookbook,domhanak,,Docs,Critical,,2026/Q2,M,0.4,2.5,2026-05-20,,
