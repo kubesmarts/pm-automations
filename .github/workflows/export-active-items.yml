@@ -457,7 +457,7 @@ jobs:
               COMMENTS=$(get_field "$item" "Comments")
 
               # Build CSV line with proper escaping
-              # Format: Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
+              # Format: Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
               CSV_LINE="${ISSUE_NUMBER},"
               CSV_LINE+="$(escape_csv "$PARENT_ISSUE"),"
               CSV_LINE+="$(escape_csv "$ISSUE_URL"),"
@@ -489,13 +489,13 @@ jobs:
             # Create or overwrite export file with all active items
             if [ $EXPORTED_COUNT -gt 0 ]; then
               # Create file with header and items
-              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments" > "$EXPORT_FILE"
+              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments" > "$EXPORT_FILE"
               
               # Sort by Issue Number descending
               sort -t',' -k1,1nr "$ACTIVE_ITEMS_FILE" >> "$EXPORT_FILE"
             else
               # No active items - create empty file with header only
-              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments" > "$EXPORT_FILE"
+              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments" > "$EXPORT_FILE"
             fi
             
             rm -f "$ACTIVE_ITEMS_FILE"

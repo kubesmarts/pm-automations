@@ -446,7 +446,7 @@ jobs:
               # Create or update export file
               if [ ! -f "$EXPORT_FILE" ] || [ ! -s "$EXPORT_FILE" ]; then
                 # First export - create file with header and new items
-                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
+                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
                 cat "$SORTED_NEW_ITEMS" >> "$EXPORT_FILE"
               else
                 # Incremental export - prepend new items after header

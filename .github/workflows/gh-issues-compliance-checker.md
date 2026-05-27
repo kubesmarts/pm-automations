@@ -2,12 +2,12 @@
 
 ## What it does
 
-This is an **automation workflow** designed to **validate GitHub issues compliance** with project field requirements and facilitate **progress reporting and sync across multiple GitHub Projects**. It runs **once daily at 00:00 UTC** and checks **all items across all configured projects**. For each item it compares the current values of the tracked fields (**Status**, **Priority**, **Version**, **Estimate**, **Remaining Work**, **Time Spent**) against the last entry in the item's **`Reporting Log`** field. If a change is detected (or the log is empty), the workflow:
+This is an **automation workflow** designed to **validate GitHub issues compliance** with project field requirements and facilitate **progress reporting and sync across multiple GitHub Projects**. It runs **once daily at 00:00 UTC** and checks **all items across all configured projects**. For each item it compares the current values of the tracked fields (**Status**, **Priority**, **Target Milestone**, **Estimate**, **Remaining Work**, **Time Spent**) against the last entry in the item's **`Reporting Log`** field. If a change is detected (or the log is empty), the workflow:
 
 1. Sets **`Reporting Date`** to today
 2. Prepends a new entry to **`Reporting Log`** in the format:
    ```
-   YYYY-MM-DD, Area, Status, Priority, Version, Estimate, Remaining Work, Time Spent
+   YYYY-MM-DD, Area, Status, Priority, Target Milestone, Estimate, Remaining Work, Time Spent
    ```
 3. (Optional) Syncs **Priority**, **Estimate**, **Remaining Work**, and **Time Spent** to the linked JIRA ticket
 
@@ -42,7 +42,7 @@ In every GitHub Project you want to track, make sure the following fields exist 
 |----------------------|---------------|-------------------------------------------------------------------------------------------|
 | `Status`             | Single select | e.g. Backlog, Next, In Progress, In Review, Done                                                           |
 | `Priority`           | Single select | e.g. `Blocker`, `Critical`, `Major`, `Normal`, `Minor`                                    |
-| `Version`            | Text          | Target release version (e.g. `3.20`, `2025.Q2`) |
+| `Target Milestone`   | Text          | Target release milestone (e.g. `3.20`, `2025.Q2`). For backward compatibility, `Version` field is also supported |
 | `Estimate`           | Number        | Estimated effort in weeks (e.g. `2` = 2 weeks, `0.4` = 2 days, `0.1` = 4 hours)         |
 | `Remaining Work`     | Number        | Remaining effort in weeks                                                                 |
 | `Time Spent`         | Number        | Time already spent in weeks                                                               |
@@ -87,7 +87,7 @@ On subsequent runs the item is treated as a normal JIRA-synced issue. Requires t
 **Reporting Log entry format** — entries are separated by ` | `, ordered **newest first**:
 
 ```
-DATE, Area, Status, Priority, Version, Estimate, Remaining Work, Time Spent, External Reference
+DATE, Area, Status, Priority, Target Milestone, Estimate, Remaining Work, Time Spent, External Reference
 ```
 
 Example (newest → oldest, max 5 entries):
@@ -107,7 +107,7 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 | `NO_REMAINING_WORK` | `Remaining Work` is empty and `Status` is `In Progress` or `In Review` (not raised for `Done` — field is auto-cleared) |
 | `NO_AREA` | `Area` is empty and `Status` is not `Backlog` |
 | `NO_PRIORITY` | `Priority` is empty and `Status` is not `Backlog` |
-| `NO_VERSION` | `Version` is empty and `Status` is not `Backlog` |
+| `NO_MILESTONE` | `Target Milestone` is empty and `Status` is not `Backlog` |
 | `NO_TIME_SPENT` | `Time Spent` is empty and `Status` is `Done` |
 | `NO_ASSIGNEE` | Issue has no assignee and `Status` is `In Progress`, `In Review`, or `Done` |
 | `JIRA_NOT_FOUND` | `External Reference` is set but the JIRA ticket does not exist (HTTP 404 with JIRA error body) |
@@ -263,7 +263,7 @@ The workflow supports a **dry-run mode** for safe testing and validation:
 ### Testing steps
 
 1. **Go to a project** listed in your `PSYNC_PROJECTS` variable and pick any issue/item
-2. **Change one of the tracked fields**: Status, Priority, Version, Estimate, Remaining Work, or Time Spent
+2. **Change one of the tracked fields**: Status, Priority, Target Milestone, Estimate, Remaining Work, or Time Spent
 3. **Trigger the workflow** manually (see above) or wait for 00:00 UTC
 4. **Check the Actions log** → open the latest run of `GH Issues Compliance Checker`. You should see:
    - A `========` header per project with the org and project number
@@ -271,7 +271,7 @@ The workflow supports a **dry-run mode** for safe testing and validation:
    - A per-project summary and a grand total at the end
 5. **Verify the project item**:
    - `Reporting Date` is set to today
-   - `Reporting Log` has a new entry prepended (`YYYY-MM-DD, Area, Status, Priority, Version, Estimate, Remaining Work, Time Spent`), max 5 entries total separated by ` | `
+   - `Reporting Log` has a new entry prepended (`YYYY-MM-DD, Area, Status, Priority, Target Milestone, Estimate, Remaining Work, Time Spent`), max 5 entries total separated by ` | `
    - `Alerts` (if the field exists) is empty when all validation rules pass, or contains one or more codes (e.g. `NO_ESTIMATE`) when a rule is violated
 6. **Verify JIRA sync (if configured)** on the linked ticket:
    - The Actions log shows `Syncing to JIRA ticket: <id>` (confirming the `gh-issue-<number>` label is present)

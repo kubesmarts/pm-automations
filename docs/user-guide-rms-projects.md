@@ -25,7 +25,7 @@ You never need to trigger it manually. The workflow takes care of everything aut
 |-------|------|---------------|
 | `Status` | Single select | Lifecycle stage (see below) |
 | `Priority` | Single select | `Blocker`, `Critical`, `Major`, `Normal`, `Minor` |
-| `Version` | Text | Target release version (e.g. `3.20`, `2025.Q2`) |
+| `Target Milestone` | Text | Target release milestone (e.g. `3.20`, `2025.Q2`) |
 | `Estimate` | Number | Total effort in **weeks** — e.g. `2` = 2 weeks, `0.4` = 2 days, `0.1` = 4 hours |
 | `Remaining Work` | Number | Remaining effort in weeks, same unit as Estimate |
 | `Time Spent` | Number | Actual time logged so far, in weeks |
@@ -60,7 +60,7 @@ The issue is queued for the next sprint or cycle. At this point you should start
 |-------|-----------|-----|
 | `Area` | **Yes** | Alerts: `NO_AREA` |
 | `Priority` | **Yes** | Alerts: `NO_PRIORITY` |
-| `Version` | **Yes** | Alerts: `NO_VERSION` |
+| `Target Milestone` | **Yes** | Alerts: `NO_MILESTONE` |
 | `Estimate` | Recommended | Will be required when the issue moves forward |
 | `Remaining Work` | Recommended | Same |
 
@@ -74,7 +74,7 @@ The issue is actively being worked on. All planning fields must be filled in and
 |-------|-----------|-----|
 | `Area` | **Yes** | Alerts: `NO_AREA` |
 | `Priority` | **Yes** | Alerts: `NO_PRIORITY` |
-| `Version` | **Yes** | Alerts: `NO_VERSION` |
+| `Target Milestone` | **Yes** | Alerts: `NO_MILESTONE` |
 | `Estimate` | **Yes** | Alerts: `NO_ESTIMATE` |
 | `Remaining Work` | **Yes** | Alerts: `NO_REMAINING_WORK` |
 | `Time Spent` | Update regularly | Will be required at `Done` |
@@ -92,7 +92,7 @@ Same requirements as `In Progress`. Ensure `Remaining Work` reflects any remaini
 |-------|-----------|
 | `Area` | **Yes** |
 | `Priority` | **Yes** |
-| `Version` | **Yes** |
+| `Target Milestone` | **Yes** |
 | `Estimate` | **Yes** |
 | `Remaining Work` | **Yes** |
 | Assignee | **Yes** |
@@ -107,7 +107,7 @@ The issue is complete. Before closing it:
 |-------|-----------|-----|
 | `Area` | **Yes** | Alerts: `NO_AREA` |
 | `Priority` | **Yes** | Alerts: `NO_PRIORITY` |
-| `Version` | **Yes** | Alerts: `NO_VERSION` |
+| `Target Milestone` | **Yes** | Alerts: `NO_MILESTONE` |
 | `Estimate` | **Yes** | Alerts: `NO_ESTIMATE` |
 | `Remaining Work` | **Auto-cleared** | The workflow sets this to empty automatically when the issue reaches `Done` |
 | `Time Spent` | **Yes** | Alerts: `NO_TIME_SPENT` |
@@ -123,7 +123,7 @@ Fill in the total `Time Spent` before or when you move the issue to `Done`. `Rem
 |-------|:-------:|:----:|:-----------:|:---------:|:----:|
 | Area | — | Required | Required | Required | Required |
 | Priority | — | Required | Required | Required | Required |
-| Version | — | Required | Required | Required | Required |
+| Target Milestone | — | Required | Required | Required | Required |
 | Estimate | — | Recommended | Required | Required | Required |
 | Remaining Work | — | Recommended | Required | Required | Auto-cleared |
 | Time Spent | — | — | Update often | Update often | Required |
@@ -183,7 +183,7 @@ Please review and resolve these alerts.
 |------|--------------|------------|
 | `NO_AREA` | `Area` is empty and the issue is past `Backlog` | Set the `Area` field |
 | `NO_PRIORITY` | `Priority` is empty and the issue is past `Backlog` | Set the `Priority` field |
-| `NO_VERSION` | `Version` is empty and the issue is past `Backlog` | Set the `Version` field |
+| `NO_MILESTONE` | `Target Milestone` is empty and the issue is past `Backlog` | Set the `Target Milestone` field |
 | `NO_ESTIMATE` | `Estimate` is empty and status is past `Next` | Set the `Estimate` field |
 | `NO_REMAINING_WORK` | `Remaining Work` is empty and status is `In Progress` or `In Review` | Set the `Remaining Work` field |
 | `NO_TIME_SPENT` | `Time Spent` is empty and status is `Done` | Enter the total time spent |
@@ -210,7 +210,7 @@ To clear `CHILDREN_STATUS`: update the child issues so their statuses align with
 Every time a tracked field changes, the workflow adds a new line to `Reporting Log`:
 
 ```
-YYYY-MM-DD, Area, Status, Priority, Version, Estimate, Remaining Work, Time Spent
+YYYY-MM-DD, Area, Status, Priority, Target Milestone, Estimate, Remaining Work, Time Spent
 ```
 
 Entries are ordered **newest first**, separated by ` | `. A maximum of 5 entries are kept — older ones are dropped automatically.
