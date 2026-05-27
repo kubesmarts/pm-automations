@@ -1,2 +1,2 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-23,,https://github.com/kubesmarts/logic-apps/issues/23,Implement Kafka-based event ingestion service for PostgreSQL backend (MODE 3),mcruzdev,In progress,,Runtimes,Major,Serverless Logic,,,1.0,0.6,0.4,,,,,
+23,,https://github.com/kubesmarts/logic-apps/issues/23,Implement Kafka-based event ingestion service for PostgreSQL backend (MODE 3),mcruzdev,In progress,,Runtimes,Major,Serverless Logic,OSL.Next,,1.0,0.6,0.4,,,,,
