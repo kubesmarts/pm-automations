@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+127,,https://github.com/serverlessworkflow/editor/issues/127,feat: Implement Storybook structure and styling,cheryl7114,,Tooling,Normal,,2026/Q2,M,1.0,0.7,2026-05-28,,Rough estimate
+1310,,https://github.com/serverlessworkflow/sdk-java/issues/1310,Rename workflow to subflow,mcruzdev,,Runtimes,Normal,,2026/Q2,S,0.2,0.2,2026-05-28,,
+545,,https://github.com/quarkiverse/quarkus-flow/issues/545,feat: Load all Langchain4J Agentic Workflows eagerly,ricardozanini,,Runtimes,Critical,,2026/Q2,L,2.0,1.7,2026-05-28,,
+552,,https://github.com/quarkiverse/quarkus-flow/issues/552,Add support for excluding specific workflows from persistence via configuration,mcruzdev,,Runtimes,Normal,,2026/Q2,M,0.4,0.4,2026-05-28,,
 100,,https://github.com/serverlessworkflow/editor/issues/100,feat: Configure CI for npm package publishing,fantonangeli,,Tooling,Normal,,,M,0.6,0.1,2026-05-27,,
 126,,https://github.com/serverlessworkflow/editor/issues/126,feat: Implement release and changelog process,fantonangeli,,Tooling,Major,,,M,0.8,1.0,2026-05-27,,
 127,,https://github.com/serverlessworkflow/editor/issues/127,feat: Implement Storybook structure and styling,cheryl7114,,Tooling,Normal,,,M,1.0,0.7,2026-05-27,,Rough estimate
