@@ -6,8 +6,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 194,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/194,Backport commits to 2.0.x after 2.0.0-beta2,tkobayas,In progress,,Runtimes,Major,,Ansible EDA 2.8.x,S,0.2,0.05,0.15,0.2,0.05,0.15,,
 168,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/168,EDA : Details for the 1st HA release,tkobayas,In progress,,Runtimes,Major,,Ansible EDA 2.8.x,L,3.0,1.0,2.0,3.0,1.0,2.0,,
 43,26,https://github.com/tkobayas/drlx-parser/issues/43,Pluggable operators (temporal),tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
-34,26,https://github.com/tkobayas/drlx-parser/issues/34,Java++ 'with' style blocks,tkobayas,Next,,Runtimes,Normal,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 26,,https://github.com/tkobayas/drlx-parser/issues/26,DrlxCompiler enhancement round 2,tkobayas,In progress,,Runtimes,Major,,Future,L,0.5,0.1,0.4,2.65,1.95,0.7,,
-22,26,https://github.com/tkobayas/drlx-parser/issues/22,Form B: if/else with per-branch consequences,tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
 13,10,https://github.com/casehubio/engine/issues/13,Replay Engine,treblereel,In progress,,Runtimes,Normal,,Future,M,0.5,0.0,0.5,0.5,0.0,0.5,,
 2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,12.0,10.0,2.0,16.2,11.4,4.0,,
