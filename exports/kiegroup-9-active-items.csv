@@ -1,11 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
+6733,,https://github.com/apache/incubator-kie-drools/issues/6733,"ListDataStore loses insertion order due to IdentityHashMap, breaking sliding window replay",tkobayas,In progress,,Runtimes,Major,,Future,S,0.1,0.05,0.05,0.1,0.0,0.1,,
 6683,,https://github.com/apache/incubator-kie-drools/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,4.0,2.0,2.0,4.0,2.0,2.0,,
 2315,,https://github.com/apache/incubator-kie-issues/issues/2315,Quarkus AI,Rikkola,In review,,Docs,Major,,Future,L,3.0,1.0,2.0,3.0,1.0,2.0,,
 2314,,https://github.com/apache/incubator-kie-issues/issues/2314,DRLGEN Investigate best plain English formats for DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,2.0,1.0,1.0,2.0,1.0,1.0,,
 2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools sequential,Rikkola,In progress,,Runtimes,Major,,Future,L,4.0,2.0,2.0,4.0,2.0,2.0,,
 194,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/194,Backport commits to 2.0.x after 2.0.0-beta2,tkobayas,In progress,,Runtimes,Major,,Ansible EDA 2.8.x,S,0.2,0.05,0.15,0.2,0.05,0.15,,
 168,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/168,EDA : Details for the 1st HA release,tkobayas,In progress,,Runtimes,Major,,Ansible EDA 2.8.x,L,3.0,1.0,2.0,3.0,1.0,2.0,,
-43,26,https://github.com/tkobayas/drlx-parser/issues/43,Pluggable operators (temporal),tkobayas,Next,,Runtimes,Major,,Future,S,0.1,0.0,0.1,0.1,0.0,0.1,,
-26,,https://github.com/tkobayas/drlx-parser/issues/26,DrlxCompiler enhancement round 2,tkobayas,In progress,,Runtimes,Major,,Future,L,0.5,0.1,0.4,2.65,1.95,0.7,,
 13,10,https://github.com/casehubio/engine/issues/13,Replay Engine,treblereel,In progress,,Runtimes,Normal,,Future,M,0.5,0.0,0.5,0.5,0.0,0.5,,
 2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,12.0,10.0,2.0,16.2,11.4,4.0,,
