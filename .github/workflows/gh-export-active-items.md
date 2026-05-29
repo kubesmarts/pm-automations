@@ -219,7 +219,7 @@ If the workflow fails with authentication errors:
 
 ## Related Documentation
 
-- [Export Done Items Workflow](./export-done-items.md) - For completed items
+- [GH Export Done Items Workflow](./gh-export-done-items.md) - For completed items
 - [GH Issues Compliance Checker](./gh-issues-compliance-checker.md) - For validating compliance and syncing reporting metrics
 - [Projects User Guide](./user-guide-rms-projects.md) - For working with reporting-metrics-based GitHub Projects
 

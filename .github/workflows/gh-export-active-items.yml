@@ -1,20 +1,22 @@
-name: Export Done Items
+name: GH Export Active Items
 
 # ---------------------------------------------------------------------------
 # Schedule configuration
-# Runs daily at 01:00 UTC (1 hour after export-active-items)
+# Runs daily at 00:00 UTC to export active items:
+# - All non-Done, non-Cancelled items
+# - Backlog items that have a target version set (excluding "Future")
 # ---------------------------------------------------------------------------
 on:
   schedule:
-    - cron: '0 1 * * *'   # Daily at 01:00 UTC
+    - cron: '0 0 * * *'   # Daily at 00:00 UTC
   workflow_dispatch:
 
 # Requires a PAT with 'project' and 'read:org' scopes stored as secret PSYNC_PAT_GH.
 # Uses the same PSYNC_PROJECTS variable as the sync workflow.
 
 jobs:
-  export-done-items:
-    name: Export done items to CSV
+  export-active-items:
+    name: Export active items to CSV
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.PSYNC_PAT_GH }}
@@ -29,7 +31,7 @@ jobs:
         run: |
           git pull origin main
 
-      - name: Export done items for all projects
+      - name: Export active items for all projects
         id: export
         run: |
           set -e
@@ -119,12 +121,12 @@ jobs:
               for allowed in "${WHITELIST[@]}"; do
                 allowed="${allowed// /}"  # Trim spaces
                 if [ "$assignee" = "$allowed" ]; then
-                  return 0  # Match found
+                  return 0
                 fi
               done
             done
             
-            return 1  # No match
+            return 1
           }
 
           # ---------------------------------------------------------------------------
@@ -149,24 +151,8 @@ jobs:
             # Create export directory
             mkdir -p "$EXPORT_BASE_DIR"
 
-            # Single export file per project
-            EXPORT_FILE="${EXPORT_BASE_DIR}/${PROJECT_OWNER}-${PROJECT_NUMBER}-done-items.csv"
-            
-            # Determine last export date from first line of existing file
-            if [ ! -f "$EXPORT_FILE" ] || [ ! -s "$EXPORT_FILE" ]; then
-              echo "First export for ${PROJECT_OWNER}:${PROJECT_NUMBER} - exporting all Done items"
-              LAST_EXPORT_DATE="1970-01-01"
-            else
-              # Get Reporting Date from first data line (line 2, after header)
-              # Use Python to properly parse CSV with quoted fields
-              LAST_EXPORT_DATE=$(python3 -c "import csv; f = open('$EXPORT_FILE', 'r'); reader = csv.reader(f); next(reader); row = next(reader, None); print(row[13].strip() if row and len(row) >= 14 else '')" 2>/dev/null || echo "")
-              if [ -z "$LAST_EXPORT_DATE" ]; then
-                echo "Warning: Could not read last export date, treating as first export"
-                LAST_EXPORT_DATE="1970-01-01"
-              else
-                echo "Incremental export since ${LAST_EXPORT_DATE}"
-              fi
-            fi
+            # Export file per project
+            EXPORT_FILE="${EXPORT_BASE_DIR}/${PROJECT_OWNER}-${PROJECT_NUMBER}-active-items.csv"
 
             # Fetch project metadata and first page of items
             echo "Fetching project metadata and page 1..."
@@ -175,7 +161,8 @@ jobs:
                 organization(login: $owner) {
                   projectV2(number: $number) {
                     id
-                    fields(first: 30) {
+                    title
+                    fields(first: 50) {
                       nodes {
                         ... on ProjectV2Field {
                           id
@@ -199,10 +186,22 @@ jobs:
                             url
                             body
                             assignees(first: 10) { nodes { login } }
-                            subIssues(first: 50) { nodes { number } }
+                            repository {
+                              owner { login }
+                              name
+                            }
+                            subIssues(first: 50) {
+                              nodes {
+                                number
+                                repository {
+                                  owner { login }
+                                  name
+                                }
+                              }
+                            }
                           }
                         }
-                        fieldValues(first: 30) {
+                        fieldValues(first: 50) {
                           nodes {
                             ... on ProjectV2ItemFieldTextValue {
                               text
@@ -238,12 +237,15 @@ jobs:
             fi
 
             PROJECT_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.id // ""')
+            PROJECT_TITLE=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.title // ""')
+            
             if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
               echo "Error: Could not resolve project ID. Skipping."
               continue
             fi
 
             echo "Project ID: $PROJECT_ID"
+            echo "Project Title: $PROJECT_TITLE"
 
             # Collect all items across all pages
             ITEMS_FILE=$(mktemp)
@@ -274,10 +276,22 @@ jobs:
                               url
                               body
                               assignees(first: 10) { nodes { login } }
-                              subIssues(first: 50) { nodes { number } }
+                              repository {
+                                owner { login }
+                                name
+                              }
+                              subIssues(first: 50) {
+                                nodes {
+                                  number
+                                  repository {
+                                    owner { login }
+                                    name
+                                  }
+                                }
+                              }
                             }
                           }
-                          fieldValues(first: 30) {
+                          fieldValues(first: 50) {
                             nodes {
                               ... on ProjectV2ItemFieldTextValue {
                                 text
@@ -317,7 +331,6 @@ jobs:
             done
 
             # Build parent-child mapping from subIssues field using composite keys
-            # This allows us to find the parent issue for any child issue
             declare -A PARENT_MAP
             while IFS= read -r item; do
               PARENT_NUM=$(echo "$item" | jq -r '.content.number // ""')
@@ -336,69 +349,95 @@ jobs:
               done < <(echo "$item" | jq -r '.content.subIssues.nodes[]? | "\(.number)|\(.repository.owner.login)|\(.repository.name)"' 2>/dev/null || echo "")
             done < "$ITEMS_FILE"
 
-            # Collect new items to export
-            NEW_ITEMS_FILE=$(mktemp)
+            # Collect active items to export
+            ACTIVE_ITEMS_FILE=$(mktemp)
             EXPORTED_COUNT=0
-            SKIPPED_ALERTS=0
-            SKIPPED_NO_DATE=0
-            SKIPPED_OLD_DATE=0
+            SKIPPED_DONE=0
+            SKIPPED_BACKLOG=0
+            SKIPPED_CANCELLED=0
+            SKIPPED_DRAFT=0
+            SKIPPED_CONTRIBUTOR=0
 
             while IFS= read -r item; do
               IS_ARCHIVED=$(echo "$item" | jq -r '.isArchived')
               ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
               
               # Skip archived items and draft items (no issue number)
-              [ "$IS_ARCHIVED" = "true" ] && continue
-              [ -z "$ISSUE_NUMBER" ] && continue
+              if [ "$IS_ARCHIVED" = "true" ]; then
+                continue
+              fi
+              
+              if [ -z "$ISSUE_NUMBER" ]; then
+                SKIPPED_DRAFT=$((SKIPPED_DRAFT + 1))
+                continue
+              fi
 
-              # Get status and check if Done
+              # Get status and check if active (not Done or Cancelled)
+              # Backlog items are included only if they have a target version
               STATUS=$(get_field "$item" "Status")
               STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
               
-              [ "$STATUS_LC" != "done" ] && continue
-
-              # Get Reporting Date - skip if empty or not greater than last export
-              REPORTING_DATE=$(get_field "$item" "Reporting Date")
-              
-              if [ -z "$REPORTING_DATE" ]; then
-                echo "  → Skipping issue #${ISSUE_NUMBER}: no Reporting Date"
-                SKIPPED_NO_DATE=$((SKIPPED_NO_DATE + 1))
+              if [ "$STATUS_LC" = "done" ]; then
+                SKIPPED_DONE=$((SKIPPED_DONE + 1))
                 continue
               fi
               
-              # Only export if Reporting Date is strictly greater than last export date
-              if [ "$REPORTING_DATE" \< "$LAST_EXPORT_DATE" ] || [ "$REPORTING_DATE" = "$LAST_EXPORT_DATE" ]; then
-                SKIPPED_OLD_DATE=$((SKIPPED_OLD_DATE + 1))
+              if [ "$STATUS_LC" = "cancelled" ]; then
+                SKIPPED_CANCELLED=$((SKIPPED_CANCELLED + 1))
                 continue
               fi
-
-              # Check for alerts - skip if any exist
-              ALERTS=$(get_field "$item" "Alerts")
-              if [ -n "$ALERTS" ]; then
-                echo "  → Skipping issue #${ISSUE_NUMBER}: has alerts (${ALERTS})"
-                SKIPPED_ALERTS=$((SKIPPED_ALERTS + 1))
-                continue
+              
+              # Check if item has a specific target milestone (for any status)
+              TARGET_MILESTONE=$(get_field "$item" "Target Milestone")
+              HAS_SPECIFIC_VERSION=false
+              if [ -n "$TARGET_MILESTONE" ] && [ "$TARGET_MILESTONE" != "Future" ]; then
+                HAS_SPECIFIC_VERSION=true
+              fi
+              
+              # For Backlog items, version is required
+              if [ "$STATUS_LC" = "backlog" ]; then
+                if [ "$HAS_SPECIFIC_VERSION" = "false" ]; then
+                  SKIPPED_BACKLOG=$((SKIPPED_BACKLOG + 1))
+                  continue
+                fi
               fi
 
               # Extract all fields
               TITLE=$(echo "$item" | jq -r '.content.title // ""')
               ISSUE_URL=$(echo "$item" | jq -r '.content.url // ""')
               
-              # Build composite key for this issue to look up parent
+              # Get repository info for composite key
               REPO_OWNER=$(echo "$item" | jq -r '.content.repository.owner.login // ""')
               REPO_NAME=$(echo "$item" | jq -r '.content.repository.name // ""')
               COMPOSITE_KEY="${REPO_OWNER}/${REPO_NAME}#${ISSUE_NUMBER}"
               
-              # Look up parent issue from the mapping built from subIssues
-              PARENT_ISSUE="${PARENT_MAP[$COMPOSITE_KEY]:-}"
-              ASSIGNEES=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
-
-              # Check whitelist
-              if ! is_whitelisted "$ASSIGNEES"; then
-                echo "  → Skipping issue #${ISSUE_NUMBER}: assignees not in contributor whitelist"
-                continue
+              # Look up parent issue from the mapping (returns composite key or empty)
+              PARENT_ISSUE_KEY="${PARENT_MAP[$COMPOSITE_KEY]:-}"
+              # Extract just the issue number from parent composite key for CSV
+              PARENT_ISSUE=""
+              if [ -n "$PARENT_ISSUE_KEY" ]; then
+                PARENT_ISSUE=$(echo "$PARENT_ISSUE_KEY" | sed 's/.*#//')
               fi
-
+              
+              ASSIGNEES=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
+              
+              # Contributor whitelist logic:
+              # - If assignee is set: always check whitelist (for all statuses)
+              # - If no assignee: allow items with specific versions (any status)
+              if [ -n "$ASSIGNEES" ]; then
+                # Has assignee - check whitelist
+                if ! is_whitelisted "$ASSIGNEES"; then
+                  SKIPPED_CONTRIBUTOR=$((SKIPPED_CONTRIBUTOR + 1))
+                  continue
+                fi
+              else
+                # No assignee - allow if item has specific version
+                if [ "$HAS_SPECIFIC_VERSION" = "false" ]; then
+                  SKIPPED_CONTRIBUTOR=$((SKIPPED_CONTRIBUTOR + 1))
+                  continue
+                fi
+              fi
+              
               TYPE=$(get_field "$item" "Type")
               AREA=$(get_field "$item" "Area")
               PRIORITY=$(get_field "$item" "Priority")
@@ -407,16 +446,24 @@ jobs:
               SIZE=$(get_field "$item" "Size")
               ESTIMATE=$(get_field "$item" "Estimate")
               TIME_SPENT=$(get_field "$item" "Time Spent")
+              REMAINING_WORK=$(get_field "$item" "Remaining Work")
+              
+              # Get Σ (Sigma) fields
+              SIGMA_ESTIMATE=$(get_field "$item" "Σ Estimate")
+              SIGMA_TIME_SPENT=$(get_field "$item" "Σ Time Spent")
+              SIGMA_REMAINING=$(get_field "$item" "Σ Remaining Work")
+              
               EXTERNAL_REF=$(get_field "$item" "External Reference")
-              # Get Comments from project field (empty if field doesn't exist)
               COMMENTS=$(get_field "$item" "Comments")
 
               # Build CSV line with proper escaping
+              # Format: Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
               CSV_LINE="${ISSUE_NUMBER},"
               CSV_LINE+="$(escape_csv "$PARENT_ISSUE"),"
               CSV_LINE+="$(escape_csv "$ISSUE_URL"),"
               CSV_LINE+="$(escape_csv "$TITLE"),"
               CSV_LINE+="$(escape_csv "$ASSIGNEES"),"
+              CSV_LINE+="$(escape_csv "$STATUS"),"
               CSV_LINE+="$(escape_csv "$TYPE"),"
               CSV_LINE+="$(escape_csv "$AREA"),"
               CSV_LINE+="$(escape_csv "$PRIORITY"),"
@@ -425,120 +472,63 @@ jobs:
               CSV_LINE+="$(escape_csv "$SIZE"),"
               CSV_LINE+="$(escape_csv "$ESTIMATE"),"
               CSV_LINE+="$(escape_csv "$TIME_SPENT"),"
-              CSV_LINE+="$(escape_csv "$REPORTING_DATE"),"
+              CSV_LINE+="$(escape_csv "$REMAINING_WORK"),"
+              CSV_LINE+="$(escape_csv "$SIGMA_ESTIMATE"),"
+              CSV_LINE+="$(escape_csv "$SIGMA_TIME_SPENT"),"
+              CSV_LINE+="$(escape_csv "$SIGMA_REMAINING"),"
               CSV_LINE+="$(escape_csv "$EXTERNAL_REF"),"
               CSV_LINE+="$(escape_csv "$COMMENTS")"
 
-              # Store with reporting date for sorting
-              echo "${REPORTING_DATE}|${CSV_LINE}" >> "$NEW_ITEMS_FILE"
+              echo "$CSV_LINE" >> "$ACTIVE_ITEMS_FILE"
               EXPORTED_COUNT=$((EXPORTED_COUNT + 1))
 
             done < "$ITEMS_FILE"
 
             rm -f "$ITEMS_FILE"
 
-            # Ensure export file header is always normalized to current format
-            if [ -f "$EXPORT_FILE" ] && [ -s "$EXPORT_FILE" ]; then
-              CURRENT_HEADER=$(head -n 1 "$EXPORT_FILE")
-              EXPECTED_HEADER="Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments"
-              if [ "$CURRENT_HEADER" != "$EXPECTED_HEADER" ]; then
-                TEMP_FILE=$(mktemp)
-                echo "$EXPECTED_HEADER" > "$TEMP_FILE"
-                tail -n +2 "$EXPORT_FILE" >> "$TEMP_FILE"
-                mv "$TEMP_FILE" "$EXPORT_FILE"
-              fi
-            fi
-
-            # Process and update export file if we have new items
+            # Create or overwrite export file with all active items
             if [ $EXPORTED_COUNT -gt 0 ]; then
-              # Sort new items by Reporting Date in descending order
-              SORTED_NEW_ITEMS=$(mktemp)
-              sort -t'|' -k1,1r "$NEW_ITEMS_FILE" | cut -d'|' -f2- > "$SORTED_NEW_ITEMS"
-
-              # Deduplicate by Issue URL, keeping newest Reporting Date
-              if [ -f "$EXPORT_FILE" ] && [ -s "$EXPORT_FILE" ]; then
-                # Combine existing and new items, deduplicate by Issue URL (column 3)
-                # Keep entry with newest Reporting Date (column 14)
-                TEMP_MERGED=$(mktemp)
-
-                # Extract existing data (skip header)
-                tail -n +2 "$EXPORT_FILE" > "$TEMP_MERGED"
-
-                # Append new items
-                cat "$SORTED_NEW_ITEMS" >> "$TEMP_MERGED"
-
-                # Deduplicate using Python for proper CSV parsing
-                DEDUPED_FILE=$(mktemp)
-                python3 -c "
-import csv
-import sys
-
-# Read all items
-url_map = {}
-with open('$TEMP_MERGED', 'r') as f:
-    reader = csv.reader(f)
-    for row in reader:
-        if len(row) >= 14:
-            url = row[2]  # Issue URL (column 3, index 2)
-            reporting_date = row[13]  # Reporting Date (column 14, index 13)
-
-            # Keep entry with newest Reporting Date
-            if url not in url_map or reporting_date > url_map[url][13]:
-                url_map[url] = row
-
-# Write deduplicated data sorted by Reporting Date (descending)
-writer = csv.writer(sys.stdout)
-for row in sorted(url_map.values(), key=lambda x: x[13], reverse=True):
-    writer.writerow(row)
-" > "$DEDUPED_FILE"
-
-                # Write final file with header
-                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
-                cat "$DEDUPED_FILE" >> "$EXPORT_FILE"
-
-                rm -f "$TEMP_MERGED" "$DEDUPED_FILE"
-              else
-                # First export - create file with header and new items
-                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
-                cat "$SORTED_NEW_ITEMS" >> "$EXPORT_FILE"
-              fi
-
-              rm -f "$SORTED_NEW_ITEMS"
+              # Create file with header and items
+              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments" > "$EXPORT_FILE"
+              
+              # Sort by Issue Number descending
+              sort -t',' -k1,1nr "$ACTIVE_ITEMS_FILE" >> "$EXPORT_FILE"
+            else
+              # No active items - create empty file with header only
+              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments" > "$EXPORT_FILE"
             fi
             
-            rm -f "$NEW_ITEMS_FILE"
+            rm -f "$ACTIVE_ITEMS_FILE"
 
             echo ""
-            if [ $EXPORTED_COUNT -gt 0 ]; then
-              echo "✓ Exported $EXPORTED_COUNT item(s) to ${EXPORT_FILE}"
-              TOTAL_EXPORTED=$((TOTAL_EXPORTED + EXPORTED_COUNT))
-            else
-              echo "No new Done items to export"
-            fi
+            echo "✓ Exported $EXPORTED_COUNT active item(s) to ${EXPORT_FILE}"
+            TOTAL_EXPORTED=$((TOTAL_EXPORTED + EXPORTED_COUNT))
             
-            if [ $SKIPPED_ALERTS -gt 0 ]; then
-              echo "  Skipped $SKIPPED_ALERTS item(s) with alerts"
+            if [ $SKIPPED_DONE -gt 0 ]; then
+              echo "  Skipped $SKIPPED_DONE Done item(s)"
             fi
-            if [ $SKIPPED_NO_DATE -gt 0 ]; then
-              echo "  Skipped $SKIPPED_NO_DATE item(s) without Reporting Date"
+            if [ $SKIPPED_BACKLOG -gt 0 ]; then
+              echo "  Skipped $SKIPPED_BACKLOG Backlog item(s)"
             fi
-            if [ $SKIPPED_OLD_DATE -gt 0 ]; then
-              echo "  Skipped $SKIPPED_OLD_DATE item(s) already exported"
+            if [ $SKIPPED_CANCELLED -gt 0 ]; then
+              echo "  Skipped $SKIPPED_CANCELLED Cancelled item(s)"
+            fi
+            if [ $SKIPPED_DRAFT -gt 0 ]; then
+              echo "  Skipped $SKIPPED_DRAFT draft item(s)"
+            fi
+            if [ $SKIPPED_CONTRIBUTOR -gt 0 ]; then
+              echo "  Skipped $SKIPPED_CONTRIBUTOR item(s) (not in contributor whitelist)"
             fi
 
           done
 
           echo ""
           echo "========================================"
-          echo "Total: $TOTAL_EXPORTED item(s) exported across all projects"
+          echo "Total: $TOTAL_EXPORTED active item(s) exported across all projects"
           echo "========================================"
 
-          # Set output for commit step
-          if [ $TOTAL_EXPORTED -gt 0 ]; then
-            echo "has_exports=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_exports=false" >> "$GITHUB_OUTPUT"
-          fi
+          # Always commit since we're doing full export (not incremental)
+          echo "has_exports=true" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push exports
         if: steps.export.outputs.has_exports == 'true'
@@ -546,6 +536,6 @@ for row in sorted(url_map.values(), key=lambda x: x[13], reverse=True):
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add exports/
-          git commit -m "Export Done items $(date -u +%Y-%m-%d)"
+          git commit -m "Export active items $(date -u +%Y-%m-%d)" || echo "No changes to commit"
           git pull --rebase origin main
           git push

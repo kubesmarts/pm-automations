@@ -2,7 +2,7 @@ name: JIRA Issues Compliance Checker
 
 on:
   schedule:
-    # Run daily at 02:00 UTC (1 hour after export-done-items)
+    # Run daily at 02:00 UTC (1 hour after gh-export-done-items)
     - cron: '0 2 * * *'
   workflow_dispatch:
     inputs:
