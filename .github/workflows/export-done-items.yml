@@ -455,18 +455,52 @@ jobs:
               SORTED_NEW_ITEMS=$(mktemp)
               sort -t'|' -k1,1r "$NEW_ITEMS_FILE" | cut -d'|' -f2- > "$SORTED_NEW_ITEMS"
 
-              # Create or update export file
-              if [ ! -f "$EXPORT_FILE" ] || [ ! -s "$EXPORT_FILE" ]; then
+              # Deduplicate by Issue URL, keeping newest Reporting Date
+              if [ -f "$EXPORT_FILE" ] && [ -s "$EXPORT_FILE" ]; then
+                # Combine existing and new items, deduplicate by Issue URL (column 3)
+                # Keep entry with newest Reporting Date (column 14)
+                TEMP_MERGED=$(mktemp)
+
+                # Extract existing data (skip header)
+                tail -n +2 "$EXPORT_FILE" > "$TEMP_MERGED"
+
+                # Append new items
+                cat "$SORTED_NEW_ITEMS" >> "$TEMP_MERGED"
+
+                # Deduplicate using Python for proper CSV parsing
+                DEDUPED_FILE=$(mktemp)
+                python3 -c "
+import csv
+import sys
+
+# Read all items
+url_map = {}
+with open('$TEMP_MERGED', 'r') as f:
+    reader = csv.reader(f)
+    for row in reader:
+        if len(row) >= 14:
+            url = row[2]  # Issue URL (column 3, index 2)
+            reporting_date = row[13]  # Reporting Date (column 14, index 13)
+
+            # Keep entry with newest Reporting Date
+            if url not in url_map or reporting_date > url_map[url][13]:
+                url_map[url] = row
+
+# Write deduplicated data sorted by Reporting Date (descending)
+writer = csv.writer(sys.stdout)
+for row in sorted(url_map.values(), key=lambda x: x[13], reverse=True):
+    writer.writerow(row)
+" > "$DEDUPED_FILE"
+
+                # Write final file with header
+                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
+                cat "$DEDUPED_FILE" >> "$EXPORT_FILE"
+
+                rm -f "$TEMP_MERGED" "$DEDUPED_FILE"
+              else
                 # First export - create file with header and new items
                 echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
                 cat "$SORTED_NEW_ITEMS" >> "$EXPORT_FILE"
-              else
-                # Incremental export - rewrite header to current format, prepend new items, then keep existing data rows
-                TEMP_FILE=$(mktemp)
-                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$TEMP_FILE"
-                cat "$SORTED_NEW_ITEMS" >> "$TEMP_FILE"
-                tail -n +2 "$EXPORT_FILE" >> "$TEMP_FILE"
-                mv "$TEMP_FILE" "$EXPORT_FILE"
               fi
 
               rm -f "$SORTED_NEW_ITEMS"

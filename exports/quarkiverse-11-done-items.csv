@@ -1,13 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
 127,,https://github.com/serverlessworkflow/editor/issues/127,feat: Implement Storybook structure and styling,cheryl7114,,Tooling,Normal,,2026/Q2,M,1.0,0.8,2026-05-29,,Rough estimate
-127,,https://github.com/serverlessworkflow/editor/issues/127,feat: Implement Storybook structure and styling,cheryl7114,,Tooling,Normal,,2026/Q2,M,1.0,0.7,2026-05-28,,Rough estimate
 1310,,https://github.com/serverlessworkflow/sdk-java/issues/1310,Rename workflow to subflow,mcruzdev,,Runtimes,Normal,,2026/Q2,S,0.2,0.2,2026-05-28,,
 545,,https://github.com/quarkiverse/quarkus-flow/issues/545,feat: Load all Langchain4J Agentic Workflows eagerly,ricardozanini,,Runtimes,Critical,,2026/Q2,L,2.0,1.7,2026-05-28,,
 552,,https://github.com/quarkiverse/quarkus-flow/issues/552,Add support for excluding specific workflows from persistence via configuration,mcruzdev,,Runtimes,Normal,,2026/Q2,M,0.4,0.4,2026-05-28,,
 100,,https://github.com/serverlessworkflow/editor/issues/100,feat: Configure CI for npm package publishing,fantonangeli,,Tooling,Normal,,,M,0.6,0.1,2026-05-27,,
 126,,https://github.com/serverlessworkflow/editor/issues/126,feat: Implement release and changelog process,fantonangeli,,Tooling,Major,,,M,0.8,1.0,2026-05-27,,
-127,,https://github.com/serverlessworkflow/editor/issues/127,feat: Implement Storybook structure and styling,cheryl7114,,Tooling,Normal,,,M,1.0,0.7,2026-05-27,,Rough estimate
-545,,https://github.com/quarkiverse/quarkus-flow/issues/545,feat: Load all Langchain4J Agentic Workflows eagerly,ricardozanini,,Runtimes,Critical,,,L,2.0,1.7,2026-05-27,,
 1395,,https://github.com/serverlessworkflow/sdk-java/issues/1395,AllStrategyCorrelationInfo persistence default implementation,fjtirado,,Runtimes,Major,,,M,0.6,0.6,2026-05-26,,
 54,,https://github.com/serverlessworkflow/editor/issues/54,feat: Integrate ELKjs for automatic diagram layout,handreyrc,,Tooling,Normal,,,M,0.8,0.8,2026-05-26,,
 557,,https://github.com/quarkiverse/quarkus-flow/issues/557,bug: examples/durable-workflow-k8s/README.md has incorrect steps,domhanak,,Docs,Normal,,2026/Q2,XS,0.1,0.1,2026-05-23,,
@@ -34,7 +31,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 53,,https://github.com/serverlessworkflow/editor/issues/53,feat: Build minimal React Flow diagram from model,handreyrc,,Tooling,Normal,,2026/Q2,M,1.0,1.0,2026-05-12,,
 125,,https://github.com/serverlessworkflow/editor/issues/125,feat: Define local integration testing strategy,fantonangeli,,Tooling,Major,,2026/Q2,M,0.6,0.0,2026-05-09,,
 497,,https://github.com/quarkiverse/quarkus-flow/issues/497,bug: Cannot to inject a Flow bean using a normal identifier,mcruzdev,,Runtimes,Critical,,2026/Q2,,0.6,0.1,2026-05-08,,
-103,,https://github.com/serverlessworkflow/editor/issues/103,Spike: Define local integration testing strategy,fantonangeli,,Tooling,Normal,,2026/Q2,S,0.2,0.2,2026-05-06,,
 1354,,https://github.com/serverlessworkflow/sdk-java/issues/1354,ForExecutor race condition: shared TaskContext causes wrong items to be processed in async loops,"ricardozanini,fjtirado",,Runtimes,Normal,,2026/Q2,S,0.1,0.1,2026-05-06,,
 273,,https://github.com/quarkiverse/quarkus-flow/issues/273,docs: Add an instance correlation pattern,mcruzdev,,Runtimes,Blocker,,2026/Q2,M,3.0,2.0,2026-05-06,,
 1349,,https://github.com/serverlessworkflow/sdk-java/issues/1349,Allow set workflow version with FuncWorkflowBuilder,mcruzdev,,Runtimes,Minor,,2026/Q2,XS,0.1,0.1,2026-05-02,,
@@ -73,11 +69,9 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 445,,https://github.com/quarkiverse/quarkus-flow/issues/445,Improve Workflow and Task Correlation in Grafana Dashboard,mcruzdev,,Tooling,Normal,,2026/Q2,S,0.4,0.4,2026-04-19,,
 455,,https://github.com/quarkiverse/quarkus-flow/issues/455,Add support to IBM Bob,mcruzdev,,Tooling,Normal,,2026/Q2,S,0.2,0.2,2026-04-19,,
 1303,,https://github.com/serverlessworkflow/sdk-java/issues/1303,JsonQueryException when using FuncDSL.openapi,"mcruzdev,fjtirado",,Runtimes,Normal,,2026/Q1,S,0.2,0.3,2026-04-18,,
-448,,https://github.com/quarkiverse/quarkus-flow/issues/448,Add Structured Logging Listener for Workflow Lifecycle Events,ricardozanini,,Runtimes,Normal,,2026/Q2,M,0.1,0.1,2026-04-18,,
 458,,https://github.com/quarkiverse/quarkus-flow/issues/458,HTTP workflows hang: Missing ManagedExecutor integration for SDK's ExecutorServiceFactory,ricardozanini,,Runtimes,Blocker,,2026/Q2,S,0.1,0.1,2026-04-18,,
 65,3,https://github.com/serverlessworkflow/editor/issues/65,feat: create a package.json validation CI,"lornakelly,fantonangeli",,Tooling,Normal,,2026/Q3,S,0.3,0.1,2026-04-18,,
 1314,,https://github.com/serverlessworkflow/sdk-java/issues/1314,Make CloudEvent type constants in AbstractLifeCyclePublisher public,ricardozanini,,Runtimes,Normal,,2026/Q2,XS,0.1,0.1,2026-04-17,,
-1317,,https://github.com/serverlessworkflow/sdk-java/issues/1317,Wrong field usage on FAult lifecycle cloud event,fjtirado,,Runtimes,Normal,,2026/Q2,S,0.2,0.2,2026-04-17,,
 9,2,https://github.com/serverlessworkflow/editor/issues/9,Update readme with folder structure,lornakelly,,Tooling,Normal,,2026/Q2,S,0.1,0.1,2026-04-17,,
 1315,,https://github.com/serverlessworkflow/sdk-java/issues/1315,NullPointer if Subflow is running wihtout specifiying input,fjtirado,,Runtimes,Normal,,2026/Q1,XS,0.1,0.1,2026-04-16,,
 49,4,https://github.com/serverlessworkflow/editor/issues/49,feat: Add model to store as source of truth,lornakelly,,Tooling,Major,,2026/Q2,S,0.4,0.3,2026-04-16,,
@@ -102,7 +96,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 16,2,https://github.com/serverlessworkflow/editor/issues/16,Set up context and global context provider component for state management,handreyrc,,Tooling,Major,,2026/Q2,S,0.7,0.8,2026-04-09,,
 421,,https://github.com/quarkiverse/quarkus-flow/issues/421,FlowSchedulerTest fails intermittently due to sub-second interval limitation,ricardozanini,,Runtimes,Blocker,,2026/Q2,XS,0.1,0.1,2026-04-09,,
 424,,https://github.com/quarkiverse/quarkus-flow/issues/424,WorkflowDefinition should be accesible from Flow,ricardozanini,,Runtimes,Normal,,2026/Q2,XS,0.1,0.1,2026-04-09,,
-48,4,https://github.com/serverlessworkflow/editor/issues/48,Spike: Investigate SDK graph output for diagram model,lornakelly,,Tooling,Major,,2026/Q2,M,0.4,0.4,2026-04-09,,
 399,,https://github.com/quarkiverse/quarkus-flow/issues/399,bug: Grafana dashboard must use time window selected by the use (dynamically),mcruzdev,,Tooling,Minor,,2026/Q2,XS,0.2,0.2,2026-04-08,,
 43,4,https://github.com/serverlessworkflow/editor/issues/43,feat: Integrate TypeScript SDK (spec 1.0) into diagram editor,lornakelly,,Tooling,Major,,2026/Q2,M,0.4,0.4,2026-04-08,,
 1283,,https://github.com/serverlessworkflow/sdk-java/issues/1283,[Experimental] Run java function calls asynchronously,fjtirado,,Runtimes,Major,,2026/Q1,S,0.3,0.3,2026-04-07,,
