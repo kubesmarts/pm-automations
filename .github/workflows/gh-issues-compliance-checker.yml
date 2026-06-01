@@ -997,6 +997,7 @@ jobs:
               declare -A ISSUE_ESTIMATE
               declare -A ISSUE_REMAINING
               declare -A ISSUE_SPENT
+              declare -A ISSUE_STATUS
               declare -A ISSUE_TITLE
               
               while IFS= read -r item; do
@@ -1015,6 +1016,7 @@ jobs:
                 ISSUE_ESTIMATE["$key"]=$(get_field "$item" "Estimate")
                 ISSUE_REMAINING["$key"]=$(get_field "$item" "Remaining Work")
                 ISSUE_SPENT["$key"]=$(get_field "$item" "Time Spent")
+                ISSUE_STATUS["$key"]=$(get_field "$item" "Status")
                 ISSUE_TITLE["$key"]=$(echo "$item" | jq -r '.content.title // ""')
               done < "$ITEMS_FILE"
               
@@ -1164,14 +1166,25 @@ jobs:
                 PARENT_ESTIMATE=$(get_field "$item" "Estimate")
                 PARENT_REMAINING=$(get_field "$item" "Remaining Work")
                 PARENT_SPENT=$(get_field "$item" "Time Spent")
-                
+                PARENT_STATUS=$(get_field "$item" "Status")
+
                 # Convert empty strings to 0
                 [ -z "$PARENT_ESTIMATE" ] && PARENT_ESTIMATE=0
                 [ -z "$PARENT_REMAINING" ] && PARENT_REMAINING=0
                 [ -z "$PARENT_SPENT" ] && PARENT_SPENT=0
-                
+
+                # Calculate inferred remaining work for parent if needed
+                PARENT_INFERRED=0
+                if [ "$PARENT_STATUS" != "Done" ] && [ "$PARENT_STATUS" != "Cancelled" ] && [ "$PARENT_REMAINING" = "0" ] && [ "$PARENT_ESTIMATE" != "0" ]; then
+                  if [ "$PARENT_SPENT" = "0" ]; then
+                    PARENT_INFERRED="$PARENT_ESTIMATE"
+                  else
+                    PARENT_INFERRED=$(awk "BEGIN {rem = $PARENT_ESTIMATE - $PARENT_SPENT; print (rem > 0 && $PARENT_SPENT <= $PARENT_ESTIMATE) ? rem : 0}")
+                  fi
+                fi
+
                 SIGMA_EST="$PARENT_ESTIMATE"
-                SIGMA_REM="$PARENT_REMAINING"
+                SIGMA_REM=$(awk "BEGIN {print ($PARENT_REMAINING == 0) ? $PARENT_INFERRED : $PARENT_REMAINING}")
                 SIGMA_SP="$PARENT_SPENT"
                 
                 DESCENDANT_COUNT=0
@@ -1180,15 +1193,33 @@ jobs:
                   desc_est=${ISSUE_ESTIMATE["$desc_key"]:-0}
                   desc_rem=${ISSUE_REMAINING["$desc_key"]:-0}
                   desc_sp=${ISSUE_SPENT["$desc_key"]:-0}
-                  
+                  desc_status=${ISSUE_STATUS["$desc_key"]:-}
+
                   [ -z "$desc_est" ] && desc_est=0
                   [ -z "$desc_rem" ] && desc_rem=0
                   [ -z "$desc_sp" ] && desc_sp=0
-                  
+
+                  # Calculate inferred remaining work for active issues when Remaining Work is empty
+                  INFERRED_REMAINING=0
+                  if [ "$desc_status" != "Done" ] && [ "$desc_status" != "Cancelled" ] && [ "$desc_rem" = "0" ] && [ "$desc_est" != "0" ]; then
+                    if [ "$desc_sp" = "0" ]; then
+                      # Case 1: No time spent yet - use full estimate
+                      INFERRED_REMAINING="$desc_est"
+                    else
+                      # Case 2: Time spent exists - calculate remaining as (estimate - timeSpent)
+                      # Only if timeSpent <= estimate (avoid negative values)
+                      CALC_REMAINING=$(awk "BEGIN {rem = $desc_est - $desc_sp; print (rem > 0 && $desc_sp <= $desc_est) ? rem : 0}")
+                      INFERRED_REMAINING="$CALC_REMAINING"
+                    fi
+                  fi
+
+                  # Use inferred value if Remaining Work is empty, otherwise use explicit value
+                  EFFECTIVE_REMAINING=$(awk "BEGIN {print ($desc_rem == 0) ? $INFERRED_REMAINING : $desc_rem}")
+
                   SIGMA_EST=$(awk "BEGIN {print $SIGMA_EST + $desc_est}")
-                  SIGMA_REM=$(awk "BEGIN {print $SIGMA_REM + $desc_rem}")
+                  SIGMA_REM=$(awk "BEGIN {print $SIGMA_REM + $EFFECTIVE_REMAINING}")
                   SIGMA_SP=$(awk "BEGIN {print $SIGMA_SP + $desc_sp}")
-                  
+
                   DESCENDANT_COUNT=$((DESCENDANT_COUNT + 1))
                 done
                 

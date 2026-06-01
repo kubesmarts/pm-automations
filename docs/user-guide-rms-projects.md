@@ -370,6 +370,40 @@ The project includes three **system-managed** fields that automatically calculat
 - Supports nested hierarchies up to 10 levels deep
 - Example: Epic → Sub-issue → Sub-sub-issue (all included in Epic's Σ fields)
 
+#### Smart Remaining Work Calculation
+
+For **active issues** (not "Done" or "Cancelled"), the Σ Remaining Work calculation intelligently infers remaining work when the Remaining Work field is empty:
+
+**Case 1: Estimate exists, no time spent yet**
+- Uses the full Estimate value as inferred remaining work
+- Logic: If work hasn't started, the full estimate remains
+
+**Case 2: Estimate exists, time has been spent**
+- Calculates: `Estimate - Time Spent` (if positive and Time Spent ≤ Estimate)
+- Logic: Infers progress based on time logged vs. estimate
+
+**Explicit values take precedence:**
+- If Remaining Work is explicitly set → that value is used
+- If Remaining Work is empty → inferred value is calculated
+
+**Example:**
+
+```
+Sub-issue with Estimate = 5, Time Spent = 2, Remaining Work = (empty)
+  → Inferred Remaining Work = 3 (5 - 2)
+  → Contributes 3 to parent's Σ Remaining Work
+
+Sub-issue with Estimate = 3, Time Spent = 0, Remaining Work = (empty)
+  → Inferred Remaining Work = 3 (full estimate)
+  → Contributes 3 to parent's Σ Remaining Work
+
+Sub-issue with Estimate = 2, Time Spent = 1, Remaining Work = 1.5 (explicit)
+  → Uses explicit value 1.5
+  → Contributes 1.5 to parent's Σ Remaining Work
+```
+
+This ensures planned work is visible in Σ Remaining Work even when explicit tracking hasn't started yet.
+
 #### Example
 
 ```
