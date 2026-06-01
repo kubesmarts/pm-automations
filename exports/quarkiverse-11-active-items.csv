@@ -1,7 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
 1206,,https://github.com/serverlessworkflow/sdk-java/issues/1206,Feat: Implement correlation on event filter,fjtirado,In progress,,Runtimes,Normal,,2026/Q2,L,1.0,,0.1,1.0,0.0,0.1,,
 1087,,https://github.com/serverlessworkflow/sdk-java/issues/1087,Add support to a2a,fjtirado,Backlog,,Runtimes,Minor,,2026/Q2,L,1.0,,,1.0,0.0,0.0,,
-576,,https://github.com/quarkiverse/quarkus-flow/issues/576,Avoid rely on quarkus-hibernate-orm-panache we should rely on quarkus-hibernate-orm,mcruzdev,In progress,,,,,,,,,,,,,,
+576,,https://github.com/quarkiverse/quarkus-flow/issues/576,Avoid rely on quarkus-hibernate-orm-panache we should rely on quarkus-hibernate-orm,mcruzdev,In progress,,,,,,,,,,0.0,0.0,0.0,,
 547,,https://github.com/quarkiverse/quarkus-flow/issues/547,Enhance Quarkus LangChain4j Workshop with Flow capabilities,ricardozanini,In progress,,Runtimes,Critical,,2026/Q2,L,2.0,0.2,2.0,2.0,0.2,2.0,,
 523,51,https://github.com/quarkiverse/quarkus-flow/issues/523,feat: Integrate Serverless Workflow Editor package into DevUI,fantonangeli,In progress,,Tooling,Normal,,2026/Q2,M,0.8,,0.8,0.8,0.0,0.8,,
 488,,https://github.com/quarkiverse/quarkus-flow/issues/488,task: Refactor docs module: Reorganize DSL examples and enable Maven test execution,domhanak,Backlog,,Docs,Major,,2026/Q2,M,0.6,,0.6,0.6,0.0,0.6,,
