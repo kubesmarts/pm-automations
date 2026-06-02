@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+560,,https://github.com/quarkiverse/quarkus-flow/issues/560,bug: Build fails with MethodTooLargeException when registering multiple Flow workflow definitions,ricardozanini,,Runtimes,Blocker,,2026/Q2,M,1.0,0.8,2026-06-02,,
 568,,https://github.com/quarkiverse/quarkus-flow/issues/568,Downgrade Quarkus Flow to look Quarkus LTS,mcruzdev,,CI,Major,,2026/Q2,XS,0.2,0.2,2026-05-31,,
 1406,,https://github.com/serverlessworkflow/sdk-java/issues/1406,Allow customization of the content of Lifecycle cloudevents,fjtirado,,Runtimes,Major,,2026/Q2,M,0.4,0.4,2026-05-30,,
 1408,,https://github.com/serverlessworkflow/sdk-java/issues/1408,Flaky test due to a java.lang.UnsupportedOperationException,fjtirado,,Runtimes,Normal,,2026/Q2,S,0.2,0.2,2026-05-30,,

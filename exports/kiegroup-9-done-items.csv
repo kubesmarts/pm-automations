@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+42,,https://github.com/tkobayas/drlx-parser/issues/42,Windows (temporal and length-based),tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-06-02,,
 11,,https://github.com/casehubio/flow/issues/11,Add OpenAPI specification and Swagger UI for REST API documentation,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-05-31,,
 6733,,https://github.com/apache/incubator-kie-drools/issues/6733,"ListDataStore loses insertion order due to IdentityHashMap, breaking sliding window replay",tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-05-30,,
 10,,https://github.com/casehubio/flow/issues/10,Add health check endpoints for k8s liveness and readiness probes,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-05-29,,
@@ -8,7 +9,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 196,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/196,EDA : Add migration tests sub-module for HA persistence compatibility,tkobayas,,QE,Major,,,M,0.2,0.2,2026-05-27,,
 33,,https://github.com/tkobayas/drlx-parser/issues/33,Java++ property accessors in consequences (setter desugaring),tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-27,,
 35,,https://github.com/tkobayas/drlx-parser/issues/35,Java++ List and Map access — integration tests,tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-27,,
-42,,https://github.com/tkobayas/drlx-parser/issues/42,Windows (temporal and length-based),tkobayas,,Runtimes,Major,,,S,0.1,0.0,2026-05-27,,
 62,,https://github.com/tkobayas/drlx-parser/issues/62,Positional out-binding (var in positional args),tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-27,,
 67,,https://github.com/tkobayas/drlx-parser/issues/67,Basic length/time windows,tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-27,,
 6711,,https://github.com/apache/incubator-kie-drools/issues/6711,Issue: NoSuchMethodError after multiple executions when using dynamic rules (KieFileSystem),tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-27,,
