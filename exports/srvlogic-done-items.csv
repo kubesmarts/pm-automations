@@ -39,7 +39,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 893,,https://redhat.atlassian.net/browse/SRVLOGIC-893,Revise variables handling on kubesmarts/kie-tools CI workflows,domhanak,Task,CI,Critical,Serverless logic,1.38.0 OSL,,0,0,2026-05-20,,
 891,,https://redhat.atlassian.net/browse/SRVLOGIC-891,Bumb the quarkus-embedded-postgresql to 0.8.0,wmedvede,Task,Runtimes,Blocker,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-05-20,,
 888,,https://redhat.atlassian.net/browse/SRVLOGIC-888,PR checks for downstream fails on deps not found,jankrystof-ibm,Bug,CI,Critical,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-05-20,,
-883,,https://redhat.atlassian.net/browse/SRVLOGIC-883,Harden workflow against network failures and GraphQL errors,dgutierr,Story,PM,Critical,Serverless logic,Future OSL,,1.0,0.4,2026-04-24,,
+883,,https://redhat.atlassian.net/browse/SRVLOGIC-883,Harden workflow against network failures and GraphQL errors,dgutierr,Story,PM,Critical,Serverless logic,Future,,1.0,0.4,2026-04-24,,
 865,,https://redhat.atlassian.net/browse/SRVLOGIC-865,DB Mibrator Job is not created with the correct image tag,wmedvede,Bug,Cloud,Blocker,Serverless logic,1.38.0 OSL,,0.8,0.8,2026-05-20,,
 864,,https://redhat.atlassian.net/browse/SRVLOGIC-864,Nightly prod build fails building non-OSL modules after March 3rd sync,domhanak,Bug,Productization,Blocker,Serverless logic,1.38.0 OSL,,0,0,2026-05-20,,
 860,,https://redhat.atlassian.net/browse/SRVLOGIC-860,QE verification of SRVLOGIC-723,gmunozfe,Task,QE,Major,Serverless logic,1.38.0 OSL,,0.4,0.4,2026-05-20,,

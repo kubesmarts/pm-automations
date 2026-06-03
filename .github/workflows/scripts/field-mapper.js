@@ -54,7 +54,7 @@ function mapPriority(jiraPriority) {
 /**
  * Format target milestone from fixVersions
  * - Takes first fixVersion
- * - Appends " OSL" suffix for SRVLOGIC project
+ * - Appends " OSL" suffix for SRVLOGIC project (unless version contains "Future")
  */
 function formatTargetMilestone(fixVersions, projectKey) {
   if (!fixVersions || fixVersions.length === 0) return '';
@@ -62,7 +62,8 @@ function formatTargetMilestone(fixVersions, projectKey) {
   let milestone = fixVersions[0].name;
 
   // SRVLOGIC special rule: append " OSL" suffix
-  if (projectKey === 'SRVLOGIC') {
+  // Exception: do not append if version contains "Future" (case insensitive)
+  if (projectKey === 'SRVLOGIC' && !milestone.toLowerCase().includes('future')) {
     milestone += ' OSL';
   }
 

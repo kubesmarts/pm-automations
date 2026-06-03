@@ -215,7 +215,7 @@ A ticket is **NOT exported** if any of these conditions are true:
 ### 5. No Assignee and No Specific Version (When Whitelist Configured)
 - Whitelist is configured (`contributors.csv` exists)
 - AND ticket has no assignee
-- AND ticket does NOT have a specific fixVersion set (empty or "Future")
+- AND ticket does NOT have a specific fixVersion set (empty or containing the word "Future" case insensitive)
 - **Rationale:** Unassigned work must be tied to a release to be tracked
 
 **Special Case - Whitelisted Backlog Export:**
@@ -361,7 +361,7 @@ Use the JIRA `fixVersions` field value as-is.
 
 ### SRVLOGIC Project Special Rule
 For tickets belonging to the SRVLOGIC project (detected by `project.key === "SRVLOGIC"`):
-- Append `" OSL"` suffix to the fixVersion value
+- Append `" OSL"` suffix to the fixVersion value (only if fixVersion does not contain the word "Future", case unsensitive)
 - **Example:** `"1.39.0"` → `"1.39.0 OSL"`
 
 **Handling Multiple Fix Versions:**
@@ -414,7 +414,7 @@ const initiative = PROJECT_NAMES[projectKey] || projectKey
 **Backlog Items Special Rule:**
 - Backlog status items are ONLY exported if:
   - They have a fixVersion set AND
-  - fixVersion is NOT "Future" AND
+  - fixVersion does NOT contain "Future" (case unsensitive) AND
   - (Assignee matches whitelist OR no whitelist configured)
 
 **CSV Columns (Active Items):**
@@ -753,7 +753,7 @@ Summary:
 ✅ Load and parse contributor whitelist (if exists)
 ✅ Fuzzy match JIRA assignee names to contributor names
 ✅ Apply all eligibility rules correctly
-✅ Export backlog items with specific fixVersion (not Future)
+✅ Export backlog items with specific fixVersion (not starting with "Future")
 ✅ Extract area from area/* labels (first match, capitalized)
 ✅ Convert JIRA time values to weeks (1 decimal precision)
 ✅ Apply OSL suffix to SRVLOGIC fixVersions
