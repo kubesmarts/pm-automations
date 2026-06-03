@@ -95,7 +95,7 @@ function generateActiveItemsCSV(issues, projectKey) {
   if (!issues || issues.length === 0) return null;
 
   const csvData = arrayToCSV(issues, ACTIVE_ITEMS_COLUMNS);
-  const fileName = `${projectKey.toLowerCase()}-export-active-items.csv`;
+  const fileName = `${projectKey.toLowerCase()}-active-items.csv`;
 
   return {
     fileName,

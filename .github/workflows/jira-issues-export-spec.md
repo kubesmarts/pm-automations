@@ -401,8 +401,8 @@ const initiative = PROJECT_NAMES[projectKey] || projectKey
 
 ### Active Items Export
 
-**File Name Format:** `<project>-export-active-items.csv`
-- Example: `srvlogic-export-active-items.csv`
+**File Name Format:** `<project>-active-items.csv`
+- Example: `srvlogic-active-items.csv`
 - Project name is **lowercase**
 
 **Eligibility:**
@@ -441,13 +441,13 @@ const initiative = PROJECT_NAMES[projectKey] || projectKey
 | Comments | (empty) | Reserved for future use |
 
 **File Replacement:**
-- If `<project>-export-active-items.csv` exists → **completely replace** with new export
+- If `<project>-active-items.csv` exists → **completely replace** with new export
 - If file doesn't exist → create new file
 
 ### Done Items Export
 
-**File Name Format:** `<project>-export-done-items.csv`
-- Example: `srvlogic-export-done-items.csv`
+**File Name Format:** `<project>-done-items.csv`
+- Example: `srvlogic-done-items.csv`
 - Project name is **lowercase**
 
 **Eligibility:**
@@ -527,7 +527,7 @@ Before adding a new entry:
 **Example Scenario:**
 
 ```
-Existing file (srvlogic-export-done-items.csv):
+Existing file (srvlogic-done-items.csv):
 2026-05-30, SRVLOGIC-100, ...
 2026-05-29, SRVLOGIC-101, ...
 2026-05-28, SRVLOGIC-102, ...
@@ -551,10 +551,10 @@ All export files are written to the `exports/` directory in the repository root:
 
 ```
 exports/
-├── srvlogic-export-active-items.csv
-├── srvlogic-export-done-items.csv
-├── quarkus-export-active-items.csv
-├── quarkus-export-done-items.csv
+├── srvlogic-active-items.csv
+├── srvlogic-done-items.csv
+├── quarkus-active-items.csv
+├── quarkus-done-items.csv
 └── ...
 ```
 
@@ -638,10 +638,10 @@ Processing issues...
   ...
 
 Generating exports...
-  srvlogic-export-active-items.csv → 45 items (replaced)
-  srvlogic-export-done-items.csv → 3 new items added (total: 128)
-  quarkus-export-active-items.csv → 20 items (replaced)
-  quarkus-export-done-items.csv → 1 new item added (total: 89)
+  srvlogic-active-items.csv → 45 items (replaced)
+  srvlogic-done-items.csv → 3 new items added (total: 128)
+  quarkus-active-items.csv → 20 items (replaced)
+  quarkus-done-items.csv → 1 new item added (total: 89)
 
 Summary:
   Total issues processed: 150

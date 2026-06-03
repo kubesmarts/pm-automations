@@ -180,7 +180,7 @@ function generateExports(projectActiveItems, projectDoneItems) {
 
   // Generate done items exports (with merging)
   for (const [projectKey, newItems] of Object.entries(projectDoneItems)) {
-    const fileName = `${projectKey.toLowerCase()}-export-done-items.csv`;
+    const fileName = `${projectKey.toLowerCase()}-done-items.csv`;
 
     // Read existing done items
     const existingItems = readExistingCSV(EXPORTS_DIR, fileName, DONE_ITEMS_COLUMNS);
