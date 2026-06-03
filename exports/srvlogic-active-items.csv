@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
+1030,,https://redhat.atlassian.net/browse/SRVLOGIC-1030,Source ansible Python venv in provisioning jobs,baldimir,In Review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0.1,0,0.1,0.1,,,
 1029,,https://redhat.atlassian.net/browse/SRVLOGIC-1029,Remediate instance running smee-clients in rhos-d,domhanak,CODE REVIEW,Spike,,Blocker,Serverless logic,1.39.0 OSL,,0.1,0,0,0.1,,,,
 1028,603,https://redhat.atlassian.net/browse/SRVLOGIC-1028,Onboard OSL to IBM Delivery Platform,baldimir,CODE REVIEW,Task,,Major,Serverless logic,1.39.0 OSL,,0.1,0,0.1,0.1,,0.1,,
 1024,,https://redhat.atlassian.net/browse/SRVLOGIC-1024,Kubesmarts - logic web tools are pointing to community documentation,fantonangeli,Next,Bug,Tooling,Critical,Serverless logic,1.39.0 OSL,,0,0,0,,,,,
@@ -59,7 +60,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 839,,https://redhat.atlassian.net/browse/SRVLOGIC-839,Splitting string bigger than 65k.,fjtirado,Done,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,0,0,0,,,,,
 813,,https://redhat.atlassian.net/browse/SRVLOGIC-813,SonataFlow Deployment Webapp not able to start a workflow,fantonangeli,In Review,Bug,Tooling,Blocker,Serverless logic,1.39.0 OSL,,0.4,0.3,0.1,0.4,0.3,0.1,,
 811,,https://redhat.atlassian.net/browse/SRVLOGIC-811,Kubesmarts normal deployment Data Index not available,fantonangeli,In Review,Bug,Tooling,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.1,0.1,0.2,0.1,0.1,,
-999,,https://redhat.atlassian.net/browse/SRVLOGIC-999,Remove Dashbuilder from Management Console,fantonangeli,Next,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,2.0,0,2.0,2.0,,2.0,,
+999,,https://redhat.atlassian.net/browse/SRVLOGIC-999,Remove Dashbuilder from Management Console,fantonangeli,In Progress,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,2.0,0,2.0,2.0,,2.0,,
 998,,https://redhat.atlassian.net/browse/SRVLOGIC-998,Create a guide about how to publish new version of Serverless Logic to start.kubesmarts.org. ,baldimir,In Review,Task,CI,Normal,Serverless logic,1.39.0 OSL,,0.1,0.1,0,0.1,0.1,,,
 988,,https://redhat.atlassian.net/browse/SRVLOGIC-988,Upgrade qe-jenkins to 2.541.3,domhanak,In Review,Task,QE,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.1,0,0.2,0.1,,,
 987,,https://redhat.atlassian.net/browse/SRVLOGIC-987,Remove unneeded kiegroup/kogito-examples,baldimir,In Review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,0,0.2,0.2,,,
