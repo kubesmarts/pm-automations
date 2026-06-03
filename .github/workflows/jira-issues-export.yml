@@ -41,12 +41,12 @@ jobs:
           PSYNC_JIRA_FILTERS: ${{ vars.PSYNC_JIRA_FILTERS }}
           PSYNC_JIRA_JQL: ${{ vars.PSYNC_JIRA_JQL }}
           PSYNC_JIRA_PROJECTS: ${{ vars.PSYNC_JIRA_PROJECTS }}
-          DRY_RUN: ${{ inputs.dry_run || 'false' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           node .github/workflows/scripts/jira-export.js
 
       - name: Upload export artifacts
-        if: ${{ !inputs.dry_run }}
+        if: ${{ github.event.inputs.dry_run != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: jira-exports-${{ github.run_number }}
@@ -54,7 +54,7 @@ jobs:
           retention-days: 30
 
       - name: Commit and push export files
-        if: ${{ !inputs.dry_run }}
+        if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
