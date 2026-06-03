@@ -47,9 +47,9 @@ class JiraClient {
 
     async searchIssues(jql, startAt = 0, maxResults = 100) {
         const encodedJql = encodeURIComponent(jql);
-        const fields = 'summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components';
+        const fields = 'summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,project,issuetype,parent,updated,aggregatetimeoriginalestimate,aggregatetimespent,aggregatetimeestimate';
         const endpoint = `/rest/api/3/search/jql?jql=${encodedJql}&fields=${fields}&maxResults=${maxResults}&startAt=${startAt}`;
-        
+
         console.log(`Searching issues with JQL: ${jql} (startAt: ${startAt})`);
         return await this.makeRequest(endpoint);
     }

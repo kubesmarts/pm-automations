@@ -1,0 +1,72 @@
+name: JIRA Issues Export
+
+on:
+  schedule:
+    # Daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no files written)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  export-jira-issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd .github/workflows/scripts
+          npm install node-fetch@2
+
+      - name: Export JIRA issues
+        env:
+          PSYNC_JIRA_BASE_URL: ${{ vars.PSYNC_JIRA_BASE_URL }}
+          PSYNC_JIRA_EMAIL: ${{ vars.PSYNC_JIRA_EMAIL }}
+          PSYNC_PAT_JIRA: ${{ secrets.PSYNC_PAT_JIRA }}
+          PSYNC_JIRA_FILTERS: ${{ vars.PSYNC_JIRA_FILTERS }}
+          PSYNC_JIRA_JQL: ${{ vars.PSYNC_JIRA_JQL }}
+          PSYNC_JIRA_PROJECTS: ${{ vars.PSYNC_JIRA_PROJECTS }}
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
+        run: |
+          node .github/workflows/scripts/jira-export.js
+
+      - name: Upload export artifacts
+        if: ${{ !inputs.dry_run }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: jira-exports-${{ github.run_number }}
+          path: exports/*.csv
+          retention-days: 30
+
+      - name: Commit and push export files
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Check if there are changes to commit
+          if [[ -n $(git status --porcelain exports/) ]]; then
+            git add exports/
+            git commit -m "Export active items $(date -u +%Y-%m-%d)
+
+Export Done items $(date -u +%Y-%m-%d)"
+            git push
+            echo "Export files committed and pushed"
+          else
+            echo "No changes to export files"
+          fi
