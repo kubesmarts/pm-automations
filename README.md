@@ -10,6 +10,7 @@ A collection of project management automations for GitHub Projects, covering pro
 | [GH Export Done Items](.github/workflows/gh-export-done-items.md) | Exports completed items from GitHub Projects to CSV files with incremental weekly exports. Runs every Sunday at 00:00 UTC |
 | [GH Export Active Items](.github/workflows/gh-export-active-items.md) | Exports active items (non-Done, non-Cancelled) and Backlog items with specific versions from GitHub Projects to CSV files. Runs daily at 00:00 UTC |
 | [JIRA Issues Compliance Checker](.github/workflows/jira-compliance-checker.md) | Validates JIRA issues against software development lifecycle policies and adds a `compliance-alerts` label for tracking. Runs daily at 06:00 UTC |
+| [JIRA Issues Export](.github/workflows/jira-issues-export-spec.md) | Exports JIRA issues to CSV files for both active and done items. Uses hybrid discovery (filters/JQL/projects), contributor whitelist with fuzzy matching, and generates project-specific exports. Runs daily at 00:00 UTC |
 
 ## User guides
 
