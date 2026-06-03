@@ -20,9 +20,9 @@ function extractIssueNumber(issueKey) {
 
 /**
  * Extract area from area/* labels
- * Takes first label matching pattern, removes prefix, capitalizes first letter
- * Exceptions: CI and QE must be in uppercase
- * e.g., ["area/ci", "bug"] -> "CI"
+ * Takes first label matching pattern, removes prefix, capitalizes appropriately
+ * Rule: 2-letter areas are uppercase (CI, QE, PM), others capitalize first letter only
+ * e.g., ["area/ci", "bug"] -> "CI", ["area/docs", "bug"] -> "Docs"
  */
 function extractArea(labels) {
   if (!labels || labels.length === 0) return '';
@@ -33,12 +33,12 @@ function extractArea(labels) {
   const areaValue = areaLabel.substring(5); // Remove "area/" prefix
   if (!areaValue) return '';
 
-  // Special cases: CI and QE must be uppercase
-  const lowerValue = areaValue.toLowerCase();
-  if (lowerValue === 'ci') return 'CI';
-  if (lowerValue === 'qe') return 'QE';
+  // Rule: 2-letter areas go uppercase (CI, QE, PM, etc.)
+  if (areaValue.length === 2) {
+    return areaValue.toUpperCase();
+  }
 
-  // Capitalize first letter only for other values
+  // Capitalize first letter only for longer values
   return areaValue.charAt(0).toUpperCase() + areaValue.slice(1).toLowerCase();
 }
 

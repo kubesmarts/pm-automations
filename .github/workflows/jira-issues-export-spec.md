@@ -264,32 +264,34 @@ The `Area` field is derived from JIRA labels matching the pattern `area/<value>`
 1. Search all ticket labels for pattern `area/*`
 2. Take the **first** label matching this pattern
 3. Remove the `area/` prefix
-4. Capitalize only the first letter (exceptions: CI and QE must be in uppercase)
+4. Capitalize only the first letter (exceptions: CI, QE and PM must be in uppercase, in general two letters go uppercase)
 5. Use the result as the Area value
 
 **Examples:**
 
 | JIRA Labels | Extracted Area |
 |-------------|----------------|
-| `["area/ci", "bug"]` | `CI` |
+| `["area/ci", "bug"]` | `CI` (2 letters = uppercase) |
+| `["area/qe"]` | `QE` (2 letters = uppercase) |
+| `["area/pm"]` | `PM` (2 letters = uppercase) |
 | `["feature", "area/docs"]` | `Docs` |
 | `["area/productization", "area/cloud"]` | `Productization` (first match) |
 | `["area/runtimes"]` | `Runtimes` |
 | `["area/tooling"]` | `Tooling` |
-| `["area/qe"]` | `QE` |
 | `["bug", "feature"]` | (empty - no area label) |
 
 **Label Mapping Reference:**
 
-| Label | Area Value |
-|-------|------------|
-| `area/ci` | `CI` |
-| `area/docs` | `Docs` |
-| `area/productization` | `Productization` |
-| `area/cloud` | `Cloud` |
-| `area/runtimes` | `Runtimes` |
-| `area/tooling` | `Tooling` |
-| `area/qe` | `QE` |
+| Label | Area Value | Rule |
+|-------|------------|------|
+| `area/ci` | `CI` | 2 letters → uppercase |
+| `area/qe` | `QE` | 2 letters → uppercase |
+| `area/pm` | `PM` | 2 letters → uppercase |
+| `area/docs` | `Docs` | First letter capitalized |
+| `area/productization` | `Productization` | First letter capitalized |
+| `area/cloud` | `Cloud` | First letter capitalized |
+| `area/runtimes` | `Runtimes` | First letter capitalized |
+| `area/tooling` | `Tooling` | First letter capitalized |
 
 ## Time Value Conversion
 
