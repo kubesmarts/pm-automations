@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+824,,https://redhat.atlassian.net/browse/SRVLOGIC-824,Use remote artifacts from RH maven repo to publish images for Logic Web Tools ,fantonangeli,Task,Tooling,Major,Serverless logic,1.38.0 OSL,,1.0,1.6,2026-06-04,,
 810,,https://redhat.atlassian.net/browse/SRVLOGIC-810,Kubesmarts DevMode deployment DevUI not available,fantonangeli,Bug,Tooling,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.1,2026-06-02,,
 677,,https://redhat.atlassian.net/browse/SRVLOGIC-677,Kubesmarts cors-proxy ERR_CERT_DATE_INVALID,fantonangeli,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,0,0.5,2026-06-01,,
 748,,https://redhat.atlassian.net/browse/SRVLOGIC-748,Create a GHA to publish Kubesmarts images every Friday,baldimir,Feature,CI,Major,Serverless logic,1.38.0 OSL,,0.6,0.6,2026-06-01,,
