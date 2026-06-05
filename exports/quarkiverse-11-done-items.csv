@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+2,,https://github.com/serverlessworkflow/editor/issues/2,Epic: Editor foundation and repository scaffolding,lornakelly,,Tooling,Major,,2026/Q2,L,0.0,0.0,2026-06-05,,
+547,,https://github.com/quarkiverse/quarkus-flow/issues/547,Enhance Quarkus LangChain4j Workshop with Flow capabilities,ricardozanini,,Runtimes,Critical,,2026/Q2,L,2.0,0.2,2026-06-05,,
+84,,https://github.com/serverlessworkflow/editor/issues/84,feat: Add error boundary for diagram rendering,kumaradityaraj,,Tooling,Normal,,2026/Q2,M,0.4,0.6,2026-06-05,,
 141,,https://github.com/serverlessworkflow/editor/issues/141,feat: Add CatchContainer to graph node types,lornakelly,,Tooling,Normal,,2026/Q2,S,0.2,0.2,2026-06-04,,
 1414,,https://github.com/serverlessworkflow/sdk-java/issues/1414,TryTask: wrong jsonPosition generation when using the catch.do field,fjtirado,,Runtimes,Major,,2026/Q2,S,0.2,0.2,2026-06-04,,
 144,,https://github.com/serverlessworkflow/editor/issues/144,feat: Add right-hand sidebar - default state (workflow info),lornakelly,,Tooling,Normal,,2026/Q2,M,0.4,0.4,2026-06-04,,
