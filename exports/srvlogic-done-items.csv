@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1032,,https://redhat.atlassian.net/browse/SRVLOGIC-1032,Allign osl-images to 111-SNAPSHOT,domhanak,Task,,Blocker,Serverless logic,1.39.0 OSL,,0,0,2026-06-05,,
+360,,https://redhat.atlassian.net/browse/SRVLOGIC-360,New SWF Diagram Editor ts/ react / react flow - Milestone 0,handreyrc,Feature,Tooling,Normal,Serverless logic,1.38.0 OSL,,13.2,20.0,2026-06-05,,
 824,,https://redhat.atlassian.net/browse/SRVLOGIC-824,Use remote artifacts from RH maven repo to publish images for Logic Web Tools ,fantonangeli,Task,Tooling,Major,Serverless logic,1.38.0 OSL,,1.0,1.6,2026-06-04,,
 810,,https://redhat.atlassian.net/browse/SRVLOGIC-810,Kubesmarts DevMode deployment DevUI not available,fantonangeli,Bug,Tooling,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.1,2026-06-02,,
 677,,https://redhat.atlassian.net/browse/SRVLOGIC-677,Kubesmarts cors-proxy ERR_CERT_DATE_INVALID,fantonangeli,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,0,0.5,2026-06-01,,
