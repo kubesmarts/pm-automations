@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-1034,,https://redhat.atlassian.net/browse/SRVLOGIC-1034,Remove Dashbuilder from kie-tools samples catalog,fantonangeli,CODE REVIEW,Task,,Critical,Serverless logic,1.39.0 OSL,,0.2,0,0.2,0.2,,0.2,,
+1034,,https://redhat.atlassian.net/browse/SRVLOGIC-1034,Remove Dashbuilder from kie-tools samples catalog,fantonangeli,CODE REVIEW,Task,Tooling,Critical,Serverless logic,1.39.0 OSL,,0.2,0,0.2,0.2,,0.2,,
 1033,,https://redhat.atlassian.net/browse/SRVLOGIC-1033,Port IP parsing changes to the scripts for smee machines provisioning,baldimir,In Review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0,0.1,0.1,,0.1,,
 1031,,https://redhat.atlassian.net/browse/SRVLOGIC-1031,Nodejs needs to be updated to 24 in Jenkins machines. ,baldimir,In Review,Task,CI,Normal,Serverless logic,1.39.0 OSL,,0.1,0,0.1,0.1,,0.1,,
 1030,,https://redhat.atlassian.net/browse/SRVLOGIC-1030,Source ansible Python venv in provisioning jobs,baldimir,In Review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0.1,0,0.1,0.1,,,
