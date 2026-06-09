@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+169,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/169,EDA : Add more load test for HA,tkobayas,,QE,Major,,Ansible EDA 2.7.x,M,0.4,0.4,2026-06-09,,
+168,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/168,EDA : Details for the 1st HA release,tkobayas,,Runtimes,Major,,Ansible EDA 2.7.x,L,3.0,3.0,2026-06-09,,
+194,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/194,Backport commits to 2.0.x after 2.0.0-beta2,tkobayas,,Runtimes,Major,,Ansible EDA 2.7.x,S,0.2,0.2,2026-06-09,,
 77,,https://github.com/tkobayas/drlx-parser/issues/77,Query enhancements,tkobayas,,Runtimes,Normal,,Future,M,0.6,0.6,2026-06-06,,
 13,,https://github.com/casehubio/engine/issues/13,Replay Engine,treblereel,,Runtimes,Normal,,Future,M,0.5,0.5,2026-06-04,,
 42,,https://github.com/tkobayas/drlx-parser/issues/42,Windows (temporal and length-based),tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-06-02,,
@@ -17,7 +20,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 68,,https://github.com/tkobayas/drlx-parser/issues/68,Constraint before/after window,tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-27,,
 73,,https://github.com/tkobayas/drlx-parser/issues/73,Runtime support for CEP windows (EventHandle + STREAM mode),tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-27,,
 12,,https://github.com/casehubio/engine/issues/12,StateContext Replay Projection,treblereel,,Runtimes,Normal,,,L,0.7,0.7,2026-05-26,,
-169,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/169,EDA : Add more load test for HA,tkobayas,,QE,Major,,,M,0.4,0.4,2026-05-26,,
 182,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/182,Re-organize load tests,tkobayas,,QE,Major,,,M,0.7,0.7,2026-05-26,,
 58,,https://github.com/tkobayas/drlx-parser/issues/58,Queries: recursive / transitive closure,tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-26,,
 12,,https://github.com/tkobayas/drlx-parser/issues/12,Add `if` / `else` branching in rule body,tkobayas,,Runtimes,Major,,,S,0.1,0.1,2026-05-25,,
