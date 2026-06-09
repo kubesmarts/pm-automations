@@ -247,10 +247,10 @@ Based on the [JIRA Status to Policy Stage Mapping](https://github.com/kubesmarts
 |-------------|------------|-------|
 | NEW | Next | Planning stage |
 | REFINEMENT | Next | Planning stage |
-| IN PROGRESS | In Progress | Active work |
-| ON_DEV | In Progress | Active work |
-| CORE_REVIEW | In Review | Under review |
-| ON_QA | In Review | Under review |
+| IN PROGRESS | In progress | Active work |
+| ON_DEV | In progress | Active work |
+| CODE_REVIEW | In review | Under review |
+| ON_QA | In review | Under review |
 | RELEASE PENDING | Done | Completed |
 | CLOSED (resolution: Done) | Done | Completed |
 | CLOSED (other resolution) | Skipped | Not exported |
