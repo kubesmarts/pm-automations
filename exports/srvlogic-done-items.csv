@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1022,,https://redhat.atlassian.net/browse/SRVLOGIC-1022,Release 1.38.0 Kubesmarts,domhanak,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-06-09,,
+774,,https://redhat.atlassian.net/browse/SRVLOGIC-774,"Operator, DI, JS and Workflows migration from OSL 1.37.2 to OSL 1.38.0",wmedvede,Task,Cloud,Critical,Serverless logic,1.38.0 OSL,,0.6,0.6,2026-06-09,,
+811,,https://redhat.atlassian.net/browse/SRVLOGIC-811,Kubesmarts normal deployment Data Index not available,fantonangeli,Bug,Tooling,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.1,2026-06-09,,
 1032,,https://redhat.atlassian.net/browse/SRVLOGIC-1032,Allign osl-images to 111-SNAPSHOT,domhanak,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,0,0,2026-06-06,,
 360,,https://redhat.atlassian.net/browse/SRVLOGIC-360,New SWF Diagram Editor ts/ react / react flow - Milestone 0,handreyrc,Feature,Tooling,Normal,Serverless logic,1.38.0 OSL,,13.2,20.0,2026-06-05,,
 824,,https://redhat.atlassian.net/browse/SRVLOGIC-824,Use remote artifacts from RH maven repo to publish images for Logic Web Tools ,fantonangeli,Task,Tooling,Major,Serverless logic,1.38.0 OSL,,1.0,1.6,2026-06-04,,
@@ -32,7 +35,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 786,443,https://redhat.atlassian.net/browse/SRVLOGIC-786,[DOC] Merge Review,domhanak,Sub-task,Docs,Critical,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-05-20,,
 779,442,https://redhat.atlassian.net/browse/SRVLOGIC-779,[DOC] Merge Review,domhanak,Sub-task,Docs,Critical,Serverless logic,1.36.0 OSL,,0.1,0.1,2026-05-20,,
 777,,https://redhat.atlassian.net/browse/SRVLOGIC-777,OpenTelemetry E2E automated IT in examples,gmunozfe,Task,QE,Critical,Serverless logic,1.38.0 OSL,,2.0,2.0,2026-05-20,,
-774,,https://redhat.atlassian.net/browse/SRVLOGIC-774,"Operator, DI, JS and Workflows migration from OSL 1.37.2 to OSL 1.38.0",wmedvede,Task,Cloud,Critical,Serverless logic,1.38.0 OSL,,0.6,0.6,2026-05-20,,
 771,,https://redhat.atlassian.net/browse/SRVLOGIC-771,Add Maven 3.9.11+ to nightly prod CI on jenkins,mareknovotny,Task,CI,Blocker,Serverless logic,1.38.0 OSL,,0,0.1,2026-05-20,,
 769,,https://redhat.atlassian.net/browse/SRVLOGIC-769,Include support for PDB for Serverless logic services,wmedvede,Epic,Cloud,Major,Serverless logic,1.38.0 OSL,,2.6,2.6,2026-05-20,,
 764,,https://redhat.atlassian.net/browse/SRVLOGIC-764,Include support for HPA natively for Serverless logic services,wmedvede,Epic,Cloud,Critical,Serverless logic,1.38.0 OSL,,2.0,2.4,2026-05-20,,
