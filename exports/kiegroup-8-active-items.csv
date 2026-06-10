@@ -1,3 +1,3 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-192,189,https://github.com/kiegroup/kogito-runtimes/issues/192,Remove spring boot template from code generation,,In review,,,Normal,OSL,1.39.0 OSL,S,0.1,0.1,,,,,,
-189,,https://github.com/kiegroup/kogito-runtimes/issues/189,Add multi version support,,In progress,,Runtimes,Normal,OSL,1.39.0 OSL,M,,,,0.0,0.0,0.0,,
+191,189,https://github.com/kiegroup/kogito-runtimes/issues/191,Add version to rest interface,fjtirado,In progress,,Runtimes,Normal,OSL,1.39.0 OSL,M,0.8,,0.8,0.0,0.0,0.0,,
+189,,https://github.com/kiegroup/kogito-runtimes/issues/189,Add multi version support,fjtirado,In progress,,Runtimes,Normal,OSL,1.39.0 OSL,M,0.0,,,0.1,0.1,0.0,SRVLOGIC-1019,
