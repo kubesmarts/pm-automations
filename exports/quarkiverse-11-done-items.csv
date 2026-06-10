@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+50,,https://github.com/serverlessworkflow/editor/issues/50,Spike: Design for workflow diagram,lornakelly,,Tooling,Major,,2026/Q2,M,1.0,2.0,2026-06-10,,
+583,,https://github.com/quarkiverse/quarkus-flow/issues/583,Fix Quarkus Ecosystem and Native Nightly CI,mcruzdev,,CI,Major,,2026/Q2,M,0.4,0.6,2026-06-10,,
+87,,https://github.com/serverlessworkflow/editor/issues/87,feat: Apply container node styling (UX),lornakelly,,Tooling,Normal,,2026/Q2,M,0.6,0.3,2026-06-10,,
 101,,https://github.com/serverlessworkflow/editor/issues/101,feat: Show selected node details in the side panel,lornakelly,,Tooling,Minor,,2026/Q2,M,0.6,0.4,2026-06-09,,Rough estimate
 163,,https://github.com/serverlessworkflow/editor/issues/163,feat: Make workflow read only by disabling drag-and-drop and edge handles,handreyrc,,Tooling,Normal,,2026/Q2,S,0.5,0.4,2026-06-09,,
 89,,https://github.com/serverlessworkflow/editor/issues/89,feat: Add specification example workflows as Storybook stories,cheryl7114,,Tooling,Minor,,2026/Q3,M,1.0,0.8,2026-06-09,,

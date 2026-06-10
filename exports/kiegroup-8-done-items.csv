@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+192,,https://github.com/kiegroup/kogito-runtimes/issues/192,Remove spring boot template from code generation,fjtirado,,Runtimes,Normal,OSL,1.39.0 OSL,S,0.1,0.1,2026-06-10,,
 757,,https://github.com/apache/incubator-kie-kogito-docs/issues/757,Add a section explaining the workflow id naming and versioning recommended practices and limitations,wmedvede,,Docs,Normal,OSL,1.39.0 OSL,S,0.2,0.2,2026-06-09,SRVLOGIC-957,
 1149,,https://github.com/serverlessworkflow/specification/issues/1149,Proposal: Official Migration Tool for 0.8/0.9 to 1.0.0 Workflows,ricardozanini,,Cloud,Major,CNCF Spec,Future,M,0.1,0.1,2026-05-08,,
 2770,,https://github.com/apache/incubator-kie-tools/issues/2770,Migrate `kie-samples` to `kie-tools` as a new package `serverless-logic-web-tools-samples`,fantonangeli,,Tooling,Normal,Apache,10.2.0. Apache,M,1.0,0.0,2026-05-08,,
