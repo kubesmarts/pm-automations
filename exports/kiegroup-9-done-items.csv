@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+6706,,https://github.com/apache/incubator-kie-drools/issues/6706,Parallel Build of Inline Accumulate rules cause a build error,tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-06-11,,
+90,,https://github.com/tkobayas/drlx-parser/issues/90,Convert test cases from ksession to RuleUnitInstance,tkobayas,,QE,Normal,,Future,S,1.0,0.4,2026-06-11,,
 207,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/207,Review AbstractHAStateManager.DROOLS_VERSION in main,tkobayas,,QE,Major,,Future,XS,0.05,0.05,2026-06-10,,
 2315,,https://github.com/apache/incubator-kie-issues/issues/2315,Quarkus AI,Rikkola,,Docs,Major,,Future,L,3.0,1.0,2026-06-10,,
 169,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/169,EDA : Add more load test for HA,tkobayas,,QE,Major,,Ansible EDA 2.7.x,M,0.4,0.4,2026-06-09,,
@@ -32,7 +34,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 54,,https://github.com/tkobayas/drlx-parser/issues/54,Accumulate: outer-binding refs in extractor expressions (sum(p.age * q.factor)),tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-05-22,,
 432,,https://github.com/mvel/mvel/issues/432,mvel3 : Map evaluator does not write back ++/-- increment/decrement to context map,tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-05-21,,
 51,,https://github.com/tkobayas/drlx-parser/issues/51,"Accumulate: acc() keyword forms (2-, 3-, and 5-param)",tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-05-21,,
-6706,,https://github.com/apache/incubator-kie-drools/issues/6706,Parallel Build of Inline Accumulate rules cause a build error,tkobayas,,Runtimes,Major,,Future,S,0.1,0.05,2026-05-21,,
 50,,https://github.com/tkobayas/drlx-parser/issues/50,Accumulate: inline-from form (avg(/persons.age)),tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-05-20,,
 49,,https://github.com/tkobayas/drlx-parser/issues/49,Accumulate: MultiAccumulate folding (N SingleAccumulates → one node),tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-05-19,,
 2281,,https://github.com/apache/incubator-kie-issues/issues/2281,DRLGEN Second level of DRL generation,Rikkola,,Runtimes,Minor,,Future,S,1.0,0.2,2026-05-16,,

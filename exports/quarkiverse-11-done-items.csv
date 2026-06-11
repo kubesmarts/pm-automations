@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+607,,https://github.com/quarkiverse/quarkus-flow/issues/607,ADR: Token Propagation and Exchange Design,ricardozanini,,Runtimes,Major,,2026/Q2,M,1.0,0.8,2026-06-11,,
+626,,https://github.com/quarkiverse/quarkus-flow/issues/626,Investigate Quarkus Platform member update PRs,baldimir,,CI,Normal,,2026/Q2,S,0.2,0.2,2026-06-11,,
 50,,https://github.com/serverlessworkflow/editor/issues/50,Spike: Design for workflow diagram,lornakelly,,Tooling,Major,,2026/Q2,M,1.0,2.0,2026-06-10,,
 583,,https://github.com/quarkiverse/quarkus-flow/issues/583,Fix Quarkus Ecosystem and Native Nightly CI,mcruzdev,,CI,Major,,2026/Q2,M,0.4,0.6,2026-06-10,,
 87,,https://github.com/serverlessworkflow/editor/issues/87,feat: Apply container node styling (UX),lornakelly,,Tooling,Normal,,2026/Q2,M,0.6,0.3,2026-06-10,,
