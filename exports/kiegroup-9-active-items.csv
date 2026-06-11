@@ -1,9 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
 6683,,https://github.com/apache/incubator-kie-drools/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,4.0,2.0,2.0,4.0,2.0,2.0,,
 2314,,https://github.com/apache/incubator-kie-issues/issues/2314,DRLGEN Investigate best plain English formats for DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,2.0,1.0,1.0,2.0,1.0,1.0,,
-2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools sequential,Rikkola,In progress,,Runtimes,Major,,Future,L,6.0,5.0,1.0,4.0,5.0,1.0,,
-207,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/207,Review AbstractHAStateManager.DROOLS_VERSION in main,tkobayas,In progress,,QE,Major,,Future,XS,0.05,,0.05,0.05,0.0,0.05,,
-90,,https://github.com/tkobayas/drlx-parser/issues/90,Convert test cases from ksession to RuleUnitInstance,tkobayas,Next,,QE,Normal,,Future,S,1.0,,1.0,,,,,
-78,,https://github.com/tkobayas/drlx-parser/issues/78,Rule metadata & syntax sugar,tkobayas,In progress,,Runtimes,Normal,,Future,M,0.6,0.1,0.5,0.6,0.0,0.6,,
+2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools sequential,Rikkola,In progress,,Runtimes,Major,,Future,L,6.0,5.0,1.0,6.0,5.0,1.0,,
+78,,https://github.com/tkobayas/drlx-parser/issues/78,Rule metadata & syntax sugar,tkobayas,In progress,,Runtimes,Normal,,Future,M,0.6,0.3,0.3,0.6,0.1,0.5,,
 10,,https://github.com/casehubio/engine/issues/10,Deterministic Replay / Restate Execution Model,treblereel,In progress,,Runtimes,Normal,,Future,L,,,,1.6,1.2,0.0,,
 2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,12.0,10.0,2.0,16.2,11.4,4.0,,
