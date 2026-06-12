@@ -1,6 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
 1042,603,https://redhat.atlassian.net/browse/SRVLOGIC-1042,Prepare Artifactory repositories,baldimir,In Review,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.6,0.5,0.1,0.6,0.5,0.1,,
-1041,,https://redhat.atlassian.net/browse/SRVLOGIC-1041,"Fix kie-tools PR Checks not executing tests, e2e test and container builds",domhanak,Next,Task,,Critical,Serverless logic,1.39.0 OSL,,0.6,0.2,0.5,0.6,0.2,0.5,,
+1041,,https://redhat.atlassian.net/browse/SRVLOGIC-1041,"Fix kie-tools PR Checks not executing tests, e2e test and container builds",domhanak,Next,Task,CI,Critical,Serverless logic,1.39.0 OSL,,0.6,0.2,0.5,0.6,0.2,0.5,,
 1040,,https://redhat.atlassian.net/browse/SRVLOGIC-1040,"Operator, DI, JS and Workflows migration from OSL 1.38.0 to OSL 1.39.0",wmedvede,Next,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,0.6,0,0.6,0.6,,0.6,,
 1039,,https://redhat.atlassian.net/browse/SRVLOGIC-1039,Upgrade Quarkus to 3.27.4,baldimir,In Review,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.2,0.1,0.1,0.2,0.1,0.1,,
 1037,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1037,Build DR1 - testing release,saumya1singh,In Progress,Task,CI,Major,Serverless logic,1.39.0 OSL,,1.0,0,1.0,1.0,,1.0,,
@@ -18,6 +18,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1019,975,https://redhat.atlassian.net/browse/SRVLOGIC-1019,Add version to runtimes API and properties,fjtirado,Next,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,1.0,0,1.0,1.0,,1.0,,
 1018,,https://redhat.atlassian.net/browse/SRVLOGIC-1018,Removal of non-OSL packages from kie-tools -> dmn-* and related packages,domhanak,In Review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0,0.2,0.2,,0.2,,
 1017,975,https://redhat.atlassian.net/browse/SRVLOGIC-1017,Startup check to validate user provided workflow id and version are available in the runtime,wmedvede,Next,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,1.0,0,1.0,1.0,,1.0,,
+1016,,https://redhat.atlassian.net/browse/SRVLOGIC-1016,Prepare and execute OSL 1.39 DR,mareknovotny,Done,Task,,Undefined,Serverless logic,1.39.0 OSL,,0,0,0,,,,,
 1015,,https://redhat.atlassian.net/browse/SRVLOGIC-1015,Add the ability to configure user provided labels in the Data Index and Job service pods according with the linked customer request.,wmedvede,Next,Epic,Cloud,Normal,Serverless logic,1.39.0 OSL,,0,0,0,,,,,
 1014,975,https://redhat.atlassian.net/browse/SRVLOGIC-1014,Document the support of multiversioned workflows,wmedvede,Next,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,0.4,0,0.4,0.4,,0.4,,
 1013,975,https://redhat.atlassian.net/browse/SRVLOGIC-1013,Operator addings to support the deployment of multiversioned workflows,wmedvede,Next,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,1.0,0,1.0,1.0,,1.0,,
