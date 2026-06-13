@@ -1,6 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+90,,https://github.com/tkobayas/drlx-parser/issues/90,Convert test cases from ksession to RuleUnitInstance,tkobayas,,QE,Normal,,Future,S,0.1,0.1,2026-06-12,,
+78,,https://github.com/tkobayas/drlx-parser/issues/78,Rule metadata & syntax sugar,tkobayas,,Runtimes,Normal,,Future,M,0.6,0.6,2026-06-12,,
 6706,,https://github.com/apache/incubator-kie-drools/issues/6706,Parallel Build of Inline Accumulate rules cause a build error,tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-06-11,,
-90,,https://github.com/tkobayas/drlx-parser/issues/90,Convert test cases from ksession to RuleUnitInstance,tkobayas,,QE,Normal,,Future,S,1.0,0.4,2026-06-11,,
 207,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/207,Review AbstractHAStateManager.DROOLS_VERSION in main,tkobayas,,QE,Major,,Future,XS,0.05,0.05,2026-06-10,,
 2315,,https://github.com/apache/incubator-kie-issues/issues/2315,Quarkus AI,Rikkola,,Docs,Major,,Future,L,3.0,1.0,2026-06-10,,
 169,,https://github.com/kiegroup/drools-ansible-rulebook-integration/issues/169,EDA : Add more load test for HA,tkobayas,,QE,Major,,Ansible EDA 2.7.x,M,0.4,0.4,2026-06-09,,
