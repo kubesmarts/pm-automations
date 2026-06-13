@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
+1043,,https://redhat.atlassian.net/browse/SRVLOGIC-1043,Update base images for the PSI machines to the latest releases of RHEL for each RHEL release,baldimir,CODE REVIEW,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,0,0.2,0.2,,,
 1042,603,https://redhat.atlassian.net/browse/SRVLOGIC-1042,Prepare Artifactory repositories,baldimir,In Review,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.6,0.5,0.1,0.6,0.5,0.1,,
 1041,,https://redhat.atlassian.net/browse/SRVLOGIC-1041,"Fix kie-tools PR Checks not executing tests, e2e test and container builds",domhanak,Next,Task,CI,Critical,Serverless logic,1.39.0 OSL,,0.6,0.2,0.5,0.6,0.2,0.5,,
 1040,,https://redhat.atlassian.net/browse/SRVLOGIC-1040,"Operator, DI, JS and Workflows migration from OSL 1.38.0 to OSL 1.39.0",wmedvede,Next,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,0.6,0,0.6,0.6,,0.6,,
@@ -67,7 +68,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 852,,https://redhat.atlassian.net/browse/SRVLOGIC-852,Cleanup midstream workflows and CI configurations across kiegroup,domhanak,In Progress,Task,CI,Critical,Serverless logic,1.39.0 OSL,,0,0,0,,,,,
 839,,https://redhat.atlassian.net/browse/SRVLOGIC-839,Splitting string bigger than 65k.,fjtirado,Done,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,0,0,0,,,,,
 813,,https://redhat.atlassian.net/browse/SRVLOGIC-813,SonataFlow Deployment Webapp not able to start a workflow,fantonangeli,In Review,Bug,Tooling,Blocker,Serverless logic,1.39.0 OSL,,0.4,0.3,0.1,0.4,0.3,0.1,,
-812,,https://redhat.atlassian.net/browse/SRVLOGIC-812,Kubesmarts not able to start a workflow,fantonangeli,Next,Bug,Tooling,Blocker,Serverless logic,1.39.0 OSL,,0.8,0,0.8,0.8,,0.8,,
+812,,https://redhat.atlassian.net/browse/SRVLOGIC-812,Kubesmarts not able to start a workflow,fantonangeli,CODE REVIEW,Bug,Tooling,Blocker,Serverless logic,1.39.0 OSL,,0.8,0,0.8,0.8,,0.8,,
 999,,https://redhat.atlassian.net/browse/SRVLOGIC-999,Remove Dashbuilder from kie-tools,fantonangeli,In Review,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,2.0,0.7,1.3,2.0,0.7,1.3,,
 998,,https://redhat.atlassian.net/browse/SRVLOGIC-998,Create a guide about how to publish new version of Serverless Logic to start.kubesmarts.org. ,baldimir,In Review,Task,CI,Normal,Serverless logic,1.39.0 OSL,,0.1,0.1,0,0.1,0.1,,,
 997,990,https://redhat.atlassian.net/browse/SRVLOGIC-997,Migration of GitLab repositories to IBM GitHub Enterprise,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,0.4,0,0.4,0.4,,0.4,,
