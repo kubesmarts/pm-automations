@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+113,,https://github.com/quarkiverse/quarkus-flow/issues/113,epic: Idempotency & correlation foundations for Quarkus Flow,mcruzdev,,Runtimes,Major,,2026/Q2,,0.0,0.0,2026-06-17,,
+627,,https://github.com/quarkiverse/quarkus-flow/issues/627,Refactor persistence modules from Quarkus extensions to runtime-only libraries,ricardozanini,,Runtimes,Major,,2026/Q2,S,0.2,0.2,2026-06-17,,
 13,,https://github.com/kubesmarts/logic-apps/issues/13,Data Index PostgreSQL: getWorkflowInstances fails due to invalid HQL path t.instance.id,gmunozfe,,Runtimes,Major,,2026/Q2,S,0.2,0.2,2026-06-16,,
 140,,https://github.com/serverlessworkflow/editor/issues/140,feat: Create and style entry/exit indicators for container nodes,lornakelly,,Tooling,Normal,,2026/Q2,S,0.2,0.2,2026-06-16,,
 16,,https://github.com/kubesmarts/logic-apps/issues/16,Data Index PostgreSQL task normalization trigger is not concurrency-safe for task lifecycle events,gmunozfe,,Runtimes,Major,,2026/Q2,S,0.6,0.6,2026-06-16,,
