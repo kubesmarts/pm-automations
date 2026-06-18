@@ -1,13 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
 1087,,https://github.com/serverlessworkflow/sdk-java/issues/1087,Add support to a2a,fjtirado,In progress,,Runtimes,Minor,,2026/Q2,L,1.0,,0.4,1.0,0.0,0.4,,
-656,,https://github.com/quarkiverse/quarkus-flow/issues/656,bug: java.nio.channels.OverlappingFileLockException when executing MVStore in dev mode,mcruzdev,In progress,,,,,,,,,,0.0,0.0,0.0,,
-652,,https://github.com/quarkiverse/quarkus-flow/issues/652,Flaky test with HelloResourceIT#hello_returns_hello_world_async method,mcruzdev,In progress,,,,,,,,,,0.0,0.0,0.0,,
-646,,https://github.com/quarkiverse/quarkus-flow/issues/646,"MVStore db-path should be runtime configurable, not build-time",ricardozanini,In review,,Runtimes,Blocker,,2026/Q2,S,0.1,0.1,0.0,0.1,0.1,0.0,,
-645,,https://github.com/quarkiverse/quarkus-flow/issues/645,Messaging module should support runtime configuration for channel detection,ricardozanini,In review,,Runtimes,Blocker,,2026/Q2,XS,0.1,0.1,0.0,0.1,0.1,0.0,,
 633,606,https://github.com/quarkiverse/quarkus-flow/issues/633,[OIDC] Phase 0 — Validation & Proof of Concept,mcruzdev,In progress,,Runtimes,Normal,,2026/Q2,M,0.4,0.3,0.1,0.4,0.3,0.1,,
 620,619,https://github.com/quarkiverse/quarkus-flow/issues/620,Create ADR for MCP Integration Design,ricardozanini,In progress,,Runtimes,Normal,,2026/Q2,M,0.2,,0.0,0.2,0.0,0.0,,
 606,,https://github.com/quarkiverse/quarkus-flow/issues/606,Epic: OIDC Token Propagation and Exchange,ricardozanini,Next,,Runtimes,Major,,2026/Q3,XL,8.0,,,9.4,1.1,8.1,,
-576,,https://github.com/quarkiverse/quarkus-flow/issues/576,Avoid rely on quarkus-hibernate-orm-panache we should rely on quarkus-hibernate-orm,mcruzdev,Backlog,,,,,2026/Q2,,,,,0.0,0.0,0.0,,WON'T FIX
+576,,https://github.com/quarkiverse/quarkus-flow/issues/576,Avoid rely on quarkus-hibernate-orm-panache we should rely on quarkus-hibernate-orm,mcruzdev,Backlog,,Runtimes,,,2026/Q2,,,,,0.0,0.0,0.0,,WON'T FIX
 531,,https://github.com/quarkiverse/quarkus-flow/issues/531,"Add `@ScheduleOn` annotation support for event-based, cron, and interval triggers in LangChain4J workflows",mcruzdev,In progress,,Runtimes,Normal,,,M,0.6,,,0.6,0.0,0.0,,
 523,51,https://github.com/quarkiverse/quarkus-flow/issues/523,feat: Integrate Serverless Workflow Editor package into DevUI,fantonangeli,In progress,,Tooling,Normal,,2026/Q2,M,0.8,,0.8,0.8,0.0,0.8,,
 488,,https://github.com/quarkiverse/quarkus-flow/issues/488,task: Refactor docs module: Reorganize DSL examples and enable Maven test execution,domhanak,Backlog,,Docs,Major,,2026/Q2,M,0.6,,0.6,0.6,0.0,0.6,,
@@ -17,12 +13,10 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mcruzdev,Next,,Runtimes,Major,,2026/Q2,M,1.0,,0.8,1.0,0.0,0.8,,
 329,,https://github.com/quarkiverse/quarkus-flow/issues/329,feat: Add Quarkus grpc channel,fjtirado,In progress,,Runtimes,Normal,,2026/Q2,S,0.3,,0.1,0.3,0.0,0.1,,
 317,112,https://github.com/quarkiverse/quarkus-flow/issues/317,bug: jpa persistence exceptions in engine after heavy load,gmunozfe,In progress,,Runtimes,Major,,2026/Q2,M,0.4,,0.2,0.4,0.0,0.2,,
-180,7,https://github.com/serverlessworkflow/editor/issues/180,feat: Assess and improve accessibility,cheryl7114,In progress,,Tooling,Normal,,2026/Q2,M,1.0,,1.0,1.0,0.0,1.0,,
-179,5,https://github.com/serverlessworkflow/editor/issues/179,bug: Parent nodes bad edges routing,handreyrc,In review,,Tooling,Major,,2026/Q2,M,1.0,0.8,0.0,1.0,0.8,0.0,,
+185,5,https://github.com/serverlessworkflow/editor/issues/185,feat: Add reusable error toast for failure feedback,cheryl7114,Next,,Tooling,Normal,,2026/Q2,S,0.4,,0.4,,,,,
+180,7,https://github.com/serverlessworkflow/editor/issues/180,feat: Assess and improve accessibility,cheryl7114,In progress,,Tooling,Normal,,2026/Q2,M,1.0,0.2,1.0,1.0,0.0,1.0,,
 166,,https://github.com/quarkiverse/quarkus-flow/issues/166,feat: Ensure agent tools can access correlation metadata,mcruzdev,Backlog,,Runtimes,Major,,2026/Q2,,2.0,,,2.0,0.0,0.0,,
 156,3,https://github.com/serverlessworkflow/editor/issues/156,bug: Unpinned tag for a non-immutable Action in workflow,fantonangeli,Next,,Tooling,Major,,2026/Q2,S,0.2,,0.2,0.2,0.0,0.2,,
-150,5,https://github.com/serverlessworkflow/editor/issues/150,feat: Export diagram from model to mermaid code,cheryl7114,In review,,Tooling,Normal,,2026/Q2,M,0.8,0.6,0.8,0.8,0.6,0.8,,
-147,5,https://github.com/serverlessworkflow/editor/issues/147,feat: Surface validation errors in the diagram UI,lornakelly,In review,,Tooling,Normal,,2026/Q2,M,0.6,0.6,0.0,0.6,0.6,0.0,,
 143,5,https://github.com/serverlessworkflow/editor/issues/143,feat: Styling tweaks and visual refinements,,Next,,Tooling,Normal,,2026/Q2,M,0.4,,0.4,0.4,0.0,0.4,,Rough estimate
 128,5,https://github.com/serverlessworkflow/editor/issues/128,feat: Implement tooltip on custom call type,kumaradityaraj,Next,,Tooling,Normal,,2026/Q2,M,0.4,,0.4,0.4,0.0,0.4,,
 116,,https://github.com/quarkiverse/quarkus-flow/issues/116,epic: Introduce curated Camel connector catalog for Quarkus Flow,ricardozanini,Backlog,,Runtimes,Minor,,2026/Q3,,,,,0.0,0.0,0.0,,
