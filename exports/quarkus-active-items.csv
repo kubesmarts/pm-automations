@@ -1,7 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-7999,,https://redhat.atlassian.net/browse/QUARKUS-7999,Document Qflow in IBQ 3.40 GA,70121:e5499540-6e78-42d4-a027-fbf00737f752,In Progress,Epic,,Major,Quarkus,3.40.0.GA,,0,0,0,,,,,
+7999,,https://redhat.atlassian.net/browse/QUARKUS-7999,Document Qflow in IBQ 3.40 GA,70121:e5499540-6e78-42d4-a027-fbf00737f752,In Progress,Epic,Docs,Major,Quarkus,3.40.0.GA,,0,0,0,,,,,
 7875,7862,https://redhat.atlassian.net/browse/QUARKUS-7875,Implementation of RHEL Platform test pipelines for Quarkus Flow using native mode,gmunozfe,Next,Story,QE,Critical,Quarkus,3.40.0.GA,,1.0,0,1.0,1.0,,1.0,,
-7874,7862,https://redhat.atlassian.net/browse/QUARKUS-7874,Implementation of OpenShift Platform test pipeline for Quarkus Flow using native mode,dgutierr,Next,Story,QE,Critical,Quarkus,3.40.0.GA,,1.0,0,1.0,1.0,,1.0,,
+7874,7862,https://redhat.atlassian.net/browse/QUARKUS-7874,Implementation of OpenShift Platform test pipeline for Quarkus Flow using native mode,domhanak,Next,Story,QE,Critical,Quarkus,3.40.0.GA,,1.0,0,1.0,1.0,,1.0,,
 7873,7862,https://redhat.atlassian.net/browse/QUARKUS-7873,Implementation of Windows Server Platform test pipelines for Quarkus Flow using JVM mode,domhanak,Next,Story,QE,Blocker,Quarkus,3.40.0.GA,,1.0,0,1.0,1.0,,1.0,,
 7872,7862,https://redhat.atlassian.net/browse/QUARKUS-7872,Implementation of RHEL Platform test pipelines for Quarkus Flow using JVM mode,gmunozfe,Next,Story,QE,Blocker,Quarkus,3.40.0.GA,,1.0,0,1.0,1.0,,1.0,,
 7870,7862,https://redhat.atlassian.net/browse/QUARKUS-7870,Implementation of OpenShift Platform test pipeline for Quarkus Flow using JVM mode,jakubschwan,Next,Story,QE,Blocker,Quarkus,3.40.0.GA,,2.0,0,2.0,2.0,,2.0,,
