@@ -1,4 +1,13 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1003,,https://github.com/serverlessworkflow/sdk-java/issues/1003,Complete Oauth 2 authorization support,mcruzdev,,Runtimes,Major,,2026/Q2,S,0.2,0.2,2026-06-18,,
+4,,https://github.com/serverlessworkflow/editor/issues/4,Epic: Typescript SDK integration and model validation,lornakelly,,Tooling,Major,,2026/Q2,L,0.0,0.0,2026-06-18,,
+587,,https://github.com/quarkiverse/quarkus-flow/issues/587,bug: Incorrect `quarkus_version_pom_property` setup in .github/workflows/quarkus-snapshot.yaml,domhanak,,CI,Major,,2026/Q2,S,0.2,0.2,2026-06-18,,
+598,,https://github.com/quarkiverse/quarkus-flow/issues/598,bug: PSQLException when executing blocking workflow in a @Transactional method,mcruzdev,,Runtimes,Critical,,2026/Q2,M,0.2,0.2,2026-06-18,,
+599,,https://github.com/quarkiverse/quarkus-flow/issues/599,bug: jakarta.enterprise.context.ContextNotActiveException,mcruzdev,,Runtimes,Critical,,2026/Q2,S,0.3,0.2,2026-06-18,,
+628,,https://github.com/quarkiverse/quarkus-flow/issues/628,bug: org.h2.jdbc.JdbcSQLDataException when persisting too long values,mcruzdev,,Runtimes,Critical,,2026/Q2,M,0.2,0.3,2026-06-18,,
+632,,https://github.com/quarkiverse/quarkus-flow/issues/632,Runner Image Distribution: Pre-baked Docker images for workflow execution,ricardozanini,,Runtimes,Critical,,2026/Q2,L,1.0,1.0,2026-06-18,,
+643,,https://github.com/quarkiverse/quarkus-flow/issues/643,Flaky test: FlowLangChain4jProcessorTest#shouldRegisterPlaceholderWorkflowForSequenceAgent,mcruzdev,,Runtimes,Major,,2026/Q2,S,0.2,0.1,2026-06-18,,
+86,,https://github.com/serverlessworkflow/editor/issues/86,feat: Apply edge styling (UX),handreyrc,,Tooling,Normal,,2026/Q2,M,0.4,0.0,2026-06-18,,
 113,,https://github.com/quarkiverse/quarkus-flow/issues/113,epic: Idempotency & correlation foundations for Quarkus Flow,mcruzdev,,Runtimes,Major,,2026/Q2,,0.0,0.0,2026-06-17,,
 627,,https://github.com/quarkiverse/quarkus-flow/issues/627,Refactor persistence modules from Quarkus extensions to runtime-only libraries,ricardozanini,,Runtimes,Major,,2026/Q2,S,0.2,0.2,2026-06-17,,
 13,,https://github.com/kubesmarts/logic-apps/issues/13,Data Index PostgreSQL: getWorkflowInstances fails due to invalid HQL path t.instance.id,gmunozfe,,Runtimes,Major,,2026/Q2,S,0.2,0.2,2026-06-16,,
