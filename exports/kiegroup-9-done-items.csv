@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+22,,https://github.com/pibizza/drools-journal/issues/22,ObjectStorageStrategy should return Payload directly instead of StorageDecision,pibizza,,Runtimes,Normal,,Future,S,0.2,0.0,2026-06-19,,
+333,,https://github.com/casehubio/engine/issues/333,dx: inputSchema/outputSchema use mini-DSL not JQ — inconsistent with rest of case definition,treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-06-19,,
 79,,https://github.com/tkobayas/drlx-parser/issues/79,Conditional branching & named windows,tkobayas,,Runtimes,Normal,,Future,M,0.6,0.6,2026-06-17,,
 2338,,https://github.com/apache/incubator-kie-issues/issues/2338,NPE in PhreakSubnetworkNotExistsNode.deleteRight for two subnetwork nots in STREAM mode,Rikkola,,Runtimes,Critical,,Future,S,1.0,1.0,2026-06-16,,
 90,,https://github.com/tkobayas/drlx-parser/issues/90,Convert test cases from ksession to RuleUnitInstance,tkobayas,,QE,Normal,,Future,S,0.1,0.1,2026-06-12,,
