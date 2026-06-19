@@ -13,6 +13,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mcruzdev,Next,,Runtimes,Major,,2026/Q2,M,1.0,,0.8,1.0,0.0,0.8,,
 329,,https://github.com/quarkiverse/quarkus-flow/issues/329,feat: Add Quarkus grpc channel,fjtirado,In progress,,Runtimes,Normal,,2026/Q2,S,0.3,,0.1,0.3,0.0,0.1,,
 317,112,https://github.com/quarkiverse/quarkus-flow/issues/317,bug: jpa persistence exceptions in engine after heavy load,gmunozfe,In progress,,Runtimes,Major,,2026/Q2,M,0.4,,0.2,0.4,0.0,0.2,,
+186,5,https://github.com/serverlessworkflow/editor/issues/186,feat: Highlight edge path on selection,handreyrc,In progress,,Tooling,Normal,,2026/Q2,S,0.6,,0.6,,,,,
 185,5,https://github.com/serverlessworkflow/editor/issues/185,feat: Add reusable error toast for failure feedback,cheryl7114,Next,,Tooling,Normal,,2026/Q2,S,0.4,,0.4,,,,,
 180,7,https://github.com/serverlessworkflow/editor/issues/180,feat: Assess and improve accessibility,cheryl7114,In progress,,Tooling,Normal,,2026/Q2,M,1.0,0.2,1.0,1.0,0.0,1.0,,
 156,3,https://github.com/serverlessworkflow/editor/issues/156,bug: Unpinned tag for a non-immutable Action in workflow,fantonangeli,Next,,Tooling,Major,,2026/Q2,S,0.2,,0.2,0.2,0.0,0.2,,
