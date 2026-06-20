@@ -1,6 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+150,,https://github.com/serverlessworkflow/editor/issues/150,feat: Export diagram from model to mermaid code,cheryl7114,,Tooling,Normal,,2026/Q2,M,0.8,0.8,2026-06-20,,
+95,,https://github.com/serverlessworkflow/editor/issues/95,Spike: Define approach for edge hover labels/tooltips,kumaradityaraj,,Tooling,Normal,,2026/Q2,S,0.2,0.4,2026-06-20,,
 147,,https://github.com/serverlessworkflow/editor/issues/147,feat: Surface validation errors in the diagram UI,lornakelly,,Tooling,Normal,,2026/Q2,M,0.6,0.6,2026-06-19,,
-150,,https://github.com/serverlessworkflow/editor/issues/150,feat: Export diagram from model to mermaid code,cheryl7114,,Tooling,Normal,,2026/Q2,M,0.8,0.6,2026-06-19,,
 179,,https://github.com/serverlessworkflow/editor/issues/179,bug: Parent nodes bad edges routing,handreyrc,,Tooling,Major,,2026/Q2,M,1.0,0.8,2026-06-19,,
 645,,https://github.com/quarkiverse/quarkus-flow/issues/645,Messaging module should support runtime configuration for channel detection,ricardozanini,,Runtimes,Blocker,,2026/Q2,XS,0.1,0.1,2026-06-19,,
 646,,https://github.com/quarkiverse/quarkus-flow/issues/646,Convert persistence-common to Quarkus extension and enable runtime configuration,ricardozanini,,Runtimes,Blocker,,2026/Q2,S,0.1,0.1,2026-06-19,,
