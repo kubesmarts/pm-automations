@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+894,,https://redhat.atlassian.net/browse/SRVLOGIC-894,Retrying Jobs are cancelled by the periodic jobs loading,wmedvede,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,0.2,0.2,2026-06-19,,
 811,,https://redhat.atlassian.net/browse/SRVLOGIC-811,Kubesmarts normal deployment Data Index not available,fantonangeli,Bug,Tooling,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.1,2026-06-10,,
 1022,,https://redhat.atlassian.net/browse/SRVLOGIC-1022,Release 1.38.0 Kubesmarts,domhanak,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-06-09,,
 774,,https://redhat.atlassian.net/browse/SRVLOGIC-774,"Operator, DI, JS and Workflows migration from OSL 1.37.2 to OSL 1.38.0",wmedvede,Task,Cloud,Critical,Serverless logic,1.38.0 OSL,,0.6,0.6,2026-06-09,,
@@ -44,7 +45,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 726,,https://redhat.atlassian.net/browse/SRVLOGIC-726,Enhance PR check workflow with repository cloning steps for apps-maven-builder,domhanak,Task,CI,Critical,Serverless logic,1.38.0 OSL,,0.2,0.1,2026-05-20,,
 723,,https://redhat.atlassian.net/browse/SRVLOGIC-723,"SonataFlow OpenAPI/Codegen parity: fix defaults, status codes, and schema generation",fjtirado,Bug,Runtimes,Minor,Serverless logic,1.38.0 OSL,,0.4,0.4,2026-05-20,,
 899,,https://redhat.atlassian.net/browse/SRVLOGIC-899,Operator version and Images tag version are not being bumped up by the release procedure,domhanak,Bug,Cloud,Blocker,Serverless logic,1.38.0 OSL,,0,0,2026-05-20,,
-894,,https://redhat.atlassian.net/browse/SRVLOGIC-894,Retrying Jobs are cancelled by the periodic jobs loading,wmedvede,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,0.2,0.2,2026-05-20,,
 893,,https://redhat.atlassian.net/browse/SRVLOGIC-893,Revise variables handling on kubesmarts/kie-tools CI workflows,domhanak,Task,CI,Critical,Serverless logic,1.38.0 OSL,,0,0,2026-05-20,,
 891,,https://redhat.atlassian.net/browse/SRVLOGIC-891,Bumb the quarkus-embedded-postgresql to 0.8.0,wmedvede,Task,Runtimes,Blocker,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-05-20,,
 888,,https://redhat.atlassian.net/browse/SRVLOGIC-888,PR checks for downstream fails on deps not found,jankrystof-ibm,Bug,CI,Critical,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-05-20,,
