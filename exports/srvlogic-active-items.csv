@@ -22,7 +22,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1044,,https://redhat.atlassian.net/browse/SRVLOGIC-1044,Update Go toolset base image in the operator image to 1.25. ,baldimir,In Review,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0.1,0,0.1,0.1,,0.1,,
 1043,,https://redhat.atlassian.net/browse/SRVLOGIC-1043,Update base images for the PSI machines to the latest releases of RHEL for each RHEL release,baldimir,In Review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,0,0.2,0.2,,,
 1042,,https://redhat.atlassian.net/browse/SRVLOGIC-1042,Prepare Artifactory repositories,baldimir,In Review,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.6,0.5,0.1,0.6,0.5,0.1,,
-1041,,https://redhat.atlassian.net/browse/SRVLOGIC-1041,"Fix kie-tools PR Checks not executing tests, e2e test and container builds",domhanak,In Progress,Task,CI,Critical,Serverless logic,1.39.0 OSL,,0.6,0.8,0,0.6,0.8,,,
 1040,,https://redhat.atlassian.net/browse/SRVLOGIC-1040,"Operator, DI, JS and Workflows migration from OSL 1.38.0 to OSL 1.39.0",wmedvede,Next,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,0.6,0,0.6,0.6,,0.6,,
 1039,,https://redhat.atlassian.net/browse/SRVLOGIC-1039,Upgrade Quarkus to 3.27.4,baldimir,In Review,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.2,0.1,0.1,0.2,0.1,0.1,,
 1037,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1037,Build DR1 - testing release,saumya1singh,In Progress,Task,CI,Major,Serverless logic,1.39.0 OSL,,1.0,0,1.0,1.0,,1.0,,
