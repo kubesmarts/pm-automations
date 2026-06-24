@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+19,,https://github.com/pibizza/drools-journal/issues/19,Refactor JournalStorage write API to semantic methods,pibizza,,Runtimes,Normal,,Future,S,0.4,0.0,2026-06-24,,
+452,,https://github.com/casehubio/engine/issues/452,feat(acl): add ACL model types and SPI to platform-api,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-06-24,,
+453,,https://github.com/casehubio/engine/issues/453,feat(acl): add @DefaultBean no-op AccessControlProvider to platform/,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-06-24,,
+455,,https://github.com/casehubio/engine/issues/455,feat(acl): wire CurrentPrincipal identity into PropagationContext.inheritedAttributes,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-06-24,,
 22,,https://github.com/pibizza/drools-journal/issues/22,ObjectStorageStrategy should return Payload directly instead of StorageDecision,pibizza,,Runtimes,Normal,,Future,S,0.2,0.0,2026-06-19,,
 333,,https://github.com/casehubio/engine/issues/333,dx: inputSchema/outputSchema use mini-DSL not JQ — inconsistent with rest of case definition,treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-06-19,,
 79,,https://github.com/tkobayas/drlx-parser/issues/79,Conditional branching & named windows,tkobayas,,Runtimes,Normal,,Future,M,0.6,0.6,2026-06-17,,

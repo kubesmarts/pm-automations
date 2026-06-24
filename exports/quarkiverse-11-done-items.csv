@@ -1,4 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+102,,https://github.com/serverlessworkflow/editor/issues/102,feat: Validate editor against specification use cases and real-world workflows,"fantonangeli,handreyrc,kumaradityaraj,cheryl7114",,Tooling,Normal,,1.0,M,0.4,0.2,2026-06-24,,
+187,,https://github.com/serverlessworkflow/editor/issues/187,bug: Dynamic require error from bundled use-sync-external-store shim,fantonangeli,,Tooling,Blocker,,2026/Q2,,0.4,0.2,2026-06-24,,
+191,,https://github.com/serverlessworkflow/editor/issues/191,task: Draft post-MVP scope & roadmap proposal,lornakelly,,Tooling,Major,,2026/Q2,M,0.3,0.3,2026-06-24,,
+652,,https://github.com/quarkiverse/quarkus-flow/issues/652,Flaky test with HelloResourceIT#hello_returns_hello_world_async method,mcruzdev,,CI,Major,,2026/Q2,S,0.4,0.3,2026-06-24,,
+656,,https://github.com/quarkiverse/quarkus-flow/issues/656,bug: java.nio.channels.OverlappingFileLockException when executing MVStore in dev mode,mcruzdev,,Runtimes,Critical,,2026/Q2,S,0.2,0.2,2026-06-24,,
 52,,https://github.com/quarkiverse/quarkus-flow/issues/52,epic: Runner API (Load/Run Workflows at Runtime),ricardozanini,,Runtimes,Major,,1.0,L,1.0,1.0,2026-06-23,,
 89,,https://github.com/serverlessworkflow/editor/issues/89,feat: Add specification example workflows as Storybook stories,cheryl7114,,Tooling,Minor,,1.0,M,1.0,0.8,2026-06-23,,
 100,,https://github.com/serverlessworkflow/editor/issues/100,feat: Configure CI for npm package publishing,fantonangeli,,Tooling,Normal,,1.0,M,0.6,0.1,2026-06-23,,
