@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+166,,https://github.com/quarkiverse/quarkus-flow/issues/166,feat: Ensure agent tools can access correlation metadata,mcruzdev,,Runtimes,Major,,2026/Q2,,0.0,0.0,2026-06-25,,ONE FIX
+531,,https://github.com/quarkiverse/quarkus-flow/issues/531,"Add `@ScheduleOn` annotation support for event-based, cron, and interval triggers in LangChain4J workflows",mcruzdev,,Runtimes,Normal,,2026/Q2,M,0.6,1.0,2026-06-25,,
+665,,https://github.com/quarkiverse/quarkus-flow/issues/665,make quick-check is not working,ricardozanini,,Runtimes,Minor,,1.0,XS,0.1,0.1,2026-06-25,,
 102,,https://github.com/serverlessworkflow/editor/issues/102,feat: Validate editor against specification use cases and real-world workflows,"fantonangeli,handreyrc,kumaradityaraj,cheryl7114",,Tooling,Normal,,1.0,M,0.4,0.2,2026-06-24,,
 187,,https://github.com/serverlessworkflow/editor/issues/187,bug: Dynamic require error from bundled use-sync-external-store shim,fantonangeli,,Tooling,Blocker,,2026/Q2,,0.4,0.2,2026-06-24,,
 191,,https://github.com/serverlessworkflow/editor/issues/191,task: Draft post-MVP scope & roadmap proposal,lornakelly,,Tooling,Major,,2026/Q2,M,0.3,0.3,2026-06-24,,
