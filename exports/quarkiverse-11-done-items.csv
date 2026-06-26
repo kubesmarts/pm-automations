@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+186,,https://github.com/serverlessworkflow/editor/issues/186,feat: Highlight edge path on selection,handreyrc,,Tooling,Normal,,2026/Q2,S,0.6,0.5,2026-06-26,,
 166,,https://github.com/quarkiverse/quarkus-flow/issues/166,feat: Ensure agent tools can access correlation metadata,mcruzdev,,Runtimes,Major,,2026/Q2,,0.0,0.0,2026-06-25,,ONE FIX
 531,,https://github.com/quarkiverse/quarkus-flow/issues/531,"Add `@ScheduleOn` annotation support for event-based, cron, and interval triggers in LangChain4J workflows",mcruzdev,,Runtimes,Normal,,2026/Q2,M,0.6,1.0,2026-06-25,,
 665,,https://github.com/quarkiverse/quarkus-flow/issues/665,make quick-check is not working,ricardozanini,,Runtimes,Minor,,1.0,XS,0.1,0.1,2026-06-25,,
