@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1000,,https://redhat.atlassian.net/browse/SRVLOGIC-1000,CPaaS upgrade to 9.39.0 including osl + drools + drools-ansible-integration,jankrystof-ibm,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.1,0,2026-06-25,,
+895,,https://redhat.atlassian.net/browse/SRVLOGIC-895,CPaaS 9.38 Upgrade for OSL pipelines,jankrystof-ibm,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-06-25,,
 894,,https://redhat.atlassian.net/browse/SRVLOGIC-894,Retrying Jobs are cancelled by the periodic jobs loading,wmedvede,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,0.2,0.2,2026-06-19,,
 811,,https://redhat.atlassian.net/browse/SRVLOGIC-811,Kubesmarts normal deployment Data Index not available,fantonangeli,Bug,Tooling,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.1,2026-06-10,,
 1022,,https://redhat.atlassian.net/browse/SRVLOGIC-1022,Release 1.38.0 Kubesmarts,domhanak,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-06-09,,
@@ -10,10 +12,8 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 677,,https://redhat.atlassian.net/browse/SRVLOGIC-677,Kubesmarts cors-proxy ERR_CERT_DATE_INVALID,fantonangeli,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,0,0.5,2026-06-01,,
 748,,https://redhat.atlassian.net/browse/SRVLOGIC-748,Create a GHA to publish Kubesmarts images every Friday,baldimir,Feature,CI,Major,Serverless logic,1.38.0 OSL,,0.6,0.6,2026-06-01,,
 901,,https://redhat.atlassian.net/browse/SRVLOGIC-901,Release unpack-build-maven-plugin to 1.0.0 and upload it to Nexus,gmunozfe,Task,CI,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.2,2026-06-01,,
-1000,,https://redhat.atlassian.net/browse/SRVLOGIC-1000,CPaaS upgrade to 9.39.0 including osl + drools + drools-ansible-integration,jankrystof-ibm,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.1,0,2026-05-30,,
 807,2234,https://redhat.atlassian.net/browse/SRVLOGIC-807,Automate creation of new product branches for OSL build,jankrystof-ibm,Task,CI,Major,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-05-30,,
 953,,https://redhat.atlassian.net/browse/SRVLOGIC-953,Cancelling a workflow does not cancel its subflows,fjtirado,Bug,Runtimes,Major,Serverless logic,1.38.0 OSL,,0.6,0.5,2026-05-29,,
-895,,https://redhat.atlassian.net/browse/SRVLOGIC-895,CPaaS 9.38 Upgrade for OSL pipelines,jankrystof-ibm,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-05-28,,
 606,,https://redhat.atlassian.net/browse/SRVLOGIC-606,Automate delivery of devmode image maven repository offline,saumya1singh,Bug,Productization,Major,Serverless logic,1.38.0 OSL,,0.2,1.0,2026-05-27,,
 799,794,https://redhat.atlassian.net/browse/SRVLOGIC-799,Prepare OSL build-configuration for 1.38,saumya1singh,Sub-task,Productization,Critical,Serverless logic,1.38.0 OSL,,0,0,2026-05-27,,
 797,794,https://redhat.atlassian.net/browse/SRVLOGIC-797,Build CR1  KN Workflows plugin RPMs and Containers,saumya1singh,Sub-task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.4,0.2,2026-05-27,,
