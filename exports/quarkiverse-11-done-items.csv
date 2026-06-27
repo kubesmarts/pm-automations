@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1087,,https://github.com/serverlessworkflow/sdk-java/issues/1087,Add support to a2a,fjtirado,,Runtimes,Minor,,2026/Q2,L,1.0,1.3,2026-06-27,,
+192,,https://github.com/serverlessworkflow/editor/issues/192,task: Write & submit ADR for community review,lornakelly,,Tooling,Major,,2026/Q2,S,0.2,0.2,2026-06-27,,
+204,,https://github.com/serverlessworkflow/editor/issues/204,fix: Bump @serverlessworkflow/sdk-typescript to 1.0.3-alpha3 to pick up DSL version validation fix,lornakelly,,Tooling,Major,,2026/Q2,S,0.1,0.1,2026-06-27,,
 186,,https://github.com/serverlessworkflow/editor/issues/186,feat: Highlight edge path on selection,handreyrc,,Tooling,Normal,,2026/Q2,S,0.6,0.5,2026-06-26,,
 166,,https://github.com/quarkiverse/quarkus-flow/issues/166,feat: Ensure agent tools can access correlation metadata,mcruzdev,,Runtimes,Major,,2026/Q2,,0.0,0.0,2026-06-25,,ONE FIX
 531,,https://github.com/quarkiverse/quarkus-flow/issues/531,"Add `@ScheduleOn` annotation support for event-based, cron, and interval triggers in LangChain4J workflows",mcruzdev,,Runtimes,Normal,,2026/Q2,M,0.6,1.0,2026-06-25,,
