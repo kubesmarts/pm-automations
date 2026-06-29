@@ -1,0 +1,46 @@
+# pm-automations — Workspace Guidelines
+
+## Project Overview
+
+A collection of GitHub Actions workflows for project management automation (GitHub Projects + JIRA).
+Each workflow under `.github/workflows/` ships with a companion `.md` guide.
+User-facing documentation lives in `docs/`.
+
+## Documentation Policy
+
+**Any code change that adds or modifies a feature must include the corresponding documentation update in the same commit/PR.**
+
+### Workflow changes (`.github/workflows/*.yml`)
+
+| Change type | Required doc update |
+|-------------|---------------------|
+| New workflow added | Create a companion `.github/workflows/<name>.md` covering: purpose, inputs/secrets, schedule, dry-run usage, and troubleshooting |
+| Existing workflow modified | Update the companion `.md` to reflect the change (new inputs, changed behavior, updated schedule, etc.) |
+| Workflow removed | Remove its companion `.md` and remove the entry from `README.md` |
+
+### Script changes (`.github/workflows/scripts/`)
+
+| Change type | Required doc update |
+|-------------|---------------------|
+| New script added | Document it in the companion `.md` of the workflow that invokes it |
+| Existing script behavior changed | Update the relevant workflow `.md` and any `docs/` guides that reference the script |
+
+### User guide changes (`docs/`)
+
+Always review [`docs/user-guide-rms-projects.md`](docs/user-guide-rms-projects.md) when:
+- A workflow adds, removes, or renames a field, label, or lifecycle state that end-users interact with
+- A new workflow changes how users should manage their GitHub Project or JIRA issues
+- An existing workflow changes its behavior in a way that is visible to end-users (e.g. new alerts, changed compliance rules, new export columns)
+
+Update the guide if any of the above apply.
+
+### README.md
+
+- Keep the **Automations** table in `README.md` in sync: add a row for every new workflow, remove rows for deleted ones.
+- Keep the **User guides** table in sync when guides are added or removed from `docs/`.
+
+## Code Style & Conventions
+
+- Workflow filenames: `kebab-case.yml`
+- Companion guide filenames: match the workflow name, e.g. `gh-export-done-items.yml` → `gh-export-done-items.md`
+- Scripts under `.github/workflows/scripts/` use Node.js; follow the existing `package.json` dependencies.
