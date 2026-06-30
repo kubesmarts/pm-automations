@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+180,,https://github.com/serverlessworkflow/editor/issues/180,feat: Assess and improve accessibility,cheryl7114,,Tooling,Normal,,2026/Q2,M,1.0,1.0,2026-06-30,,
 1087,,https://github.com/serverlessworkflow/sdk-java/issues/1087,Add support to a2a,fjtirado,,Runtimes,Minor,,2026/Q2,L,1.0,1.3,2026-06-27,,
 192,,https://github.com/serverlessworkflow/editor/issues/192,task: Write & submit ADR for community review,lornakelly,,Tooling,Major,,2026/Q2,S,0.2,0.2,2026-06-27,,
 204,,https://github.com/serverlessworkflow/editor/issues/204,fix: Bump @serverlessworkflow/sdk-typescript to 1.0.3-alpha3 to pick up DSL version validation fix,lornakelly,,Tooling,Major,,2026/Q2,S,0.1,0.1,2026-06-27,,

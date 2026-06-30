@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+3,,https://github.com/kubesmarts/logic-operator/issues/3,Codebase Cleanup & Preparation,ricardozanini,,Cloud,Blocker,Serverless Logic,OSL.Next,,0.4,0.4,2026-06-30,,
 13,,https://github.com/kubesmarts/logic-apps/issues/13,Data Index PostgreSQL: getWorkflowInstances fails due to invalid HQL path t.instance.id,gmunozfe,,Runtimes,Blocker,Serverless Logic,OSL.Next,,0.1,0.1,2026-05-28,,
 16,,https://github.com/kubesmarts/logic-apps/issues/16,Data Index PostgreSQL task normalization trigger is not concurrency-safe for task lifecycle events,gmunozfe,,Runtimes,Major,Serverless Logic,OSL.Next,,0.3,0.3,2026-05-28,,
 19,,https://github.com/kubesmarts/logic-apps/issues/19,Data Index PostgreSQL deadlocks under performance pressure,gmunozfe,,Runtimes,Major,Serverless Logic,OSL.Next,,0.4,0.3,2026-05-28,,
