@@ -1,7 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-1070,,https://redhat.atlassian.net/browse/SRVLOGIC-1070,Reuse midstream-mvn-config/settings.xml in all GitHub workflows in kubesmarts/kie-tools workflows. ,baldimir,Next,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0,0.4,0.4,,0.4,,
-1068,,https://redhat.atlassian.net/browse/SRVLOGIC-1068,CPaaS upgrade to v9.40.0 including osl + drools + drools-ansible-integration,saumya1singh,In Review,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.1,0.1,0,0.1,0.1,,,
-1067,,https://redhat.atlassian.net/browse/SRVLOGIC-1067,Some snapshot artifacts are deployed twice during the snapshots publishing,baldimir,In Progress,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0,0.4,0.4,,0.4,,
+1071,,https://redhat.atlassian.net/browse/SRVLOGIC-1071,Weekly image publishing pipeline needs to override image names,baldimir,In Review,Bug,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0.1,0.1,0.1,0.1,0.1,,
+1070,,https://redhat.atlassian.net/browse/SRVLOGIC-1070,Reuse midstream-mvn-config/settings.xml in all GitHub workflows in kubesmarts/kie-tools workflows. ,baldimir,In Review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0.4,0,0.4,0.4,,,
+1067,,https://redhat.atlassian.net/browse/SRVLOGIC-1067,Some snapshot artifacts are deployed twice during the snapshots publishing,baldimir,In Progress,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0.2,0.2,0.4,0.2,0.2,,
 1065,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1065,[IBM test migration] Implement ARM Architecture Support in QE Jobs,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,2.0,0,2.0,2.0,,2.0,,
 1064,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1064,[IBM test migration] Create Top-Level Pipeline for QE Jobs,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,0.6,0,0.6,0.6,,0.6,,
 1063,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1063,[IBM test migration] Migration of Product Tests: OCP Jobs,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,2.0,0,2.0,2.0,,2.0,,
