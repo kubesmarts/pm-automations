@@ -107,10 +107,12 @@ function mapStatus(jiraStatus) {
   const statusMap = {
     'NEW': 'Next',
     'REFINEMENT': 'Next',
-    'IN PROGRESS': 'In Progress',
-    'ON_DEV': 'In Progress',
-    'CORE_REVIEW': 'In Review',
-    'ON_QA': 'In Review',
+    'IN PROGRESS': 'In progress',
+    'ON_DEV': 'In progress',
+    'CODE REVIEW': 'In review',
+    'CODE_REVIEW': 'In review',
+    'CORE_REVIEW': 'In review',
+    'ON_QA': 'In review',
     'RELEASE PENDING': 'Done',
     'CLOSED': 'Done', // Only if resolution = Done (checked before calling)
     'BACKLOG': 'Backlog'

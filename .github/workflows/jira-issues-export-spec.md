@@ -232,9 +232,9 @@ Backlog items ARE exported if:
 | Yes | "1.39.0" | Backlog | Yes | Whitelisted + specific version |
 | Yes | "Future" | Backlog | No | Future version excluded |
 | Yes | (empty) | Backlog | No | No version set |
-| Yes | "1.39.0" | In Progress | Yes | Whitelisted + specific version |
+| Yes | "1.39.0" | In progress | Yes | Whitelisted + specific version |
 | No | "1.39.0" | Backlog | No | Not in whitelist |
-| No | "1.39.0" | In Progress | No | Not in whitelist |
+| No | "1.39.0" | In progress | No | Not in whitelist |
 | (none) | "1.39.0" | Backlog | Yes | Specific version allows unassigned |
 | (none) | "Future" | Backlog | No | Future version + no assignee |
 | (none) | (empty) | Backlog | No | No version + no assignee |
@@ -249,6 +249,7 @@ Based on the [JIRA Status to Policy Stage Mapping](https://github.com/kubesmarts
 | REFINEMENT | Next | Planning stage |
 | IN PROGRESS | In progress | Active work |
 | ON_DEV | In progress | Active work |
+| CODE REVIEW | In review | Under review |
 | CODE_REVIEW | In review | Under review |
 | ON_QA | In review | Under review |
 | RELEASE PENDING | Done | Completed |

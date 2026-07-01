@@ -44,3 +44,8 @@ Update the guide if any of the above apply.
 - Workflow filenames: `kebab-case.yml`
 - Companion guide filenames: match the workflow name, e.g. `gh-export-done-items.yml` → `gh-export-done-items.md`
 - Scripts under `.github/workflows/scripts/` use Node.js; follow the existing `package.json` dependencies.
+
+## Commit Preparation Rule
+
+- Before preparing, suggesting, or executing any commit-related action in this repository, run [`npm test`](.github/workflows/scripts/package.json) in [`.github/workflows/scripts/`](.github/workflows/scripts).
+- If the tests fail, do not proceed with the commit request until the failure is resolved or the user explicitly instructs otherwise.
