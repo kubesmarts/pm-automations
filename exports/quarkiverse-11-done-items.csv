@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1490,,https://github.com/serverlessworkflow/sdk-java/issues/1490,Referencing an undefined authentication via `.use` silently sends request unauthenticated,mcruzdev,,Runtimes,Major,,2026/Q2,S,0.1,0.1,2026-07-02,,
+691,,https://github.com/quarkiverse/quarkus-flow/issues/691,feat: Allow a global gRPC configuration per namespace:name,mcruzdev,,Runtimes,Major,,2026/Q2,M,0.3,0.3,2026-07-02,,
 1492,,https://github.com/serverlessworkflow/sdk-java/issues/1492,Show a better message error when the proto descriptor is not available,"mcruzdev,fjtirado",,Runtimes,Normal,,2026/Q2,S,0.1,0.1,2026-07-01,,
 1496,,https://github.com/serverlessworkflow/sdk-java/issues/1496,Closing grpc managedChannel,fjtirado,,Runtimes,Normal,,2026/Q2,S,0.2,0.2,2026-07-01,,
 199,,https://github.com/serverlessworkflow/editor/issues/199,bug: Edge labels rendered behind nodes and edges,handreyrc,,Tooling,Normal,,2026/Q2,S,0.5,0.3,2026-07-01,,
