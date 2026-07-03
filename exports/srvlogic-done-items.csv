@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,,Normal,Serverless logic,1.39.0 OSL,,0,2.0,2026-07-02,,
 1068,,https://redhat.atlassian.net/browse/SRVLOGIC-1068,CPaaS upgrade to v9.40.0 including osl + drools + drools-ansible-integration,saumya1singh,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.1,0.1,2026-06-29,,
 1000,,https://redhat.atlassian.net/browse/SRVLOGIC-1000,CPaaS upgrade to 9.39.0 including osl + drools + drools-ansible-integration,jankrystof-ibm,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.1,0,2026-06-29,,
 895,,https://redhat.atlassian.net/browse/SRVLOGIC-895,CPaaS 9.38 Upgrade for OSL pipelines,jankrystof-ibm,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.1,0.1,2026-06-25,,
