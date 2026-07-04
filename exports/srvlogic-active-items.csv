@@ -1,5 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-1074,,https://redhat.atlassian.net/browse/SRVLOGIC-1074,QE verification of SRVLOGIC-1024,domhanak,In review,Task,,Critical,Serverless logic,1.39.0 OSL,,0,0,0,,,,,
+1075,,https://redhat.atlassian.net/browse/SRVLOGIC-1075,Upload NodeJS version v24.18.0 to rcm-guest,saumya1singh,Next,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0,0.2,0.2,,0.2,,
+1074,,https://redhat.atlassian.net/browse/SRVLOGIC-1074,QE verification of SRVLOGIC-1024,domhanak,In review,Task,Tooling,Critical,Serverless logic,1.39.0 OSL,,0,0,0,,,,,
 1073,,https://redhat.atlassian.net/browse/SRVLOGIC-1073,Update kubernetes libraries to v0.36.x stream,baldimir,In review,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,0,0.2,0.2,,,
 1071,,https://redhat.atlassian.net/browse/SRVLOGIC-1071,Weekly image publishing pipeline needs to override image names,baldimir,In review,Bug,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0.1,0.1,0.1,0.1,0.1,,
 1070,,https://redhat.atlassian.net/browse/SRVLOGIC-1070,Reuse midstream-mvn-config/settings.xml in all GitHub workflows in kubesmarts/kie-tools workflows. ,baldimir,In review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0.4,0,0.4,0.4,,,
