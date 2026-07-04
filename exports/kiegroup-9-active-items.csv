@@ -4,6 +4,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 2314,,https://github.com/apache/incubator-kie-issues/issues/2314,DRLGEN Investigate best plain English formats for DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,2.0,1.0,1.0,2.0,1.0,1.0,,
 2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools sequential,Rikkola,In progress,,Runtimes,Major,,Future,L,6.0,5.0,1.0,6.0,5.0,1.0,,
 456,,https://github.com/casehubio/engine/issues/456,feat(acl): thread dispatch identity via PropagationContext,treblereel,In progress,,Runtimes,Normal,,Future,M,0.6,0.0,0.6,0.6,0.0,0.6,,
+99,,https://github.com/kiegroup/drools-lsp/issues/99,Non-alpha release,tkobayas,In review,,Tooling,Major,,Future,S,0.2,0.1,0.1,0.2,0.1,0.1,,
 97,,https://github.com/tkobayas/drlx-parser/issues/97,DRLX syntax review,tkobayas,In progress,,Docs,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,
 14,6683,https://github.com/pibizza/drools-journal/issues/14,Implement Chronicle Queue backend — ChronicleJournalStorage and ChronicleJournalScanner,pibizza,In progress,,Runtimes,Normal,,Future,L,1.2,0.1,1.1,1.2,0.1,1.1,,
 10,,https://github.com/casehubio/engine/issues/10,Deterministic Replay / Restate Execution Model,treblereel,In progress,,Runtimes,Normal,,Future,L,,,,1.6,1.2,0.0,,

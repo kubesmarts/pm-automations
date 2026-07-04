@@ -1,5 +1,4 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-32,23,https://github.com/kubesmarts/logic-apps/issues/32,Data Index ingestion bottleneck in Mode 3 with Kafka and postgresql: consider grouping events,mcruzdev,In progress,,Runtimes,Major,Serverless Logic,OSL.Next,,0.4,0.4,0.0,0.4,0.4,0.0,,
 16,,https://github.com/kubesmarts/logic-operator/issues/16,[EPIC] Logic Operator v2.0 - Implementation Roadmap,ricardozanini,Next,,Cloud,Blocker,Serverless Logic,OSL.Next,,,,,0.4,0.4,0.0,,
 15,16,https://github.com/kubesmarts/logic-operator/issues/15,Production Readiness,ricardozanini,Backlog,,Cloud,Blocker,Serverless Logic,OSL.Next,,,,,0.0,0.0,0.0,,
 14,16,https://github.com/kubesmarts/logic-operator/issues/14,Migration Guide & Documentation,ricardozanini,Backlog,,Docs,Blocker,Serverless Logic,OSL.Next,,,,,0.0,0.0,0.0,,
