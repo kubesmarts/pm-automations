@@ -1,4 +1,11 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+110,,https://github.com/serverlessworkflow/editor/issues/110,Demo: Present editor to CNCF community and gather feedback,lornakelly,,Tooling,Major,,2026/Q2,S,0.2,0.1,2026-07-04,,
+1509,,https://github.com/serverlessworkflow/sdk-java/issues/1509,Reduce verbosity of use.authentications(...) DSL for OAuth2/OIDC,mcruzdev,,Runtimes,Major,,2026/Q3,M,0.2,0.2,2026-07-04,,
+1511,,https://github.com/serverlessworkflow/sdk-java/issues/1511,Expose reference resolution in DefaultAuthProviderFactory as a public static method,mcruzdev,,Runtimes,Major,,2026/Q3,M,0.2,0.2,2026-07-04,,
+185,,https://github.com/serverlessworkflow/editor/issues/185,feat: Add reusable error toast for failure feedback,cheryl7114,,Tooling,Normal,,2026/Q2,S,0.6,0.8,2026-07-04,,
+725,,https://github.com/quarkiverse/quarkus-flow/issues/725,[Docs] Document proxy support as experimental feature,ricardozanini,,Runtimes,Major,,1.0,XS,0.1,0.1,2026-07-04,,
+670,,https://github.com/quarkiverse/quarkus-flow/issues/670,feat: Configure Dependabot to open a single weekly dependency update PR for each ecosystem,"ricardozanini,fantonangeli",,CI,Major,,2026/Q2,XS,0.1,0.1,2026-07-03,,
+707,,https://github.com/quarkiverse/quarkus-flow/issues/707,"Qflow generated JPA tables includes ""process"" instead of ""workflow"" in some of the generated DB  objects",wmedvede,,Runtimes,Normal,,2026/Q2,S,0.2,0.2,2026-07-03,,
 1490,,https://github.com/serverlessworkflow/sdk-java/issues/1490,Referencing an undefined authentication via `.use` silently sends request unauthenticated,mcruzdev,,Runtimes,Major,,2026/Q2,S,0.1,0.1,2026-07-02,,
 691,,https://github.com/quarkiverse/quarkus-flow/issues/691,feat: Allow a global gRPC configuration per namespace:name,mcruzdev,,Runtimes,Major,,2026/Q2,M,0.3,0.3,2026-07-02,,
 1492,,https://github.com/serverlessworkflow/sdk-java/issues/1492,Show a better message error when the proto descriptor is not available,"mcruzdev,fjtirado",,Runtimes,Normal,,2026/Q2,S,0.1,0.1,2026-07-01,,
