@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+14,,https://github.com/pibizza/drools-journal/issues/14,Implement Chronicle Queue backend — ChronicleJournalStorage and ChronicleJournalScanner,pibizza,,Runtimes,Normal,,Future,L,1.2,0.1,2026-07-05,,
 3,,https://github.com/tkobayas/drlx-lsp/issues/3,Add completion tests for new drlx-parser constructs,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-07-04,,
 457,,https://github.com/casehubio/engine/issues/457,feat(acl): extend case definition YAML schema with authorization section,treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-07-04,,
 6765,,https://github.com/apache/incubator-kie-drools/issues/6765,Revisit removeDormantTuple issue,tkobayas,,Runtimes,Major,,Future,M,0.8,0.8,2026-07-02,,
