@@ -1,4 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+633,,https://github.com/quarkiverse/quarkus-flow/issues/633,[OIDC] Phase 0 — Validation & Proof of Concept,mcruzdev,,Runtimes,Normal,,2026/Q2,M,0.4,0.3,2026-07-07,,
+128,,https://github.com/serverlessworkflow/editor/issues/128,feat: Implement tooltip on custom call type,kumaradityaraj,,Tooling,Normal,,2026/Q2,M,0.4,0.8,2026-07-06,,
+143,,https://github.com/serverlessworkflow/editor/issues/143,feat: Styling tweaks and visual refinements,lornakelly,,Tooling,Normal,,2026/Q2,M,0.4,0.4,2026-07-06,,Rough estimate
+156,,https://github.com/serverlessworkflow/editor/issues/156,bug: Unpinned tag for a non-immutable Action in workflow,fantonangeli,,Tooling,Major,,2026/Q2,S,0.2,0.1,2026-07-06,,
+715,,https://github.com/quarkiverse/quarkus-flow/issues/715,bug: A2AClientAgent is an Agent but it is not treated as such,ricardozanini,,Runtimes,Major,,1.0,S,0.5,0.1,2026-07-06,,
+79,,https://github.com/serverlessworkflow/editor/issues/79,feat: Style start/end node components,kumaradityaraj,,Tooling,Normal,,2026/Q2,S,0.2,1.0,2026-07-06,,
 110,,https://github.com/serverlessworkflow/editor/issues/110,Demo: Present editor to CNCF community and gather feedback,lornakelly,,Tooling,Major,,2026/Q2,S,0.2,0.1,2026-07-04,,
 1509,,https://github.com/serverlessworkflow/sdk-java/issues/1509,Reduce verbosity of use.authentications(...) DSL for OAuth2/OIDC,mcruzdev,,Runtimes,Major,,2026/Q3,M,0.2,0.2,2026-07-04,,
 1511,,https://github.com/serverlessworkflow/sdk-java/issues/1511,Expose reference resolution in DefaultAuthProviderFactory as a public static method,mcruzdev,,Runtimes,Major,,2026/Q3,M,0.2,0.2,2026-07-04,,

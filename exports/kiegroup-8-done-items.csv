@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+2762,,https://github.com/apache/incubator-kie-tools/issues/2762,[serverless-logic-web-tools] Migrate the devmode image used to deploy workflows to `sonataflow-devmode-image`,fantonangeli,,Tooling,Normal,OSL,1.38.0 OSL,M,0.0,0.0,2026-07-07,,
+2767,,https://github.com/apache/incubator-kie-tools/issues/2767,[serverless-logic-web-tools] Importing gist with multiple files does not work,fantonangeli,,Tooling,Normal,OSL,1.38.0 OSL,M,0.0,0.0,2026-07-07,,
+2769,,https://github.com/apache/incubator-kie-tools/issues/2769,Move SLWT quarkus-accelerator into kie-tools as a new package serverless-logic-web-tools-accelerator-quarkus,fantonangeli,,Tooling,Normal,Apache,1.38.0 OSL,M,1.0,0.0,2026-07-07,,
+3271,,https://github.com/apache/incubator-kie-tools/issues/3271,"Sonataflow management console should use GET requests to data index ""/graphql"" endpoint",fantonangeli,,Tooling,Normal,Apache,1.38.0 OSL,S,0.5,0.0,2026-07-07,,
 192,,https://github.com/kiegroup/kogito-runtimes/issues/192,Remove spring boot template from code generation,fjtirado,,Runtimes,Normal,OSL,1.39.0 OSL,S,0.1,0.1,2026-06-10,,
 757,,https://github.com/apache/incubator-kie-kogito-docs/issues/757,Add a section explaining the workflow id naming and versioning recommended practices and limitations,wmedvede,,Docs,Normal,OSL,1.39.0 OSL,S,0.2,0.2,2026-06-09,SRVLOGIC-957,
 1149,,https://github.com/serverlessworkflow/specification/issues/1149,Proposal: Official Migration Tool for 0.8/0.9 to 1.0.0 Workflows,ricardozanini,,Cloud,Major,CNCF Spec,Future,M,0.1,0.1,2026-05-08,,
@@ -42,7 +46,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 197,48,https://github.com/quarkiverse/quarkus-flow/issues/197,Add MVStore plugin to Quarkus flow,fjtirado,,Runtimes,Major,CNCF Spec,Future,S,0.2,0.2,2026-03-17,,
 2238,,https://github.com/apache/incubator-kie-issues/issues/2238,[Regression] ProcessEventDispatcher doesn't consider processInstanceId,fjtirado,,Runtimes,Major,CNCF Spec,Future,M,0.4,0.3,2026-03-17,,
 1129,,https://github.com/apache/incubator-kie-issues/issues/1129,SWF-Editor: React Flow PoC,handreyrc,,Tooling,Minor,OSL,1.38.0 OSL,M,3.0,3.0,2026-03-13,,
-2603,,https://github.com/apache/incubator-kie-tools/issues/2603,EPIC - SonataFlow Operator and Kogito Images migration to `kie-tools`,"ricardozanini",,Cloud,Major,Apache,10.1.0 Apache,XL,4.0,4.0,2026-03-13,,
+2603,,https://github.com/apache/incubator-kie-tools/issues/2603,EPIC - SonataFlow Operator and Kogito Images migration to `kie-tools`,ricardozanini,,Cloud,Major,Apache,10.1.0 Apache,XL,4.0,4.0,2026-03-13,,
 3324,,https://github.com/apache/incubator-kie-tools/issues/3324,[serverless-workflow-diagram-editor] for a foreach state the foreach node is not coloured,"fantonangeli,kumaradityaraj",,Tooling,Normal,Apache,10.1.0 Apache,M,2.0,3.9,2026-03-13,,
 3432,,https://github.com/apache/incubator-kie-tools/issues/3432,[sonataflow-operator] Implement nativelly HPA support for SonataFlow workflows and Data Index service deployments,wmedvede,,Cloud,Major,OSL,1.38.0 OSL,M,2.0,2.2,2026-03-13,,
 3438,,https://github.com/apache/incubator-kie-tools/issues/3438,[sonataflow-deployment-webapp] SonataFlow Deployment Webapp not able to start a workflow,fantonangeli,,Tooling,Minor,Apache,10.1.0 Apache,M,0.5,0.3,2026-03-13,,
