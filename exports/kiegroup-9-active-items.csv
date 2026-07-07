@@ -1,11 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
 6761,,https://github.com/apache/incubator-kie-drools/issues/6761,"CI scoped build misses Quarkus extension runtime <-> deployment pairing, causing extension-descriptor failures on PRs",tkobayas,In progress,,CI,Normal,,Future,S,0.2,0.1,0.1,0.2,0.1,0.1,,
-6683,,https://github.com/apache/incubator-kie-drools/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,4.0,2.0,0.0,10.0,2.7,4.3,,"I have zeroed the remaining time since the item is now split in subitems, and the subitems will provide the remaining time."
+6683,,https://github.com/apache/incubator-kie-drools/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,4.0,2.0,0.0,10.0,2.7,3.2,,"I have zeroed the remaining time since the item is now split in subitems, and the subitems will provide the remaining time."
 2314,,https://github.com/apache/incubator-kie-issues/issues/2314,DRLGEN Investigate best plain English formats for DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,2.0,1.0,1.0,2.0,1.0,1.0,,
 2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools sequential,Rikkola,In progress,,Runtimes,Major,,Future,L,6.0,5.0,1.0,6.0,5.0,1.0,,
 456,,https://github.com/casehubio/engine/issues/456,feat(acl): thread dispatch identity via PropagationContext,treblereel,In progress,,Runtimes,Normal,,Future,M,0.6,0.0,0.6,0.6,0.0,0.6,,
-99,,https://github.com/kiegroup/drools-lsp/issues/99,Non-alpha release,tkobayas,In review,,Tooling,Major,,Future,S,0.2,0.1,0.1,0.2,0.1,0.1,,
+99,,https://github.com/kiegroup/drools-lsp/issues/99,Non-alpha release,tkobayas,In progress,,Tooling,Major,,Future,S,0.2,0.1,0.1,0.2,0.1,0.1,,
 97,,https://github.com/tkobayas/drlx-parser/issues/97,DRLX syntax review,tkobayas,In progress,,Docs,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,
-10,,https://github.com/casehubio/engine/issues/10,Deterministic Replay / Restate Execution Model,treblereel,In progress,,Runtimes,Normal,,Future,L,,,,1.6,1.2,0.0,,
 9,2,https://github.com/casehubio/engine/issues/9,YAML schema support for typed expressions,treblereel,In progress,,Runtimes,Normal,,Future,L,1.0,0.0,1.0,1.0,0.0,1.0,,
-2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,0.0,0.0,0.0,4.2,1.4,2.0,,
+2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,,,,,,,,
