@@ -77,6 +77,7 @@ Compliance alert codes:
 | `NO_PRIORITY` | Missing priority |
 | `NO_VERSION` | Missing fix versions |
 | `NO_ESTIMATE` | Missing original estimate |
+| `ESTIMATE_TOO_LONG` | Original estimate exceeds 2 weeks and status is `In Progress` |
 | `NO_REMAINING_WORK` | Missing remaining estimate |
 | `NO_TIME_SPENT` | Missing time spent |
 | `NO_ASSIGNEE` | Missing assignee |
@@ -153,6 +154,9 @@ The workflow will:
 - Verify you have permission to edit issues in JIRA
 - Check workflow logs for specific error messages
 - Try dry run mode to test without making changes
+
+### `ESTIMATE_TOO_LONG` violation on an issue
+- The original estimate on the JIRA ticket exceeds 2 weeks (10 business days) and the ticket is `In Progress`; consider breaking the work into smaller issues, or move it back to `Backlog` / `New` if the large estimate is intentional at this stage
 
 ### Workflow fails
 - Check **Actions** tab for error logs

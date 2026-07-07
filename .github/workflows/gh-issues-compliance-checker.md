@@ -104,6 +104,7 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 | Code | When set |
 |------|----------|
 | `NO_ESTIMATE` | `Estimate` is empty and the item's `Status` is neither `Backlog` nor `Next` |
+| `ESTIMATE_TOO_LONG` | `Estimate` is set but exceeds 2 weeks and the item's `Status` is `In Progress` |
 | `NO_REMAINING_WORK` | `Remaining Work` is empty and `Status` is `In Progress` or `In Review` (not raised for `Done` — field is auto-cleared) |
 | `NO_AREA` | `Area` is empty and `Status` is not `Backlog` |
 | `NO_PRIORITY` | `Priority` is empty and `Status` is not `Backlog` |
@@ -295,6 +296,7 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **Project in a different org not processed** → the PAT owner must be a member of that org; for SAML SSO orgs the PAT must be authorized via **GitHub → Settings → Personal access tokens → Configure SSO → Authorize**
 - **`Alerts` field not updated** → the field name must be exactly `Alerts` (case-sensitive) and its type must be Text; if absent, the field is silently skipped and a note appears in the Actions log (`not configured`)
 - **`Alerts` shows `NO_ESTIMATE` or `NO_REMAINING_WORK`** → set the missing field on the project item, or move the item back to `Backlog` / `Next` status if estimation is not yet applicable
+- **`Alerts` shows `ESTIMATE_TOO_LONG`** → the item's `Estimate` is greater than 2 weeks and it is `In Progress`; consider breaking it down into smaller pieces of work, or move it back to `Backlog` / `Next` if the large estimate is intentional at this stage
 - **`Alerts` shows `NO_AREA`** → set the `Area` field on the project item, or move it back to `Backlog` if area classification is not yet applicable
 - **`Alerts` shows `NO_PRIORITY`** → set the `Priority` field on the project item, or move it back to `Backlog` if prioritization is not yet applicable
 - **`Alerts` shows `NO_TIME_SPENT`** → the item is `Done` but `Time Spent` is empty; log the actual time spent

@@ -75,7 +75,7 @@ The issue is actively being worked on. All planning fields must be filled in and
 | `Area` | **Yes** | Alerts: `NO_AREA` |
 | `Priority` | **Yes** | Alerts: `NO_PRIORITY` |
 | `Target Milestone` | **Yes** | Alerts: `NO_MILESTONE` |
-| `Estimate` | **Yes** | Alerts: `NO_ESTIMATE` |
+| `Estimate` | **Yes** | Alerts: `NO_ESTIMATE`; keep ≤ 2 weeks while `In Progress` or alerts `ESTIMATE_TOO_LONG` |
 | `Remaining Work` | **Yes** | Alerts: `NO_REMAINING_WORK` |
 | `Time Spent` | Update regularly | Will be required at `Done` |
 | Assignee (GH issue) | **Yes** | Alerts: `NO_ASSIGNEE` |
@@ -185,6 +185,7 @@ Please review and resolve these alerts.
 | `NO_PRIORITY` | `Priority` is empty and the issue is past `Backlog` | Set the `Priority` field |
 | `NO_MILESTONE` | `Target Milestone` is empty and the issue is past `Backlog` | Set the `Target Milestone` field |
 | `NO_ESTIMATE` | `Estimate` is empty and status is past `Next` | Set the `Estimate` field |
+| `ESTIMATE_TOO_LONG` | `Estimate` exceeds 2 weeks and status is `In Progress` | Break the work item into smaller pieces, or move it back to `Backlog` / `Next` if the large estimate is intentional at this stage |
 | `NO_REMAINING_WORK` | `Remaining Work` is empty and status is `In Progress` or `In Review` | Set the `Remaining Work` field |
 | `NO_TIME_SPENT` | `Time Spent` is empty and status is `Done` | Enter the total time spent |
 | `NO_ASSIGNEE` | No assignee on the GH issue and status is `In Progress`, `In Review`, or `Done` | Assign the issue to the responsible person |

@@ -34,6 +34,9 @@ class PolicyValidator {
             'component': 'NO_COMPONENT'
         };
 
+        // Threshold for ESTIMATE_TOO_LONG: 2 weeks = 2 × 5 days × 8 hours × 3600 seconds
+        this.estimateTooLongSeconds = 2 * 5 * 8 * 3600;
+
         // Component-to-Area label mapping (for SRVLOGIC issues only)
         this.componentAreaMapping = {
             'CI:Midstream': 'area/ci',
@@ -119,6 +122,14 @@ class PolicyValidator {
         // Special check: Remaining Work should be cleared when Done
         if (policyStage === 'Done' && fieldValues.remainingEstimate) {
             violations.push('REMAINING_WORK_NOT_CLEARED');
+        }
+
+        // ESTIMATE_TOO_LONG: estimate is set but exceeds 2 weeks, only for In Progress
+        if (policyStage === 'In Progress') {
+            const estimateSeconds = issue.fields.timetracking?.originalEstimateSeconds;
+            if (estimateSeconds != null && estimateSeconds > this.estimateTooLongSeconds) {
+                violations.push('ESTIMATE_TOO_LONG');
+            }
         }
 
         return {

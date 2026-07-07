@@ -221,6 +221,12 @@ if [ -n "$TIME_SPENT_FIELD_ID" ] && [ "$STATUS_LC" = "done" ] && [ -z "$TIME_SPE
   SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }NO_TIME_SPENT"
 fi
 
+# ESTIMATE_TOO_LONG
+if [ -n "$ESTIMATE_FIELD_ID" ] && [ "$STATUS_LC" = "in progress" ] && [ -n "$ESTIMATE" ] && \
+   awk -v e="$ESTIMATE" 'BEGIN { exit !(e+0 > 2) }'; then
+  SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }ESTIMATE_TOO_LONG"
+fi
+
 echo "\$SYNC_STATUS_CODES"
 `;
   return bash(script);
@@ -361,6 +367,43 @@ test('NO_TIME_SPENT: not raised for in-progress items', () => {
 test('NO_TIME_SPENT: not raised when time spent is set', () => {
   const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'done', TIME_SPENT: '1.5' });
   assert.ok(!codes.includes('NO_TIME_SPENT'), `Unexpected NO_TIME_SPENT when set: "${codes}"`);
+});
+
+// -- ESTIMATE_TOO_LONG --
+
+test('ESTIMATE_TOO_LONG: raised for in-progress item with estimate > 2 weeks', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', ESTIMATE: '3' });
+  assert.ok(codes.includes('ESTIMATE_TOO_LONG'), `Expected ESTIMATE_TOO_LONG, got: "${codes}"`);
+});
+
+test('ESTIMATE_TOO_LONG: not raised when estimate is exactly 2 weeks', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', ESTIMATE: '2' });
+  assert.ok(!codes.includes('ESTIMATE_TOO_LONG'), `Unexpected ESTIMATE_TOO_LONG for estimate=2: "${codes}"`);
+});
+
+test('ESTIMATE_TOO_LONG: not raised when estimate is below 2 weeks', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', ESTIMATE: '1' });
+  assert.ok(!codes.includes('ESTIMATE_TOO_LONG'), `Unexpected ESTIMATE_TOO_LONG for estimate=1: "${codes}"`);
+});
+
+test('ESTIMATE_TOO_LONG: not raised for backlog items even with large estimate', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'backlog', ESTIMATE: '5' });
+  assert.ok(!codes.includes('ESTIMATE_TOO_LONG'), `Unexpected ESTIMATE_TOO_LONG for backlog: "${codes}"`);
+});
+
+test('ESTIMATE_TOO_LONG: not raised for next items even with large estimate', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'next', ESTIMATE: '5' });
+  assert.ok(!codes.includes('ESTIMATE_TOO_LONG'), `Unexpected ESTIMATE_TOO_LONG for next: "${codes}"`);
+});
+
+test('ESTIMATE_TOO_LONG: not raised when estimate field is not configured', () => {
+  const codes = evalRule({ ...ALL_FIELDS, ESTIMATE_FIELD_ID: '', STATUS_LC: 'in progress', ESTIMATE: '5' });
+  assert.ok(!codes.includes('ESTIMATE_TOO_LONG'), `Unexpected ESTIMATE_TOO_LONG when field absent: "${codes}"`);
+});
+
+test('ESTIMATE_TOO_LONG: not raised when estimate is absent (NO_ESTIMATE handles that)', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', ESTIMATE: '' });
+  assert.ok(!codes.includes('ESTIMATE_TOO_LONG'), `Unexpected ESTIMATE_TOO_LONG for empty estimate: "${codes}"`);
 });
 
 // -- Multiple alerts at once --
