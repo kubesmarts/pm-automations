@@ -455,10 +455,11 @@ jobs:
               
               EXTERNAL_REF=$(get_field "$item" "External Reference")
               COMMENTS=$(get_field "$item" "Comments")
+              REPORTING_DATE=$(get_field "$item" "Reporting Date")
               ALERTS=$(get_field "$item" "Alerts")
 
               # Build CSV line with proper escaping
-              # Format: Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Alerts
+              # Format: Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
               CSV_LINE="${ISSUE_NUMBER},"
               CSV_LINE+="$(escape_csv "$PARENT_ISSUE"),"
               CSV_LINE+="$(escape_csv "$ISSUE_URL"),"
@@ -479,6 +480,7 @@ jobs:
               CSV_LINE+="$(escape_csv "$SIGMA_REMAINING"),"
               CSV_LINE+="$(escape_csv "$EXTERNAL_REF"),"
               CSV_LINE+="$(escape_csv "$COMMENTS"),"
+              CSV_LINE+="$(escape_csv "$REPORTING_DATE"),"
               CSV_LINE+="$(escape_csv "$ALERTS")"
 
               echo "$CSV_LINE" >> "$ACTIVE_ITEMS_FILE"
@@ -491,13 +493,13 @@ jobs:
             # Create or overwrite export file with all active items
             if [ $EXPORTED_COUNT -gt 0 ]; then
               # Create file with header and items
-              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Alerts" > "$EXPORT_FILE"
+              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts" > "$EXPORT_FILE"
               
               # Sort by Issue Number descending
               sort -t',' -k1,1nr "$ACTIVE_ITEMS_FILE" >> "$EXPORT_FILE"
             else
               # No active items - create empty file with header only
-              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Alerts" > "$EXPORT_FILE"
+              echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts" > "$EXPORT_FILE"
             fi
             
             rm -f "$ACTIVE_ITEMS_FILE"

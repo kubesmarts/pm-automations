@@ -63,6 +63,7 @@ const ACTIVE_ITEMS_COLUMNS = [
   'Σ Remaining Work',
   'External Reference',
   'Comments',
+  'Reporting Date',
   'Alerts'
 ];
 

@@ -440,6 +440,7 @@ const initiative = PROJECT_NAMES[projectKey] || projectKey
 | Σ Remaining Work | Aggregated remaining estimate in weeks | See Time Conversion (if available) |
 | External Reference | (empty) | Reserved for future use |
 | Comments | (empty) | Reserved for future use |
+| Reporting Date | Last updated date of the ticket | `issue.fields.updated` formatted as `YYYY-MM-DD`; falls back to current date if absent |
 | Alerts | Compliance violation codes from latest compliance comment | Empty if no `compliance-alerts` label; e.g. `NO_ESTIMATE, NO_REMAINING_WORK` |
 
 **File Replacement:**

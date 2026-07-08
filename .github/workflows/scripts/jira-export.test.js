@@ -11,7 +11,7 @@ const { issueToActiveItemRow } = require('./jira-export');
 /**
  * Build a minimal JIRA issue suitable for issueToActiveItemRow.
  */
-function makeIssue({ key = 'PROJ-1', status = 'IN PROGRESS', labels = [] } = {}) {
+function makeIssue({ key = 'PROJ-1', status = 'IN PROGRESS', labels = [], updated = '2025-03-15T10:00:00.000Z' } = {}) {
   return {
     key,
     fields: {
@@ -28,6 +28,7 @@ function makeIssue({ key = 'PROJ-1', status = 'IN PROGRESS', labels = [] } = {})
       aggregatetimeoriginalestimate: null,
       aggregatetimespent: null,
       aggregatetimeestimate: null,
+      updated,
     },
   };
 }
@@ -88,13 +89,34 @@ test('issueToActiveItemRow: Alerts column is present in returned row object', as
   assert.ok(Object.prototype.hasOwnProperty.call(row, 'Alerts'), 'row must have an Alerts key');
 });
 
+test('issueToActiveItemRow: Reporting Date is derived from issue.fields.updated', async () => {
+  const issue  = makeIssue({ updated: '2025-06-20T08:30:00.000Z' });
+  const client = makeJiraClient();
+
+  const row = await issueToActiveItemRow(issue, 'https://jira.example.com', null, client);
+
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Reporting Date'), 'row must have a Reporting Date key');
+  assert.equal(row['Reporting Date'], '2025-06-20');
+});
+
+test('issueToActiveItemRow: Reporting Date falls back to today when updated is absent', async () => {
+  const issue  = makeIssue({ updated: null });
+  const client = makeJiraClient();
+
+  const row = await issueToActiveItemRow(issue, 'https://jira.example.com', null, client);
+
+  const today = new Date().toISOString().split('T')[0];
+  assert.equal(row['Reporting Date'], today);
+});
+
 test('issueToActiveItemRow: other fields are unaffected when Alerts is populated', async () => {
-  const issue  = makeIssue({ key: 'PROJ-42', labels: ['compliance-alerts'] });
+  const issue  = makeIssue({ key: 'PROJ-42', labels: ['compliance-alerts'], updated: '2025-05-01T00:00:00.000Z' });
   const client = makeJiraClient('NO_AREA');
 
   const row = await issueToActiveItemRow(issue, 'https://jira.example.com', null, client);
 
   assert.equal(row['Issue Number'], '42');
   assert.equal(row['Title'], 'Test issue title');
+  assert.equal(row['Reporting Date'], '2025-05-01');
   assert.equal(row['Alerts'], 'NO_AREA');
 });

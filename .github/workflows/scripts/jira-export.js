@@ -73,6 +73,7 @@ async function issueToActiveItemRow(issue, baseUrl, whitelist, jiraClient) {
     'Σ Remaining Work': formatAggregateTimeValue(timeTracking.aggregateRemainingEstimate),
     'External Reference': '', // Reserved for future use
     'Comments': '', // Reserved for future use
+    'Reporting Date': formatReportingDate(issue.fields?.updated),
     'Alerts': alerts
   };
 }
