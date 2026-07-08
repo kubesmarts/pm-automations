@@ -127,6 +127,9 @@ function isDoneItem(issue) {
   // RELEASE PENDING is considered done
   if (status === 'RELEASE PENDING') return true;
 
+  // DONE (next-gen Jira projects) is considered done
+  if (status === 'DONE') return true;
+
   // CLOSED with resolution = Done is considered done
   if (status === 'CLOSED' && resolution === 'Done') return true;
 
@@ -138,11 +141,11 @@ function isDoneItem(issue) {
  */
 function isActiveItem(issue) {
   const status = (issue.fields?.status?.name || '').toUpperCase();
-  const resolution = issue.fields?.resolution?.name;
 
-  // Not RELEASE PENDING and not CLOSED with Done resolution
+  // Terminal statuses are never active
   if (status === 'RELEASE PENDING') return false;
-  if (status === 'CLOSED' && resolution === 'Done') return false;
+  if (status === 'DONE') return false;
+  if (status === 'CLOSED') return false; // any resolution — CLOSED+non-Done must be skipped, not exported as active
 
   return true;
 }
