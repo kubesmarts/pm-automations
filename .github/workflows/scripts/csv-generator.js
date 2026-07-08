@@ -62,7 +62,8 @@ const ACTIVE_ITEMS_COLUMNS = [
   'Σ Time Spent',
   'Σ Remaining Work',
   'External Reference',
-  'Comments'
+  'Comments',
+  'Alerts'
 ];
 
 /**

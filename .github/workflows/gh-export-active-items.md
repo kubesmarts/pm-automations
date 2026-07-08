@@ -86,6 +86,7 @@ Each export file contains the following columns:
 | Σ Remaining Work | Sum of remaining work for parent issues |
 | External Reference | External tracking reference (e.g., JIRA ID) |
 | Comments | Additional notes or comments |
+| Alerts | Compliance validation codes from the `Alerts` project field (e.g. `NO_ESTIMATE, NO_AREA`); empty when no alerts are present |
 
 ### Data Processing
 

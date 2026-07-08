@@ -2,7 +2,7 @@ const path = require('path');
 const JiraClient = require('./jira-client');
 const IssueDiscovery = require('./issue-discovery');
 const { loadContributorWhitelist, resolveAssignee } = require('./contributor-matcher');
-const { isEligibleForExport, isDoneItem, isActiveItem } = require('./eligibility-checker');
+const { hasComplianceAlerts, isEligibleForExport, isDoneItem, isActiveItem } = require('./eligibility-checker');
 const { extractTimeTracking, formatTimeValue, formatAggregateTimeValue } = require('./time-converter');
 const {
   extractProjectKey,
@@ -42,10 +42,15 @@ const CONTRIBUTORS_FILE = path.join(process.cwd(), 'contributors.csv');
 /**
  * Convert JIRA issue to CSV row (active items)
  */
-function issueToActiveItemRow(issue, baseUrl, whitelist) {
+async function issueToActiveItemRow(issue, baseUrl, whitelist, jiraClient) {
   const projectKey = extractProjectKey(issue.key);
   const assignee = resolveAssignee(issue.fields?.assignee, whitelist);
   const timeTracking = extractTimeTracking(issue);
+
+  // Fetch alert codes only for issues that carry the compliance-alerts label
+  const alerts = hasComplianceAlerts(issue)
+    ? await jiraClient.extractComplianceAlerts(issue.key)
+    : '';
 
   return {
     'Issue Number': extractIssueNumber(issue.key),
@@ -67,7 +72,8 @@ function issueToActiveItemRow(issue, baseUrl, whitelist) {
     'Σ Time Spent': formatAggregateTimeValue(timeTracking.aggregateTimeSpent),
     'Σ Remaining Work': formatAggregateTimeValue(timeTracking.aggregateRemainingEstimate),
     'External Reference': '', // Reserved for future use
-    'Comments': '' // Reserved for future use
+    'Comments': '', // Reserved for future use
+    'Alerts': alerts
   };
 }
 
@@ -102,7 +108,7 @@ function issueToDoneItemRow(issue, baseUrl, whitelist) {
 /**
  * Process and export issues
  */
-async function processIssues(issues, whitelist) {
+async function processIssues(issues, whitelist, jiraClient) {
   const stats = {
     total: issues.length,
     activeExported: 0,
@@ -143,7 +149,7 @@ async function processIssues(issues, whitelist) {
       console.log(`${issue.key} → Done (reported ${row['Reporting Date']})`);
     } else if (isActiveItem(issue)) {
       // Active item
-      const row = issueToActiveItemRow(issue, JIRA_BASE_URL, whitelist);
+      const row = await issueToActiveItemRow(issue, JIRA_BASE_URL, whitelist, jiraClient);
       if (!projectActiveItems[projectKey]) {
         projectActiveItems[projectKey] = [];
       }
@@ -277,7 +283,7 @@ async function main() {
     }
 
     // Process issues
-    const { projectActiveItems, projectDoneItems, stats } = await processIssues(issues, whitelist);
+    const { projectActiveItems, projectDoneItems, stats } = await processIssues(issues, whitelist, jiraClient);
 
     // Generate exports
     const generatedFiles = generateExports(projectActiveItems, projectDoneItems);
@@ -296,4 +302,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { main };
+module.exports = { main, issueToActiveItemRow };

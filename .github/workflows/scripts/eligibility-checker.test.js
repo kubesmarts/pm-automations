@@ -2,17 +2,20 @@
 
 const test   = require('node:test');
 const assert = require('node:assert/strict');
-const { isDoneItem, isActiveItem } = require('./eligibility-checker');
+const { hasComplianceAlerts, isEligibleForExport, isDoneItem, isActiveItem } = require('./eligibility-checker');
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function makeIssue({ status = 'IN PROGRESS', resolution = null } = {}) {
+function makeIssue({ status = 'IN PROGRESS', resolution = null, labels = [], fixVersions = [], assignee = null } = {}) {
   return {
     fields: {
-      status:     { name: status },
-      resolution: resolution ? { name: resolution } : null,
+      status:      { name: status },
+      resolution:  resolution ? { name: resolution } : null,
+      labels,
+      fixVersions: fixVersions.map(v => ({ name: v })),
+      assignee:    assignee ? { displayName: assignee, accountId: 'acc-1' } : null,
     },
   };
 }
@@ -106,4 +109,50 @@ test('isActiveItem: CLOSED with non-Done resolution is not active', () => {
 
 test('isActiveItem: CLOSED with no resolution is not active', () => {
   assert.equal(isActiveItem(makeIssue({ status: 'CLOSED' })), false);
+});
+
+// ---------------------------------------------------------------------------
+// hasComplianceAlerts
+// ---------------------------------------------------------------------------
+
+test('hasComplianceAlerts: returns true when compliance-alerts label is present', () => {
+  assert.ok(hasComplianceAlerts(makeIssue({ labels: ['compliance-alerts'] })));
+});
+
+test('hasComplianceAlerts: returns false when compliance-alerts label is absent', () => {
+  assert.equal(hasComplianceAlerts(makeIssue({ labels: ['area/ci', 'bug'] })), false);
+});
+
+test('hasComplianceAlerts: returns false when labels are empty', () => {
+  assert.equal(hasComplianceAlerts(makeIssue()), false);
+});
+
+// ---------------------------------------------------------------------------
+// isEligibleForExport — compliance-alerts issues ARE eligible (no longer excluded)
+// ---------------------------------------------------------------------------
+
+test('isEligibleForExport: compliance-alerts issue is eligible when other rules pass', () => {
+  // In-progress, whitelisted assignee, has a specific version — must pass
+  const whitelist = new Map([['acc-1', 'alice']]);
+  const issue = makeIssue({
+    status:      'IN PROGRESS',
+    labels:      ['compliance-alerts'],
+    fixVersions: ['1.39.0'],
+    assignee:    'Alice',
+  });
+  const result = isEligibleForExport(issue, 'alice', whitelist);
+  assert.equal(result.eligible, true);
+});
+
+test('isEligibleForExport: compliance-alerts backlog issue with no fixVersion is still ineligible (backlog rule)', () => {
+  const issue = makeIssue({ status: 'BACKLOG', labels: ['compliance-alerts'] });
+  const result = isEligibleForExport(issue, null, null);
+  assert.equal(result.eligible, false);
+  assert.equal(result.reason, 'backlog without fixVersion');
+});
+
+test('isEligibleForExport: compliance-alerts in-progress issue with no whitelist is eligible', () => {
+  const issue = makeIssue({ status: 'IN PROGRESS', labels: ['compliance-alerts'] });
+  const result = isEligibleForExport(issue, null, null);
+  assert.equal(result.eligible, true);
 });

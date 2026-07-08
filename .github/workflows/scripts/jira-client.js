@@ -212,6 +212,43 @@ class JiraClient {
         });
     }
 
+    /**
+     * Extract compliance alert codes from the latest compliance checker comment.
+     * Returns a comma-separated string of codes (e.g. "NO_ESTIMATE, NO_REMAINING_WORK"),
+     * or an empty string if no compliance comment exists.
+     * The comment body format is:
+     *   "Compliance violations detected: <codes>. Please review and resolve."
+     */
+    async extractComplianceAlerts(issueKey) {
+        try {
+            const existing = await this.makeRequest(`/rest/api/3/issue/${issueKey}/comment?maxResults=100&orderBy=-created`);
+            const comment = existing.comments?.find(c =>
+                JSON.stringify(c.body).includes('Compliance violations detected:')
+            );
+            if (!comment) return '';
+
+            // Walk the ADF document to extract all text nodes
+            const fullText = this._extractTextFromADF(comment.body);
+            const match = fullText.match(/Compliance violations detected:\s*(.+?)\.\s*Please review and resolve/);
+            return match ? match[1].trim() : '';
+        } catch (error) {
+            console.warn(`Warning: Could not fetch compliance alerts for ${issueKey}: ${error.message}`);
+            return '';
+        }
+    }
+
+    /**
+     * Recursively extract plain text from an Atlassian Document Format (ADF) node.
+     */
+    _extractTextFromADF(node) {
+        if (!node) return '';
+        if (node.type === 'text') return node.text || '';
+        if (Array.isArray(node.content)) {
+            return node.content.map(child => this._extractTextFromADF(child)).join('');
+        }
+        return '';
+    }
+
     async deleteComplianceComment(issueKey) {
         const existing = await this.makeRequest(`/rest/api/3/issue/${issueKey}/comment?maxResults=100&orderBy=-created`);
         const existingComment = existing.comments?.find(c =>

@@ -63,15 +63,7 @@ function isAssigneeInWhitelist(issue, resolvedAssignee, whitelist) {
  * Returns { eligible: boolean, reason: string }
  */
 function isEligibleForExport(issue, resolvedAssignee, whitelist) {
-  // Rule 1: Has compliance-alerts label
-  if (hasComplianceAlerts(issue)) {
-    return {
-      eligible: false,
-      reason: 'compliance-alerts label'
-    };
-  }
-
-  // Rule 2: Backlog without fixVersion
+  // Rule 1: Backlog without fixVersion
   if (isBacklogStatus(issue) && hasNoFixVersion(issue)) {
     return {
       eligible: false,
@@ -79,7 +71,7 @@ function isEligibleForExport(issue, resolvedAssignee, whitelist) {
     };
   }
 
-  // Rule 3: Backlog with Future version only
+  // Rule 2: Backlog with Future version only
   if (isBacklogStatus(issue) && hasFutureVersionOnly(issue)) {
     return {
       eligible: false,
@@ -87,13 +79,13 @@ function isEligibleForExport(issue, resolvedAssignee, whitelist) {
     };
   }
 
-  // Rule 4 & 5: Whitelist enforcement
+  // Rule 3 & 4: Whitelist enforcement
   if (whitelist) {
     const hasAssignee = !!issue.fields?.assignee;
     const inWhitelist = isAssigneeInWhitelist(issue, resolvedAssignee, whitelist);
     const hasSpecificVersion = hasSpecificFixVersion(issue);
 
-    // Rule 4: Assignee not in whitelist AND no specific fixVersion
+    // Rule 3: Assignee not in whitelist AND no specific fixVersion
     if (hasAssignee && !inWhitelist && !hasSpecificVersion) {
       return {
         eligible: false,
@@ -101,7 +93,7 @@ function isEligibleForExport(issue, resolvedAssignee, whitelist) {
       };
     }
 
-    // Rule 5: No assignee AND no specific fixVersion
+    // Rule 4: No assignee AND no specific fixVersion
     if (!hasAssignee && !hasSpecificVersion) {
       return {
         eligible: false,

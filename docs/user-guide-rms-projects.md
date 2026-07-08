@@ -151,6 +151,8 @@ When synced to JIRA, the workflow automatically converts these values to JIRA's 
 
 The `Alerts` field is updated on every workflow run. An empty value means everything is healthy. When one or more rules are violated, comma-separated codes appear — for example: `NO_AREA, NO_ESTIMATE`.
 
+The `Alerts` value is also included in the **active items CSV export**. Issues with compliance alerts are exported (not skipped), and their violation codes appear in the `Alerts` column so consumers of the CSV can identify and track items that need attention.
+
 ### Email notifications
 
 When validation alerts are detected on issues with assignees, the workflow automatically creates or updates a **GitHub issue** with the label `alerts-notification`. Each assignee is mentioned in a comment with their specific alerts grouped by project, which triggers GitHub's email notification system (based on the assignee's notification preferences).

@@ -192,31 +192,29 @@ For each JIRA ticket:
 
 A ticket is **NOT exported** if any of these conditions are true:
 
-### 1. Compliance Alerts
-- Ticket has the label `compliance-alerts`
-- **Rationale:** Issues with compliance violations should be fixed before export
-
-### 2. Backlog Items Without Version
+### 1. Backlog Items Without Version
 - Ticket status is `BACKLOG` (or equivalent)
 - AND `fixVersions` is empty
 - **Rationale:** Unplanned backlog items are not tracked in exports
 
-### 3. Backlog Items with Future Version
+### 2. Backlog Items with Future Version
 - Ticket status is `BACKLOG` (or equivalent)
 - AND `fixVersions` contains only `"Future"`
 - **Rationale:** Future-planned items are not actively tracked
 
-### 4. Unassigned Non-Active Contributors (When Whitelist Configured)
+### 3. Unassigned Non-Active Contributors (When Whitelist Configured)
 - Whitelist is configured (`contributors.csv` exists)
 - AND ticket assignee is not in whitelist
 - AND ticket does NOT have a specific fixVersion set (empty or "Future")
 - **Rationale:** Untracked contributors' work is only exported if tied to a specific release
 
-### 5. No Assignee and No Specific Version (When Whitelist Configured)
+### 4. No Assignee and No Specific Version (When Whitelist Configured)
 - Whitelist is configured (`contributors.csv` exists)
 - AND ticket has no assignee
 - AND ticket does NOT have a specific fixVersion set (empty or containing the word "Future" case insensitive)
 - **Rationale:** Unassigned work must be tied to a release to be tracked
+
+> **Note:** Issues with the `compliance-alerts` label are **included** in the active items export. Their violation codes are surfaced in the `Alerts` column (see Active Items CSV Columns below).
 
 **Special Case - Whitelisted Backlog Export:**
 
@@ -442,6 +440,7 @@ const initiative = PROJECT_NAMES[projectKey] || projectKey
 | Σ Remaining Work | Aggregated remaining estimate in weeks | See Time Conversion (if available) |
 | External Reference | (empty) | Reserved for future use |
 | Comments | (empty) | Reserved for future use |
+| Alerts | Compliance violation codes from latest compliance comment | Empty if no `compliance-alerts` label; e.g. `NO_ESTIMATE, NO_REMAINING_WORK` |
 
 **File Replacement:**
 - If `<project>-active-items.csv` exists → **completely replace** with new export
@@ -806,8 +805,12 @@ Summary:
 - **Expected:** Export all eligible issues, use JIRA assignee IDs
 
 ### Scenario 10: Compliance Alerts
-- **Setup:** Issue with compliance-alerts label
-- **Expected:** Skip issue, not exported to any CSV
+- **Setup:** Issue with `compliance-alerts` label and a compliance checker comment
+- **Expected:** Issue is exported to active items CSV with violation codes in the `Alerts` column (e.g. `NO_ESTIMATE, NO_REMAINING_WORK`)
+
+### Scenario 11: Compliance Alerts — No Comment
+- **Setup:** Issue with `compliance-alerts` label but no compliance checker comment on the ticket
+- **Expected:** Issue is exported with `Alerts` column empty
 
 ## Next Steps
 
