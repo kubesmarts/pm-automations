@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1515,,https://github.com/serverlessworkflow/sdk-java/issues/1515,Move cron-utils dependency to a separated `scheduler` module,fjtirado,,Runtimes,Blocker,,1.0,S,0.2,0.1,2026-07-09,,
+1516,,https://github.com/serverlessworkflow/sdk-java/issues/1516,Replace `sulky-ulid` with `ulid-creator`,ricardozanini,,Runtimes,Blocker,,1.0,XS,0.1,0.1,2026-07-09,,
+49,,https://github.com/quarkiverse/quarkus-flow/issues/49,epic: Add Workflow Management Console,ricardozanini,,Tooling,Minor,,2026/Q2,L,4.0,2.4,2026-07-09,,
+713,,https://github.com/quarkiverse/quarkus-flow/issues/713,Joni Dependency Assessment: Quarkus JQ/Jackson JQ,ricardozanini,,Runtimes,Blocker,,1.0,XS,0.1,0.1,2026-07-09,,
 195,,https://github.com/open-workflow-specification/editor/issues/195,feat: Review & improve documentation before release,handreyrc,,Tooling,Normal,,2026/Q2,S,0.2,0.2,2026-07-08,,
 90,,https://github.com/open-workflow-specification/editor/issues/90,feat: Write integrator documentation,fantonangeli,,Tooling,Normal,,1.0,S,0.2,0.1,2026-07-08,,
 633,,https://github.com/quarkiverse/quarkus-flow/issues/633,[OIDC] Phase 0 — Validation & Proof of Concept,mcruzdev,,Runtimes,Normal,,2026/Q2,M,0.4,0.3,2026-07-07,,
