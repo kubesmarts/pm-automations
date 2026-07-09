@@ -1,9 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 1517,,https://github.com/serverlessworkflow/sdk-java/issues/1517,NPE in TryExecutor when retry is configured without explicit backoff strategy,mcruzdev,In progress,,Runtimes,Blocker,,1.0,,0.2,,,0.2,0.0,0.0,,,2026-07-04,NO_REMAINING_WORK
-1515,720,https://github.com/serverlessworkflow/sdk-java/issues/1515,Move cron-utils dependency to a separated `scheduler` module,fjtirado,In review,,Runtimes,Blocker,,1.0,S,0.2,0.1,,0.0,0.0,0.0,,,2026-07-04,
 1489,,https://github.com/serverlessworkflow/sdk-java/issues/1489,[Experimental] Allow serialization of Workflows defined using Java,fjtirado,In review,,Runtimes,Major,,1.0,M,1.0,1.2,0.0,1.0,0.0,0.2,,,2026-07-08,
 1481,,https://github.com/serverlessworkflow/sdk-java/issues/1481,Add a context-propagation SPI to carry caller context,"mcruzdev,fjtirado",Backlog,,Runtimes,Blocker,,1.0,L,0.4,,,0.4,0.0,0.0,,,2026-07-08,
-733,,https://github.com/quarkiverse/quarkus-flow/issues/733,"bug: Default ""false"" is not permitted for MSSQL",gmunozfe,In progress,,,,,,,,,,,,,,,,
 731,606,https://github.com/quarkiverse/quarkus-flow/issues/731,Improve OIDC implementation DX by delegating to quarkus-oidc-client,ricardozanini,Next,,Runtimes,Blocker,,1.0,M,0.4,0.0,0.4,0.4,0.0,0.4,,,2026-07-07,
 728,,https://github.com/quarkiverse/quarkus-flow/issues/728,"Add support for remaining LangChain4j agent annotations (@ParallelMapperAgent, @SupervisorAgent, @PlannerAgent, @McpClientAgent)",ricardozanini,In progress,,Runtimes,Major,,1.0,S,0.1,0.1,0.0,0.1,0.1,0.0,,,2026-07-08,
 723,717,https://github.com/quarkiverse/quarkus-flow/issues/723,docs: Document Quarkus Flow best practices,mcruzdev,In progress,,Runtimes,Major,,1.0,S,0.1,0.1,,0.1,0.1,0.0,,,2026-07-04,NO_REMAINING_WORK
@@ -21,7 +19,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 425,,https://github.com/quarkiverse/quarkus-flow/issues/425,docs: Improve docs module to execute tests during maven build,domhanak,Backlog,,Docs,Major,,1.0,M,0.6,0.0,0.6,0.6,0.0,0.6,,,2026-07-08,
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mcruzdev,Next,,Runtimes,Major,,1.0,M,1.0,,0.8,1.0,0.0,0.8,,,2026-07-08,
 317,112,https://github.com/quarkiverse/quarkus-flow/issues/317,bug: jpa persistence exceptions in engine after heavy load,gmunozfe,In progress,,Runtimes,Major,,1.0,M,0.4,,0.2,0.4,0.0,0.2,,,2026-07-08,
-241,,https://github.com/open-workflow-specification/editor/issues/241,bug: Generated CHANGELOG files are missing Apache license header,fantonangeli,In review,,Tooling,Blocker,,1.0,M,0.4,,0.4,0.4,0.0,0.4,,,2026-07-08,
 239,214,https://github.com/open-workflow-specification/editor/issues/239,Spike: Edit-surface & editable-fields investigation,lornakelly,Next,,Tooling,Major,,2026/Q3,M,0.5,,0.5,0.5,0.0,0.5,,,2026-07-07,
 238,214,https://github.com/open-workflow-specification/editor/issues/238,Spike: Node-edit interaction & UX (design),,Backlog,,Tooling,Major,,2026/Q3,M,0.5,,0.5,0.5,0.0,0.5,,,,
 237,207,https://github.com/open-workflow-specification/editor/issues/237,feat: Publish package on npm,,Backlog,,Tooling,Critical,,2026/Q4,S,0.6,,0.6,0.0,0.0,0.0,,,,
@@ -40,7 +37,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 224,207,https://github.com/open-workflow-specification/editor/issues/224,feat: Host-agnostic editable text + change events,,Backlog,,Tooling,Normal,,2026/Q3,M,0.8,,0.8,0.0,0.0,0.0,,,,
 223,207,https://github.com/open-workflow-specification/editor/issues/223,feat: Scaffold the text-pane workspace package,,Backlog,,Tooling,Normal,,2026/Q3,M,0.8,,0.8,0.0,0.0,0.0,,,,
 222,,https://github.com/open-workflow-specification/editor/issues/222,feat: Migrate to Open Workflow Specification,lornakelly,In progress,,Tooling,Critical,,2026/Q3,M,0.4,,0.4,0.4,0.0,0.4,,,2026-07-08,
-221,214,https://github.com/open-workflow-specification/editor/issues/221,Spike: investigate stable node ID alternatives to index-based sdk ids,handreyrc,In progress,,Tooling,Major,,2026/Q3,M,0.5,,0.5,0.5,0.0,0.5,,,2026-07-08,
+221,214,https://github.com/open-workflow-specification/editor/issues/221,Spike: investigate stable node ID alternatives to index-based sdk ids,handreyrc,In review,,Tooling,Major,,2026/Q3,M,0.5,,0.5,0.5,0.5,0.0,,,2026-07-08,
 211,207,https://github.com/open-workflow-specification/editor/issues/211,Spike: Define IntelliSense user experience,cheryl7114,In progress,,Tooling,Major,,2026/Q3,M,1.0,,1.0,1.0,0.0,1.0,,,2026-07-07,
 209,207,https://github.com/open-workflow-specification/editor/issues/209,Spike: Decide on approach for language service,fantonangeli,Backlog,,Tooling,Major,,2026/Q3,M,0.4,,0.4,0.4,0.0,0.4,,,2026-07-02,
 208,207,https://github.com/open-workflow-specification/editor/issues/208,Spike: Evaluate embedded code editor,,Backlog,,Tooling,Major,,2026/Q3,S,0.4,,0.4,0.0,0.0,0.0,,,,
