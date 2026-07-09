@@ -3,7 +3,7 @@
  * Based on: 1 week = 5 days, 1 day = 8 hours
  *
  * @param {number} seconds - JIRA time in seconds
- * @returns {number} - Time in weeks, rounded to 1 decimal
+ * @returns {number} - Time in weeks, rounded to 4 decimals
  */
 function jiraTimeToWeeks(seconds) {
   if (!seconds || seconds === 0) return 0;
@@ -11,7 +11,7 @@ function jiraTimeToWeeks(seconds) {
   const hours = seconds / 3600;
   const weeks = hours / 40; // 40 hours per week (5 days * 8 hours)
 
-  return Math.round(weeks * 10) / 10; // Round to 1 decimal
+  return Math.round(weeks * 10000) / 10000; // Round to 4 decimals
 }
 
 /**
@@ -45,7 +45,7 @@ function extractTimeTracking(issue) {
 /**
  * Format time value for CSV export
  * - 0 -> "0" or empty string based on flag
- * - Positive values -> string with 1 decimal
+ * - Positive values -> up to 4 decimal places, trailing zeros stripped
  * - Negative values -> "0" (should not happen, but safety check)
  */
 function formatTimeValue(weeks, emptyIfZero = false) {
@@ -53,16 +53,17 @@ function formatTimeValue(weeks, emptyIfZero = false) {
     return emptyIfZero ? '' : '0';
   }
 
-  return weeks.toFixed(1);
+  return String(Math.round(weeks * 10000) / 10000);
 }
 
 /**
  * Format aggregate time value for CSV export
  * Returns empty string if zero or not available
+ * Positive values -> up to 4 decimal places, trailing zeros stripped
  */
 function formatAggregateTimeValue(weeks) {
   if (!weeks || weeks <= 0) return '';
-  return weeks.toFixed(1);
+  return String(Math.round(weeks * 10000) / 10000);
 }
 
 module.exports = {
