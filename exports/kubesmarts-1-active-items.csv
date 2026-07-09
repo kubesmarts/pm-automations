@@ -1,2 +1,3 @@
-Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Version,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments
-14,,https://github.com/kubesmarts/pm-automations/issues/14,feat: GH issue to JIRA sync improvements,dgutierr,Next,,PM,Normal,,,,0.4,,0.4,0.4,0.0,0.4,,
+Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
+73,,https://github.com/kubesmarts/pm-automations/issues/73,feat: add IN_PROGRESS_NO_WORK_REMAINING compliance alert,skavgou,In progress,,PM,Normal,,,,0.4,,0.0,0.4,0.0,0.0,,,2026-07-09,
+14,,https://github.com/kubesmarts/pm-automations/issues/14,feat: GH issue to JIRA sync improvements,dgutierr,Next,,PM,Normal,,,,0.4,,0.4,0.4,0.0,0.4,,,2026-03-17,

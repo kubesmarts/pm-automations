@@ -1,5 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 6683,,https://github.com/apache/incubator-kie-drools/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,0.0,2.0,0.0,6.0,2.7,3.2,,"I have zeroed the remaining time since the item is now split in subitems, and the subitems will provide the remaining time.",2026-07-08,
+2365,,https://github.com/apache/incubator-kie-issues/issues/2365,Add drools-lsp to kie-tools,tkobayas,In progress,,Tooling,Major,,Future,M,0.8,0.2,0.6,0.8,0.0,0.8,,,2026-07-07,
 2314,,https://github.com/apache/incubator-kie-issues/issues/2314,DRLGEN Investigate best plain English formats for DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,2.0,1.0,1.0,2.0,1.0,1.0,,,2026-05-16,
 2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools sequential,Rikkola,In progress,,Runtimes,Major,,Future,L,6.0,5.0,1.0,6.0,5.0,1.0,,,2026-06-10,ESTIMATE_TOO_LONG
 99,,https://github.com/kiegroup/drools-lsp/issues/99,Non-alpha release,tkobayas,In progress,,Tooling,Major,,Future,S,0.2,0.1,0.1,0.2,0.1,0.1,,,2026-07-06,
