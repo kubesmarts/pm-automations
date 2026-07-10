@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,2,2,2026-07-10,,,
+1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,2,2,2026-07-10,,,NO_ESTIMATE
 677,,https://redhat.atlassian.net/browse/SRVLOGIC-677,Kubesmarts cors-proxy ERR_CERT_DATE_INVALID,fantonangeli,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,1,0.5,2026-07-10,,,
 1006,,https://redhat.atlassian.net/browse/SRVLOGIC-1006,Version of graphql-java library that is not publicly available is used in 1.38. ,mareknovotny,Bug,Productization,Critical,Serverless logic,1.39.0 OSL,,0.6,0.025,2026-07-09,,,
 360,,https://redhat.atlassian.net/browse/SRVLOGIC-360,New SWF Diagram Editor ts/ react / react flow - Milestone 0,handreyrc,Feature,Tooling,Normal,Serverless logic,1.38.0 OSL,,13.2,20,2026-07-07,,,
@@ -84,4 +84,4 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 974,,https://redhat.atlassian.net/browse/SRVLOGIC-974,Unable to execute qe primary-pipeline because of offline_maven_repo_upload job failure,domhanak,Bug,QE,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.05,2026-05-19,,,
 970,975,https://redhat.atlassian.net/browse/SRVLOGIC-970,Workflow deploy time validations via webhooks,wmedvede,Spike,Cloud,Normal,Serverless logic,1.39.0 OSL,,1,1,2026-05-11,,,
 920,,https://redhat.atlassian.net/browse/SRVLOGIC-920,failure in - Sync main branch - with upstream,jankrystof-ibm,Bug,CI,Major,Serverless logic,1.38.0 OSL,,0.025,0.075,2026-05-08,,,
-883,,https://redhat.atlassian.net/browse/SRVLOGIC-883,Harden workflow against network failures and GraphQL errors,dgutierr,Story,PM,Critical,Serverless logic,Future,,1,0.4,2026-04-24,,,
+883,,https://redhat.atlassian.net/browse/SRVLOGIC-883,Harden workflow against network failures and GraphQL errors,dgutierr,Story,PM,Critical,Serverless logic,Future,,1,0.4,2026-04-24,,,
