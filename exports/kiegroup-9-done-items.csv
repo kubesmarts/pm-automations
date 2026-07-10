@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+39,,https://github.com/pibizza/drools-journal/issues/39,Liveness scan does not account for superseded inserts (re-insert same factHandleId),pibizza,,Runtimes,Major,,Future,S,0.1,,2026-07-10,,,NO_TIME_SPENT
+99,,https://github.com/kiegroup/drools-lsp/issues/99,Non-alpha release,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-07-10,,,
 6761,,https://github.com/apache/incubator-kie-drools/issues/6761,"CI scoped build misses Quarkus extension runtime <-> deployment pairing, causing extension-descriptor failures on PRs",tkobayas,,CI,Normal,,Future,S,0.2,0.1,2026-07-09,,,
 456,,https://github.com/casehubio/engine/issues/456,feat(acl): thread dispatch identity via PropagationContext,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-07-08,,,
 14,,https://github.com/pibizza/drools-journal/issues/14,Implement Chronicle Queue backend — ChronicleJournalStorage and ChronicleJournalScanner,pibizza,,Runtimes,Normal,,Future,L,1.2,0.1,2026-07-05,,,
