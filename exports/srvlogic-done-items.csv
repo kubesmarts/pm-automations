@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,2,2,2026-07-10,,
+677,,https://redhat.atlassian.net/browse/SRVLOGIC-677,Kubesmarts cors-proxy ERR_CERT_DATE_INVALID,fantonangeli,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,1,0.5,2026-07-10,,
 1006,,https://redhat.atlassian.net/browse/SRVLOGIC-1006,Version of graphql-java library that is not publicly available is used in 1.38. ,mareknovotny,Bug,Productization,Critical,Serverless logic,1.39.0 OSL,,0.6,0.025,2026-07-09,,
 360,,https://redhat.atlassian.net/browse/SRVLOGIC-360,New SWF Diagram Editor ts/ react / react flow - Milestone 0,handreyrc,Feature,Tooling,Normal,Serverless logic,1.38.0 OSL,,13.2,20,2026-07-07,,
 673,,https://redhat.atlassian.net/browse/SRVLOGIC-673,Align configs with Quarkus 3.20.1,wmedvede,Epic,Runtimes,Normal,Serverless logic,1.38.0 OSL,,4,1,2026-07-07,,
@@ -6,7 +8,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 769,,https://redhat.atlassian.net/browse/SRVLOGIC-769,Include support for PDB for Serverless logic services,wmedvede,Epic,Cloud,Major,Serverless logic,1.38.0 OSL,,2.6,2.6,2026-07-07,,
 757,,https://redhat.atlassian.net/browse/SRVLOGIC-757,Visualize function input output parameters on Data Index,fjtirado,Epic,Runtimes,Normal,Serverless logic,1.38.0 OSL,,2.4,1.2,2026-07-07,,
 744,,https://redhat.atlassian.net/browse/SRVLOGIC-744,WebApp for Workflow Endpoint deployment,kumaradityaraj,Epic,Tooling,Normal,Serverless logic,1.38.0 OSL,,3,6,2026-07-07,,
-1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,,Normal,Serverless logic,1.39.0 OSL,,0,2,2026-07-02,,
 1068,,https://redhat.atlassian.net/browse/SRVLOGIC-1068,CPaaS upgrade to v9.40.0 including osl + drools + drools-ansible-integration,saumya1singh,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.075,0.075,2026-06-29,,
 1000,,https://redhat.atlassian.net/browse/SRVLOGIC-1000,CPaaS upgrade to 9.39.0 including osl + drools + drools-ansible-integration,jankrystof-ibm,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.075,0.0333,2026-06-29,,
 895,,https://redhat.atlassian.net/browse/SRVLOGIC-895,CPaaS 9.38 Upgrade for OSL pipelines,jankrystof-ibm,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.075,0.075,2026-06-25,,
@@ -17,7 +18,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1032,,https://redhat.atlassian.net/browse/SRVLOGIC-1032,Allign osl-images to 111-SNAPSHOT,domhanak,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,0.025,0.025,2026-06-06,,
 824,,https://redhat.atlassian.net/browse/SRVLOGIC-824,Use remote artifacts from RH maven repo to publish images for Logic Web Tools ,fantonangeli,Task,Tooling,Major,Serverless logic,1.38.0 OSL,,1,1.6,2026-06-04,,
 810,,https://redhat.atlassian.net/browse/SRVLOGIC-810,Kubesmarts DevMode deployment DevUI not available,fantonangeli,Bug,Tooling,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.1,2026-06-02,,
-677,,https://redhat.atlassian.net/browse/SRVLOGIC-677,Kubesmarts cors-proxy ERR_CERT_DATE_INVALID,fantonangeli,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,0.0004,0.5,2026-06-01,,
 748,,https://redhat.atlassian.net/browse/SRVLOGIC-748,Create a GHA to publish Kubesmarts images every Friday,baldimir,Feature,CI,Major,Serverless logic,1.38.0 OSL,,0.6,0.6,2026-06-01,,
 901,,https://redhat.atlassian.net/browse/SRVLOGIC-901,Release unpack-build-maven-plugin to 1.0.0 and upload it to Nexus,gmunozfe,Task,CI,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.2,2026-06-01,,
 807,2234,https://redhat.atlassian.net/browse/SRVLOGIC-807,Automate creation of new product branches for OSL build,jankrystof-ibm,Task,CI,Major,Serverless logic,1.38.0 OSL,,0.0625,0.05,2026-05-30,,

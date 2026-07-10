@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
+1078,1055,https://redhat.atlassian.net/browse/SRVLOGIC-1078,Migrate drools-baseline job to CSD,jankrystof-ibm,In review,Sub-task,QE,Blocker,Serverless logic,1.40.0 OSL,,0.4,0.3125,0.0875,0.4,0.3125,0.0875,,,2026-07-10,
 1077,,https://redhat.atlassian.net/browse/SRVLOGIC-1077,Unify kie-tools environment variables to use default values from /env/install.js for each package in CI checks,domhanak,Next,Task,CI,Critical,Serverless logic,1.39.0 OSL,,0.1,0,0.1,0.1,,0.1,,,2026-07-09,
 1076,,https://redhat.atlassian.net/browse/SRVLOGIC-1076,Kubernetes APIs vesion bump to 1.36.0  verification,jakubschwan,Next,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-07-07,
 1075,,https://redhat.atlassian.net/browse/SRVLOGIC-1075,Upload NodeJS version v24.18.0 to rcm-guest,saumya1singh,In review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.3,0,0.2,0.3,,,,2026-07-09,
@@ -18,7 +19,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1058,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1058,[IBM test migration] Migration of Product Tests: Community,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0,1,1,,1,,,2026-06-19,
 1057,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1057,[IBM test migration] Migration of Nightly Jobs: Cloud,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,0,2,2,,2,,,2026-06-19,
 1056,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1056,[IBM test migration] Migration of Nightly Jobs: Tools,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,0,2,2,,2,,,2026-06-19,
-1055,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1055,[IBM test migration] Migration of Nightly Jobs: Community,jakubschwan,In progress,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,0,2,2,,2,,,2026-06-19,
+1055,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1055,[IBM test migration] Migration of Nightly Jobs: Community,jakubschwan,In progress,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,0,2,2.4,0.3125,2.0875,,,2026-06-19,
 1054,,https://redhat.atlassian.net/browse/SRVLOGIC-1054,Use Red Hat rbac-proxy image in kubesmarts/kie-tools,baldimir,In review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0.1,0,0.1,0.1,,,,2026-06-17,
 1053,,https://redhat.atlassian.net/browse/SRVLOGIC-1053,[OSL nightly] Operator Bundle reintroduced relatedImages section again,baldimir,In review,Bug,CI,Blocker,Serverless logic,1.39.0 OSL,,0.1,0.05,0.05,0.1,0.05,0.05,,,2026-06-17,
 1052,1046,https://redhat.atlassian.net/browse/SRVLOGIC-1052,Setup initial configuration enabling CI inside harmony shared Jenkins instance in CSD ,jankrystof-ibm,In review,Sub-task,CI,Major,Serverless logic,1.40.0 OSL,,0.15,0.15,0,0.15,0.15,,,,2026-07-07,
