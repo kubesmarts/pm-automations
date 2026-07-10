@@ -17,7 +17,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 425,,https://github.com/quarkiverse/quarkus-flow/issues/425,docs: Improve docs module to execute tests during maven build,domhanak,Backlog,,Docs,Major,,1.0,M,0.6,0.0,0.6,0.6,0.0,0.6,,,2026-07-08,
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mcruzdev,Next,,Runtimes,Major,,1.0,M,1.0,,0.8,1.0,0.0,0.8,,,2026-07-08,
 317,112,https://github.com/quarkiverse/quarkus-flow/issues/317,bug: jpa persistence exceptions in engine after heavy load,gmunozfe,In progress,,Runtimes,Major,,1.0,M,0.4,,0.2,0.4,0.0,0.2,,,2026-07-08,
-259,258,https://github.com/open-workflow-specification/editor/issues/259,Spike: investigate add/remove-node interaction,handreyrc,Next,,Tooling,Major,,Future,M,0.6,,0.6,,,,,,,
+259,258,https://github.com/open-workflow-specification/editor/issues/259,Spike: investigate add/remove-node interaction,handreyrc,Next,,Tooling,Major,,Future,M,0.6,,0.6,0.6,0.0,0.6,,,2026-07-10,
 257,6,https://github.com/open-workflow-specification/editor/issues/257,Task: Deprecate old serverlessworkflow package,fantonangeli,Backlog,,Tooling,Critical,,1.0,S,0.2,,0.2,0.2,0.0,0.2,,,2026-07-09,
 239,214,https://github.com/open-workflow-specification/editor/issues/239,Spike: Edit-surface & editable-fields investigation,lornakelly,Next,,Tooling,Major,,2026/Q3,M,0.5,,0.5,0.5,0.0,0.5,,,2026-07-07,
 238,214,https://github.com/open-workflow-specification/editor/issues/238,Spike: Node-edit interaction & UX (design),,Backlog,,Tooling,Major,,2026/Q3,M,0.5,,0.5,0.5,0.0,0.5,,,,
