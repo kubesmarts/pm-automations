@@ -201,6 +201,12 @@ if [ -n "$REMAINING_WORK_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" !=
   SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }NO_REMAINING_WORK"
 fi
 
+# IN_PROGRESS_NO_WORK_REMAINING
+if [ -n "$REMAINING_WORK_FIELD_ID" ] && [ "$STATUS_LC" = "in progress" ] && [ -n "$REMAINING_WORK" ] && \
+   awk -v r="$REMAINING_WORK" 'BEGIN { exit !(r+0 == 0) }'; then
+  SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }IN_PROGRESS_NO_WORK_REMAINING"
+fi
+
 # NO_AREA
 if [ -n "$AREA_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ -z "$AREA" ]; then
   SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }NO_AREA"
@@ -295,6 +301,45 @@ test('NO_REMAINING_WORK: not raised when remaining work is set', () => {
   const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', REMAINING_WORK: '0.5' });
   assert.ok(!codes.includes('NO_REMAINING_WORK'), `Unexpected NO_REMAINING_WORK when set: "${codes}"`);
 });
+
+
+// -- IN_PROGRESS_NO_WORK_REMAINING --
+
+test('IN_PROGRESS_NO_WORK_REMAINING: raised when in-progress item has remaining work of 0', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', REMAINING_WORK: '0' });
+  assert.ok(codes.includes('IN_PROGRESS_NO_WORK_REMAINING'), `Expected IN_PROGRESS_NO_WORK_REMAINING, got: "${codes}"`);
+});
+
+test('IN_PROGRESS_NO_WORK_REMAINING: raised when in-progress item has remaining work of 0.0', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', REMAINING_WORK: '0.0' });
+  assert.ok(codes.includes('IN_PROGRESS_NO_WORK_REMAINING'), `Expected IN_PROGRESS_NO_WORK_REMAINING for 0.0, got: "${codes}"`);
+});
+
+test('IN_PROGRESS_NO_WORK_REMAINING: not raised when remaining work is a positive value', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', REMAINING_WORK: '0.5' });
+  assert.ok(!codes.includes('IN_PROGRESS_NO_WORK_REMAINING'), `Unexpected IN_PROGRESS_NO_WORK_REMAINING when set: "${codes}"`);
+});
+
+test('IN_PROGRESS_NO_WORK_REMAINING: not raised when remaining work is empty (NO_REMAINING_WORK handles that)', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', REMAINING_WORK: '' });
+  assert.ok(!codes.includes('IN_PROGRESS_NO_WORK_REMAINING'), `Unexpected IN_PROGRESS_NO_WORK_REMAINING for empty value: "${codes}"`);
+});
+
+test('IN_PROGRESS_NO_WORK_REMAINING: not raised for done items', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'done', REMAINING_WORK: '0' });
+  assert.ok(!codes.includes('IN_PROGRESS_NO_WORK_REMAINING'), `Unexpected IN_PROGRESS_NO_WORK_REMAINING for done: "${codes}"`);
+});
+
+test('IN_PROGRESS_NO_WORK_REMAINING: not raised for backlog items', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'backlog', REMAINING_WORK: '0' });
+  assert.ok(!codes.includes('IN_PROGRESS_NO_WORK_REMAINING'), `Unexpected IN_PROGRESS_NO_WORK_REMAINING for backlog: "${codes}"`);
+});
+
+test('IN_PROGRESS_NO_WORK_REMAINING: not raised when remaining work field is not configured', () => {
+  const codes = evalRule({ ...ALL_FIELDS, REMAINING_WORK_FIELD_ID: '', STATUS_LC: 'in progress', REMAINING_WORK: '0' });
+  assert.ok(!codes.includes('IN_PROGRESS_NO_WORK_REMAINING'), `Unexpected IN_PROGRESS_NO_WORK_REMAINING when field absent: "${codes}"`);
+});
+
 
 // -- NO_AREA --
 

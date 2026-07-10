@@ -307,6 +307,10 @@ jobs:
               if [ -n "$REMAINING_WORK_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ "$STATUS_LC" != "done" ] && [ -z "$REMAINING_WORK" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_REMAINING_WORK"
               fi
+              if [ -n "$REMAINING_WORK_FIELD_ID" ] && [ "$STATUS_LC" = "in progress" ] && [ -n "$REMAINING_WORK" ] && \
+                 awk -v r="$REMAINING_WORK" 'BEGIN { exit !(r+0 == 0) }'; then
+                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }IN_PROGRESS_NO_WORK_REMAINING"
+              fi
               if [ -n "$AREA_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ -z "$AREA" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_AREA"
               fi
