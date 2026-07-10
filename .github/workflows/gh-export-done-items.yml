@@ -197,6 +197,7 @@ jobs:
                             number
                             title
                             url
+                            stateReason
                             body
                             assignees(first: 10) { nodes { login } }
                             subIssues(first: 50) { nodes { number } }
@@ -272,6 +273,7 @@ jobs:
                               number
                               title
                               url
+                              stateReason
                               body
                               assignees(first: 10) { nodes { login } }
                               subIssues(first: 50) { nodes { number } }
@@ -356,6 +358,14 @@ jobs:
               STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
               
               [ "$STATUS_LC" != "done" ] && continue
+
+              # Skip Done items whose underlying GH issue was not closed as completed
+              # (e.g. closed as "not planned"). stateReason must be COMPLETED for Done items.
+              STATE_REASON=$(echo "$item" | jq -r '.content.stateReason // ""')
+              if [ "$STATE_REASON" != "COMPLETED" ]; then
+                echo "  → Skipping issue #${ISSUE_NUMBER}: Done but stateReason is '${STATE_REASON:-null}' (not COMPLETED)."
+                continue
+              fi
 
               # Get Reporting Date - skip if empty or not greater than last export
               REPORTING_DATE=$(get_field "$item" "Reporting Date")

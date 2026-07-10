@@ -563,3 +563,60 @@ test('GITHUB_OUTPUT: independent — errors and alerts can both be true simultan
   assert.equal(result.hasErrors, 'true');
   assert.equal(result.hasAlerts, 'true');
 });
+
+// ---------------------------------------------------------------------------
+// SECTION 7 – Bash logic: stateReason skip guard
+//
+// Done items whose underlying GH issue was not closed as COMPLETED must be
+// skipped before any validation runs.  The guard sits right after STATUS_LC
+// is set and before field reads / alert generation.
+// ---------------------------------------------------------------------------
+
+/**
+ * Simulate the stateReason skip guard from process_items().
+ * Returns 'skipped' when the item would be skipped, 'processed' otherwise.
+ */
+function evalStateReasonGuard({ statusLC, stateReason }) {
+  const script = `
+STATUS_LC=${JSON.stringify(statusLC)}
+# Simulate jq extracting stateReason from the item JSON
+STATE_REASON=${JSON.stringify(stateReason ?? '')}
+
+SKIPPED=false
+if [ "$STATUS_LC" = "done" ]; then
+  if [ "$STATE_REASON" != "COMPLETED" ]; then
+    SKIPPED=true
+  fi
+fi
+
+if [ "$SKIPPED" = "true" ]; then
+  echo "skipped"
+else
+  echo "processed"
+fi
+`;
+  return bash(script);
+}
+
+test('stateReason guard: Done + COMPLETED is processed', () => {
+  assert.equal(evalStateReasonGuard({ statusLC: 'done', stateReason: 'COMPLETED' }), 'processed');
+});
+
+test('stateReason guard: Done + NOT_PLANNED is skipped', () => {
+  assert.equal(evalStateReasonGuard({ statusLC: 'done', stateReason: 'NOT_PLANNED' }), 'skipped');
+});
+
+test('stateReason guard: Done + REOPENED is skipped', () => {
+  assert.equal(evalStateReasonGuard({ statusLC: 'done', stateReason: 'REOPENED' }), 'skipped');
+});
+
+test('stateReason guard: Done + null stateReason is skipped', () => {
+  assert.equal(evalStateReasonGuard({ statusLC: 'done', stateReason: '' }), 'skipped');
+});
+
+test('stateReason guard: non-Done status is never skipped regardless of stateReason', () => {
+  assert.equal(evalStateReasonGuard({ statusLC: 'in progress', stateReason: 'NOT_PLANNED' }), 'processed');
+  assert.equal(evalStateReasonGuard({ statusLC: 'backlog',     stateReason: 'NOT_PLANNED' }), 'processed');
+  assert.equal(evalStateReasonGuard({ statusLC: 'next',        stateReason: 'NOT_PLANNED' }), 'processed');
+  assert.equal(evalStateReasonGuard({ statusLC: 'in review',   stateReason: 'NOT_PLANNED' }), 'processed');
+});

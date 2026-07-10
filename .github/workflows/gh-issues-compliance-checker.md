@@ -13,6 +13,12 @@ This is an **automation workflow** designed to **validate GitHub issues complian
 
 No action is taken when non-tracked fields change (e.g. title, assignee).
 
+### Skipping Issues Closed as "Not Planned"
+
+When a project item's **Status** is `Done`, the workflow checks the underlying GitHub issue's `stateReason`. If `stateReason` is not `COMPLETED` (e.g. the issue was closed as **"not planned"**, or is `REOPENED`, or has no `stateReason`), the item is **silently skipped** — no alerts are raised, no reporting fields are updated, and no JIRA sync is attempted.
+
+This prevents false compliance alerts (e.g. `NO_TIME_SPENT`, `NO_AREA`) from being raised against work that was intentionally abandoned or cancelled.
+
 ### Contributor Whitelist Filtering
 
 The workflow can be configured to process only issues assigned to approved contributors. This is controlled by a `contributors.csv` file in the repository root.

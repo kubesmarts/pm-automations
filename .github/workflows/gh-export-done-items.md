@@ -56,11 +56,12 @@ schedule:
 An item is exported **only if ALL** conditions are met:
 
 1. ✅ **Status = "Done"** (case-insensitive)
-2. ✅ **Has GitHub issue number** (not a draft item)
-3. ✅ **Not archived**
-4. ✅ **Reporting Date > last export date** (or first run)
-5. ✅ **Alerts field is empty** (no validation issues)
-6. ✅ **Assignee is in contributor whitelist** (if `contributors.csv` exists)
+2. ✅ **GitHub issue `stateReason` is `COMPLETED`** — issues closed as "not planned", reopened, or with no `stateReason` are skipped
+3. ✅ **Has GitHub issue number** (not a draft item)
+4. ✅ **Not archived**
+5. ✅ **Reporting Date > last export date** (or first run)
+6. ✅ **Alerts field is empty** (no validation issues)
+7. ✅ **Assignee is in contributor whitelist** (if `contributors.csv` exists)
 
 Items with alerts are skipped and will be exported once the alerts are resolved.
 

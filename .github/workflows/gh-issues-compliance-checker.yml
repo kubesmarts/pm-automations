@@ -194,6 +194,18 @@ jobs:
 
               STATUS=$(get_field         "$item" "Status")
               STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
+
+              # Skip Done items whose underlying GH issue was not closed as completed
+              # (e.g. closed as "not planned"). stateReason must be COMPLETED for Done items.
+              if [ "$STATUS_LC" = "done" ]; then
+                STATE_REASON=$(echo "$item" | jq -r '.content.stateReason // ""')
+                if [ "$STATE_REASON" != "COMPLETED" ]; then
+                  echo "  → Skipping: issue is Done but stateReason is '${STATE_REASON:-null}' (not COMPLETED)."
+                  SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+                  continue
+                fi
+              fi
+
               PRIORITY=$(get_field       "$item" "Priority")
               ESTIMATE=$(get_field       "$item" "Estimate")
               REMAINING_WORK=$(get_field "$item" "Remaining Work")
@@ -754,6 +766,7 @@ jobs:
                             number
                             title
                             url
+                            stateReason
                             repository {
                               owner { login }
                               name
@@ -903,6 +916,7 @@ jobs:
                               number
                               title
                               url
+                              stateReason
                               repository {
                                 owner { login }
                                 name
