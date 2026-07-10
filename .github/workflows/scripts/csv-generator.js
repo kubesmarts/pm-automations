@@ -86,7 +86,8 @@ const DONE_ITEMS_COLUMNS = [
   'Time Spent',
   'Reporting Date',
   'External Reference',
-  'Comments'
+  'Comments',
+  'Alerts'
 ];
 
 /**

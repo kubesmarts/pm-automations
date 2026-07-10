@@ -60,10 +60,9 @@ An item is exported **only if ALL** conditions are met:
 3. ✅ **Has GitHub issue number** (not a draft item)
 4. ✅ **Not archived**
 5. ✅ **Reporting Date > last export date** (or first run)
-6. ✅ **Alerts field is empty** (no validation issues)
-7. ✅ **Assignee is in contributor whitelist** (if `contributors.csv` exists)
+6. ✅ **Assignee is in contributor whitelist** (if `contributors.csv` exists)
 
-Items with alerts are skipped and will be exported once the alerts are resolved.
+Items are exported regardless of whether they have validation alerts. The `Alerts` column in the CSV shows any active alerts for filtering purposes.
 
 Items with non-whitelisted assignees (when whitelist is active) are skipped and logged.
 
@@ -85,7 +84,7 @@ exports/
 ### Header (fixed for all projects)
 
 ```csv
-Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments
+Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
 ```
 
 ### Field Descriptions
@@ -108,6 +107,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 | Reporting Date | Date when item was last updated | Required - items without this field are skipped |
 | External Reference | JIRA ticket key or other reference | Empty if field not in project |
 | Comments | Comments field from project | Empty if field not in project |
+| Alerts | Validation alert codes | Empty if no alerts; e.g. `NO_ESTIMATE, NO_TIME_SPENT` |
 
 ### CSV Escaping
 
@@ -120,7 +120,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 ### First Run (No Previous Export)
 
 When the CSV file doesn't exist or is empty for a project:
-- Exports **ALL** items with Status = "Done", a Reporting Date, and no Alerts
+- Exports **ALL** items with Status = "Done" and a Reporting Date
 - Creates baseline export with all historical completed items
 - Items are sorted by Reporting Date in descending order
 - File: `exports/<owner>-<number>-done-items.csv`
@@ -133,7 +133,6 @@ When the CSV file exists and has data:
 - New items are sorted by Reporting Date in descending order
 - New items are prepended at the beginning of the file (after header)
 - Skips items without Reporting Date
-- Skips items with Alerts (exported when alerts are fixed)
 - File: `exports/<owner>-<number>-done-items.csv` (updated in place)
 
 ### No New Items
@@ -155,10 +154,7 @@ First export for kubesmarts:1 - exporting all Done items
 Fetching project metadata and page 1...
 Project ID: PVT_kwDOABcD...
 
-  → Skipping issue #58: has alerts (NO_TIME_SPENT)
-
 ✓ Exported 42 item(s) to exports/kubesmarts-1-done-items.csv
-  Skipped 1 item(s) with alerts
 
 ========================================
 Total: 42 item(s) exported across all projects
@@ -199,9 +195,9 @@ Example: `Export Done items 2026-03-30`
 
 **Possible causes:**
 - No items with Status = "Done"
-- All Done items have Alerts
 - All Done items already exported (Reporting Date ≤ last export date)
 - All Done items are draft items (no GitHub issue number)
+- All Done items closed as "not planned" (stateReason != COMPLETED)
 
 **Solution:** Check the workflow log for skip reasons
 
@@ -218,9 +214,9 @@ Example: `Export Done items 2026-03-30`
 
 **Expected behavior:** If a project doesn't have a field (e.g., "Initiative", "Size"), the CSV will have an empty value for that field. This is normal and allows the same CSV format across all projects.
 
-### Items with alerts not exported
+### Items with alerts in export
 
-**Expected behavior:** Items with validation alerts are intentionally skipped. They will be exported once the alerts are resolved and the Reporting Date is updated.
+**Expected behavior:** Items with validation alerts are exported. The `Alerts` column in the CSV contains the alert codes for those items, allowing consumers to filter or track items needing attention.
 
 ## Integration with Compliance Checker Workflow
 

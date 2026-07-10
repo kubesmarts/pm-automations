@@ -341,7 +341,6 @@ jobs:
             # Collect new items to export
             NEW_ITEMS_FILE=$(mktemp)
             EXPORTED_COUNT=0
-            SKIPPED_ALERTS=0
             SKIPPED_NO_DATE=0
             SKIPPED_OLD_DATE=0
 
@@ -382,14 +381,6 @@ jobs:
                 continue
               fi
 
-              # Check for alerts - skip if any exist
-              ALERTS=$(get_field "$item" "Alerts")
-              if [ -n "$ALERTS" ]; then
-                echo "  → Skipping issue #${ISSUE_NUMBER}: has alerts (${ALERTS})"
-                SKIPPED_ALERTS=$((SKIPPED_ALERTS + 1))
-                continue
-              fi
-
               # Extract all fields
               TITLE=$(echo "$item" | jq -r '.content.title // ""')
               ISSUE_URL=$(echo "$item" | jq -r '.content.url // ""')
@@ -420,6 +411,7 @@ jobs:
               EXTERNAL_REF=$(get_field "$item" "External Reference")
               # Get Comments from project field (empty if field doesn't exist)
               COMMENTS=$(get_field "$item" "Comments")
+              ALERTS=$(get_field "$item" "Alerts")
 
               # Build CSV line with proper escaping
               CSV_LINE="${ISSUE_NUMBER},"
@@ -437,7 +429,8 @@ jobs:
               CSV_LINE+="$(escape_csv "$TIME_SPENT"),"
               CSV_LINE+="$(escape_csv "$REPORTING_DATE"),"
               CSV_LINE+="$(escape_csv "$EXTERNAL_REF"),"
-              CSV_LINE+="$(escape_csv "$COMMENTS")"
+              CSV_LINE+="$(escape_csv "$COMMENTS"),"
+              CSV_LINE+="$(escape_csv "$ALERTS")"
 
               # Store with reporting date for sorting
               echo "${REPORTING_DATE}|${CSV_LINE}" >> "$NEW_ITEMS_FILE"
@@ -448,13 +441,26 @@ jobs:
             rm -f "$ITEMS_FILE"
 
             # Ensure export file header is always normalized to current format
+            # and migrate data rows to match (add missing Alerts column if needed)
             if [ -f "$EXPORT_FILE" ] && [ -s "$EXPORT_FILE" ]; then
               CURRENT_HEADER=$(head -n 1 "$EXPORT_FILE")
-              EXPECTED_HEADER="Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments"
+              EXPECTED_HEADER="Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts"
               if [ "$CURRENT_HEADER" != "$EXPECTED_HEADER" ]; then
                 TEMP_FILE=$(mktemp)
                 echo "$EXPECTED_HEADER" > "$TEMP_FILE"
-                tail -n +2 "$EXPORT_FILE" >> "$TEMP_FILE"
+                # Migrate existing data rows: append empty Alerts column if missing
+                tail -n +2 "$EXPORT_FILE" | while IFS= read -r line; do
+                  # Count commas to determine column count (columns = commas + 1)
+                  comma_count=$(echo "$line" | tr -cd ',' | wc -c)
+                  col_count=$((comma_count + 1))
+                  if [ $col_count -eq 16 ]; then
+                    # Old format (16 columns) - append empty Alerts column
+                    echo "${line}," >> "$TEMP_FILE"
+                  else
+                    # Already has 17 columns or different format - keep as is
+                    echo "$line" >> "$TEMP_FILE"
+                  fi
+                done
                 mv "$TEMP_FILE" "$EXPORT_FILE"
               fi
             fi
@@ -479,16 +485,16 @@ jobs:
 
                 # Deduplicate using Python for proper CSV parsing
                 DEDUPED_FILE=$(mktemp)
-                python3 -c "import csv, sys; url_map = {}; [url_map.update({row[2]: row}) if row[2] not in url_map or row[13] > url_map[row[2]][13] else None for row in csv.reader(open('$TEMP_MERGED')) if len(row) >= 14]; [csv.writer(sys.stdout).writerow(row) for row in sorted(url_map.values(), key=lambda x: x[13], reverse=True)]" > "$DEDUPED_FILE"
+                python3 -c "import csv, sys; url_map = {}; [url_map.update({row[2]: row}) if row[2] not in url_map or row[13] > url_map[row[2]][13] else None for row in csv.reader(open('$TEMP_MERGED')) if len(row) >= 17]; [csv.writer(sys.stdout).writerow(row) for row in sorted(url_map.values(), key=lambda x: x[13], reverse=True)]" > "$DEDUPED_FILE"
 
                 # Write final file with header
-                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
+                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts" > "$EXPORT_FILE"
                 cat "$DEDUPED_FILE" >> "$EXPORT_FILE"
 
                 rm -f "$TEMP_MERGED" "$DEDUPED_FILE"
               else
                 # First export - create file with header and new items
-                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments" > "$EXPORT_FILE"
+                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts" > "$EXPORT_FILE"
                 cat "$SORTED_NEW_ITEMS" >> "$EXPORT_FILE"
               fi
 
@@ -505,9 +511,6 @@ jobs:
               echo "No new Done items to export"
             fi
             
-            if [ $SKIPPED_ALERTS -gt 0 ]; then
-              echo "  Skipped $SKIPPED_ALERTS item(s) with alerts"
-            fi
             if [ $SKIPPED_NO_DATE -gt 0 ]; then
               echo "  Skipped $SKIPPED_NO_DATE item(s) without Reporting Date"
             fi

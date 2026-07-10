@@ -81,10 +81,15 @@ async function issueToActiveItemRow(issue, baseUrl, whitelist, jiraClient) {
 /**
  * Convert JIRA issue to CSV row (done items)
  */
-function issueToDoneItemRow(issue, baseUrl, whitelist) {
+async function issueToDoneItemRow(issue, baseUrl, whitelist, jiraClient) {
   const projectKey = extractProjectKey(issue.key);
   const assignee = resolveAssignee(issue.fields?.assignee, whitelist);
   const timeTracking = extractTimeTracking(issue);
+
+  // Fetch alert codes only for issues that carry the compliance-alerts label
+  const alerts = hasComplianceAlerts(issue)
+    ? await jiraClient.extractComplianceAlerts(issue.key)
+    : '';
 
   return {
     'Issue Number': extractIssueNumber(issue.key),
@@ -102,7 +107,8 @@ function issueToDoneItemRow(issue, baseUrl, whitelist) {
     'Time Spent': formatTimeValue(timeTracking.timeSpent),
     'Reporting Date': formatReportingDate(issue.fields?.updated),
     'External Reference': '', // Reserved for future use
-    'Comments': '' // Reserved for future use
+    'Comments': '', // Reserved for future use
+    'Alerts': alerts
   };
 }
 
@@ -141,7 +147,7 @@ async function processIssues(issues, whitelist, jiraClient) {
     // Determine if active or done
     if (isDoneItem(issue)) {
       // Done item
-      const row = issueToDoneItemRow(issue, JIRA_BASE_URL, whitelist);
+      const row = await issueToDoneItemRow(issue, JIRA_BASE_URL, whitelist, jiraClient);
       if (!projectDoneItems[projectKey]) {
         projectDoneItems[projectKey] = [];
       }
@@ -303,4 +309,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { main, issueToActiveItemRow };
+module.exports = { main, issueToActiveItemRow, issueToDoneItemRow };

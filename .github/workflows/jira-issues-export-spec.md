@@ -478,6 +478,7 @@ const initiative = PROJECT_NAMES[projectKey] || projectKey
 | Reporting Date | Last update date | `issue.fields.updated` in `YYYY-MM-DD` format |
 | External Reference | (empty) | Reserved for future use |
 | Comments | (empty) | Reserved for future use |
+| Alerts | Compliance violation codes from latest compliance comment | Empty if no `compliance-alerts` label; e.g. `NO_ESTIMATE, NO_REMAINING_WORK` |
 
 **Columns NOT Present in Done Items:**
 - `Status` - Not needed for done items

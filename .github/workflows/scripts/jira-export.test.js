@@ -2,7 +2,7 @@
 
 const test   = require('node:test');
 const assert = require('node:assert/strict');
-const { issueToActiveItemRow } = require('./jira-export');
+const { issueToActiveItemRow, issueToDoneItemRow } = require('./jira-export');
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -119,4 +119,80 @@ test('issueToActiveItemRow: other fields are unaffected when Alerts is populated
   assert.equal(row['Title'], 'Test issue title');
   assert.equal(row['Reporting Date'], '2025-05-01');
   assert.equal(row['Alerts'], 'NO_AREA');
+});
+
+// ---------------------------------------------------------------------------
+// issueToDoneItemRow — Alerts field
+// ---------------------------------------------------------------------------
+
+test('issueToDoneItemRow: Alerts is empty for an issue without compliance-alerts label', async () => {
+  const issue  = makeIssue({ labels: [] });
+  const client = makeJiraClient('SHOULD_NOT_BE_CALLED');
+  // extractComplianceAlerts must NOT be called
+  let called = false;
+  client.extractComplianceAlerts = async () => { called = true; return 'SHOULD_NOT_BE_CALLED'; };
+
+  const row = await issueToDoneItemRow(issue, 'https://jira.example.com', null, client);
+
+  assert.equal(row['Alerts'], '', 'Alerts must be empty when no compliance-alerts label');
+  assert.equal(called, false, 'extractComplianceAlerts must not be called for clean issues');
+});
+
+test('issueToDoneItemRow: Alerts is populated from extractComplianceAlerts when compliance-alerts label is present', async () => {
+  const issue  = makeIssue({ labels: ['compliance-alerts'] });
+  const client = makeJiraClient('NO_TIME_SPENT');
+
+  const row = await issueToDoneItemRow(issue, 'https://jira.example.com', null, client);
+
+  assert.equal(row['Alerts'], 'NO_TIME_SPENT');
+});
+
+test('issueToDoneItemRow: Alerts is empty string when compliance-alerts label is present but comment returns empty', async () => {
+  const issue  = makeIssue({ labels: ['compliance-alerts'] });
+  const client = makeJiraClient('');
+
+  const row = await issueToDoneItemRow(issue, 'https://jira.example.com', null, client);
+
+  assert.equal(row['Alerts'], '');
+});
+
+test('issueToDoneItemRow: Alerts column is present in returned row object', async () => {
+  const issue  = makeIssue();
+  const client = makeJiraClient();
+
+  const row = await issueToDoneItemRow(issue, 'https://jira.example.com', null, client);
+
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Alerts'), 'row must have an Alerts key');
+});
+
+test('issueToDoneItemRow: done items have correct columns including Alerts', async () => {
+  const issue  = makeIssue({ key: 'PROJ-99', labels: ['compliance-alerts'], updated: '2025-07-10T00:00:00.000Z' });
+  const client = makeJiraClient('NO_ESTIMATE, NO_TIME_SPENT');
+
+  const row = await issueToDoneItemRow(issue, 'https://jira.example.com', null, client);
+
+  // Verify all expected done item columns are present
+  assert.equal(row['Issue Number'], '99');
+  assert.equal(row['Title'], 'Test issue title');
+  assert.equal(row['Reporting Date'], '2025-07-10');
+  assert.equal(row['Alerts'], 'NO_ESTIMATE, NO_TIME_SPENT');
+
+  // Verify done items have the expected columns
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Issue Number'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Parent Issue'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Issue URL'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Title'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Assignees'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Type'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Area'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Priority'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Initiative'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Target Milestone'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Size'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Estimate'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Time Spent'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Reporting Date'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'External Reference'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Comments'));
+  assert.ok(Object.prototype.hasOwnProperty.call(row, 'Alerts'));
 });
