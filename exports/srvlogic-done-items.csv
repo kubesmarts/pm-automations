@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,2,2,2026-07-10,,,NO_ESTIMATE
+1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,2,2,2026-07-11,,,
 677,,https://redhat.atlassian.net/browse/SRVLOGIC-677,Kubesmarts cors-proxy ERR_CERT_DATE_INVALID,fantonangeli,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,1,0.5,2026-07-10,,,
 1006,,https://redhat.atlassian.net/browse/SRVLOGIC-1006,Version of graphql-java library that is not publicly available is used in 1.38. ,mareknovotny,Bug,Productization,Critical,Serverless logic,1.39.0 OSL,,0.6,0.025,2026-07-09,,,
 360,,https://redhat.atlassian.net/browse/SRVLOGIC-360,New SWF Diagram Editor ts/ react / react flow - Milestone 0,handreyrc,Feature,Tooling,Normal,Serverless logic,1.38.0 OSL,,13.2,20,2026-07-07,,,

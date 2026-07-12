@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-1078,1055,https://redhat.atlassian.net/browse/SRVLOGIC-1078,Migrate drools-baseline job to CSD,jankrystof-ibm,In review,Sub-task,QE,Blocker,Serverless logic,1.40.0 OSL,,0.4,0.3125,0.0875,0.4,0.3125,0.0875,,,2026-07-10,
+1078,1055,https://redhat.atlassian.net/browse/SRVLOGIC-1078,Migrate drools-baseline job to CSD,jankrystof-ibm,In review,Sub-task,QE,Blocker,Serverless logic,1.40.0 OSL,,0.4,0.3125,0.0875,0.4,0.3125,0.0875,,,2026-07-11,NO_COMPONENT
 1077,,https://redhat.atlassian.net/browse/SRVLOGIC-1077,Unify kie-tools environment variables to use default values from /env/install.js for each package in CI checks,domhanak,Next,Task,CI,Critical,Serverless logic,1.39.0 OSL,,0.1,0,0.1,0.1,,0.1,,,2026-07-09,
 1076,,https://redhat.atlassian.net/browse/SRVLOGIC-1076,Kubernetes APIs vesion bump to 1.36.0  verification,jakubschwan,Next,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-07-07,
 1075,,https://redhat.atlassian.net/browse/SRVLOGIC-1075,Upload NodeJS version v24.18.0 to rcm-guest,saumya1singh,In review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.3,0,0.2,0.3,,,,2026-07-09,
