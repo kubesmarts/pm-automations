@@ -1,8 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-6683,,https://github.com/apache/incubator-kie-drools/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,0.0,2.0,0.0,9.5,2.7,6.7,,Added some more issues after a review of Mark Proctor,2026-07-08,"IN_PROGRESS_NO_WORK_REMAINING, CHILDREN_STATUS"
+6683,,https://github.com/apache/incubator-kie-drools/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,0.0,2.0,0.0,9.5,2.7,6.6,,Added some more issues after a review of Mark Proctor,2026-07-08,CHILDREN_STATUS
 2365,,https://github.com/apache/incubator-kie-issues/issues/2365,Add drools-lsp to kie-tools,tkobayas,In progress,,Tooling,Major,,Future,M,0.8,0.2,0.6,0.8,0.2,0.6,,,2026-07-10,
 2314,,https://github.com/apache/incubator-kie-issues/issues/2314,DRLGEN Investigate best plain English formats for DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,2.0,1.0,1.0,2.0,1.0,1.0,,,2026-05-16,
 2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools sequential,Rikkola,In progress,,Runtimes,Major,,Future,L,6.0,5.0,1.0,6.0,5.0,1.0,,,2026-06-10,ESTIMATE_TOO_LONG
 97,,https://github.com/tkobayas/drlx-parser/issues/97,DRLX syntax review,tkobayas,In progress,,Docs,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,,2026-06-26,
 9,2,https://github.com/casehubio/engine/issues/9,YAML schema support for typed expressions,treblereel,In progress,,Runtimes,Normal,,Future,L,1.0,0.0,1.0,1.0,0.0,1.0,,,2026-06-17,
-2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,4.2,,2.0,4.2,1.4,2.0,,,2026-07-06,"NO_ESTIMATE, NO_REMAINING_WORK, CHILDREN_STATUS"
+2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,In progress,,Runtimes,Normal,,Future,XL,4.2,,2.0,8.4,1.4,4.0,,,2026-07-11,"ESTIMATE_TOO_LONG, CHILDREN_STATUS"
