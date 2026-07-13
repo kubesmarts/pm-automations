@@ -62,7 +62,7 @@ jobs:
           # Check if there are changes to commit
           if [[ -n $(git status --porcelain exports/) ]]; then
             git add exports/
-            git commit -m "Export active items $(date -u +%Y-%m-%d)" -m "Export Done items $(date -u +%Y-%m-%d)"
+            git commit -m "Export JIRA items $(date -u +%Y-%m-%d)"
             git push
             echo "Export files committed and pushed"
           else

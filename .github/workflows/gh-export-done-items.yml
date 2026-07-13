@@ -538,6 +538,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add exports/
-          git commit -m "Export Done items $(date -u +%Y-%m-%d)"
+          git commit -m "Export GH done items $(date -u +%Y-%m-%d)"
           git pull --rebase origin main
           git push
