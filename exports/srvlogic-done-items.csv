@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+950,,https://redhat.atlassian.net/browse/SRVLOGIC-950,OSL 1.38.0.CR1 community baselines ( smoke tests ) jobs failure analysis,domhanak,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.4,0.3,2026-07-12,,,
+949,,https://redhat.atlassian.net/browse/SRVLOGIC-949,Duplicate Drools reference in 1.38.0.CR1,saumya1singh,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.05,0,2026-07-12,,,NO_TIME_SPENT
 1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,2,2,2026-07-11,,,
 677,,https://redhat.atlassian.net/browse/SRVLOGIC-677,Kubesmarts cors-proxy ERR_CERT_DATE_INVALID,fantonangeli,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,1,0.5,2026-07-10,,,
 1006,,https://redhat.atlassian.net/browse/SRVLOGIC-1006,Version of graphql-java library that is not publicly available is used in 1.38. ,mareknovotny,Bug,Productization,Critical,Serverless logic,1.39.0 OSL,,0.6,0.025,2026-07-09,,,
@@ -71,7 +73,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 957,,https://redhat.atlassian.net/browse/SRVLOGIC-957,Add a documentation section explaining the workflow id naming and versioning recommended practices and limitations,wmedvede,Task,Docs,Normal,Serverless logic,1.38.0 OSL,,0.2,0.2,2026-05-20,,,
 954,,https://redhat.atlassian.net/browse/SRVLOGIC-954,Implement logic builder image build verification pipeline,domhanak,Story,QE,Critical,Serverless logic,1.38.0 OSL,,0.4,0.125,2026-05-20,,,
 952,794,https://redhat.atlassian.net/browse/SRVLOGIC-952,Build CR2 KN Workflows plugin RPMs and Containers,saumya1singh,Sub-task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.2,2026-05-20,,,
-950,,https://redhat.atlassian.net/browse/SRVLOGIC-950,OSL 1.38.0.CR1 community baselines ( smoke tests ) jobs failure analysis,domhanak,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.4,0.3,2026-05-20,,,
 934,,https://redhat.atlassian.net/browse/SRVLOGIC-934,9.105.x-prod osl-images branch is not prepared for release,domhanak,Bug,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.025,0.025,2026-05-20,,,
 931,,https://redhat.atlassian.net/browse/SRVLOGIC-931,Cleanup old manifests in osl-images,domhanak,Task,Cloud,Critical,Serverless logic,1.38.0 OSL,,0.025,0.025,2026-05-20,,,
 921,,https://redhat.atlassian.net/browse/SRVLOGIC-921,Extend OSL cut-offf automation - PNC nightly build configuration,jankrystof-ibm,Task,Productization,Critical,Serverless logic,1.38.0 OSL,,0.075,0.075,2026-05-20,,,
