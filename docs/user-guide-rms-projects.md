@@ -189,6 +189,7 @@ Please review and resolve these alerts.
 | `NO_ESTIMATE` | `Estimate` is empty and status is past `Next` | Set the `Estimate` field |
 | `ESTIMATE_TOO_LONG` | `Estimate` exceeds 2 weeks and status is `In Progress` | Break the work item into smaller pieces, or move it back to `Backlog` / `Next` if the large estimate is intentional at this stage |
 | `NO_REMAINING_WORK` | `Remaining Work` is empty and status is `In Progress` or `In Review` | Set the `Remaining Work` field |
+| `IN_PROGRESS_NO_WORK_REMAINING` | `Remaining Work` is `0`, `Estimate` is greater than `0`, and status is `In Progress` — work appears complete but status not updated (not raised for zero-estimate items) | Move status to `In Review` or `Done`, or set the remaining effort to the correct non-zero value |
 | `NO_TIME_SPENT` | `Time Spent` is empty and status is `Done` | Enter the total time spent |
 | `NO_ASSIGNEE` | No assignee on the GH issue and status is `In Progress`, `In Review`, or `Done` | Assign the issue to the responsible person |
 | `CHILDREN_STATUS` | Parent/child status mismatch detected (see below) | Align child statuses with the parent |
