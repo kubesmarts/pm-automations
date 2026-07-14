@@ -2,7 +2,7 @@
 
 ## What it does
 
-This is an **automation workflow** designed to **validate GitHub issues compliance** with project field requirements and facilitate **progress reporting and sync across multiple GitHub Projects**. It runs **once daily at 00:00 UTC** and checks **all items across all configured projects**. For each item it compares the current values of the tracked fields (**Status**, **Priority**, **Target Milestone**, **Estimate**, **Remaining Work**, **Time Spent**) against the last entry in the item's **`Reporting Log`** field. If a change is detected (or the log is empty), the workflow:
+This is an **automation workflow** designed to **validate GitHub issues compliance** with project field requirements and facilitate **progress reporting and sync across multiple GitHub Projects**. It runs **once daily at 00:00 UTC (first in the workflow sequence)** and checks **all items across all configured projects**. For each item it compares the current values of the tracked fields (**Status**, **Priority**, **Target Milestone**, **Estimate**, **Remaining Work**, **Time Spent**) against the last entry in the item's **`Reporting Log`** field. If a change is detected (or the log is empty), the workflow:
 
 1. Sets **`Reporting Date`** to today
 2. Prepends a new entry to **`Reporting Log`** in the format:
@@ -211,7 +211,7 @@ No additional configuration is required — the workflow uses the existing `PSYN
 
 ---
 
-Once all steps are done, the workflow runs automatically once daily (00:00 UTC) across all projects listed in `PSYNC_PROJECTS`.
+Once all steps are done, the workflow runs automatically once daily (00:00 UTC, first in the workflow sequence) across all projects listed in `PSYNC_PROJECTS`.
 
 ---
 

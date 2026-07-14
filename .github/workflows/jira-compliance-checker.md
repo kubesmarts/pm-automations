@@ -19,7 +19,7 @@ Go to **Repository → Settings → Secrets and variables → Actions → Variab
   - `PSYNC_JIRA_PROJECTS` - Comma-separated project keys (e.g., `ISSUE,QUARKUS`)
 
 ### 3. Run the Workflow
-- **Automatic:** Runs daily at 06:00 UTC
+- **Automatic:** Runs daily at 00:30 UTC (30 min after gh-issues-compliance-checker)
 - **Manual:** Go to **Actions → JIRA Issues Compliance Checker → Run workflow**
   - Optional: Enable "Dry run mode" to test without updating JIRA
 

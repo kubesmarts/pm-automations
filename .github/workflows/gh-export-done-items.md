@@ -5,7 +5,7 @@ Automatically exports completed items from GitHub Projects to a single CSV file 
 ## Overview
 
 This workflow:
-- Runs every Sunday at midnight UTC (00:00)
+- Runs daily at 01:30 UTC (30 min after gh-export-active-items)
 - Exports items with Status = "Done" from all configured projects
 - Maintains one CSV file per project in the `exports/` directory
 - Only exports items without validation alerts
@@ -32,7 +32,7 @@ See the [Contributor Access Management](../docs/user-guide-rms-projects.md#contr
 
 ```yaml
 schedule:
-  - cron: '0 0 * * 0'  # Every Sunday at 00:00 UTC
+  - cron: '30 1 * * *'  # Daily at 01:30 UTC (30 min after gh-export-active-items)
 ```
 
 **Manual trigger:** Available via workflow_dispatch

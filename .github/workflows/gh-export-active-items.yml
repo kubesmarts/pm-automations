@@ -2,13 +2,13 @@ name: GH Export Active Items
 
 # ---------------------------------------------------------------------------
 # Schedule configuration
-# Runs daily at 00:00 UTC to export active items:
+# Runs daily at 01:00 UTC to export active items:
 # - All non-Done, non-Cancelled items
 # - Backlog items that have a target version set (excluding "Future")
 # ---------------------------------------------------------------------------
 on:
   schedule:
-    - cron: '0 0 * * *'   # Daily at 00:00 UTC
+    - cron: '0 1 * * *'   # Daily at 01:00 UTC (30 min after jira-compliance-checker)
   workflow_dispatch:
 
 # Requires a PAT with 'project' and 'read:org' scopes stored as secret PSYNC_PAT_GH.

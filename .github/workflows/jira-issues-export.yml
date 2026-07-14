@@ -2,8 +2,8 @@ name: JIRA Issues Export
 
 on:
   schedule:
-    # Daily at 00:00 UTC
-    - cron: '0 0 * * *'
+    # Daily at 02:00 UTC (30 min after gh-export-done-items)
+    - cron: '0 2 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
