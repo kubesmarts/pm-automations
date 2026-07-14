@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1080,1079,https://redhat.atlassian.net/browse/SRVLOGIC-1080,Investigate and debug sonataflow-operator E2E test workflow failures,domhanak,Sub-task,CI,Blocker,Serverless logic,1.39.0 OSL,,0,0.8,2026-07-14,,,
 950,,https://redhat.atlassian.net/browse/SRVLOGIC-950,OSL 1.38.0.CR1 community baselines ( smoke tests ) jobs failure analysis,domhanak,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.4,0.3,2026-07-12,,,
 949,,https://redhat.atlassian.net/browse/SRVLOGIC-949,Duplicate Drools reference in 1.38.0.CR1,saumya1singh,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.05,0,2026-07-12,,,NO_TIME_SPENT
 1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,2,2,2026-07-11,,,
