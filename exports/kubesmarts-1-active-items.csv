@@ -1,2 +1,2 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-83,,https://github.com/kubesmarts/pm-automations/issues/83,Epics should suppress NO_ESTIMATE alert and conditionally suppress NO_REMAINING_WORK alert,skavgou,In progress,,PM,Major,,,,0.0,,0.3,0.0,0.0,0.3,,,2026-07-13,
+83,,https://github.com/kubesmarts/pm-automations/issues/83,Epics should suppress NO_ESTIMATE alert and conditionally suppress NO_REMAINING_WORK alert,skavgou,In progress,,PM,Major,,,,0.4,,0.3,0.0,0.0,0.3,,,2026-07-13,
