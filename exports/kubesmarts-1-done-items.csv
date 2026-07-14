@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+73,,https://github.com/kubesmarts/pm-automations/issues/73,feat: add IN_PROGRESS_NO_WORK_REMAINING compliance alert,skavgou,,PM,Normal,,,,0.4,0.4,2026-07-14,,,
 85,,https://github.com/kubesmarts/pm-automations/issues/85,Allow exporting Done items with validation alerts in both GH and JIRA exports,dgutierr,,PM,Major,,,,0.1,0.1,2026-07-11,,,
 76,,https://github.com/kubesmarts/pm-automations/issues/76,Add Reporting Date column to active items CSV export (GH and JIRA),dgutierr,,PM,Major,,,,0.05,0.05,2026-07-10,,,
 80,,https://github.com/kubesmarts/pm-automations/issues/80,Improve precision of exported time tracking values to avoid loss of accuracy for small estimates,dgutierr,,PM,Critical,,,,0.1,0.05,2026-07-10,,,
