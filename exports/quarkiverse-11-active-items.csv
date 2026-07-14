@@ -1,6 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 1481,,https://github.com/serverlessworkflow/sdk-java/issues/1481,Add a context-propagation SPI to carry caller context,"mcruzdev,fjtirado",Backlog,,Runtimes,Blocker,,1.0,L,0.4,,,0.4,0.0,0.0,,,2026-07-08,
-731,606,https://github.com/quarkiverse/quarkus-flow/issues/731,Improve OIDC implementation DX by delegating to quarkus-oidc-client,ricardozanini,Next,,Runtimes,Blocker,,1.0,M,0.4,0.0,0.4,0.4,0.0,0.4,,,2026-07-07,
+731,606,https://github.com/quarkiverse/quarkus-flow/issues/731,Improve OIDC implementation DX by delegating to quarkus-oidc-client,ricardozanini,In progress,,Runtimes,Blocker,,1.0,M,0.4,0.0,0.4,0.4,0.0,0.4,,,2026-07-14,
 723,717,https://github.com/quarkiverse/quarkus-flow/issues/723,docs: Document Quarkus Flow best practices,mcruzdev,In progress,,Runtimes,Major,,1.0,S,0.1,0.1,,0.1,0.1,0.0,,,2026-07-04,NO_REMAINING_WORK
 722,720,https://github.com/quarkiverse/quarkus-flow/issues/722,Migrate experimental modules from sdk-java to new dsl module,ricardozanini,Next,,Runtimes,Blocker,,1.0,L,1.0,0.0,1.0,1.0,0.0,1.0,,,2026-07-04,
 719,720,https://github.com/quarkiverse/quarkus-flow/issues/719,[Docs] Document jq expression security model and timeout best practices,"ricardozanini,nightcityblade",Next,,Runtimes,Blocker,,1.0,S,0.2,,0.2,0.2,0.0,0.2,,,2026-07-04,
