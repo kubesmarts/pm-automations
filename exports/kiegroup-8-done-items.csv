@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+208,,https://github.com/kiegroup/kogito-runtimes/issues/208,Allow masking sensitive data in logs.,fjtirado,,Runtimes,Normal,OSL,1.39.0 OSL,S,0.4,0.3,2026-07-15,SRVLOGIC-935,,
 2762,,https://github.com/apache/incubator-kie-tools/issues/2762,[serverless-logic-web-tools] Migrate the devmode image used to deploy workflows to `sonataflow-devmode-image`,fantonangeli,,Tooling,Normal,OSL,1.38.0 OSL,M,0.0,0.0,2026-07-07,,,
 2767,,https://github.com/apache/incubator-kie-tools/issues/2767,[serverless-logic-web-tools] Importing gist with multiple files does not work,fantonangeli,,Tooling,Normal,OSL,1.38.0 OSL,M,0.0,0.0,2026-07-07,,,
 2769,,https://github.com/apache/incubator-kie-tools/issues/2769,Move SLWT quarkus-accelerator into kie-tools as a new package serverless-logic-web-tools-accelerator-quarkus,fantonangeli,,Tooling,Normal,Apache,1.38.0 OSL,M,1.0,0.0,2026-07-07,,,
