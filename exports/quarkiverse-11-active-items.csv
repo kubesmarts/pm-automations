@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-1481,,https://github.com/serverlessworkflow/sdk-java/issues/1481,Add a context-propagation SPI to carry caller context,"mcruzdev,fjtirado",Backlog,,Runtimes,Blocker,,1.0,L,0.4,,,0.4,0.0,0.0,,,2026-07-08,
+1481,,https://github.com/open-workflow-specification/sdk-java/issues/1481,Add a context-propagation SPI to carry caller context,"mcruzdev,fjtirado",Backlog,,Runtimes,Blocker,,1.0,L,0.4,,,0.4,0.0,0.0,,,2026-07-08,
 731,606,https://github.com/quarkiverse/quarkus-flow/issues/731,Improve OIDC implementation DX by delegating to quarkus-oidc-client,ricardozanini,In progress,,Runtimes,Blocker,,1.0,M,0.4,0.0,0.4,0.4,0.0,0.4,,,2026-07-14,
 723,717,https://github.com/quarkiverse/quarkus-flow/issues/723,docs: Document Quarkus Flow best practices,mcruzdev,In progress,,Runtimes,Major,,1.0,S,0.1,0.1,,0.1,0.1,0.0,,,2026-07-04,NO_REMAINING_WORK
 722,720,https://github.com/quarkiverse/quarkus-flow/issues/722,Migrate experimental modules from sdk-java to new dsl module,ricardozanini,Next,,Runtimes,Blocker,,1.0,L,1.0,0.0,1.0,1.0,0.0,1.0,,,2026-07-04,
@@ -9,7 +9,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 620,619,https://github.com/quarkiverse/quarkus-flow/issues/620,Create ADR for MCP Integration Design,ricardozanini,In review,,Runtimes,Normal,,1.0,M,0.2,0.1,0.0,0.2,0.1,0.0,,,2026-07-11,
 606,,https://github.com/quarkiverse/quarkus-flow/issues/606,Epic: OIDC Token Propagation and Exchange,mcruzdev,Next,,Runtimes,Major,,Future,XL,,,,1.8,1.1,0.4,,,2026-07-04,
 538,,https://github.com/eiiches/jackson-jq/issues/538,Proposal: Pluggable Regex Engine for jackson-jq,,Backlog,,Runtimes,Normal,,1.0,L,1.0,,,1.0,0.0,0.0,,,,
-523,51,https://github.com/quarkiverse/quarkus-flow/issues/523,feat: Integrate Serverless Workflow Editor package into DevUI,fantonangeli,In review,,Tooling,Normal,,1.0,M,3.0,1.7,1.3,3.0,1.7,1.3,,,2026-07-13,
+523,51,https://github.com/quarkiverse/quarkus-flow/issues/523,feat: Integrate Serverless Workflow Editor package into DevUI,fantonangeli,In review,,Tooling,Normal,,1.0,M,2.0,1.7,1.3,2.0,1.7,1.3,,,2026-07-15,
 488,,https://github.com/quarkiverse/quarkus-flow/issues/488,task: Refactor docs module: Reorganize DSL examples and enable Maven test execution,domhanak,Backlog,,Docs,Major,,1.0,M,0.6,,0.6,0.6,0.0,0.6,,,2026-07-08,
 487,,https://github.com/quarkiverse/quarkus-flow/issues/487,docs: Expand Java DLS Cookbook with additional examples,domhanak,Backlog,,Docs,Major,,1.0,M,0.6,,0.6,0.6,0.0,0.6,,,2026-07-08,
 469,,https://github.com/quarkiverse/quarkus-flow/issues/469,feat: Test Framework for Workflow Event Assertions,mcruzdev,Next,,Runtimes,Normal,,2026/Q3,,1.6,0.6,,1.6,0.6,0.0,,,2026-06-19,
@@ -37,18 +37,17 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 224,207,https://github.com/open-workflow-specification/editor/issues/224,feat: Host-agnostic editable text + change events,,Backlog,,Tooling,Normal,,2026/Q3,M,0.8,,0.8,0.8,0.0,0.8,,,,
 223,207,https://github.com/open-workflow-specification/editor/issues/223,feat: Scaffold the text-pane workspace package,,Backlog,,Tooling,Normal,,2026/Q3,M,0.8,,0.8,0.8,0.0,0.8,,,,
 222,,https://github.com/open-workflow-specification/editor/issues/222,feat: Migrate to Open Workflow Specification,lornakelly,In review,,Tooling,Critical,,2026/Q3,M,0.4,0.4,0.0,0.4,0.4,0.0,,,2026-07-09,
-211,207,https://github.com/open-workflow-specification/editor/issues/211,Spike: Define IntelliSense user experience,cheryl7114,In progress,,Tooling,Major,,2026/Q3,M,1.0,0.5,1.0,1.0,0.5,1.0,,,2026-07-13,
+211,207,https://github.com/open-workflow-specification/editor/issues/211,Spike: Define IntelliSense user experience,cheryl7114,In progress,,Tooling,Major,,2026/Q3,M,1.0,0.7,1.0,1.0,0.7,1.0,,,2026-07-15,
 209,207,https://github.com/open-workflow-specification/editor/issues/209,Spike: Decide on approach for language service,fantonangeli,Backlog,,Tooling,Major,,2026/Q3,M,0.4,,0.4,0.4,0.0,0.4,,,2026-07-02,
 208,207,https://github.com/open-workflow-specification/editor/issues/208,Spike: Evaluate embedded code editor,,Backlog,,Tooling,Major,,2026/Q3,S,0.4,,0.4,0.4,0.0,0.4,,,,
 197,6,https://github.com/open-workflow-specification/editor/issues/197,task: Write & publish blog post,lornakelly,In review,,Tooling,Major,,1.0,S,0.2,0.1,0.1,0.2,0.1,0.1,,,2026-07-08,
 193,190,https://github.com/open-workflow-specification/editor/issues/193,task: Break down accepted ADR into estimated tickets,lornakelly,In progress,,Tooling,Major,,2026/Q3,M,0.6,0.3,0.3,0.6,0.3,0.3,,,2026-07-06,
 190,,https://github.com/open-workflow-specification/editor/issues/190,Epic: Serverless Workflow Editor Post MVP Planning,lornakelly,In progress,,Tooling,Major,,2026/Q3,M,0.0,0.0,0.0,1.1,0.8,0.3,,,2026-06-24,
-116,,https://github.com/quarkiverse/quarkus-flow/issues/116,epic: Introduce curated Camel connector catalog for Quarkus Flow,ricardozanini,Backlog,,Runtimes,Minor,,1.0,,,,,0.0,0.0,0.0,,,2026-06-23,
 114,,https://github.com/quarkiverse/quarkus-flow/issues/114,feat: OpenTelemetry tracing support for Quarkus Flow,wmedvede,In progress,,Runtimes,Major,,1.0,M,6.0,4.0,2.0,6.0,4.0,2.0,,,2026-07-08,ESTIMATE_TOO_LONG
 112,,https://github.com/quarkiverse/quarkus-flow/issues/112,epic: Benchmark and Load Testing,gmunozfe,In progress,,Runtimes,Major,,2026/Q3,L,7.0,6.0,1.5,17.8,18.2,1.7,,,2026-07-13,ESTIMATE_TOO_LONG
 98,7,https://github.com/open-workflow-specification/editor/issues/98,feat: Review and increase E2E test coverage,kumaradityaraj,In progress,,Tooling,Minor,,1.0,S,0.2,,0.2,0.2,0.0,0.2,,,2026-07-13,
 97,7,https://github.com/open-workflow-specification/editor/issues/97,feat: Increase unit test coverage across core modules,kumaradityaraj,Next,,Tooling,Minor,,1.0,S,0.2,,0.2,0.2,0.0,0.2,,,2026-07-04,
-51,,https://github.com/quarkiverse/quarkus-flow/issues/51,epic: Integrate Serverless Workflow Editor into DevUI,lornakelly,Backlog,,Tooling,Major,,1.0,,,,,3.0,1.7,1.3,,,2026-06-23,
+51,,https://github.com/quarkiverse/quarkus-flow/issues/51,epic: Integrate Serverless Workflow Editor into DevUI,lornakelly,Backlog,,Tooling,Major,,1.0,,,,,2.0,1.7,1.3,,,2026-06-23,
 7,1,https://github.com/open-workflow-specification/editor/issues/7,"Epic: Hardening, testing, and user feedback incorporation",lornakelly,In progress,,Tooling,Major,,1.0,L,0.0,0.0,0.0,2.0,1.3,0.4,,,2026-06-24,
 6,1,https://github.com/open-workflow-specification/editor/issues/6,"Epic: Packaging, release and integration ",lornakelly,In progress,,Tooling,Major,,1.0,L,0.0,0.0,0.0,3.2,2.1,0.3,,,2026-06-23,CHILDREN_STATUS
 1,,https://github.com/open-workflow-specification/editor/issues/1,Epic: Serverless Workflow Editor MVP,lornakelly,In progress,,Tooling,Major,,1.0,XL,0.0,0.0,0.0,41.0,34.6,0.7,,,2026-06-23,

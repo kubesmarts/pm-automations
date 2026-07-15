@@ -1,5 +1,4 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-210,,https://github.com/kiegroup/kogito-runtimes/issues/210,Add process metadata information to MDC context,fjtirado,In progress,,Runtimes,Normal,OSL,1.39.0 OSL,S,0.3,,0.2,0.3,0.0,0.2,SRVLOGIC-936,,2026-07-14,
-208,,https://github.com/kiegroup/kogito-runtimes/issues/208,Allow masking sensitive data in logs.,fjtirado,In review,,Runtimes,Normal,OSL,1.39.0 OSL,S,0.4,0.15,0.1,0.4,0.15,0.1,SRVLOGIC-935,,2026-07-14,
+210,,https://github.com/kiegroup/kogito-runtimes/issues/210,Add process metadata information to MDC context,fjtirado,In review,,Runtimes,Normal,OSL,1.39.0 OSL,S,0.3,0.2,,0.3,0.2,0.0,SRVLOGIC-936,,2026-07-15,NO_REMAINING_WORK
 191,189,https://github.com/kiegroup/kogito-runtimes/issues/191,Add version to rest interface,fjtirado,Next,,Runtimes,Normal,OSL,1.39.0 OSL,M,0.8,,0.8,0.8,0.0,0.8,,,2026-07-13,
 189,,https://github.com/kiegroup/kogito-runtimes/issues/189,Add version to runtimes API and properties,fjtirado,Next,,Runtimes,Normal,OSL,1.39.0 OSL,M,0.0,,,0.8,0.0,0.8,SRVLOGIC-1019,,2026-07-13,
