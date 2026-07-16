@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+222,,https://github.com/open-workflow-specification/editor/issues/222,feat: Migrate to Open Workflow Specification,lornakelly,,Tooling,Critical,,2026/Q3,M,0.4,0.4,2026-07-16,,,
+260,,https://github.com/open-workflow-specification/editor/issues/260,bug: Start/End node styles reference unavailable Tailwind CSS variables inside Shadow DOM,fantonangeli,,Tooling,Blocker,,2026/Q2,M,0.4,,2026-07-16,,,NO_TIME_SPENT
+731,,https://github.com/quarkiverse/quarkus-flow/issues/731,Improve OIDC implementation DX by delegating to quarkus-oidc-client,ricardozanini,,Runtimes,Blocker,,1.0,M,0.4,1.0,2026-07-16,,,
 1517,,https://github.com/serverlessworkflow/sdk-java/issues/1517,NPE in TryExecutor when retry is configured without explicit backoff strategy,"mcruzdev,fjtirado",,Runtimes,Blocker,,1.0,,0.2,0.2,2026-07-14,,,
 1529,,https://github.com/serverlessworkflow/sdk-java/issues/1529,Improve traceability of scheduled task,fjtirado,,Runtimes,Normal,,2026/Q3,XS,0.1,0.1,2026-07-14,,,
 737,,https://github.com/quarkiverse/quarkus-flow/issues/737,docs: Documentation uses wrong camelCase property for persistence auto-restore,gmunozfe,,Docs,Major,,1.0,S,0.1,0.1,2026-07-13,,,
