@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
+1083,,https://redhat.atlassian.net/browse/SRVLOGIC-1083,Nightly build from main fails when done on Java 17 after j2cl maven plugin patch update.  ,baldimir,In review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.05,0.15,0.2,0.05,0.15,,,2026-07-16,
 1081,,https://redhat.atlassian.net/browse/SRVLOGIC-1081,Update Go dependency x/net,baldimir,In review,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0.1,0.1,0,0.1,0.1,,,,2026-07-15,
 1079,,https://redhat.atlassian.net/browse/SRVLOGIC-1079,Split kie-tools e2e tests execution into separate workflows,baldimir,In review,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,1,1,0,1,1.8,,,,2026-07-14,
 1078,1055,https://redhat.atlassian.net/browse/SRVLOGIC-1078,Migrate drools-baseline job to CSD,jankrystof-ibm,In review,Sub-task,CI,Blocker,Serverless logic,1.40.0 OSL,,0.4,0.3125,0.0875,0.4,0.3125,0.0875,,,2026-07-16,
