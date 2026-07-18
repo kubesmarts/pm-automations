@@ -1,4 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+257,,https://github.com/open-workflow-specification/editor/issues/257,Task: Deprecate old serverlessworkflow package,fantonangeli,,Tooling,Critical,,1.0,XS,0.2,0.1,2026-07-18,,,
+264,,https://github.com/open-workflow-specification/editor/issues/264,feat: Replace sdk with new openworkflow sdk,lornakelly,,Tooling,Normal,,1.0,S,0.1,,2026-07-18,,,NO_TIME_SPENT
+266,,https://github.com/open-workflow-specification/editor/issues/266,Task: Publish MVP package,fantonangeli,,Tooling,Critical,,1.0,M,0.2,0.2,2026-07-18,,,
+750,,https://github.com/quarkiverse/quarkus-flow/issues/750,bug: When a parallel agent is used as a subagent of another workflow it hangs forever,ricardozanini,,Runtimes,Blocker,,1.0,S,0.4,0.1,2026-07-18,,,
+755,,https://github.com/quarkiverse/quarkus-flow/issues/755,bug: Register WorkflowExecutionListener service providers for native builds,gmunozfe,,,,,,,,,2026-07-18,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
+98,,https://github.com/open-workflow-specification/editor/issues/98,feat: Review and increase E2E test coverage,kumaradityaraj,,Tooling,Minor,,1.0,S,0.2,,2026-07-18,,,NO_TIME_SPENT
 260,,https://github.com/open-workflow-specification/editor/issues/260,bug: Start/End node styles reference unavailable Tailwind CSS variables inside Shadow DOM,fantonangeli,,Tooling,Blocker,,2026/Q2,M,0.4,0.2,2026-07-17,,,
 222,,https://github.com/open-workflow-specification/editor/issues/222,feat: Migrate to Open Workflow Specification,lornakelly,,Tooling,Critical,,2026/Q3,M,0.4,0.4,2026-07-16,,,
 731,,https://github.com/quarkiverse/quarkus-flow/issues/731,Improve OIDC implementation DX by delegating to quarkus-oidc-client,ricardozanini,,Runtimes,Blocker,,1.0,M,0.4,1.0,2026-07-16,,,
