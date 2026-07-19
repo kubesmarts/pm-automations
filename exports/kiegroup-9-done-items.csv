@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+327,,https://github.com/casehubio/engine/issues/327,HumanTaskTarget: support runtime-evaluated expiresIn — static YAML Duration can't vary per case instance,treblereel,,,Normal,,Future,M,0.6,0.0,2026-07-19,,,NO_AREA
 2344,,https://github.com/apache/incubator-kie-issues/issues/2344,Model compiler: NPE evaluating temporal after() when an OR branch is a negated join,Rikkola,,Runtimes,Critical,,Future,S,1.0,1.0,2026-07-17,,,
 68,,https://github.com/casehubio/platform/issues/68,"epic: ACL authorization model — Phase 1 (flat grants), Phase 2 (identity propagation), Phase 3 (worker rights roadmap)",treblereel,,Runtimes,Normal,,Future,XL,4.0,4.0,2026-07-15,,,
 39,,https://github.com/pibizza/drools-journal/issues/39,Liveness scan does not account for superseded inserts (re-insert same factHandleId),pibizza,,Runtimes,Major,,Future,S,0.1,0.1,2026-07-15,,,
