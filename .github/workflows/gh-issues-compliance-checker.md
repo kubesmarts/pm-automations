@@ -109,9 +109,9 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 
 | Code | When set |
 |------|----------|
-| `NO_ESTIMATE` | `Estimate` is empty and the item's `Status` is neither `Backlog` nor `Next` |
+| `NO_ESTIMATE` | `Estimate` is empty, the item's `Status` is neither `Backlog` nor `Next`, **and the item is not an epic** (epics may have no estimate when all work is tracked in sub-issues) |
 | `ESTIMATE_TOO_LONG` | `Estimate` is set but exceeds 2 weeks and the item's `Status` is `In Progress` |
-| `NO_REMAINING_WORK` | `Remaining Work` is empty and `Status` is `In Progress` or `In Review` (not raised for `Done` — field is auto-cleared) |
+| `NO_REMAINING_WORK` | `Remaining Work` is empty and `Status` is `In Progress` or `In Review` (not raised for `Done` — field is auto-cleared). **For epics, only raised when `Estimate` is greater than 0** — if no estimate is set on the epic itself, remaining work is not required |
 | `IN_PROGRESS_NO_WORK_REMAINING` | `Remaining Work` is explicitly `0`, `Estimate` is greater than `0`, and `Status` is `In Progress` — work appears complete but status has not been updated (not raised for zero-estimate items) |
 | `NO_AREA` | `Area` is empty and `Status` is not `Backlog` |
 | `NO_PRIORITY` | `Priority` is empty and `Status` is not `Backlog` |
@@ -302,7 +302,8 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **Item not processed** → the workflow paginates (100 items per page); check the log to confirm the item's page was fetched
 - **Project in a different org not processed** → the PAT owner must be a member of that org; for SAML SSO orgs the PAT must be authorized via **GitHub → Settings → Personal access tokens → Configure SSO → Authorize**
 - **`Alerts` field not updated** → the field name must be exactly `Alerts` (case-sensitive) and its type must be Text; if absent, the field is silently skipped and a note appears in the Actions log (`not configured`)
-- **`Alerts` shows `NO_ESTIMATE` or `NO_REMAINING_WORK`** → set the missing field on the project item, or move the item back to `Backlog` / `Next` status if estimation is not yet applicable
+- **`Alerts` shows `NO_ESTIMATE`** → set the `Estimate` field on the project item, or move the item back to `Backlog` / `Next` if estimation is not yet applicable. Note: epics (items with sub-issues) never trigger `NO_ESTIMATE` — estimate is optional for them
+- **`Alerts` shows `NO_REMAINING_WORK`** → set the `Remaining Work` field. For epics this alert only fires when their own `Estimate` is greater than 0 — set remaining work to the appropriate value, or set `Estimate` to `0` if all work is tracked in sub-issues
 - **`Alerts` shows `IN_PROGRESS_NO_WORK_REMAINING`** → `Remaining Work` is `0` and `Estimate` is greater than `0` but the item is still `In Progress`; if the work is done, move the status to `In Review` or `Done`, otherwise set the remaining effort to the correct non-zero value
 - **`Alerts` shows `ESTIMATE_TOO_LONG`** → the item's `Estimate` is greater than 2 weeks and it is `In Progress`; consider breaking it down into smaller pieces of work, or move it back to `Backlog` / `Next` if the large estimate is intentional at this stage
 - **`Alerts` shows `NO_AREA`** → set the `Area` field on the project item, or move it back to `Backlog` if area classification is not yet applicable

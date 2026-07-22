@@ -17,7 +17,7 @@ const TWO_WEEKS_S = 2 * ONE_WEEK_S;
  * Only the fields exercised by the ESTIMATE_TOO_LONG rule are required here;
  * all other required fields are pre-populated so other rules don't fire.
  */
-function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST-1' } = {}) {
+function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST-1', subtasks = [] } = {}) {
     return {
         key,
         fields: {
@@ -28,6 +28,7 @@ function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST
             assignee:     { displayName: 'Alice', accountId: 'alice-id' },
             labels:       ['area/runtimes'],
             components:   [],
+            subtasks,
             timetracking: {
                 originalEstimateSeconds:  estimateSeconds,
                 originalEstimate:         estimateSeconds != null ? `${Math.round(estimateSeconds / 3600)}h` : undefined,
@@ -142,4 +143,51 @@ test('ESTIMATE_TOO_LONG: not raised for Done items even with large estimate', ()
     const result = validator.validateIssue(issue, jiraClient);
     assert.ok(!result.violations.includes('ESTIMATE_TOO_LONG'),
         `Unexpected ESTIMATE_TOO_LONG for Done: ${result.violations}`);
+});
+
+// ---------------------------------------------------------------------------
+// Epic suppression tests (NO_ESTIMATE / NO_REMAINING_WORK)
+// ---------------------------------------------------------------------------
+
+/** A stub sub-task entry — only the presence matters for isEpic(). */
+const STUB_SUBTASK = { key: 'TEST-2', fields: { summary: 'child' } };
+
+test('NO_ESTIMATE: not raised for In Progress epic with no estimate', () => {
+    const validator = new PolicyValidator();
+    // Epic with no estimate — originalEstimateSeconds is null
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: null, subtasks: [STUB_SUBTASK] });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_ESTIMATE'),
+        `Unexpected NO_ESTIMATE for epic: ${result.violations}`);
+});
+
+test('NO_ESTIMATE: raised for non-epic In Progress item with no estimate', () => {
+    const validator = new PolicyValidator();
+    // Non-epic (no subtasks) with no estimate — should still fire
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: null, subtasks: [] });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_ESTIMATE'),
+        `Expected NO_ESTIMATE for non-epic without estimate: ${result.violations}`);
+});
+
+test('NO_REMAINING_WORK: not raised for In Progress epic with no estimate', () => {
+    const validator = new PolicyValidator();
+    // Epic with estimate=0 — remaining work not mandatory
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: 0, subtasks: [STUB_SUBTASK] });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_REMAINING_WORK'),
+        `Unexpected NO_REMAINING_WORK for epic with estimate=0: ${result.violations}`);
+});
+
+test('NO_REMAINING_WORK: raised for In Progress epic when estimate > 0 and remaining work is absent', () => {
+    const validator = new PolicyValidator();
+    // Epic with a real estimate — remaining work IS required
+    // We need remainingEstimateSeconds to be 0/null to trigger the missing-field path.
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: ONE_WEEK_S, subtasks: [STUB_SUBTASK] });
+    // Override remaining to be absent (null) to trigger the rule
+    issue.fields.timetracking.remainingEstimateSeconds = null;
+    issue.fields.timetracking.remainingEstimate = undefined;
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_REMAINING_WORK'),
+        `Expected NO_REMAINING_WORK for epic with estimate>0 and no remaining: ${result.violations}`);
 });

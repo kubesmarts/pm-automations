@@ -186,9 +186,9 @@ Please review and resolve these alerts.
 | `NO_AREA` | `Area` is empty and the issue is past `Backlog` | Set the `Area` field |
 | `NO_PRIORITY` | `Priority` is empty and the issue is past `Backlog` | Set the `Priority` field |
 | `NO_MILESTONE` | `Target Milestone` is empty and the issue is past `Backlog` | Set the `Target Milestone` field |
-| `NO_ESTIMATE` | `Estimate` is empty and status is past `Next` | Set the `Estimate` field |
+| `NO_ESTIMATE` | `Estimate` is empty, status is past `Next`, and the issue is not an epic | Set the `Estimate` field. Epics (issues with sub-issues) are exempt — estimate is optional for them |
 | `ESTIMATE_TOO_LONG` | `Estimate` exceeds 2 weeks and status is `In Progress` | Break the work item into smaller pieces, or move it back to `Backlog` / `Next` if the large estimate is intentional at this stage |
-| `NO_REMAINING_WORK` | `Remaining Work` is empty and status is `In Progress` or `In Review` | Set the `Remaining Work` field |
+| `NO_REMAINING_WORK` | `Remaining Work` is empty and status is `In Progress` or `In Review`. For epics, only raised when their own `Estimate` is greater than 0 | Set the `Remaining Work` field. For epics whose all work is in sub-issues, keep `Estimate` at `0` to suppress this alert |
 | `IN_PROGRESS_NO_WORK_REMAINING` | `Remaining Work` is `0`, `Estimate` is greater than `0`, and status is `In Progress` — work appears complete but status not updated (not raised for zero-estimate items) | Move status to `In Review` or `Done`, or set the remaining effort to the correct non-zero value |
 | `NO_TIME_SPENT` | `Time Spent` is empty and status is `Done` | Enter the total time spent |
 | `NO_ASSIGNEE` | No assignee on the GH issue and status is `In Progress`, `In Review`, or `Done` | Assign the issue to the responsible person |
@@ -301,6 +301,8 @@ Most Epics serve purely as organizational containers. In this case:
 
 All time tracking should be done in the sub-issues. The Epic itself has no work associated with it.
 
+> **Compliance alerts:** The workflow automatically suppresses `NO_ESTIMATE` for all epics — estimate is optional. `NO_REMAINING_WORK` is also suppressed when the epic's own `Estimate` is `0` or empty. If you set a non-zero `Estimate` directly on the epic, `Remaining Work` becomes required (the same as for any regular issue with an estimate).
+
 **Example:**
 ```
 Epic: Implement User Authentication (Estimate: 0)
@@ -316,6 +318,7 @@ Total feature estimate: 6 weeks (sum of sub-issues)
 Sometimes an Epic requires work that isn't captured in any sub-issue (e.g., minor coordination tasks, quick documentation updates). In this case:
 
 - **Estimate**: `> 0` (only for work specific to the Epic itself)
+- **Remaining Work**: required — once a non-zero estimate is set on the epic, the `NO_REMAINING_WORK` alert will fire if this field is empty
 - Track time for Epic-specific work separately from sub-issues
 
 **Important:** If the Epic-specific work has enough substance or complexity, **create a dedicated sub-issue for it** instead of tracking it directly on the Epic. This provides better granularity and makes the work more visible.
