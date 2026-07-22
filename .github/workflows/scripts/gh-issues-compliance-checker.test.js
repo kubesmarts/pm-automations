@@ -191,14 +191,16 @@ function evalRule(vars) {
 ${assignments}
 SYNC_STATUS_CODES=""
 
-# NO_ESTIMATE
-if [ -n "$ESTIMATE_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ -z "$ESTIMATE" ]; then
+# NO_ESTIMATE: suppressed for epics (estimate is optional on epics).
+if [ -n "$ESTIMATE_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ -z "$ESTIMATE" ] && [ "$HAS_SUB_ISSUES" != "true" ]; then
   SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }NO_ESTIMATE"
 fi
 
-# NO_REMAINING_WORK
+# NO_REMAINING_WORK: for epics, only raised when estimate is set and > 0.
 if [ -n "$REMAINING_WORK_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ "$STATUS_LC" != "done" ] && [ -z "$REMAINING_WORK" ]; then
-  SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }NO_REMAINING_WORK"
+  if [ "$HAS_SUB_ISSUES" != "true" ] || awk -v e="$ESTIMATE" 'BEGIN { exit !(e+0 > 0) }'; then
+    SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }NO_REMAINING_WORK"
+  fi
 fi
 
 # IN_PROGRESS_NO_WORK_REMAINING
@@ -276,6 +278,11 @@ test('NO_ESTIMATE: not raised when field is not configured', () => {
   assert.ok(!codes.includes('NO_ESTIMATE'), `Unexpected NO_ESTIMATE when field absent: "${codes}"`);
 });
 
+test('NO_ESTIMATE: not raised for epic (in-progress, no estimate)', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', ESTIMATE: '', HAS_SUB_ISSUES: 'true' });
+  assert.ok(!codes.includes('NO_ESTIMATE'), `Unexpected NO_ESTIMATE for epic: "${codes}"`);
+});
+
 // -- NO_REMAINING_WORK --
 
 test('NO_REMAINING_WORK: raised for in-progress item with no remaining work', () => {
@@ -301,6 +308,21 @@ test('NO_REMAINING_WORK: not raised for next items', () => {
 test('NO_REMAINING_WORK: not raised when remaining work is set', () => {
   const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', REMAINING_WORK: '0.5' });
   assert.ok(!codes.includes('NO_REMAINING_WORK'), `Unexpected NO_REMAINING_WORK when set: "${codes}"`);
+});
+
+test('NO_REMAINING_WORK: not raised for epic with no estimate (estimate empty)', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', REMAINING_WORK: '', ESTIMATE: '', HAS_SUB_ISSUES: 'true' });
+  assert.ok(!codes.includes('NO_REMAINING_WORK'), `Unexpected NO_REMAINING_WORK for epic with no estimate: "${codes}"`);
+});
+
+test('NO_REMAINING_WORK: not raised for epic with zero estimate', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', REMAINING_WORK: '', ESTIMATE: '0', HAS_SUB_ISSUES: 'true' });
+  assert.ok(!codes.includes('NO_REMAINING_WORK'), `Unexpected NO_REMAINING_WORK for epic with estimate=0: "${codes}"`);
+});
+
+test('NO_REMAINING_WORK: raised for epic when estimate is > 0 and remaining work is empty', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', REMAINING_WORK: '', ESTIMATE: '1', HAS_SUB_ISSUES: 'true' });
+  assert.ok(codes.includes('NO_REMAINING_WORK'), `Expected NO_REMAINING_WORK for epic with estimate=1: "${codes}"`);
 });
 
 

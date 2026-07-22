@@ -240,6 +240,9 @@ jobs:
               # Compute Alerts codes (validation rules, always evaluated regardless of changes)
               SYNC_STATUS_CODES=""
 
+              # Determine whether this item is an epic (has at least one sub-issue in the graph).
+              HAS_SUB_ISSUES=$(echo "$item" | jq -r 'if (.content.subIssues.nodes // [] | length) > 0 then "true" else "false" end')
+
               # Handle JIRA ticket creation if External Reference is a CREATE directive.
               # Pattern: "CREATE <projectKey> [<component>]"  e.g. "CREATE QUARKUS quarkus-flow"
               # On success: EXTERNAL_REF is set to the new JIRA key and LAST_STATUS is cleared
@@ -309,15 +312,19 @@ jobs:
                   fi
                 fi
               fi
-              if [ -n "$ESTIMATE_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ -z "$ESTIMATE" ]; then
+              # NO_ESTIMATE: suppressed for epics (estimate is optional on epics).
+              if [ -n "$ESTIMATE_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ -z "$ESTIMATE" ] && [ "$HAS_SUB_ISSUES" != "true" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_ESTIMATE"
               fi
               if [ -n "$ESTIMATE_FIELD_ID" ] && [ "$STATUS_LC" = "in progress" ] && [ -n "$ESTIMATE" ] && \
                  awk -v e="$ESTIMATE" 'BEGIN { exit !(e+0 > 2) }'; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }ESTIMATE_TOO_LONG"
               fi
+              # NO_REMAINING_WORK: for epics, only raised when estimate is set and > 0.
               if [ -n "$REMAINING_WORK_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ "$STATUS_LC" != "next" ] && [ "$STATUS_LC" != "done" ] && [ -z "$REMAINING_WORK" ]; then
-                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_REMAINING_WORK"
+                if [ "$HAS_SUB_ISSUES" != "true" ] || awk -v e="$ESTIMATE" 'BEGIN { exit !(e+0 > 0) }'; then
+                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_REMAINING_WORK"
+                fi
               fi
               if [ -n "$REMAINING_WORK_FIELD_ID" ] && [ "$STATUS_LC" = "in progress" ] && [ -n "$REMAINING_WORK" ] && \
                  awk -v r="$REMAINING_WORK" 'BEGIN { exit !(r+0 == 0) }' && \

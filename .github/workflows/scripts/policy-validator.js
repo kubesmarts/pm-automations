@@ -83,10 +83,19 @@ class PolicyValidator {
         return stage;
     }
 
+    /**
+     * Returns true when the issue is an epic — i.e. it has at least one sub-task/sub-issue.
+     * Both JIRA subtasks and the newer "child issues" are stored in issue.fields.subtasks.
+     */
+    isEpic(issue) {
+        return Array.isArray(issue.fields.subtasks) && issue.fields.subtasks.length > 0;
+    }
+
     validateIssue(issue, jiraClient) {
         const status = jiraClient.extractStatus(issue);
         const policyStage = this.mapStatusToPolicyStage(status);
         const requiredFields = this.requiredFields[policyStage] || [];
+        const epic = this.isEpic(issue);
 
         const violations = [];
         const fieldValues = {
@@ -114,6 +123,15 @@ class PolicyValidator {
             : requiredFields;
 
         for (const field of fieldsToCheck) {
+            // NO_ESTIMATE is suppressed for epics — estimate is optional on epics.
+            if (field === 'originalEstimate' && epic) continue;
+
+            // NO_REMAINING_WORK is suppressed for epics unless their own estimate is > 0.
+            if (field === 'remainingEstimate' && epic) {
+                const estimateSeconds = issue.fields.timetracking?.originalEstimateSeconds ?? 0;
+                if (estimateSeconds <= 0) continue;
+            }
+
             if (!this.isFieldValid(field, fieldValues[field])) {
                 violations.push(this.violationCodes[field]);
             }
