@@ -1,9 +1,15 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+208,,https://github.com/open-workflow-specification/editor/issues/208,Spike: Evaluate embedded code editor,lornakelly,,Tooling,Major,,2026/Q3,S,0.4,0.4,2026-07-22,,,
+1,,https://github.com/open-workflow-specification/editor/issues/1,Epic: Serverless Workflow Editor MVP,lornakelly,,Tooling,Major,,1.0,XL,0.0,0.0,2026-07-22,,,
+197,,https://github.com/open-workflow-specification/editor/issues/197,task: Write & publish blog post,lornakelly,,Tooling,Major,,1.0,S,0.2,0.1,2026-07-22,,,
+6,,https://github.com/open-workflow-specification/editor/issues/6,"Epic: Packaging, release and integration ",lornakelly,,Tooling,Major,,1.0,L,0.0,0.0,2026-07-22,,,
+7,,https://github.com/open-workflow-specification/editor/issues/7,"Epic: Hardening, testing, and user feedback incorporation",lornakelly,,Tooling,Major,,1.0,L,0.0,0.0,2026-07-22,,,
+722,,https://github.com/quarkiverse/quarkus-flow/issues/722,Migrate experimental modules from sdk-java to new dsl module,ricardozanini,,Runtimes,Blocker,,1.0,L,1.0,0.0,2026-07-22,,,
+97,,https://github.com/open-workflow-specification/editor/issues/97,feat: Increase unit test coverage across core modules,kumaradityaraj,,Tooling,Minor,,1.0,S,0.2,,2026-07-22,,,NO_TIME_SPENT
 264,,https://github.com/open-workflow-specification/editor/issues/264,feat: Replace sdk with new openworkflow sdk,lornakelly,,Tooling,Normal,,1.0,S,0.1,0.1,2026-07-21,,,
 755,,https://github.com/quarkiverse/quarkus-flow/issues/755,bug: Register WorkflowExecutionListener service providers for native builds,gmunozfe,,Runtimes,Blocker,,1.0,S,0.2,0.2,2026-07-21,,,
 98,,https://github.com/open-workflow-specification/editor/issues/98,feat: Review and increase E2E test coverage,kumaradityaraj,,Tooling,Minor,,1.0,S,0.2,0.2,2026-07-21,,,
 112,,https://github.com/quarkiverse/quarkus-flow/issues/112,epic: Benchmark and Load Testing,gmunozfe,,Runtimes,Major,,2026/Q3,L,7.0,6.0,2026-07-21,,,CHILDREN_STATUS
-208,,https://github.com/open-workflow-specification/editor/issues/208,Spike: Evaluate embedded code editor,lornakelly,,Tooling,Major,,2026/Q3,S,0.4,0.2,2026-07-21,,,
 523,,https://github.com/quarkiverse/quarkus-flow/issues/523,feat: Integrate Serverless Workflow Editor package into DevUI,fantonangeli,,Tooling,Normal,,1.0,M,2.0,1.8,2026-07-21,,,
 257,,https://github.com/open-workflow-specification/editor/issues/257,Task: Deprecate old serverlessworkflow package,fantonangeli,,Tooling,Critical,,1.0,XS,0.2,0.1,2026-07-18,,,
 266,,https://github.com/open-workflow-specification/editor/issues/266,Task: Publish MVP package,fantonangeli,,Tooling,Critical,,1.0,M,0.2,0.2,2026-07-18,,,
