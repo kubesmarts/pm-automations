@@ -4,7 +4,8 @@
 A GitHub Actions workflow that exports JIRA issues to CSV files for both active and done items. The workflow retrieves tickets from JIRA using filters, JQL queries, or project keys, applies eligibility rules, and generates project-specific CSV exports that are compatible with the GitHub Project reporting metrics structure.
 
 ## Schedule
-- **Frequency:** Daily at 02:00 UTC (30 min after gh-export-done-items)
+- **Daily:** 02:00 UTC (30 min after gh-export-done-items)
+- **Tuesdays:** 12:57 UTC (5 min before the 3 PM CEST weekly status meeting, for fresh project metrics)
 - **Manual trigger:** Supported via workflow_dispatch
 
 ## JIRA Connection Configuration

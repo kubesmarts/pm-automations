@@ -4,6 +4,8 @@ on:
   schedule:
     # Daily at 02:00 UTC (30 min after gh-export-done-items)
     - cron: '0 2 * * *'
+    # Tuesdays at 12:57 UTC (5 min before the 3 PM CEST status meeting)
+    - cron: '57 12 * * 2'
   workflow_dispatch:
     inputs:
       dry_run:

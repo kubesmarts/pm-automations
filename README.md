@@ -7,10 +7,10 @@ A collection of project management automations for GitHub Projects, covering pro
 | Workflow | Description |
 |----------|-------------|
 | [GH Issues Compliance Checker](.github/workflows/gh-issues-compliance-checker.md) | Validates GitHub issues compliance with project field requirements, tracks field changes across multiple GitHub Projects, maintains a reporting log, and optionally syncs progress to JIRA. Runs daily at 00:00 UTC. Supports dry-run mode for safe testing |
-| [GH Export Done Items](.github/workflows/gh-export-done-items.md) | Exports completed items from GitHub Projects to CSV files with incremental weekly exports. Runs every Sunday at 00:00 UTC |
-| [GH Export Active Items](.github/workflows/gh-export-active-items.md) | Exports active items (non-Done, non-Cancelled) and Backlog items with specific versions from GitHub Projects to CSV files. Runs daily at 00:00 UTC |
-| [JIRA Issues Compliance Checker](.github/workflows/jira-compliance-checker.md) | Validates JIRA issues against software development lifecycle policies and adds a `compliance-alerts` label for tracking. Runs daily at 06:00 UTC |
-| [JIRA Issues Export](.github/workflows/jira-issues-export-spec.md) | Exports JIRA issues to CSV files for both active and done items. Uses hybrid discovery (filters/JQL/projects), contributor whitelist with fuzzy matching, and generates project-specific exports. Runs daily at 00:00 UTC |
+| [GH Export Active Items](.github/workflows/gh-export-active-items.md) | Exports active items (non-Done, non-Cancelled) and Backlog items with specific versions from GitHub Projects to CSV files. Runs daily at 01:00 UTC and Tuesdays at 12:55 UTC (pre-meeting refresh) |
+| [GH Export Done Items](.github/workflows/gh-export-done-items.md) | Exports completed items from GitHub Projects to CSV files with incremental daily exports. Runs daily at 01:30 UTC and Tuesdays at 12:56 UTC (pre-meeting refresh) |
+| [JIRA Issues Compliance Checker](.github/workflows/jira-compliance-checker.md) | Validates JIRA issues against software development lifecycle policies and adds a `compliance-alerts` label for tracking. Runs daily at 00:30 UTC |
+| [JIRA Issues Export](.github/workflows/jira-issues-export-spec.md) | Exports JIRA issues to CSV files for both active and done items. Uses hybrid discovery (filters/JQL/projects), contributor whitelist with fuzzy matching, and generates project-specific exports. Runs daily at 02:00 UTC and Tuesdays at 12:57 UTC (pre-meeting refresh) |
 
 ## User guides
 

@@ -32,10 +32,13 @@ See the [Contributor Access Management](../docs/user-guide-rms-projects.md#contr
 
 ```yaml
 schedule:
-  - cron: '30 1 * * *'  # Daily at 01:30 UTC (30 min after gh-export-active-items)
+  - cron: '30 1 * * *'   # Daily at 01:30 UTC (30 min after gh-export-active-items)
+  - cron: '56 12 * * 2'  # Tuesdays at 12:56 UTC (pre-meeting refresh)
 ```
 
-**Manual trigger:** Available via workflow_dispatch
+- **Daily**: 01:30 UTC (30 min after gh-export-active-items)
+- **Tuesdays**: 12:56 UTC (5 min before the 3 PM CEST weekly status meeting, for fresh project metrics)
+- **Manual trigger**: Available via workflow_dispatch
 
 ## Configuration
 

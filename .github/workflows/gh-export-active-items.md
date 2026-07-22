@@ -6,8 +6,9 @@ The **Export Active Items** workflow automatically exports active project items 
 
 ## Schedule
 
-- **Frequency**: Daily at 01:00 UTC (30 min after jira-compliance-checker)
-- **Trigger**: Automated via GitHub Actions schedule, or manually via workflow dispatch
+- **Daily**: 01:00 UTC (30 min after jira-compliance-checker)
+- **Tuesdays**: 12:55 UTC (5 min before the 3 PM CEST weekly status meeting, for fresh project metrics)
+- **Manual trigger**: Available via workflow dispatch
 
 ## What Gets Exported
 
@@ -141,7 +142,7 @@ The exported CSV files can be consumed by downstream reporting and analytics too
 
 ### Automatic Execution
 
-The workflow runs automatically every day at midnight UTC, ensuring fresh data for daily planning and reporting.
+The workflow runs daily at 01:00 UTC and again on Tuesdays at 12:55 UTC (before the weekly status meeting), ensuring fresh data for planning and reporting.
 
 ### Manual Execution
 
