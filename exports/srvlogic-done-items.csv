@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1092,,https://redhat.atlassian.net/browse/SRVLOGIC-1092,Setup QE testing pipelines for 1.39.0,domhanak,Task,,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.075,2026-07-23,,,NO_COMPONENT
+1083,,https://redhat.atlassian.net/browse/SRVLOGIC-1083,Nightly build from main fails when done on Java 17 after j2cl maven plugin patch update.  ,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.05,2026-07-23,,,
+1079,,https://redhat.atlassian.net/browse/SRVLOGIC-1079,Split kie-tools e2e tests execution into separate workflows,baldimir,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,1,1,2026-07-22,,,
+1075,,https://redhat.atlassian.net/browse/SRVLOGIC-1075,Upload NodeJS version v24.18.0 to rcm-guest,saumya1singh,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.3,2026-07-22,,,
 1080,1079,https://redhat.atlassian.net/browse/SRVLOGIC-1080,Investigate and debug sonataflow-operator E2E test workflow failures,domhanak,Sub-task,CI,Blocker,Serverless logic,1.39.0 OSL,,0,0.8,2026-07-15,,,NO_ESTIMATE
 950,,https://redhat.atlassian.net/browse/SRVLOGIC-950,OSL 1.38.0.CR1 community baselines ( smoke tests ) jobs failure analysis,domhanak,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.4,0.3,2026-07-12,,,
 949,,https://redhat.atlassian.net/browse/SRVLOGIC-949,Duplicate Drools reference in 1.38.0.CR1,saumya1singh,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.05,0,2026-07-12,,,NO_TIME_SPENT
