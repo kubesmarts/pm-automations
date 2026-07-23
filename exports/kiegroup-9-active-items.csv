@@ -1,5 +1,4 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-6819,,https://github.com/apache/incubator-kie-drools/issues/6819,"""CI :: Build"" job fails in KJarLoadingTest because of missing kjar build",tkobayas,In progress,,QE,Major,,Future,XS,0.1,0.05,0.05,0.1,0.05,0.05,,,2026-07-22,
 6683,,https://github.com/apache/incubator-kie-drools/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,0.0,2.0,0.0,9.5,2.8,6.6,,Added some more issues after a review of Mark Proctor,2026-07-08,CHILDREN_STATUS
 2380,2313,https://github.com/apache/incubator-kie-issues/issues/2380,Drools Sequential: Simple sequence() functionality,Rikkola,In progress,,Runtimes,Normal,,Future,M,1.0,0.0,1.0,1.0,0.0,1.0,,,2026-07-17,
 2314,,https://github.com/apache/incubator-kie-issues/issues/2314,DRLGEN Investigate best plain English formats for DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,2.0,1.0,1.0,2.0,1.0,1.0,,,2026-05-16,
