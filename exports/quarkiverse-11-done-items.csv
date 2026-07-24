@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1553,,https://github.com/open-workflow-specification/sdk-java/issues/1553,Java defined WFs tasks are serialized without the `call` field,fjtirado,,Runtimes,Critical,,2026/Q3,S,0.2,0.2,2026-07-24,,,
+1558,,https://github.com/open-workflow-specification/sdk-java/issues/1558,YAML serialization/deserialization fails if there is a number in query http,fjtirado,,Runtimes,Major,,2026/Q3,XS,0.1,0.1,2026-07-24,,,
+777,,https://github.com/quarkiverse/quarkus-flow/issues/777,"NPE in JandexMethodInputJsonSchema for boxed JDK types (Integer, Long, etc.)",ricardozanini,,Runtimes,Blocker,,1.0,XS,0.1,0.1,2026-07-24,,,
 97,,https://github.com/open-workflow-specification/editor/issues/97,feat: Increase unit test coverage across core modules,kumaradityaraj,,Tooling,Minor,,1.0,S,0.2,0.2,2026-07-23,,,
 275,,https://github.com/open-workflow-specification/editor/issues/275,bug: Edges not centred in QF on start and end nodes,lornakelly,,Tooling,,,,,,,2026-07-23,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 208,,https://github.com/open-workflow-specification/editor/issues/208,Spike: Evaluate embedded code editor,lornakelly,,Tooling,Major,,2026/Q3,S,0.4,0.4,2026-07-22,,,
