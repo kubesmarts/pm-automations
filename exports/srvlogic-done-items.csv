@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-1092,,https://redhat.atlassian.net/browse/SRVLOGIC-1092,Setup QE testing pipelines for 1.39.0,domhanak,Task,,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.075,2026-07-23,,,NO_COMPONENT
+1092,,https://redhat.atlassian.net/browse/SRVLOGIC-1092,Setup QE testing pipelines for 1.39.0,domhanak,Task,QE,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.075,2026-07-24,,,
 1083,,https://redhat.atlassian.net/browse/SRVLOGIC-1083,Nightly build from main fails when done on Java 17 after j2cl maven plugin patch update.  ,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.05,2026-07-23,,,
 1079,,https://redhat.atlassian.net/browse/SRVLOGIC-1079,Split kie-tools e2e tests execution into separate workflows,baldimir,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,1,1,2026-07-22,,,
 1075,,https://redhat.atlassian.net/browse/SRVLOGIC-1075,Upload NodeJS version v24.18.0 to rcm-guest,saumya1singh,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.3,2026-07-22,,,

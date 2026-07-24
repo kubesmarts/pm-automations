@@ -8,4 +8,4 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 7870,7862,https://redhat.atlassian.net/browse/QUARKUS-7870,Implementation of OpenShift Platform test pipeline for Quarkus Flow using JVM mode,gmunozfe,Next,Story,QE,Blocker,Quarkus,3.40.0.GA,,2,0,2,2,,2,,,2026-07-13,
 7862,,https://redhat.atlassian.net/browse/QUARKUS-7862,Quarkus Flow in IBQ verification requirements,domhanak,In progress,Epic,QE,Critical,Quarkus,3.40.0.GA,,0,0,0,10,,10,,,2026-07-01,NO_REMAINING_WORK
 7861,7862,https://redhat.atlassian.net/browse/QUARKUS-7861,Implementation of product maven artifacts tests (MaReTe) for Quarkus Flow,domhanak,Next,Story,QE,Blocker,Quarkus,3.40.0.GA,,2,0,2,2,,2,,,2026-06-09,
-7353,,https://redhat.atlassian.net/browse/QUARKUS-7353,Add Quarkus Flow into Platform,baldimir,In progress,Epic,Productization,Major,Quarkus,3.40.0.GA,,0,1,4,4.05,3.325,5.725,,,2026-07-09,
+7353,,https://redhat.atlassian.net/browse/QUARKUS-7353,Add Quarkus Flow into Platform,baldimir,In progress,Epic,Productization,Major,Quarkus,3.40.0.GA,,0,1,4,4.05,3.375,5.675,,,2026-07-09,

@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
+1094,,https://redhat.atlassian.net/browse/SRVLOGIC-1094,Fix offline_maven_repo_upload problems,domhanak,In progress,Task,QE,Critical,Serverless logic,1.39.0 OSL,,0.1,0,0.1,0.1,,0.1,,,2026-07-24,
 1091,,https://redhat.atlassian.net/browse/SRVLOGIC-1091,parent-seed job tests fail when setting up 1.39.0 qe jobs,domhanak,Backlog,Bug,,Critical,Serverless logic,1.39.0 OSL,,0.2,0.025,0.175,0.2,0.025,0.175,,,2026-07-22,
 1087,,https://redhat.atlassian.net/browse/SRVLOGIC-1087,Red Hat prod deps missing in maven.repository.redhat.com for OSL 1.38 CR2,saumya1singh,Next,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-07-22,
 1086,,https://redhat.atlassian.net/browse/SRVLOGIC-1086,Upgrade Quarkus to 3.27.4.1,baldimir,In review,Task,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.125,0.05,0.075,0.125,0.05,0.075,,,2026-07-22,
@@ -19,7 +20,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1061,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1061,[IBM test migration] Migration of Product Tests: Maven Repo Jobs,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0,1,1,,1,,,2026-07-21,
 1060,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1060,[IBM test migration] Migration of Product Tests: Cloud,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0,1,1,,1,,,2026-07-21,
 1059,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1059,[IBM test migration] Migration of Product Tests: Tools,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0,1,1,,1,,,2026-07-21,
-1058,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1058,[IBM test migration] Migration of Product Tests: Community,jankrystof-ibm,In progress,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0.125,0.875,1,0.125,0.875,,,2026-07-21,
+1058,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1058,[IBM test migration] Migration of Product Tests: Community,jankrystof-ibm,In progress,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0.275,0.725,1,0.275,0.725,,,2026-07-23,
 1057,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1057,[IBM test migration] Migration of Nightly Jobs: Cloud,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,0,2,2,,2,,,2026-07-21,
 1056,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1056,[IBM test migration] Migration of Nightly Jobs: Tools,jakubschwan,In progress,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,0.3,1.7,2.1,0.3,1.8,,,2026-07-21,
 1055,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1055,[IBM test migration] Migration of Nightly Jobs: Community,jakubschwan,In progress,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,1.2,0.8,2.4,1.5125,0.8875,,,2026-07-21,
@@ -59,10 +60,10 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1012,,https://redhat.atlassian.net/browse/SRVLOGIC-1012,Removal of non-OSL packages from kie-tools -> pmml-vscode-extension,domhanak,In review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.025,0,0.025,0.025,,0.025,,,2026-06-16,
 1011,,https://redhat.atlassian.net/browse/SRVLOGIC-1011,osl_export_dist workflow is not setting QUARKUS_VERSION in kogito-project-versions,domhanak,Next,Task,CI,Critical,Serverless logic,1.39.0 OSL,,0.05,0,0.05,0.05,,0.05,,,2026-07-22,
 1010,,https://redhat.atlassian.net/browse/SRVLOGIC-1010,Adjust Jenkinsfile.prod.nightly job definition to use 111-SNAPSHOT,domhanak,In review,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,0.05,0.05,0,0.05,0.05,,,,2026-06-01,
-1009,,https://redhat.atlassian.net/browse/SRVLOGIC-1009,Cleanup old snapshots in logic-maven-repository automatically,baldimir,In progress,Task,CI,Major,Serverless logic,1.40.0 OSL,,0.2,0.2,0,0.2,0.2,,,,2026-07-23,NO_REMAINING_WORK
+1009,,https://redhat.atlassian.net/browse/SRVLOGIC-1009,Cleanup old snapshots in logic-maven-repository automatically,baldimir,In progress,Task,CI,Major,Serverless logic,1.40.0 OSL,,0.2,0.2,0.6,0.2,0.2,0.6,,,2026-07-24,
 1008,,https://redhat.atlassian.net/browse/SRVLOGIC-1008,Removal of non-OSL packages from kie-tools -> bpmn-editor and related packages,domhanak,In review,Story,CI,Critical,Serverless logic,1.39.0 OSL,,1,0.4,0.6,1,0.4,0.6,,,2026-05-28,
 1007,,https://redhat.atlassian.net/browse/SRVLOGIC-1007,Remove RHBOP jobs,baldimir,In review,Task,CI,Normal,Serverless logic,1.39.0 OSL,,0.1,0.025,0.075,0.1,0.025,0.075,,,2026-05-25,
-1001,,https://redhat.atlassian.net/browse/SRVLOGIC-1001,Release of 1.39,mareknovotny,Next,Epic,Productization,Critical,Serverless logic,1.39.0 OSL,,12,0,12,17.025,0.025,17,,,2026-06-25,
+1001,,https://redhat.atlassian.net/browse/SRVLOGIC-1001,Release of 1.39,mareknovotny,Next,Epic,Productization,Critical,Serverless logic,1.39.0 OSL,,12,0,12,17.025,0.025,17,,,2026-07-23,
 591,,https://redhat.atlassian.net/browse/SRVLOGIC-591,Publish bundle images to quay.io/kubesmarts ,baldimir,In review,Story,CI,Critical,Serverless logic,1.39.0 OSL,,1,0.9,0.1,1,0.9,0.1,,,2026-07-22,
 589,581,https://redhat.atlassian.net/browse/SRVLOGIC-589,Document the GitOps Workflow,domhanak,Next,Sub-task,CI,Critical,Serverless logic,Future,,0,0,0,,,,,,2026-05-19,
 586,581,https://redhat.atlassian.net/browse/SRVLOGIC-586,Add release.yaml to Track Image Versions,ricardozanini,Next,Sub-task,Cloud,Major,Serverless logic,Future,,0,0,0,,,,,,2026-05-26,
