@@ -1,4 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1569,,https://github.com/open-workflow-specification/sdk-java/issues/1569,OneOfValueProvider builders clobber value by calling all setters unconditionally,ricardozanini,,Runtimes,Blocker,,1.0,XS,0.1,0.1,2026-07-25,,,
+211,,https://github.com/open-workflow-specification/editor/issues/211,Spike: Define IntelliSense user experience,cheryl7114,,Tooling,Major,,2026/Q3,M,1.0,1.1,2026-07-25,,,
+239,,https://github.com/open-workflow-specification/editor/issues/239,Spike: Edit-surface & editable-fields investigation,kumaradityaraj,,Tooling,Major,,2026/Q3,M,0.5,0.5,2026-07-25,,,
+279,,https://github.com/open-workflow-specification/editor/issues/279,bug: Retry edge overlaps its source node,handreyrc,,Tooling,Major,,2026/Q2,S,0.7,0.3,2026-07-25,,,
+775,,https://github.com/quarkiverse/quarkus-flow/issues/775,bug: Edges not centred in QF on start and end nodes,lornakelly,,Tooling,Major,,1.0,M,0.2,0.2,2026-07-25,,,
+781,,https://github.com/quarkiverse/quarkus-flow/issues/781,bug: Multiple quarkus-flow example workflows fail validation in the editor,ricardozanini,,Tooling,Blocker,,1.0,M,0.2,0.0,2026-07-25,,,
 1553,,https://github.com/open-workflow-specification/sdk-java/issues/1553,Java defined WFs tasks are serialized without the `call` field,fjtirado,,Runtimes,Critical,,2026/Q3,S,0.2,0.2,2026-07-24,,,
 1558,,https://github.com/open-workflow-specification/sdk-java/issues/1558,YAML serialization/deserialization fails if there is a number in query http,fjtirado,,Runtimes,Major,,2026/Q3,XS,0.1,0.1,2026-07-24,,,
 777,,https://github.com/quarkiverse/quarkus-flow/issues/777,"NPE in JandexMethodInputJsonSchema for boxed JDK types (Integer, Long, etc.)",ricardozanini,,Runtimes,Blocker,,1.0,XS,0.1,0.1,2026-07-24,,,
