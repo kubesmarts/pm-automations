@@ -1,6 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 1100,,https://redhat.atlassian.net/browse/SRVLOGIC-1100,Upgrade to Quarkus 3.33.x stream,baldimir,In progress,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.6,0,0.6,0.6,,0.6,,,2026-07-28,
-1099,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1099,Update Quarkus version to the latest LTS - 3.33.2.SP3,mareknovotny,Next,Task,,Undefined,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-07-28,
+1099,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1099,Update Quarkus version to the latest LTS - 3.33.2.SP3,mareknovotny,Next,Task,Productization,Undefined,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-07-29,NO_PRIORITY
 1097,,https://redhat.atlassian.net/browse/SRVLOGIC-1097,Run packages update in container images builds,baldimir,In review,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0.2,0.1,0.1,0.2,0.1,0.1,,,2026-07-27,
 1096,,https://redhat.atlassian.net/browse/SRVLOGIC-1096,UMB message does not contain correct data.,saumya1singh,In progress,Bug,Productization,Blocker,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-07-28,"NO_ESTIMATE, NO_REMAINING_WORK"
 1095,,https://redhat.atlassian.net/browse/SRVLOGIC-1095,Investigate 2 failures in kogito-maven-repo-testsuite-smoke,domhanak,In review,Task,QE,Critical,Serverless logic,1.39.0 OSL,,0.2,0.1,0,0.2,0.1,,,,2026-07-28,
@@ -91,7 +91,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 707,,https://redhat.atlassian.net/browse/SRVLOGIC-707,Add Operator bundle into product build CI,baldimir,In review,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0.4,0.1,0.3,0.4,0.1,0.3,,,2026-06-18,
 887,,https://redhat.atlassian.net/browse/SRVLOGIC-887,Improve the midstream XSD placement,baldimir,In review,Task,Productization,Normal,Serverless logic,1.39.0 OSL,,0.2,0.175,0.025,0.2,0.175,0.025,,,2026-05-19,
 858,,https://redhat.atlassian.net/browse/SRVLOGIC-858,QE Verification of SRVLOGIC-758,gmunozfe,Next,Task,QE,Major,Serverless logic,Future,,0,0,0,,,,,,2026-05-12,
-856,,https://redhat.atlassian.net/browse/SRVLOGIC-856,QE verification of DOCS Pattern: Consuming Other Workflows in-cluster via OpenAPI + Service Discovery,jakubschwan,In progress,Task,QE,Major,Serverless logic,1.38.0 OSL,,0.2,0,0.2,0.2,,0.2,,,2026-07-28,"NO_ESTIMATE, NO_REMAINING_WORK"
+856,,https://redhat.atlassian.net/browse/SRVLOGIC-856,QE verification of DOCS Pattern: Consuming Other Workflows in-cluster via OpenAPI + Service Discovery,jakubschwan,In progress,Task,QE,Major,Serverless logic,1.38.0 OSL,,0.2,0,0.2,0.2,,0.2,,,2026-07-29,
 852,,https://redhat.atlassian.net/browse/SRVLOGIC-852,Cleanup midstream workflows and CI configurations across kiegroup,domhanak,In progress,Task,CI,Critical,Serverless logic,1.39.0 OSL,,0.025,0.0188,0.0063,0.025,0.0188,0.0063,,,2026-05-19,
 813,,https://redhat.atlassian.net/browse/SRVLOGIC-813,SonataFlow Deployment Webapp not able to start a workflow,fantonangeli,In review,Bug,Tooling,Blocker,Serverless logic,1.39.0 OSL,,0.4,0.3,0,0.4,0.3,,,,2026-07-14,
 812,,https://redhat.atlassian.net/browse/SRVLOGIC-812,Kubesmarts not able to start a workflow,fantonangeli,In review,Bug,Tooling,Blocker,Serverless logic,1.39.0 OSL,,0.8,0.4,0,0.8,0.4,,,,2026-07-13,
@@ -126,7 +126,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 935,,https://redhat.atlassian.net/browse/SRVLOGIC-935,Built in sensitive data masking in sonataflow logging,fjtirado,In review,Feature,Runtimes,Normal,Serverless logic,1.39.0 OSL,,0.4,0.3,0,0.4,0.3,,,,2026-07-20,
 928,,https://redhat.atlassian.net/browse/SRVLOGIC-928,Decouple serverless logic midstream repositories from Apache KIE ,baldimir,In review,Epic,CI,Critical,Serverless logic,1.39.0 OSL,,1.5,1,0.5,3.7,3.7,0.5,,,2026-06-02,
 927,,https://redhat.atlassian.net/browse/SRVLOGIC-927,Opentelemetry test failures in CI jenkins,gmunozfe,In review,Task,QE,Minor,Serverless logic,1.39.0 OSL,,0.2,0.2,0,0.2,0.2,,,,2026-05-19,
-924,407,https://redhat.atlassian.net/browse/SRVLOGIC-924,Performance regression job,gmunozfe,In progress,Task,QE,Critical,Serverless logic,Future,,2,1,4,2,1,4,,,2026-07-28,ESTIMATE_TOO_LONG
+924,407,https://redhat.atlassian.net/browse/SRVLOGIC-924,Performance regression job,gmunozfe,In progress,Task,QE,Critical,Serverless logic,Future,,2,1,4,2,1,4,,,2026-07-29,
 923,,https://redhat.atlassian.net/browse/SRVLOGIC-923,Enhance the jobs service to keep falied jobs in DB via configuraton,wmedvede,Next,Feature,Runtimes,Normal,Serverless logic,Future,,0,0,0,,,,,,2026-04-27,
 922,,https://redhat.atlassian.net/browse/SRVLOGIC-922,Kogito-apps failing due to missing resource,gmunozfe,In progress,Task,QE,Minor,Serverless logic,Future,,1,0,1,1,,1,,,2026-05-20,
 915,,https://redhat.atlassian.net/browse/SRVLOGIC-915,Test to validate ConfigMaps installed by operator use expected product values,domhanak,In review,Story,QE,Major,Serverless logic,1.39.0 OSL,,0.2,0,0.2,0.2,,0.2,,,2026-05-19,
