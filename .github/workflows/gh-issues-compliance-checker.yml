@@ -16,6 +16,10 @@ on:
         required: false
         type: boolean
         default: false
+      projects:
+        description: 'Comma-separated list of projects (overrides PSYNC_PROJECTS). Example: "orgA:1,orgB:5"'
+        required: false
+        type: string
 
 # Requires a PAT with 'project' and 'read:org' scopes stored as secret PSYNC_PAT_GH.
 # The default GITHUB_TOKEN does not have write access to organization-level projects.
@@ -30,7 +34,7 @@ jobs:
       JIRA_API_TOKEN: ${{ secrets.PSYNC_PAT_JIRA }}
       JIRA_EMAIL: ${{ vars.PSYNC_JIRA_EMAIL }}
       JIRA_BASE_URL: ${{ vars.PSYNC_JIRA_BASE_URL }}
-      PROJECTS: ${{ vars.PSYNC_PROJECTS }}
+      PROJECTS: ${{ inputs.projects || vars.PSYNC_PROJECTS }}
       DRY_RUN: ${{ inputs.dry_run || 'false' }}
     steps:
       - name: Checkout repository
