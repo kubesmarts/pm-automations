@@ -264,8 +264,9 @@ For JIRA sync testing also:
 
 1. Go to **Actions → GH Issues Compliance Checker → Run workflow**
 2. (Optional) Check **"Run in dry-run mode"** to preview changes without making any modifications
-3. Click **"Run workflow"**
-4. The workflow runs immediately against all projects in `PSYNC_PROJECTS`
+3. (Optional) Enter a value in **"projects"** to target a specific subset of projects instead of the full `PSYNC_PROJECTS` list (see [Overriding the project list](#overriding-the-project-list) below)
+4. Click **"Run workflow"**
+5. The workflow runs immediately against all projects in `PSYNC_PROJECTS` (or the overridden list if provided)
 
 ### Dry-run mode
 
@@ -288,6 +289,29 @@ The workflow supports a **dry-run mode** for safe testing and validation:
 **How to enable:**
 - **Manual runs:** Check the "Run in dry-run mode" checkbox when triggering the workflow
 - **Scheduled runs:** Always run with dry-run disabled (default behavior)
+
+---
+
+### Overriding the project list
+
+When triggering the workflow manually, you can supply a **`projects`** input to run against a custom set of projects instead of the full `PSYNC_PROJECTS` repository variable. This is useful when testing new compliance rules or script changes on a small test project without affecting all configured projects.
+
+**Format:** same as `PSYNC_PROJECTS` — space-separated `owner:project_number` pairs.
+
+Example — run against a single test project:
+```
+orgA:99
+```
+
+Example — run against two projects:
+```
+orgA:1 orgB:5
+```
+
+**Behaviour:**
+- When `projects` is provided, it **completely overrides** `PSYNC_PROJECTS` for that run.
+- When `projects` is omitted (left blank), the workflow falls back to `PSYNC_PROJECTS` as usual.
+- Scheduled runs are unaffected — they always use `PSYNC_PROJECTS`.
 
 **Example dry-run log output:**
 ```
