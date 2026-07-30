@@ -1,7 +1,11 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+796,,https://github.com/quarkiverse/quarkus-flow/issues/796,feat: Update @openworkflowspec/diagram-editor to 1.0.0 and align SDK exclusions,fantonangeli,,Tooling,Critical,,2026/Q2,S,0.2,0.1,2026-07-30,,,
+259,,https://github.com/open-workflow-specification/editor/issues/259,Spike: investigate add/remove-node interaction,handreyrc,,Tooling,Major,,Future,M,0.6,0.6,2026-07-30,,,
+799,,https://github.com/quarkiverse/quarkus-flow/issues/799,Messaging CloudEvent encoding is non-standard on both producer and consumer,ricardozanini,,Runtimes,Blocker,,1.0,M,0.2,0.2,2026-07-30,,,
+802,,https://github.com/quarkiverse/quarkus-flow/issues/802,Add select() and envelope().select() to DSL for CloudEvent data extraction,ricardozanini,,Runtimes,Major,,1.0,S,0.1,0.1,2026-07-30,,,
+808,,https://github.com/quarkiverse/quarkus-flow/issues/808,inputFrom(CloudEvent::getData) fails — bare Function path uses asJavaObject() instead of model.as(),"ricardozanini,fjtirado",,Runtimes,Blocker,,1.0,XS,0.1,0.1,2026-07-30,,,
 51,,https://github.com/quarkiverse/quarkus-flow/issues/51,epic: Integrate Serverless Workflow Editor into DevUI,lornakelly,,Tooling,Major,,1.0,,0.0,0.0,2026-07-29,,,
 773,,https://github.com/quarkiverse/quarkus-flow/issues/773,bug: Fix OIDC authentication and namespace authorization in Runner,gmunozfe,,Runtimes,Major,,1.0,M,0.8,0.7,2026-07-29,,,
-796,,https://github.com/quarkiverse/quarkus-flow/issues/796,feat: Update @openworkflowspec/diagram-editor to 1.0.0 and align SDK exclusions,fantonangeli,,Tooling,Critical,,,S,0.2,0.1,2026-07-29,,,NO_MILESTONE
 1573,,https://github.com/open-workflow-specification/sdk-java/issues/1573,"When schema is not valid, an IllegalArgumentException is thrown rather than a WorkflowException",fjtirado,,Runtimes,Normal,,2026/Q3,S,0.2,0.2,2026-07-28,,,
 275,,https://github.com/open-workflow-specification/editor/issues/275,bug: Edges not centred in QF on start and end nodes,lornakelly,,Tooling,Major,,1.0,M,0.2,0.2,2026-07-27,,,
 273,,https://github.com/open-workflow-specification/editor/issues/273,feat: Increase E2E test timeout to reduce CI flakiness,kumaradityaraj,,Tooling,Normal,,2026/Q3,S,0.2,0.2,2026-07-27,,,
