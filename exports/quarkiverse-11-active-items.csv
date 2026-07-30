@@ -1,7 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 1544,,https://github.com/open-workflow-specification/sdk-java/issues/1544,Make AuthProvider.content() return CompletableFuture for async auth flows,fjtirado,Next,,Runtimes,Normal,,2026/Q3,M,0.3,,0.1,0.3,0.0,0.1,,,2026-07-28,
-802,,https://github.com/quarkiverse/quarkus-flow/issues/802,Add select() and envelope().select() to DSL for CloudEvent data extraction,ricardozanini,In progress,,Runtimes,Major,,1.0,S,0.1,0.1,0.0,0.1,0.1,0.0,,,2026-07-29,IN_PROGRESS_NO_WORK_REMAINING
-799,,https://github.com/quarkiverse/quarkus-flow/issues/799,Messaging CloudEvent encoding is non-standard on both producer and consumer,ricardozanini,In progress,,Runtimes,Blocker,,1.0,M,0.2,0.0,0.2,0.2,0.0,0.2,,,2026-07-29,
+807,,https://github.com/quarkiverse/quarkus-flow/issues/807,Mark `run` tasks as unsupportable,ricardozanini,Next,,Runtimes,Blocker,,1.0,S,0.2,,0.2,0.2,0.0,0.2,,,2026-07-30,
+804,,https://github.com/quarkiverse/quarkus-flow/issues/804,feat: Implement test suite that validates example rendering in devui's openworkflow editor,domhanak,In progress,,QE,Critical,,2026/Q3,L,1.0,0.1,0.9,1.0,0.1,0.9,,,2026-07-30,
 745,,https://github.com/quarkiverse/quarkus-flow/issues/745,Integrate async AuthProvider API from SDK for non-blocking OIDC token negotiation,fjtirado,Next,,Runtimes,Normal,,2026/Q3,S,0.2,,,0.2,0.0,0.0,,,2026-07-22,
 723,717,https://github.com/quarkiverse/quarkus-flow/issues/723,docs: Document Quarkus Flow best practices,mcruzdev,In progress,,Runtimes,Major,,1.0,S,0.1,0.1,,0.1,0.1,0.0,,,2026-07-04,NO_REMAINING_WORK
 671,,https://github.com/quarkiverse/quarkus-flow/issues/671,[OIDC] Phase 1: Introduce Token Propagation and Exchange through a new module (quarkus-flow-oidc module),mcruzdev,In progress,,Runtimes,Major,,Future,L,1.0,,0.5,1.0,0.0,0.5,,,2026-07-08,
@@ -13,12 +13,12 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 425,,https://github.com/quarkiverse/quarkus-flow/issues/425,docs: Improve docs module to execute tests during maven build,domhanak,Backlog,,Docs,Major,,1.0,M,0.6,0.0,0.6,0.6,0.0,0.6,,,2026-07-08,
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mcruzdev,Next,,Runtimes,Major,,1.0,M,1.0,,0.8,1.0,0.0,0.8,,,2026-07-08,
 317,112,https://github.com/quarkiverse/quarkus-flow/issues/317,bug: jpa persistence exceptions in engine after heavy load,gmunozfe,In progress,,Runtimes,Major,,1.0,M,0.4,,0.2,0.4,0.0,0.2,,,2026-07-08,
+284,258,https://github.com/open-workflow-specification/editor/issues/284,Spike: investigate field validation from schema in editing mode,handreyrc,In progress,,Tooling,Major,,Future,M,0.6,,0.6,0.6,0.0,0.6,,,2026-07-30,
 272,207,https://github.com/open-workflow-specification/editor/issues/272,task: Task Type Reference: field-level breakdown (required/optional) for IntelliSense schema,cheryl7114,In review,,Tooling,Normal,,2026/Q3,M,0.6,0.6,0.0,0.6,0.6,0.0,,,2026-07-29,
 270,207,https://github.com/open-workflow-specification/editor/issues/270,feat:  Optimise bundle size for the Monaco text pane before release,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
 267,214,https://github.com/open-workflow-specification/editor/issues/267,feat: Bump sdk package to alpha5,handreyrc,Next,,Tooling,Normal,,2026/Q3,M,0.2,0.0,0.2,0.2,0.0,0.2,,,2026-07-23,
-259,258,https://github.com/open-workflow-specification/editor/issues/259,Spike: investigate add/remove-node interaction,handreyrc,In review,,Tooling,Major,,Future,M,0.6,0.6,0.0,0.6,0.6,0.0,,,2026-07-23,
-258,,https://github.com/open-workflow-specification/editor/issues/258,Epic: Milestone 3 - Build & wire the workflow,lornakelly,In progress,,Tooling,Critical,,Future,XL,0.0,,0.0,0.6,0.6,0.0,,,2026-07-16,
-238,214,https://github.com/open-workflow-specification/editor/issues/238,Spike: Node-edit interaction & UX (design),lornakelly,In progress,,Tooling,Major,,2026/Q3,M,0.5,0.3,0.2,0.5,0.3,0.2,,,2026-07-22,
+258,,https://github.com/open-workflow-specification/editor/issues/258,Epic: Milestone 3 - Build & wire the workflow,lornakelly,In progress,,Tooling,Critical,,Future,XL,0.0,,0.0,1.2,0.6,0.6,,,2026-07-16,
+238,214,https://github.com/open-workflow-specification/editor/issues/238,Spike: Node-edit interaction & UX (design),lornakelly,In review,,Tooling,Major,,2026/Q3,M,0.5,0.3,0.2,0.5,0.3,0.2,,,2026-07-30,
 237,207,https://github.com/open-workflow-specification/editor/issues/237,feat: Publish package on npm,,Next,,Tooling,Critical,,2026/Q4,M,0.6,,0.6,0.6,0.0,0.6,,,,
 236,207,https://github.com/open-workflow-specification/editor/issues/236,feat: Validate editor against real-world workflows,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
 235,207,https://github.com/open-workflow-specification/editor/issues/235,feat: Styling/UX refinements,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,

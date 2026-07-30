@@ -1,1 +1,3 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
+89,,https://github.com/kubesmarts/pm-automations/issues/89,GH Checker: add workflow input to override PSYNC_PROJECTS,skavgou,In progress,,PM,Major,,,,,,,0.0,0.0,0.0,,,2026-07-30,"NO_ESTIMATE, NO_REMAINING_WORK"
+78,,https://github.com/kubesmarts/pm-automations/issues/78,GH checker: New `PR_NOT_MERGED` alert. Issues marked as Done must have all linked PRs merged,skavgou,In progress,,PM,Critical,,,,0.4,,0.4,0.4,0.0,0.4,,,2026-07-30,
