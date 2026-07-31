@@ -191,3 +191,78 @@ test('NO_REMAINING_WORK: raised for In Progress epic when estimate > 0 and remai
     assert.ok(result.violations.includes('NO_REMAINING_WORK'),
         `Expected NO_REMAINING_WORK for epic with estimate>0 and no remaining: ${result.violations}`);
 });
+
+// ---------------------------------------------------------------------------
+// PR_NOT_MERGED tests
+// ---------------------------------------------------------------------------
+
+/**
+ * A "Done" issue — RELEASE PENDING has all required fields populated via makeIssue defaults.
+ * We must also set timeSpent so NO_TIME_SPENT doesn't fire.
+ */
+function makeDoneIssue(overrides = {}) {
+    const issue = makeIssue({ status: 'RELEASE PENDING', estimateSeconds: ONE_WEEK_S, ...overrides });
+    // timetracking already has timeSpentSeconds > 0 when estimateSeconds is set
+    return issue;
+}
+
+const OPEN_PR   = { id: '1', title: 'Fix bug', url: 'https://github.com/org/repo/pull/1', status: 'OPEN' };
+const MERGED_PR = { id: '2', title: 'Add feature', url: 'https://github.com/org/repo/pull/2', status: 'MERGED' };
+
+test('PR_NOT_MERGED: raised for RELEASE PENDING issue with at least one open PR', () => {
+    const validator = new PolicyValidator();
+    const issue = makeDoneIssue();
+    const result = validator.validateIssue(issue, jiraClient, [OPEN_PR]);
+    assert.ok(result.violations.includes('PR_NOT_MERGED'),
+        `Expected PR_NOT_MERGED, got: ${result.violations}`);
+});
+
+test('PR_NOT_MERGED: raised for CLOSED/Done issue with at least one open PR', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'CLOSED', estimateSeconds: ONE_WEEK_S });
+    issue.fields.resolution = { name: 'Done' };
+    const result = validator.validateIssue(issue, jiraClient, [OPEN_PR]);
+    assert.ok(result.violations.includes('PR_NOT_MERGED'),
+        `Expected PR_NOT_MERGED for CLOSED/Done, got: ${result.violations}`);
+});
+
+test('PR_NOT_MERGED: not raised when all linked PRs are merged (empty open-PR list)', () => {
+    const validator = new PolicyValidator();
+    const issue = makeDoneIssue();
+    // Caller filters to open PRs only; passing empty list simulates all-merged
+    const result = validator.validateIssue(issue, jiraClient, []);
+    assert.ok(!result.violations.includes('PR_NOT_MERGED'),
+        `Unexpected PR_NOT_MERGED when all PRs merged: ${result.violations}`);
+});
+
+test('PR_NOT_MERGED: not raised when there are no linked PRs', () => {
+    const validator = new PolicyValidator();
+    const issue = makeDoneIssue();
+    const result = validator.validateIssue(issue, jiraClient, []);
+    assert.ok(!result.violations.includes('PR_NOT_MERGED'),
+        `Unexpected PR_NOT_MERGED with no PRs: ${result.violations}`);
+});
+
+test('PR_NOT_MERGED: not raised when openPullRequests parameter is omitted', () => {
+    const validator = new PolicyValidator();
+    const issue = makeDoneIssue();
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('PR_NOT_MERGED'),
+        `Unexpected PR_NOT_MERGED when parameter omitted: ${result.violations}`);
+});
+
+test('PR_NOT_MERGED: not raised for In Progress issues even with open PRs', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: ONE_WEEK_S });
+    const result = validator.validateIssue(issue, jiraClient, [OPEN_PR]);
+    assert.ok(!result.violations.includes('PR_NOT_MERGED'),
+        `Unexpected PR_NOT_MERGED for In Progress: ${result.violations}`);
+});
+
+test('PR_NOT_MERGED: raised with mixed open and merged PRs (at least one open)', () => {
+    const validator = new PolicyValidator();
+    const issue = makeDoneIssue();
+    const result = validator.validateIssue(issue, jiraClient, [MERGED_PR, OPEN_PR]);
+    assert.ok(result.violations.includes('PR_NOT_MERGED'),
+        `Expected PR_NOT_MERGED with mixed PRs, got: ${result.violations}`);
+});

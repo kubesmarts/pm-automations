@@ -106,6 +106,29 @@ class JiraClient {
         return await this.makeRequest(`/rest/api/3/issue/${issueKey}?fields=${fields}`);
     }
 
+    /**
+     * Fetch linked pull requests for a JIRA issue via the dev-status API.
+     * Returns an array of PR objects: { id, title, url, status, state }.
+     * - status: 'OPEN' | 'MERGED' | 'DECLINED' (as returned by JIRA)
+     * Returns an empty array when the API is unavailable or no PRs are linked.
+     */
+    async fetchLinkedPullRequests(issueId) {
+        try {
+            const endpoint = `/rest/dev-status/1.0/issue/detail?issueId=${issueId}&applicationType=GitHub&dataType=pullrequest`;
+            const data = await this.makeRequest(endpoint);
+            const repos = data?.detail?.[0]?.pullRequests ?? [];
+            return repos.map(pr => ({
+                id: pr.id,
+                title: pr.name,
+                url: pr.url,
+                status: pr.status  // 'OPEN', 'MERGED', 'DECLINED'
+            }));
+        } catch (error) {
+            console.warn(`  ⚠️  Could not fetch linked PRs for issue ${issueId}: ${error.message}`);
+            return [];
+        }
+    }
+
     async updateIssueLabels(issueKey, labelsToAdd, labelsToRemove) {
         const issue = await this.fetchIssue(issueKey);
         const currentLabels = this.extractLabels(issue);

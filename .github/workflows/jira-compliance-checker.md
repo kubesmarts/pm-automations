@@ -82,6 +82,7 @@ Compliance alert codes:
 | `NO_TIME_SPENT` | Missing time spent |
 | `NO_ASSIGNEE` | Missing assignee |
 | `REMAINING_WORK_NOT_CLEARED` | Remaining work not cleared when Done (auto-cleared by the workflow) |
+| `PR_NOT_MERGED` | One or more GitHub PRs linked to the ticket are still open. Only checked for `RELEASE PENDING` and `CLOSED` (resolution: Done) tickets. PRs are fetched via the JIRA dev-status API |
 
 ### 4. Compliance Report
 A JSON report is generated with:
@@ -157,6 +158,11 @@ The workflow will:
 
 ### `ESTIMATE_TOO_LONG` violation on an issue
 - The original estimate on the JIRA ticket exceeds 2 weeks (10 business days) and the ticket is `In Progress`; consider breaking the work into smaller issues, or move it back to `Backlog` / `New` if the large estimate is intentional at this stage
+
+### `PR_NOT_MERGED` violation on an issue
+- One or more GitHub pull requests linked to the ticket are still open while the ticket is in `RELEASE PENDING` or `CLOSED` (Done) status
+- Merge or close the open PRs, then the alert will clear on the next workflow run
+- If the JIRA dev-status API is not available (e.g. the GitHub integration is not configured), the check is silently skipped — no false positives will be raised
 
 ### Workflow fails
 - Check **Actions** tab for error logs

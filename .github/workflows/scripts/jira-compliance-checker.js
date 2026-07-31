@@ -97,8 +97,20 @@ async function main() {
                 continue;
             }
 
+            // Fetch open PRs for Done-stage issues (needed for PR_NOT_MERGED check)
+            let openPullRequests = [];
+            const preCheckStage = policyValidator.mapStatusToPolicyStage(jiraClient.extractStatus(issue));
+            if (preCheckStage === 'Done') {
+                const issueId = issue.id;
+                const allPRs = await jiraClient.fetchLinkedPullRequests(issueId);
+                openPullRequests = allPRs.filter(pr => pr.status === 'OPEN');
+                if (openPullRequests.length > 0) {
+                    console.log(`  Open PRs: ${openPullRequests.length} (${openPullRequests.map(pr => pr.url).join(', ')})`);
+                }
+            }
+
             // Validate issue
-            const validationResult = policyValidator.validateIssue(issue, jiraClient);
+            const validationResult = policyValidator.validateIssue(issue, jiraClient, openPullRequests);
             console.log(`  Status: ${validationResult.status} (${validationResult.policyStage})`);
 
             // Auto-clear remaining estimate for Done issues

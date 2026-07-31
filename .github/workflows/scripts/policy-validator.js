@@ -91,7 +91,7 @@ class PolicyValidator {
         return Array.isArray(issue.fields.subtasks) && issue.fields.subtasks.length > 0;
     }
 
-    validateIssue(issue, jiraClient) {
+    validateIssue(issue, jiraClient, openPullRequests = []) {
         const status = jiraClient.extractStatus(issue);
         const policyStage = this.mapStatusToPolicyStage(status);
         const requiredFields = this.requiredFields[policyStage] || [];
@@ -140,6 +140,11 @@ class PolicyValidator {
         // Special check: Remaining Work should be cleared when Done
         if (policyStage === 'Done' && fieldValues.remainingEstimate) {
             violations.push('REMAINING_WORK_NOT_CLEARED');
+        }
+
+        // PR_NOT_MERGED: Done issues must have all linked PRs merged
+        if (policyStage === 'Done' && openPullRequests.length > 0) {
+            violations.push('PR_NOT_MERGED');
         }
 
         // ESTIMATE_TOO_LONG: estimate is set but exceeds 2 weeks, only for In Progress
