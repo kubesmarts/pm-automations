@@ -1,6 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-1100,,https://redhat.atlassian.net/browse/SRVLOGIC-1100,Upgrade to Quarkus 3.33.x stream,baldimir,In progress,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.6,0,0.6,0.6,,0.6,,,2026-07-29,
-1099,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1099,Update Quarkus version to the latest LTS - 3.33.2.SP3,baldimir,Next,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-07-30,
+1100,,https://redhat.atlassian.net/browse/SRVLOGIC-1100,Upgrade to Quarkus 3.33.x stream,baldimir,In review,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.6,0.4,0.2,0.6,0.4,0.2,,,2026-07-30,
+1099,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1099,Update Quarkus version to the latest LTS - 3.33.2.SP3,saumya1singh,Next,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.2,0,0.2,0.2,,0.2,,,2026-07-30,
 1097,,https://redhat.atlassian.net/browse/SRVLOGIC-1097,Run packages update in container images builds,baldimir,In review,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0.2,0.1,0.1,0.2,0.1,0.1,,,2026-07-27,
 1095,,https://redhat.atlassian.net/browse/SRVLOGIC-1095,Investigate 2 failures in kogito-maven-repo-testsuite-smoke,domhanak,In review,Task,QE,Critical,Serverless logic,1.39.0 OSL,,0.2,0.1,0,0.2,0.1,,,,2026-07-28,
 1094,,https://redhat.atlassian.net/browse/SRVLOGIC-1094,Fix offline_maven_repo_upload problems,domhanak,In review,Task,QE,Critical,Serverless logic,1.39.0 OSL,,0.1,0.2875,0,0.1,0.2875,,,,2026-07-30,
@@ -24,7 +24,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1061,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1061,[IBM test migration] Migration of Product Tests: Maven Repo Jobs,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0,1,1,,1,,,2026-07-21,
 1060,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1060,[IBM test migration] Migration of Product Tests: Cloud,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0,1,1,,1,,,2026-07-21,
 1059,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1059,[IBM test migration] Migration of Product Tests: Tools,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0,1,1,,1,,,2026-07-21,
-1058,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1058,[IBM test migration] Migration of Product Tests: Community,jankrystof-ibm,In review,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0.875,0.125,1,0.875,0.125,,,2026-07-29,
+1058,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1058,[IBM test migration] Migration of Product Tests: Community,jankrystof-ibm,In review,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0.875,0.125,1,0.875,0.125,,,2026-07-30,
 1057,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1057,[IBM test migration] Migration of Nightly Jobs: Cloud,jakubschwan,Next,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,0,2,2,,2,,,2026-07-21,
 1056,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1056,[IBM test migration] Migration of Nightly Jobs: Tools,jakubschwan,In progress,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,0.3,1.7,2.2,0.3,1.9,,,2026-07-28,
 1055,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1055,[IBM test migration] Migration of Nightly Jobs: Community,jakubschwan,In progress,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,1.2,0.8,2.4,1.5125,0.8875,,,2026-07-21,
@@ -55,7 +55,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1023,,https://redhat.atlassian.net/browse/SRVLOGIC-1023,Kubesmarts - logic web tools are using community release of Quarkus,domhanak,Next,Bug,Productization,Critical,Serverless logic,1.39.0 OSL,,0.025,0,0.025,0.025,,0.025,,,2026-06-02,
 1021,,https://redhat.atlassian.net/browse/SRVLOGIC-1021,Cleanup rhos-d of old unused instances,domhanak,In review,Task,,Critical,Serverless logic,1.39.0 OSL,,0.1,0.1,0,0.1,0.1,,,,2026-06-03,
 1020,,https://redhat.atlassian.net/browse/SRVLOGIC-1020,ba-docker-registry.baqe.org Docker proxy is not available,jakubschwan,Next,Bug,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0,0.2,0.2,,0.2,,,2026-06-05,
-1019,975,https://redhat.atlassian.net/browse/SRVLOGIC-1019,Add version to runtimes API and properties,fjtirado,Next,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-07-06,
+1019,975,https://redhat.atlassian.net/browse/SRVLOGIC-1019,Add version to runtimes API and properties,fjtirado,In review,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-07-30,
 1018,,https://redhat.atlassian.net/browse/SRVLOGIC-1018,Removal of non-OSL packages from kie-tools -> dmn-* and related packages,domhanak,In review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0,0.2,0.2,,0.2,,,2026-06-04,
 1017,975,https://redhat.atlassian.net/browse/SRVLOGIC-1017,Startup check to validate user provided workflow id and version are available in the runtime,wmedvede,In review,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,1,1,0,1,1,,,,2026-06-19,
 1015,,https://redhat.atlassian.net/browse/SRVLOGIC-1015,Add the ability to configure user provided labels in the Data Index and Job service pods according with the linked customer request.,wmedvede,In progress,Epic,Cloud,Normal,Serverless logic,1.39.0 OSL,,0.8,0.8,0,0.8,0.8,,,,2026-07-14,"NO_ESTIMATE, NO_REMAINING_WORK"
@@ -67,7 +67,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1009,,https://redhat.atlassian.net/browse/SRVLOGIC-1009,Cleanup old snapshots in logic-maven-repository automatically,baldimir,In progress,Task,CI,Major,Serverless logic,1.40.0 OSL,,0.2,0.2,0.6,0.2,0.2,0.6,,,2026-07-24,
 1008,,https://redhat.atlassian.net/browse/SRVLOGIC-1008,Removal of non-OSL packages from kie-tools -> bpmn-editor and related packages,domhanak,In review,Story,CI,Critical,Serverless logic,1.39.0 OSL,,1,0.4,0.6,1,0.4,0.6,,,2026-05-28,
 1007,,https://redhat.atlassian.net/browse/SRVLOGIC-1007,Remove RHBOP jobs,baldimir,In review,Task,CI,Normal,Serverless logic,1.39.0 OSL,,0.1,0.025,0.075,0.1,0.025,0.075,,,2026-05-25,
-1001,,https://redhat.atlassian.net/browse/SRVLOGIC-1001,Release of 1.39,mareknovotny,In progress,Epic,Productization,Critical,Serverless logic,1.39.0 OSL,,8,0,8,13.025,3.025,12,,,2026-07-28,ESTIMATE_TOO_LONG
+1001,,https://redhat.atlassian.net/browse/SRVLOGIC-1001,Release of 1.39,mareknovotny,In progress,Epic,Productization,Critical,Serverless logic,1.39.0 OSL,,8,0,8,13.225,3.025,12.2,,,2026-07-28,ESTIMATE_TOO_LONG
 591,,https://redhat.atlassian.net/browse/SRVLOGIC-591,Publish bundle images to quay.io/kubesmarts ,baldimir,In review,Story,CI,Critical,Serverless logic,1.39.0 OSL,,1,0.9,0.1,1,0.9,0.1,,,2026-07-22,
 589,581,https://redhat.atlassian.net/browse/SRVLOGIC-589,Document the GitOps Workflow,domhanak,Next,Sub-task,CI,Critical,Serverless logic,Future,,0,0,0,,,,,,2026-05-19,
 586,581,https://redhat.atlassian.net/browse/SRVLOGIC-586,Add release.yaml to Track Image Versions,ricardozanini,Next,Sub-task,Cloud,Major,Serverless logic,Future,,0,0,0,,,,,,2026-05-26,
