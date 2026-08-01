@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+222,,https://github.com/kiegroup/kogito-runtimes/issues/222,DataIndex to support version and versionless process API,fjtirado,,,,,,,,,2026-08-01,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 191,,https://github.com/kiegroup/kogito-runtimes/issues/191,Add version to rest interface,fjtirado,,Runtimes,Normal,OSL,1.39.0 OSL,L,1.5,1.2,2026-07-31,,,
 210,,https://github.com/kiegroup/kogito-runtimes/issues/210,Add process metadata information to MDC context,fjtirado,,Runtimes,Normal,OSL,1.39.0 OSL,S,0.3,0.2,2026-07-16,SRVLOGIC-936,,
 208,,https://github.com/kiegroup/kogito-runtimes/issues/208,Allow masking sensitive data in logs.,fjtirado,,Runtimes,Normal,OSL,1.39.0 OSL,S,0.4,0.3,2026-07-15,SRVLOGIC-935,,
