@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+7,,https://github.com/tkobayas/drlx-lsp/issues/7,Implement semantic completions for non-DOT_ACCESS CompletionSite cases,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-03,,,
+8,,https://github.com/tkobayas/drlx-lsp/issues/8,Enable @Disabled improvement target tests for SentinelExpressionTypeResolver,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-03,,,
 717,,https://github.com/casehubio/engine/issues/717,ExperiencePlanStep.stepOutcome() should return RoutingOutcome instead of String,treblereel,,Runtimes,Normal,,Future,M,0.4,0.0,2026-08-02,,,
 196,,https://github.com/casehubio/platform/issues/196,feat: server-side preference value validation using schema constraints,treblereel,,Runtimes,Major,,Future,S,0.2,0.2,2026-07-31,,,
 197,,https://github.com/casehubio/work/issues/197,fix(core): casehub-work-core test compile failure — SelectionContext constructor mismatch,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-07-31,,,
