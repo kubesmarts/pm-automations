@@ -1,0 +1,362 @@
+name: GH Archive Project Items
+
+# ---------------------------------------------------------------------------
+# Manually-triggered workflow that archives GitHub Project v2 items matching
+# a given filter (status + target milestone values).
+#
+# Inputs:
+#   projects       - Space-separated list of projects (e.g. "quarkiverse:11 kiegroup:8")
+#   filter         - Space-separated filter clauses:
+#                    status:<value>
+#                    target-milestone:<v1>,<v2>,...
+#   dry_run        - When true, log matches without archiving (default: true)
+# ---------------------------------------------------------------------------
+on:
+  workflow_dispatch:
+    inputs:
+      projects:
+        description: 'Space-separated list of projects (e.g. "quarkiverse:11 kiegroup:8")'
+        required: true
+        type: string
+      filter:
+        description: 'Filter string (e.g. "status:Done target-milestone:2026/Q1,2026/Q2")'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry-run mode — log matches without archiving'
+        required: false
+        type: boolean
+        default: true
+
+# Requires a PAT with 'project' and 'read:org' scopes stored as secret PSYNC_PAT_GH.
+
+jobs:
+  archive-items:
+    name: Archive matching project items
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PSYNC_PAT_GH }}
+      PROJECTS: ${{ inputs.projects }}
+      FILTER: ${{ inputs.filter }}
+      DRY_RUN: ${{ inputs.dry_run }}
+
+    steps:
+      - name: Archive matching items across all projects
+        run: |
+          set -e
+
+          echo "Projects : $PROJECTS"
+          echo "Filter   : $FILTER"
+          echo "Dry-run  : $DRY_RUN"
+          echo ""
+
+          # ---------------------------------------------------------------------------
+          # Parse the filter string into STATUS and TARGET_MILESTONES variables.
+          # Supports:
+          #   status:<value>
+          #   target-milestone:<v1>,<v2>,...
+          # ---------------------------------------------------------------------------
+          FILTER_STATUS=""
+          FILTER_TARGET_MILESTONES=""
+
+          for clause in $FILTER; do
+            key="${clause%%:*}"
+            val="${clause#*:}"
+            case "$key" in
+              status)            FILTER_STATUS="$val" ;;
+              target-milestone)  FILTER_TARGET_MILESTONES="$val" ;;
+              *)
+                echo "Warning: unknown filter clause '$clause' — ignored"
+                ;;
+            esac
+          done
+
+          if [ -z "$FILTER_STATUS" ] && [ -z "$FILTER_TARGET_MILESTONES" ]; then
+            echo "Error: filter must include at least one of 'status:' or 'target-milestone:'"
+            exit 1
+          fi
+
+          echo "Parsed filter:"
+          echo "  Status            : ${FILTER_STATUS:-<any>}"
+          echo "  Target milestones : ${FILTER_TARGET_MILESTONES:-<any>}"
+          echo ""
+
+          # ---------------------------------------------------------------------------
+          # Helper: extract a single-select or text field value by name from item JSON
+          # ---------------------------------------------------------------------------
+          get_field() {
+            local item_json="$1"
+            local field_name="$2"
+            echo "$item_json" | jq -r --arg n "$field_name" '
+              [ .fieldValues.nodes[] | select(.field.name == $n) ] |
+              if length == 0 then ""
+              else .[0] |
+                if .text  != null then .text
+                elif .number != null then (.number | tostring)
+                elif .name  != null then .name
+                elif .date  != null then .date
+                else ""
+                end
+              end
+            '
+          }
+
+          # ---------------------------------------------------------------------------
+          # Iterate over all configured projects
+          # ---------------------------------------------------------------------------
+          TOTAL_ARCHIVED=0
+          TOTAL_MATCHED=0
+          TOTAL_FAILED=0
+
+          # Job summary header
+          {
+            echo "## GH Archive Project Items"
+            echo ""
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "> ⚠️ **Dry-run mode** — no items were archived"
+            fi
+            echo ""
+            echo "**Filter:** \`$FILTER\`"
+            echo ""
+            echo "| Project | Fetched | Matched | Archived | Failed |"
+            echo "|---------|---------|---------|----------|--------|"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          for PROJECT_ENTRY in $PROJECTS; do
+            PROJECT_OWNER="${PROJECT_ENTRY%%:*}"
+            PROJECT_NUMBER="${PROJECT_ENTRY##*:}"
+            PROJECT_FAILED=0
+
+            echo "========================================"
+            echo "Project: $PROJECT_OWNER #$PROJECT_NUMBER"
+            echo "========================================"
+
+            # ------------------------------------------------------------------
+            # Fetch project ID + first page of items
+            # ------------------------------------------------------------------
+            PAGE_RESPONSE=$(gh api graphql -f query='
+              query($owner: String!, $number: Int!) {
+                organization(login: $owner) {
+                  projectV2(number: $number) {
+                    id
+                    items(first: 100) {
+                      pageInfo { hasNextPage endCursor }
+                      nodes {
+                        id
+                        isArchived
+                        content {
+                          ... on Issue      { number title url }
+                          ... on DraftIssue { title }
+                        }
+                        fieldValues(first: 30) {
+                          nodes {
+                            ... on ProjectV2ItemFieldTextValue {
+                              text
+                              field { ... on ProjectV2Field { name } }
+                            }
+                            ... on ProjectV2ItemFieldNumberValue {
+                              number
+                              field { ... on ProjectV2Field { name } }
+                            }
+                            ... on ProjectV2ItemFieldSingleSelectValue {
+                              name
+                              field { ... on ProjectV2SingleSelectField { name } }
+                            }
+                            ... on ProjectV2ItemFieldDateValue {
+                              date
+                              field { ... on ProjectV2Field { name } }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ' -f owner="$PROJECT_OWNER" -F number=$PROJECT_NUMBER)
+
+            GRAPHQL_ERRORS=$(echo "$PAGE_RESPONSE" | jq -r '.errors // empty')
+            if [ -n "$GRAPHQL_ERRORS" ]; then
+              echo "Error: GraphQL query failed for $PROJECT_OWNER #$PROJECT_NUMBER:"
+              echo "$GRAPHQL_ERRORS"
+              continue
+            fi
+
+            PROJECT_ID=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.id // ""')
+            if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
+              echo "Error: could not resolve project ID. Skipping."
+              continue
+            fi
+            echo "Project ID: $PROJECT_ID"
+
+            # Collect all items across all pages into a temp file
+            ITEMS_FILE=$(mktemp)
+            echo "$PAGE_RESPONSE" | jq -c '.data.organization.projectV2.items.nodes[]' >> "$ITEMS_FILE"
+
+            HAS_NEXT=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.items.pageInfo.hasNextPage')
+            CURSOR=$(echo "$PAGE_RESPONSE"   | jq -r '.data.organization.projectV2.items.pageInfo.endCursor')
+            PAGE=1
+
+            while [ "$HAS_NEXT" = "true" ]; do
+              PAGE=$((PAGE + 1))
+              echo "Fetching page $PAGE..."
+
+              PAGE_RESPONSE=$(gh api graphql -f query='
+                query($owner: String!, $number: Int!, $cursor: String!) {
+                  organization(login: $owner) {
+                    projectV2(number: $number) {
+                      items(first: 100, after: $cursor) {
+                        pageInfo { hasNextPage endCursor }
+                        nodes {
+                          id
+                          isArchived
+                          content {
+                            ... on Issue      { number title url }
+                            ... on DraftIssue { title }
+                          }
+                          fieldValues(first: 30) {
+                            nodes {
+                              ... on ProjectV2ItemFieldTextValue {
+                                text
+                                field { ... on ProjectV2Field { name } }
+                              }
+                              ... on ProjectV2ItemFieldNumberValue {
+                                number
+                                field { ... on ProjectV2Field { name } }
+                              }
+                              ... on ProjectV2ItemFieldSingleSelectValue {
+                                name
+                                field { ... on ProjectV2SingleSelectField { name } }
+                              }
+                              ... on ProjectV2ItemFieldDateValue {
+                                date
+                                field { ... on ProjectV2Field { name } }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ' -f owner="$PROJECT_OWNER" -F number=$PROJECT_NUMBER -f cursor="$CURSOR")
+
+              GRAPHQL_ERRORS=$(echo "$PAGE_RESPONSE" | jq -r '.errors // empty')
+              if [ -n "$GRAPHQL_ERRORS" ]; then
+                echo "Error: GraphQL pagination failed on page $PAGE"
+                break
+              fi
+
+              echo "$PAGE_RESPONSE" | jq -c '.data.organization.projectV2.items.nodes[]' >> "$ITEMS_FILE"
+
+              HAS_NEXT=$(echo "$PAGE_RESPONSE" | jq -r '.data.organization.projectV2.items.pageInfo.hasNextPage')
+              CURSOR=$(echo "$PAGE_RESPONSE"   | jq -r '.data.organization.projectV2.items.pageInfo.endCursor')
+            done
+
+            FETCHED=$(wc -l < "$ITEMS_FILE")
+            echo "Fetched $FETCHED total items."
+
+            # ------------------------------------------------------------------
+            # Filter and (optionally) archive matching items
+            # ------------------------------------------------------------------
+            MATCHED=0
+            ARCHIVED=0
+
+            while IFS= read -r item; do
+              IS_ARCHIVED=$(echo "$item" | jq -r '.isArchived')
+              [ "$IS_ARCHIVED" = "true" ] && continue
+
+              ITEM_ID=$(echo "$item" | jq -r '.id')
+              ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
+              TITLE=$(echo "$item" | jq -r '.content.title // "(draft)"')
+              LABEL="${ISSUE_NUMBER:+#${ISSUE_NUMBER} }${TITLE}"
+
+              # --- Status filter ---
+              if [ -n "$FILTER_STATUS" ]; then
+                STATUS=$(get_field "$item" "Status")
+                STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
+                FILTER_STATUS_LC=$(echo "$FILTER_STATUS" | tr '[:upper:]' '[:lower:]')
+                [ "$STATUS_LC" != "$FILTER_STATUS_LC" ] && continue
+              fi
+
+              # --- Target Milestone filter ---
+              if [ -n "$FILTER_TARGET_MILESTONES" ]; then
+                TM=$(get_field "$item" "Target Milestone")
+                MATCH=false
+                IFS=',' read -ra TM_LIST <<< "$FILTER_TARGET_MILESTONES"
+                for wanted in "${TM_LIST[@]}"; do
+                  if [ "$TM" = "$wanted" ]; then
+                    MATCH=true
+                    break
+                  fi
+                done
+                [ "$MATCH" = "false" ] && continue
+              fi
+
+              MATCHED=$((MATCHED + 1))
+
+              if [ "$DRY_RUN" = "true" ]; then
+                echo "  [dry-run] would archive: $LABEL"
+              else
+                ARCHIVE_RESP=$(gh api graphql -f query="
+                  mutation {
+                    archiveProjectV2Item(input: {
+                      projectId: \"$PROJECT_ID\",
+                      itemId: \"$ITEM_ID\"
+                    }) {
+                      item { id }
+                    }
+                  }
+                " 2>&1)
+                ARCHIVE_ERRORS=$(echo "$ARCHIVE_RESP" | jq -r '.errors // empty' 2>/dev/null || echo "")
+                if [ -n "$ARCHIVE_ERRORS" ]; then
+                  echo "  ✗ failed:   $LABEL — $ARCHIVE_ERRORS"
+                  PROJECT_FAILED=$((PROJECT_FAILED + 1))
+                else
+                  echo "  ✓ archived: $LABEL"
+                  ARCHIVED=$((ARCHIVED + 1))
+                fi
+              fi
+
+            done < "$ITEMS_FILE"
+
+            rm -f "$ITEMS_FILE"
+
+            TOTAL_MATCHED=$((TOTAL_MATCHED + MATCHED))
+            TOTAL_ARCHIVED=$((TOTAL_ARCHIVED + ARCHIVED))
+            TOTAL_FAILED=$((TOTAL_FAILED + PROJECT_FAILED))
+
+            echo ""
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "  $MATCHED item(s) would be archived (dry-run)"
+            else
+              echo "  $ARCHIVED / $MATCHED item(s) archived${PROJECT_FAILED:+, $PROJECT_FAILED failed}"
+            fi
+            echo ""
+
+            # Append project row to job summary
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "| \`$PROJECT_OWNER:$PROJECT_NUMBER\` | $FETCHED | $MATCHED | — | — |" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "| \`$PROJECT_OWNER:$PROJECT_NUMBER\` | $FETCHED | $MATCHED | $ARCHIVED | $PROJECT_FAILED |" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+
+          echo "========================================"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "Total: $TOTAL_MATCHED item(s) matched across all projects (dry-run — no changes made)"
+          else
+            echo "Total: $TOTAL_ARCHIVED item(s) archived across all projects${TOTAL_FAILED:+, $TOTAL_FAILED failed}"
+          fi
+          echo "========================================"
+
+          # Job summary footer
+          {
+            echo ""
+            echo "---"
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "**Total matched:** $TOTAL_MATCHED &nbsp;|&nbsp; Re-run with _Dry-run_ unchecked to archive."
+            else
+              echo "**Total archived:** $TOTAL_ARCHIVED &nbsp;|&nbsp; **Failed:** $TOTAL_FAILED"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

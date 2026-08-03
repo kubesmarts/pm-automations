@@ -11,6 +11,7 @@ A collection of project management automations for GitHub Projects, covering pro
 | [GH Export Done Items](.github/workflows/gh-export-done-items.md) | Exports completed items from GitHub Projects to CSV files with incremental daily exports. Runs daily at 01:30 UTC and Tuesdays at 12:56 UTC (pre-meeting refresh) |
 | [JIRA Issues Compliance Checker](.github/workflows/jira-compliance-checker.md) | Validates JIRA issues against software development lifecycle policies and adds a `compliance-alerts` label for tracking. Runs daily at 00:30 UTC |
 | [JIRA Issues Export](.github/workflows/jira-issues-export-spec.md) | Exports JIRA issues to CSV files for both active and done items. Uses hybrid discovery (filters/JQL/projects), contributor whitelist with fuzzy matching, and generates project-specific exports. Runs daily at 02:00 UTC and Tuesdays at 12:57 UTC (pre-meeting refresh) |
+| [GH Archive Project Items](.github/workflows/gh-archive-project-items.md) | Manually archives GitHub Project v2 items matching a composable filter (any project field, e.g. status, target milestone) across one or more projects. Supports dry-run mode. Manual trigger only |
 
 ## User guides
 
