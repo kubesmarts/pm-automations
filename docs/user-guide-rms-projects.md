@@ -192,6 +192,7 @@ Please review and resolve these alerts.
 | `IN_PROGRESS_NO_WORK_REMAINING` | `Remaining Work` is `0`, `Estimate` is greater than `0`, and status is `In Progress` — work appears complete but status not updated (not raised for zero-estimate items) | Move status to `In Review` or `Done`, or set the remaining effort to the correct non-zero value |
 | `NO_TIME_SPENT` | `Time Spent` is empty and status is `Done` | Enter the total time spent |
 | `NO_ASSIGNEE` | No assignee on the GH issue and status is `In Progress`, `In Review`, or `Done` | Assign the issue to the responsible person |
+| `PR_NOT_MERGED` | Issue is `Done` but at least one linked pull request is still open / not merged | Merge or close all linked PRs — the alert clears on the next run once they are all merged |
 | `CHILDREN_STATUS` | Parent/child status mismatch detected (see below) | Align child statuses with the parent |
 | `JIRA_NOT_FOUND` | `External Reference` points to a JIRA ticket that doesn't exist | Verify or correct the JIRA key |
 | `JIRA_SYNC_NOT_ALLOWED` | The JIRA ticket exists but doesn't have the `gh-issue-<N>` label | Add the label to the JIRA ticket (e.g. `gh-issue-3`) |

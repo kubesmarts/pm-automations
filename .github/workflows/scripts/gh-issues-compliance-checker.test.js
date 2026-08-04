@@ -698,3 +698,111 @@ test('stateReason guard: non-Done status is never skipped regardless of stateRea
   assert.equal(evalStateReasonGuard({ statusLC: 'next',        stateReason: 'NOT_PLANNED' }), 'processed');
   assert.equal(evalStateReasonGuard({ statusLC: 'in review',   stateReason: 'NOT_PLANNED' }), 'processed');
 });
+
+// ---------------------------------------------------------------------------
+// SECTION – PR_NOT_MERGED alert
+// ---------------------------------------------------------------------------
+
+/**
+ * Simulate the PR_NOT_MERGED check from process_items().
+ * Builds a minimal item JSON with the given timelineItems and injects the
+ * STATUS_LC / ISSUE_NUMBER variables, then runs the exact check snippet.
+ */
+function evalPRNotMerged({ statusLC, issueNumber, timelineItems }) {
+  // Build a minimal item JSON matching what the GraphQL query returns.
+  const itemJson = JSON.stringify({
+    content: {
+      number: issueNumber || null,
+      timelineItems: {
+        nodes: (timelineItems || []).map(pr => ({
+          source: {
+            number: pr.number,
+            state:  pr.state,
+            merged: pr.merged,
+          }
+        }))
+      }
+    }
+  });
+
+  const script = `
+STATUS_LC=${JSON.stringify(statusLC)}
+ISSUE_NUMBER=${JSON.stringify(String(issueNumber ?? ''))}
+item=${JSON.stringify(itemJson)}
+SYNC_STATUS_CODES=""
+
+if [ "$STATUS_LC" = "done" ] && [ -n "$ISSUE_NUMBER" ]; then
+  LINKED_PRS=$(echo "$item" | jq -r '
+    [.content.timelineItems.nodes[]? |
+     select(.source.number != null) |
+     select(.source.merged == false)] |
+    length')
+  if [ "\${LINKED_PRS:-0}" -gt 0 ]; then
+    SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }PR_NOT_MERGED"
+  fi
+fi
+
+echo "\$SYNC_STATUS_CODES"
+`;
+  return bash(script);
+}
+
+test('PR_NOT_MERGED: raised for Done issue with an open (unmerged) PR', () => {
+  const codes = evalPRNotMerged({
+    statusLC: 'done',
+    issueNumber: '42',
+    timelineItems: [{ number: 10, state: 'OPEN', merged: false }],
+  });
+  assert.ok(codes.includes('PR_NOT_MERGED'), `Expected PR_NOT_MERGED, got: "${codes}"`);
+});
+
+test('PR_NOT_MERGED: not raised for Done issue with all PRs merged', () => {
+  const codes = evalPRNotMerged({
+    statusLC: 'done',
+    issueNumber: '42',
+    timelineItems: [{ number: 10, state: 'MERGED', merged: true }],
+  });
+  assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED, got: "${codes}"`);
+});
+
+test('PR_NOT_MERGED: not raised for Done issue with no linked PRs', () => {
+  const codes = evalPRNotMerged({
+    statusLC: 'done',
+    issueNumber: '42',
+    timelineItems: [],
+  });
+  assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED, got: "${codes}"`);
+});
+
+test('PR_NOT_MERGED: not raised for non-Done item even with unmerged PRs', () => {
+  for (const statusLC of ['in progress', 'in review', 'next', 'backlog']) {
+    const codes = evalPRNotMerged({
+      statusLC,
+      issueNumber: '42',
+      timelineItems: [{ number: 10, state: 'OPEN', merged: false }],
+    });
+    assert.ok(!codes.includes('PR_NOT_MERGED'),
+      `Unexpected PR_NOT_MERGED for status "${statusLC}", got: "${codes}"`);
+  }
+});
+
+test('PR_NOT_MERGED: not raised for Done draft item (no issue number)', () => {
+  const codes = evalPRNotMerged({
+    statusLC: 'done',
+    issueNumber: '',
+    timelineItems: [{ number: 10, state: 'OPEN', merged: false }],
+  });
+  assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED, got: "${codes}"`);
+});
+
+test('PR_NOT_MERGED: raised when at least one PR is open even if others are merged', () => {
+  const codes = evalPRNotMerged({
+    statusLC: 'done',
+    issueNumber: '42',
+    timelineItems: [
+      { number: 10, state: 'MERGED', merged: true },
+      { number: 11, state: 'OPEN',   merged: false },
+    ],
+  });
+  assert.ok(codes.includes('PR_NOT_MERGED'), `Expected PR_NOT_MERGED, got: "${codes}"`);
+});
