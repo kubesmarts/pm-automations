@@ -3,7 +3,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 811,,https://github.com/quarkiverse/quarkus-flow/issues/811,feat: Bump diagram editor package,lornakelly,Next,,Tooling,Critical,,1.0,S,0.2,,0.2,0.2,0.0,0.2,,,2026-07-31,
 807,,https://github.com/quarkiverse/quarkus-flow/issues/807,Mark `run` tasks as unsupportable,ricardozanini,Next,,Runtimes,Blocker,,1.0,S,0.2,,0.2,0.2,0.0,0.2,,,2026-07-30,
 804,,https://github.com/quarkiverse/quarkus-flow/issues/804,feat: Implement test suite that validates example rendering in devui's openworkflow editor,domhanak,In progress,,QE,Critical,,2026/Q3,L,1.0,0.1,0.9,1.0,0.1,0.9,,,2026-07-30,
-745,,https://github.com/quarkiverse/quarkus-flow/issues/745,Integrate async AuthProvider API from SDK for non-blocking OIDC token negotiation,fjtirado,In review,,Runtimes,Normal,,2026/Q3,M,0.4,,0.4,0.4,0.0,0.4,,,2026-08-04,
 723,717,https://github.com/quarkiverse/quarkus-flow/issues/723,docs: Document Quarkus Flow best practices,mcruzdev,In progress,,Runtimes,Major,,1.0,S,0.1,0.1,,0.1,0.1,0.0,,,2026-07-04,NO_REMAINING_WORK
 671,,https://github.com/quarkiverse/quarkus-flow/issues/671,[OIDC] Phase 1: Introduce Token Propagation and Exchange through a new module (quarkus-flow-oidc module),mcruzdev,In progress,,Runtimes,Major,,Future,L,1.0,,0.5,1.0,0.0,0.5,,,2026-07-08,
 620,619,https://github.com/quarkiverse/quarkus-flow/issues/620,Create ADR for MCP Integration Design,ricardozanini,In review,,Runtimes,Normal,,1.0,M,0.2,0.1,0.0,0.2,0.1,0.0,,,2026-07-11,
