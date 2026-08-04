@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+6,,https://github.com/tkobayas/drlx-lsp/issues/6,Implement Maven classpath resolution via ClasspathProvider,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-04,,,
 7,,https://github.com/tkobayas/drlx-lsp/issues/7,Implement semantic completions for non-DOT_ACCESS CompletionSite cases,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-03,,,
 8,,https://github.com/tkobayas/drlx-lsp/issues/8,Enable @Disabled improvement target tests for SentinelExpressionTypeResolver,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-03,,,
 717,,https://github.com/casehubio/engine/issues/717,ExperiencePlanStep.stepOutcome() should return RoutingOutcome instead of String,treblereel,,Runtimes,Normal,,Future,M,0.4,0.0,2026-08-02,,,
