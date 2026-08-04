@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+95,,https://github.com/kubesmarts/pm-automations/issues/95,Add workflow to archive GitHub Project v2 items by composable filter,dgutierr,,PM,Major,,,,0.1,0.05,2026-08-04,,,
 83,,https://github.com/kubesmarts/pm-automations/issues/83,Epics should suppress NO_ESTIMATE alert and conditionally suppress NO_REMAINING_WORK alert,skavgou,,PM,Major,,,,0.4,0.5,2026-07-23,,,
 91,,https://github.com/kubesmarts/pm-automations/issues/91,Schedule export workflows to run before Tuesday status meeting,dgutierr,,PM,Major,,,,0.05,0.025,2026-07-23,,,
 73,,https://github.com/kubesmarts/pm-automations/issues/73,feat: add IN_PROGRESS_NO_WORK_REMAINING compliance alert,skavgou,,PM,Normal,,,,0.4,0.4,2026-07-14,,,

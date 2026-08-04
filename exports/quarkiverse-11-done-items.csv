@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1544,,https://github.com/open-workflow-specification/sdk-java/issues/1544,Make AuthProvider.content() return CompletableFuture for async auth flows,fjtirado,,Runtimes,Normal,,2026/Q3,M,0.3,0.4,2026-08-04,,,
 717,,https://github.com/quarkiverse/quarkus-flow/issues/717,bug: Not active transaction in active method,mcruzdev,,Runtimes,Major,,1.0,S,0.2,0.0,2026-08-01,,,CHILDREN_STATUS
 720,,https://github.com/quarkiverse/quarkus-flow/issues/720,[EPIC] Hardening Quarkus Flow Dependencies for 1.0.0 release,ricardozanini,,,,,,,,,2026-08-01,,,"NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 810,,https://github.com/quarkiverse/quarkus-flow/issues/810,ContentBasedRouterEventsPublisher still uses MutinyEmitter<byte[]> in 0.15.0 — #799 fix incomplete,ricardozanini,,Runtimes,Blocker,,1.0,M,0.3,0.3,2026-07-31,,,
