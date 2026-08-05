@@ -130,3 +130,47 @@ test('extractComplianceAlerts: works when mention node precedes the text (real c
   const result = await client.extractComplianceAlerts('PROJ-6');
   assert.equal(result, 'NO_PRIORITY');
 });
+
+// ---------------------------------------------------------------------------
+// fetchLinkedPullRequests
+// ---------------------------------------------------------------------------
+
+test('fetchLinkedPullRequests: returns mapped PR objects from dev-status API', async () => {
+  const devStatusResponse = {
+    detail: [{
+      pullRequests: [
+        { id: '1', name: 'Fix bug', url: 'https://github.com/org/repo/pull/1', status: 'MERGED' },
+        { id: '2', name: 'Add feature', url: 'https://github.com/org/repo/pull/2', status: 'OPEN' },
+      ]
+    }]
+  };
+  const client = makeClient(async () => devStatusResponse);
+  const prs = await client.fetchLinkedPullRequests('10001');
+  assert.equal(prs.length, 2);
+  assert.equal(prs[0].status, 'MERGED');
+  assert.equal(prs[1].status, 'OPEN');
+  assert.equal(prs[1].url, 'https://github.com/org/repo/pull/2');
+});
+
+test('fetchLinkedPullRequests: returns empty array when no PRs linked', async () => {
+  const client = makeClient(async () => ({ detail: [{ pullRequests: [] }] }));
+  const prs = await client.fetchLinkedPullRequests('10002');
+  assert.deepEqual(prs, []);
+});
+
+test('fetchLinkedPullRequests: returns empty array when detail is absent', async () => {
+  const client = makeClient(async () => ({}));
+  const prs = await client.fetchLinkedPullRequests('10003');
+  assert.deepEqual(prs, []);
+});
+
+test('fetchLinkedPullRequests: returns empty array and warns on API error', async () => {
+  const client = makeClient(async () => { throw new Error('403 Forbidden'); });
+  const warnings = [];
+  const origWarn = console.warn;
+  console.warn = (...args) => warnings.push(args.join(' '));
+  const prs = await client.fetchLinkedPullRequests('10004');
+  console.warn = origWarn;
+  assert.deepEqual(prs, []);
+  assert.ok(warnings.some(w => w.includes('10004')));
+});
