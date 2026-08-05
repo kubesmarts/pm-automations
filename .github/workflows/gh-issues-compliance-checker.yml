@@ -277,6 +277,9 @@ jobs:
                         labels:      [$label]
                       } + (if $comp != "" then {components: [{name: $comp}]} else {} end))
                     }')
+                  if [ "$DRY_RUN" = "true" ]; then
+                    echo "  → [DRY-RUN] Would create JIRA ticket."
+                  else
                   set +e
                   JIRA_CREATE_HTTP=$(curl -s --max-time 30 -o /tmp/jira_create.json -w "%{http_code}" \
                     -H "Authorization: ${JIRA_AUTH_HEADER}" \
@@ -310,6 +313,7 @@ jobs:
                     SYNC_STATUS_CODES="JIRA_CREATE_ERROR HTTP_${JIRA_CREATE_HTTP}"
                     EXTERNAL_REF=""
                   fi
+                  fi # end DRY_RUN check
                 fi
               fi
               # NO_ESTIMATE: suppressed for epics (estimate is optional on epics).
@@ -345,16 +349,18 @@ jobs:
               fi
               # Auto-clear Remaining Work for any Done item that still has a value (zero or non-zero).
               if [ "$STATUS_LC" = "done" ] && [ -n "$REMAINING_WORK" ] && [ -n "$REMAINING_WORK_FIELD_ID" ]; then
-                gh api graphql -f query='
-                  mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!) {
-                    clearProjectV2ItemFieldValue(input: {
-                      projectId: $projectId
-                      itemId: $itemId
-                      fieldId: $fieldId
-                    }) { projectV2Item { id } }
-                  }
-                ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                  -f fieldId="$REMAINING_WORK_FIELD_ID" > /dev/null
+                if [ "$DRY_RUN" != "true" ]; then
+                  gh api graphql -f query='
+                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!) {
+                      clearProjectV2ItemFieldValue(input: {
+                        projectId: $projectId
+                        itemId: $itemId
+                        fieldId: $fieldId
+                      }) { projectV2Item { id } }
+                    }
+                  ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                    -f fieldId="$REMAINING_WORK_FIELD_ID" > /dev/null
+                fi
                 echo "  → Remaining Work auto-cleared (issue is Done)."
                 REMAINING_WORK=""
               fi
@@ -410,17 +416,19 @@ jobs:
                 SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
                 if [ -n "$SYNC_STATUS_FIELD_ID" ]; then
                   echo "  → Alerts: ${SYNC_STATUS_CODES:-none}"
-                  gh api graphql -f query='
-                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
-                      updateProjectV2ItemFieldValue(input: {
-                        projectId: $projectId
-                        itemId: $itemId
-                        fieldId: $fieldId
-                        value: { text: $text }
-                      }) { projectV2Item { id } }
-                    }
-                  ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                    -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES" > /dev/null
+                  if [ "$DRY_RUN" != "true" ]; then
+                    gh api graphql -f query='
+                      mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                        updateProjectV2ItemFieldValue(input: {
+                          projectId: $projectId
+                          itemId: $itemId
+                          fieldId: $fieldId
+                          value: { text: $text }
+                        }) { projectV2Item { id } }
+                      }
+                    ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                      -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES" > /dev/null
+                  fi
                 fi
                 if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_CREATE_ERROR|JIRA_ENDPOINT_ERROR'; then
                   record_error "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$SYNC_STATUS_CODES"
@@ -459,33 +467,38 @@ jobs:
               fi
 
               # Update 'Reporting Date' to today
-              gh api graphql -f query='
-                mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Date!) {
-                  updateProjectV2ItemFieldValue(input: {
-                    projectId: $projectId
-                    itemId: $itemId
-                    fieldId: $fieldId
-                    value: { date: $date }
-                  }) { projectV2Item { id } }
-                }
-              ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                -f fieldId="$REPORTING_DATE_FIELD_ID" -f date="$TODAY" > /dev/null
+              if [ "$DRY_RUN" = "true" ]; then
+                echo "  → [DRY-RUN] Would update Reporting Date to $TODAY"
+                echo "  → [DRY-RUN] Would prepend to Reporting Log: $NEW_ENTRY"
+              else
+                gh api graphql -f query='
+                  mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Date!) {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: $projectId
+                      itemId: $itemId
+                      fieldId: $fieldId
+                      value: { date: $date }
+                    }) { projectV2Item { id } }
+                  }
+                ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                  -f fieldId="$REPORTING_DATE_FIELD_ID" -f date="$TODAY" > /dev/null
 
-              # Append new entry to 'Reporting Log'
-              gh api graphql -f query='
-                mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
-                  updateProjectV2ItemFieldValue(input: {
-                    projectId: $projectId
-                    itemId: $itemId
-                    fieldId: $fieldId
-                    value: { text: $text }
-                  }) { projectV2Item { id } }
-                }
-              ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                -f fieldId="$REPORTING_LOG_FIELD_ID" -f text="$NEW_LOG" > /dev/null
+                # Append new entry to 'Reporting Log'
+                gh api graphql -f query='
+                  mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                    updateProjectV2ItemFieldValue(input: {
+                      projectId: $projectId
+                      itemId: $itemId
+                      fieldId: $fieldId
+                      value: { text: $text }
+                    }) { projectV2Item { id } }
+                  }
+                ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                  -f fieldId="$REPORTING_LOG_FIELD_ID" -f text="$NEW_LOG" > /dev/null
+              fi
 
               # Sync to JIRA if an External Reference is set
-              if [ -n "$EXTERNAL_REF" ]; then
+              if [ -n "$EXTERNAL_REF" ] && [ "$DRY_RUN" != "true" ]; then
                 JIRA_ISSUE_URL="${JIRA_BASE_URL}/rest/api/2/issue/${EXTERNAL_REF}"
 
                 # Fetch JIRA issue upfront to verify sync conditions before making any changes
@@ -689,17 +702,19 @@ jobs:
               # Write Alerts field (reflects validation violations and JIRA sync results)
               if [ -n "$SYNC_STATUS_FIELD_ID" ]; then
                 echo "  → Alerts: ${SYNC_STATUS_CODES:-none}"
-                gh api graphql -f query='
-                  mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
-                    updateProjectV2ItemFieldValue(input: {
-                      projectId: $projectId
-                      itemId: $itemId
-                      fieldId: $fieldId
-                      value: { text: $text }
-                    }) { projectV2Item { id } }
-                  }
-                ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                  -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES" > /dev/null
+                if [ "$DRY_RUN" != "true" ]; then
+                  gh api graphql -f query='
+                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: $projectId
+                        itemId: $itemId
+                        fieldId: $fieldId
+                        value: { text: $text }
+                      }) { projectV2Item { id } }
+                    }
+                  ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                    -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES" > /dev/null
+                fi
               fi
               if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_CREATE_ERROR|JIRA_ENDPOINT_ERROR'; then
                 record_error "${PROJECT_OWNER}:${PROJECT_NUMBER}" "$SYNC_STATUS_CODES"
@@ -1148,44 +1163,48 @@ jobs:
                   echo "  → Σ Estimate: $SIGMA_EST, Σ Remaining Work: $SIGMA_REM, Σ Time Spent: $SIGMA_SP"
                   
                   # Update the Σ fields with parent's values
-                  gh api graphql -f query="
-                    mutation {
-                      updateProjectV2ItemFieldValue(input: {
-                        projectId: \"$PROJECT_ID\"
-                        itemId: \"$ITEM_ID\"
-                        fieldId: \"$SIGMA_ESTIMATE_FIELD_ID\"
-                        value: { number: $SIGMA_EST }
-                      }) {
-                        projectV2Item { id }
+                  if [ "$DRY_RUN" = "true" ]; then
+                    echo "  → [DRY-RUN] Would update Σ Estimate=$SIGMA_EST, Σ Remaining=$SIGMA_REM, Σ Spent=$SIGMA_SP"
+                  else
+                    gh api graphql -f query="
+                      mutation {
+                        updateProjectV2ItemFieldValue(input: {
+                          projectId: \"$PROJECT_ID\"
+                          itemId: \"$ITEM_ID\"
+                          fieldId: \"$SIGMA_ESTIMATE_FIELD_ID\"
+                          value: { number: $SIGMA_EST }
+                        }) {
+                          projectV2Item { id }
+                        }
                       }
-                    }
-                  " >/dev/null
-                  
-                  gh api graphql -f query="
-                    mutation {
-                      updateProjectV2ItemFieldValue(input: {
-                        projectId: \"$PROJECT_ID\"
-                        itemId: \"$ITEM_ID\"
-                        fieldId: \"$SIGMA_REMAINING_FIELD_ID\"
-                        value: { number: $SIGMA_REM }
-                      }) {
-                        projectV2Item { id }
+                    " >/dev/null
+                    
+                    gh api graphql -f query="
+                      mutation {
+                        updateProjectV2ItemFieldValue(input: {
+                          projectId: \"$PROJECT_ID\"
+                          itemId: \"$ITEM_ID\"
+                          fieldId: \"$SIGMA_REMAINING_FIELD_ID\"
+                          value: { number: $SIGMA_REM }
+                        }) {
+                          projectV2Item { id }
+                        }
                       }
-                    }
-                  " >/dev/null
-                  
-                  gh api graphql -f query="
-                    mutation {
-                      updateProjectV2ItemFieldValue(input: {
-                        projectId: \"$PROJECT_ID\"
-                        itemId: \"$ITEM_ID\"
-                        fieldId: \"$SIGMA_SPENT_FIELD_ID\"
-                        value: { number: $SIGMA_SP }
-                      }) {
-                        projectV2Item { id }
+                    " >/dev/null
+                    
+                    gh api graphql -f query="
+                      mutation {
+                        updateProjectV2ItemFieldValue(input: {
+                          projectId: \"$PROJECT_ID\"
+                          itemId: \"$ITEM_ID\"
+                          fieldId: \"$SIGMA_SPENT_FIELD_ID\"
+                          value: { number: $SIGMA_SP }
+                        }) {
+                          projectV2Item { id }
+                        }
                       }
-                    }
-                  " >/dev/null
+                    " >/dev/null
+                  fi
                   
                   SIGMA_UPDATED_COUNT=$((SIGMA_UPDATED_COUNT + 1))
                   continue
@@ -1264,47 +1283,51 @@ jobs:
                 
                 echo "  → Validated: Σ Estimate: $SIGMA_EST, Σ Remaining Work: $SIGMA_REM, Σ Time Spent: $SIGMA_SP"
                 
-                # Update Σ Estimate field - use inline value in mutation to avoid type issues
-                gh api graphql -f query="
-                  mutation {
-                    updateProjectV2ItemFieldValue(input: {
-                      projectId: \"$PROJECT_ID\"
-                      itemId: \"$ITEM_ID\"
-                      fieldId: \"$SIGMA_ESTIMATE_FIELD_ID\"
-                      value: { number: $SIGMA_EST }
-                    }) {
-                      projectV2Item { id }
+                if [ "$DRY_RUN" = "true" ]; then
+                  echo "  → [DRY-RUN] Would update Σ Estimate=$SIGMA_EST, Σ Remaining=$SIGMA_REM, Σ Spent=$SIGMA_SP"
+                else
+                  # Update Σ Estimate field - use inline value in mutation to avoid type issues
+                  gh api graphql -f query="
+                    mutation {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: \"$PROJECT_ID\"
+                        itemId: \"$ITEM_ID\"
+                        fieldId: \"$SIGMA_ESTIMATE_FIELD_ID\"
+                        value: { number: $SIGMA_EST }
+                      }) {
+                        projectV2Item { id }
+                      }
                     }
-                  }
-                " >/dev/null
-                
-                # Update Σ Remaining Work field
-                gh api graphql -f query="
-                  mutation {
-                    updateProjectV2ItemFieldValue(input: {
-                      projectId: \"$PROJECT_ID\"
-                      itemId: \"$ITEM_ID\"
-                      fieldId: \"$SIGMA_REMAINING_FIELD_ID\"
-                      value: { number: $SIGMA_REM }
-                    }) {
-                      projectV2Item { id }
+                  " >/dev/null
+                  
+                  # Update Σ Remaining Work field
+                  gh api graphql -f query="
+                    mutation {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: \"$PROJECT_ID\"
+                        itemId: \"$ITEM_ID\"
+                        fieldId: \"$SIGMA_REMAINING_FIELD_ID\"
+                        value: { number: $SIGMA_REM }
+                      }) {
+                        projectV2Item { id }
+                      }
                     }
-                  }
-                " >/dev/null
-                
-                # Update Σ Time Spent field
-                gh api graphql -f query="
-                  mutation {
-                    updateProjectV2ItemFieldValue(input: {
-                      projectId: \"$PROJECT_ID\"
-                      itemId: \"$ITEM_ID\"
-                      fieldId: \"$SIGMA_SPENT_FIELD_ID\"
-                      value: { number: $SIGMA_SP }
-                    }) {
-                      projectV2Item { id }
+                  " >/dev/null
+                  
+                  # Update Σ Time Spent field
+                  gh api graphql -f query="
+                    mutation {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: \"$PROJECT_ID\"
+                        itemId: \"$ITEM_ID\"
+                        fieldId: \"$SIGMA_SPENT_FIELD_ID\"
+                        value: { number: $SIGMA_SP }
+                      }) {
+                        projectV2Item { id }
+                      }
                     }
-                  }
-                " >/dev/null
+                  " >/dev/null
+                fi
                 
                 SIGMA_UPDATED_COUNT=$((SIGMA_UPDATED_COUNT + 1))
               done < "$ITEMS_FILE"
