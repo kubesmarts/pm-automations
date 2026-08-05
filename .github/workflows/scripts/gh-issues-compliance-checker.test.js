@@ -707,6 +707,12 @@ test('stateReason guard: non-Done status is never skipped regardless of stateRea
  * Simulate the PR_NOT_MERGED check from process_items().
  * Builds a minimal item JSON with the given timelineItems and injects the
  * STATUS_LC / ISSUE_NUMBER variables, then runs the exact check snippet.
+ *
+ * Each entry in timelineItems must include:
+ *   willCloseTarget {boolean} — true only for PRs that use closing keywords (Closes #N)
+ *   number          {number}
+ *   state           {string}  — "OPEN", "CLOSED", "MERGED"
+ *   merged          {boolean}
  */
 function evalPRNotMerged({ statusLC, issueNumber, timelineItems }) {
   // Build a minimal item JSON matching what the GraphQL query returns.
@@ -715,6 +721,7 @@ function evalPRNotMerged({ statusLC, issueNumber, timelineItems }) {
       number: issueNumber || null,
       timelineItems: {
         nodes: (timelineItems || []).map(pr => ({
+          willCloseTarget: pr.willCloseTarget,
           source: {
             number: pr.number,
             state:  pr.state,
@@ -734,8 +741,9 @@ SYNC_STATUS_CODES=""
 if [ "$STATUS_LC" = "done" ] && [ -n "$ISSUE_NUMBER" ]; then
   LINKED_PRS=$(echo "$item" | jq -r '
     [.content.timelineItems.nodes[]? |
+     select(.willCloseTarget == true) |
      select(.source.number != null) |
-     select(.source.merged == false)] |
+     select(.source.state == "OPEN")] |
     length')
   if [ "\${LINKED_PRS:-0}" -gt 0 ]; then
     SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }PR_NOT_MERGED"
@@ -747,20 +755,20 @@ echo "\$SYNC_STATUS_CODES"
   return bash(script);
 }
 
-test('PR_NOT_MERGED: raised for Done issue with an open (unmerged) PR', () => {
+test('PR_NOT_MERGED: raised for Done issue with an open closing PR', () => {
   const codes = evalPRNotMerged({
     statusLC: 'done',
     issueNumber: '42',
-    timelineItems: [{ number: 10, state: 'OPEN', merged: false }],
+    timelineItems: [{ willCloseTarget: true, number: 10, state: 'OPEN', merged: false }],
   });
   assert.ok(codes.includes('PR_NOT_MERGED'), `Expected PR_NOT_MERGED, got: "${codes}"`);
 });
 
-test('PR_NOT_MERGED: not raised for Done issue with all PRs merged', () => {
+test('PR_NOT_MERGED: not raised for Done issue with all closing PRs merged', () => {
   const codes = evalPRNotMerged({
     statusLC: 'done',
     issueNumber: '42',
-    timelineItems: [{ number: 10, state: 'MERGED', merged: true }],
+    timelineItems: [{ willCloseTarget: true, number: 10, state: 'MERGED', merged: true }],
   });
   assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED, got: "${codes}"`);
 });
@@ -774,12 +782,12 @@ test('PR_NOT_MERGED: not raised for Done issue with no linked PRs', () => {
   assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED, got: "${codes}"`);
 });
 
-test('PR_NOT_MERGED: not raised for non-Done item even with unmerged PRs', () => {
+test('PR_NOT_MERGED: not raised for non-Done item even with open closing PRs', () => {
   for (const statusLC of ['in progress', 'in review', 'next', 'backlog']) {
     const codes = evalPRNotMerged({
       statusLC,
       issueNumber: '42',
-      timelineItems: [{ number: 10, state: 'OPEN', merged: false }],
+      timelineItems: [{ willCloseTarget: true, number: 10, state: 'OPEN', merged: false }],
     });
     assert.ok(!codes.includes('PR_NOT_MERGED'),
       `Unexpected PR_NOT_MERGED for status "${statusLC}", got: "${codes}"`);
@@ -790,19 +798,37 @@ test('PR_NOT_MERGED: not raised for Done draft item (no issue number)', () => {
   const codes = evalPRNotMerged({
     statusLC: 'done',
     issueNumber: '',
-    timelineItems: [{ number: 10, state: 'OPEN', merged: false }],
+    timelineItems: [{ willCloseTarget: true, number: 10, state: 'OPEN', merged: false }],
   });
   assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED, got: "${codes}"`);
 });
 
-test('PR_NOT_MERGED: raised when at least one PR is open even if others are merged', () => {
+test('PR_NOT_MERGED: raised when at least one closing PR is open even if others are merged', () => {
   const codes = evalPRNotMerged({
     statusLC: 'done',
     issueNumber: '42',
     timelineItems: [
-      { number: 10, state: 'MERGED', merged: true },
-      { number: 11, state: 'OPEN',   merged: false },
+      { willCloseTarget: true, number: 10, state: 'MERGED', merged: true },
+      { willCloseTarget: true, number: 11, state: 'OPEN',   merged: false },
     ],
   });
   assert.ok(codes.includes('PR_NOT_MERGED'), `Expected PR_NOT_MERGED, got: "${codes}"`);
+});
+
+test('PR_NOT_MERGED: not raised for Done issue when open PR is a comment mention (willCloseTarget false)', () => {
+  const codes = evalPRNotMerged({
+    statusLC: 'done',
+    issueNumber: '42',
+    timelineItems: [{ willCloseTarget: false, number: 10, state: 'OPEN', merged: false }],
+  });
+  assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED for comment mention, got: "${codes}"`);
+});
+
+test('PR_NOT_MERGED: not raised for Done issue when closing PR was closed without merging', () => {
+  const codes = evalPRNotMerged({
+    statusLC: 'done',
+    issueNumber: '42',
+    timelineItems: [{ willCloseTarget: true, number: 10, state: 'CLOSED', merged: false }],
+  });
+  assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED for closed-without-merge PR, got: "${codes}"`);
 });

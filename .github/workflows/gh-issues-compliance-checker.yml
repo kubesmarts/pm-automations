@@ -403,12 +403,15 @@ jobs:
                 fi
               fi
 
-              # PR_NOT_MERGED: Done issue must have all linked PRs merged.
+              # PR_NOT_MERGED: Done issue must have at least one closing PR still open.
+              # Only PRs that are explicitly linked to close the issue (willCloseTarget == true)
+              # are checked — casual mentions in comments are ignored.
               if [ "$STATUS_LC" = "done" ] && [ -n "$ISSUE_NUMBER" ]; then
                 LINKED_PRS=$(echo "$item" | jq -r '
                   [.content.timelineItems.nodes[]? |
+                   select(.willCloseTarget == true) |
                    select(.source.number != null) |
-                   select(.source.merged == false)] |
+                   select(.source.state == "OPEN")] |
                   length')
                 if [ "${LINKED_PRS:-0}" -gt 0 ]; then
                   SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }PR_NOT_MERGED"
@@ -814,6 +817,7 @@ jobs:
                             timelineItems(first: 25, itemTypes: [CROSS_REFERENCED_EVENT]) {
                               nodes {
                                 ... on CrossReferencedEvent {
+                                  willCloseTarget
                                   source {
                                     ... on PullRequest {
                                       number
@@ -977,6 +981,7 @@ jobs:
                               timelineItems(first: 25, itemTypes: [CROSS_REFERENCED_EVENT]) {
                                 nodes {
                                   ... on CrossReferencedEvent {
+                                    willCloseTarget
                                     source {
                                       ... on PullRequest {
                                         number
