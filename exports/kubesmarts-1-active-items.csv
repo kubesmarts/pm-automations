@@ -1,4 +1,3 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-92,,https://github.com/kubesmarts/pm-automations/issues/92,JIRA checker: New `PR_NOT_MERGED` alert. Tickets marked as Done must have all linked PRs merged,dgutierr,In review,,PM,Critical,,,,0.1,0.05,0.0,0.1,0.05,0.0,,,2026-08-02,
-89,,https://github.com/kubesmarts/pm-automations/issues/89,GH Checker: add workflow input to override PSYNC_PROJECTS,skavgou,In progress,,PM,Major,,,,0.5,,0.3,0.5,0.0,0.3,,,2026-07-31,
-78,,https://github.com/kubesmarts/pm-automations/issues/78,GH checker: New `PR_NOT_MERGED` alert. Issues marked as Done must have all linked PRs merged,skavgou,In review,,PM,Critical,,,,0.4,,0.0,0.4,0.0,0.0,,,2026-08-04,
+89,,https://github.com/kubesmarts/pm-automations/issues/89,GH Checker: add workflow input to override PSYNC_PROJECTS,skavgou,Next,,PM,Major,,,,0.5,,0.3,0.5,0.0,0.3,,,2026-08-05,
+77,,https://github.com/kubesmarts/pm-automations/issues/77,New `NO_DESCRIPTION` alert for GH checker workflow,skavgou,In progress,,PM,Major,,,,0.2,,0.2,0.2,0.0,0.2,,,2026-08-06,
