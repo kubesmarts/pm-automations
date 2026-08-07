@@ -1,4 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+114,,https://github.com/quarkiverse/quarkus-flow/issues/114,feat: OpenTelemetry tracing support for Quarkus Flow,wmedvede,,Runtimes,Major,,1.0,M,6.0,9.0,2026-08-07,,,
+1596,,https://github.com/open-workflow-specification/sdk-java/issues/1596,Update to latest schema once the new specification is released.,fjtirado,,Runtimes,Major,,2026/Q3,M,0.6,,2026-08-07,,Waiting for the specification schema to be released,NO_TIME_SPENT
+1598,,https://github.com/open-workflow-specification/sdk-java/issues/1598,Generator does not support uri-reference,fjtirado,,Runtimes,Major,,2026/Q3,S,0.2,0.1,2026-08-07,,,
+306,,https://github.com/open-workflow-specification/editor/issues/306,feat: Temporary workaround for unpublished specification changes,lornakelly,,Tooling,Critical,,1.0,M,0.2,0.1,2026-08-07,,,
+825,,https://github.com/quarkiverse/quarkus-flow/issues/825,bug: Workflow with Switch task fails in native mode,wmedvede,,Runtimes,Major,,1.0,XS,0.2,0.2,2026-08-07,,,
 717,,https://github.com/quarkiverse/quarkus-flow/issues/717,bug: Not active transaction in active method,mcruzdev,,Runtimes,Major,,1.0,S,0.2,0.2,2026-08-06,,,CHILDREN_STATUS
 284,,https://github.com/open-workflow-specification/editor/issues/284,Spike: investigate field validation from schema in editing mode,handreyrc,,Tooling,Major,,Future,M,0.6,0.6,2026-08-06,,,
 716,,https://github.com/quarkiverse/quarkus-flow/issues/716,bug: Quarkus Flow 0.12.0 is not at Maven Central,mcruzdev,,Runtimes,Blocker,,1.0,XS,0.1,0.1,2026-08-06,,,

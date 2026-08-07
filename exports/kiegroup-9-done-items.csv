@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+327,,https://github.com/casehubio/engine/issues/327,HumanTaskTarget: support runtime-evaluated expiresIn — static YAML Duration can't vary per case instance,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-08-07,,,
 6,,https://github.com/tkobayas/drlx-lsp/issues/6,Implement Maven classpath resolution via ClasspathProvider,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-04,,,
 7,,https://github.com/tkobayas/drlx-lsp/issues/7,Implement semantic completions for non-DOT_ACCESS CompletionSite cases,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-03,,,
 8,,https://github.com/tkobayas/drlx-lsp/issues/8,Enable @Disabled improvement target tests for SentinelExpressionTypeResolver,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-03,,,
@@ -8,7 +9,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 5,,https://github.com/tkobayas/drlx-lsp/issues/5,Review and refactor incomplete code completion approach,tkobayas,,Tooling,Major,,Future,M,1.0,1.0,2026-07-31,,,
 6819,,https://github.com/apache/incubator-kie-drools/issues/6819,"""CI :: Build"" job fails in KJarLoadingTest because of missing kjar build",tkobayas,,QE,Major,,Future,XS,0.1,0.05,2026-07-23,,,
 2365,,https://github.com/apache/incubator-kie-issues/issues/2365,[DRL Editor] Add drools-lsp to kie-tools,tkobayas,,Tooling,Major,,Future,M,0.8,0.8,2026-07-22,,,
-327,,https://github.com/casehubio/engine/issues/327,HumanTaskTarget: support runtime-evaluated expiresIn — static YAML Duration can't vary per case instance,treblereel,,,Normal,,Future,M,0.6,0.0,2026-07-19,,,NO_AREA
 2344,,https://github.com/apache/incubator-kie-issues/issues/2344,Model compiler: NPE evaluating temporal after() when an OR branch is a negated join,Rikkola,,Runtimes,Critical,,Future,S,1.0,1.0,2026-07-17,,,
 68,,https://github.com/casehubio/platform/issues/68,"epic: ACL authorization model — Phase 1 (flat grants), Phase 2 (identity propagation), Phase 3 (worker rights roadmap)",treblereel,,Runtimes,Normal,,Future,XL,4.0,4.0,2026-07-15,,,
 39,,https://github.com/pibizza/drools-journal/issues/39,Liveness scan does not account for superseded inserts (re-insert same factHandleId),pibizza,,Runtimes,Major,,Future,S,0.1,0.1,2026-07-15,,,
