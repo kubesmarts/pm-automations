@@ -125,6 +125,7 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 | `JIRA_CREATE_ERROR HTTP_<code>` | A `CREATE` directive was detected but the JIRA ticket creation failed |
 | `JIRA_CREATE_ERROR NO_ISSUE` | A `CREATE` directive was detected but the item is not linked to a GH issue |
 | `JIRA_CREATE_ERROR NO_EXT_REF_FIELD` | A `CREATE` directive was detected but the `External Reference` field is not configured in the project |
+| `NO_DESCRIPTION` | Issue body is empty **and** the item is either an epic (has sub-issues) **or** has an `Estimate` ≥ 4 hours (`0.1` weeks). Items with no estimate or an estimate smaller than 4 hours are not checked. |
 | `PR_NOT_MERGED` | Issue is `Done` but at least one linked pull request has not been merged yet |
 | `CHILDREN_STATUS` | Parent/child status inconsistency detected (see below) |
 
@@ -316,6 +317,7 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **`Alerts` shows `JIRA_SYNC_NOT_ALLOWED`** → the JIRA ticket exists but lacks the `gh-issue-<number>` label; add it (e.g. `gh-issue-3`) to the JIRA ticket to opt it in to syncing
 - **`Alerts` shows `JIRA_SYNC_ERROR HTTP_<code>`** → a JIRA API call failed; check the Actions log for the response body and consult the JIRA troubleshooting entries below
 - **`Alerts` shows `PR_NOT_MERGED`** → the issue is `Done` but one or more linked pull requests are still open; merge or close the outstanding PRs and the alert will clear on the next run
+- **`Alerts` shows `NO_DESCRIPTION`** → add a description to the GitHub issue body. This alert fires when the issue has no body and is either a parent issue (has sub-issues) or has an `Estimate` of 4 hours (`0.1` weeks) or more. Small issues with no estimate or a sub-4-hour estimate are exempt.
 - **`Alerts` shows `CHILDREN_STATUS`** → resolve the status inconsistency: if the parent is `Done`, all children must also be `Done`; if the parent is active (not `Backlog`/`Next`), no child should still be in `Backlog`
 - **JIRA sync skipped with "does not have the 'gh-issue-<number>' label"** → add the label `gh-issue-<number>` to the JIRA ticket to opt it in to syncing
 - **JIRA update failed (HTTP 401)** → `PSYNC_PAT_JIRA` is missing or expired, or `PSYNC_JIRA_EMAIL` is wrong; Atlassian Cloud uses Basic auth (`email:api_token`) — verify both are correctly configured

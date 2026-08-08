@@ -242,6 +242,8 @@ jobs:
 
               # Determine whether this item is an epic (has at least one sub-issue in the graph).
               HAS_SUB_ISSUES=$(echo "$item" | jq -r 'if (.content.subIssues.nodes // [] | length) > 0 then "true" else "false" end')
+              # Extract issue body/description (empty string if absent or not an issue).
+              ISSUE_BODY=$(echo "$item" | jq -r '.content.body // ""')
 
               # Handle JIRA ticket creation if External Reference is a CREATE directive.
               # Pattern: "CREATE <projectKey> [<component>]"  e.g. "CREATE QUARKUS quarkus-flow"
@@ -368,6 +370,16 @@ jobs:
               if { [ "$STATUS_LC" = "in progress" ] || [ "$STATUS_LC" = "in review" ] || [ "$STATUS_LC" = "done" ]; } && \
                  [ "$HAS_ASSIGNEE" != "true" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_ASSIGNEE"
+              fi
+              # NO_DESCRIPTION: raised when:
+              #   - item is an epic (has sub-issues), OR
+              #   - item has an estimate >= 4 hours (0.1 weeks)
+              # AND the issue body is empty. Items with no estimate (< 4h) are skipped.
+              if [ -z "$ISSUE_BODY" ]; then
+                if [ "$HAS_SUB_ISSUES" = "true" ] || \
+                   { [ -n "$ESTIMATE" ] && awk -v e="$ESTIMATE" 'BEGIN { exit !(e+0 >= 0.1) }'; }; then
+                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_DESCRIPTION"
+                fi
               fi
 
               # Check CHILDREN_STATUS: detect parent/child status inconsistencies.
@@ -808,6 +820,7 @@ jobs:
                             number
                             title
                             url
+                            body
                             stateReason
                             repository {
                               owner { login }
@@ -972,6 +985,7 @@ jobs:
                               number
                               title
                               url
+                              body
                               stateReason
                               repository {
                                 owner { login }
