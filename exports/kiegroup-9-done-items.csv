@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+343,,https://github.com/casehubio/work/issues/343,Consolidate Flyway migrations into single initial schemas,treblereel,,Runtimes,Major,,Future,M,0.2,0.0,2026-08-08,,,
 327,,https://github.com/casehubio/engine/issues/327,HumanTaskTarget: support runtime-evaluated expiresIn — static YAML Duration can't vary per case instance,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-08-07,,,
 6,,https://github.com/tkobayas/drlx-lsp/issues/6,Implement Maven classpath resolution via ClasspathProvider,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-04,,,
 7,,https://github.com/tkobayas/drlx-lsp/issues/7,Implement semantic completions for non-DOT_ACCESS CompletionSite cases,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-03,,,
