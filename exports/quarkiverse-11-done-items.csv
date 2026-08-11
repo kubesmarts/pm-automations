@@ -1,11 +1,11 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+293,,https://github.com/open-workflow-specification/editor/issues/293,feat: Add shadcn components for editing fields,kumaradityaraj,,Tooling,Normal,,2026/Q3,S,0.2,0.2,2026-08-11,,,
+741,,https://github.com/quarkiverse/quarkus-flow/issues/741,docs: Remove quarkus.flow.durable.kube.member.lease.acquire-timeout property from documentation as it's not implemented yet,mcruzdev,,Runtimes,Major,,1.0,M,0.0,0.0,2026-08-11,,,
 1526,,https://github.com/open-workflow-specification/sdk-java/issues/1526,Implement attemp.duration,"mcruzdev,fjtirado",,Runtimes,Normal,,1.0,M,0.4,0.3,2026-08-08,,,
 1599,,https://github.com/open-workflow-specification/sdk-java/issues/1599,Incorporate https://github.com/open-workflow-specification/specification/pull/1182 when merged,fjtirado,,Runtimes,Major,,2026/Q3,S,0.1,0.1,2026-08-08,,,
 1601,,https://github.com/open-workflow-specification/sdk-java/issues/1601,Support then in try catch,fjtirado,,Runtimes,Normal,,2026/Q3,S,0.2,,2026-08-08,,,NO_TIME_SPENT
 1604,,https://github.com/open-workflow-specification/sdk-java/issues/1604,"Drop sh -c in RunShellExecutor, add command allowlist",fjtirado,,Runtimes,Major,,2026/Q3,S,0.2,0.1,2026-08-08,,,
-293,,https://github.com/open-workflow-specification/editor/issues/293,feat: Add shadcn components for editing fields,kumaradityaraj,,Tooling,Normal,,2026/Q3,S,0.2,,2026-08-08,,,NO_TIME_SPENT
 723,,https://github.com/quarkiverse/quarkus-flow/issues/723,docs: Document Quarkus Flow best practices,mcruzdev,,Runtimes,Major,,1.0,S,0.2,0.2,2026-08-08,,,
-741,,https://github.com/quarkiverse/quarkus-flow/issues/741,docs: Remove quarkus.flow.durable.kube.member.lease.acquire-timeout property from documentation as it's not implemented yet,mcruzdev,,,,,,,,,2026-08-08,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 114,,https://github.com/quarkiverse/quarkus-flow/issues/114,feat: OpenTelemetry tracing support for Quarkus Flow,wmedvede,,Runtimes,Major,,1.0,M,6.0,9.0,2026-08-07,,,
 1596,,https://github.com/open-workflow-specification/sdk-java/issues/1596,Update to latest schema once the new specification is released.,fjtirado,,Runtimes,Major,,2026/Q3,M,0.6,,2026-08-07,,Waiting for the specification schema to be released,NO_TIME_SPENT
 1598,,https://github.com/open-workflow-specification/sdk-java/issues/1598,Generator does not support uri-reference,fjtirado,,Runtimes,Major,,2026/Q3,S,0.2,0.1,2026-08-07,,,
