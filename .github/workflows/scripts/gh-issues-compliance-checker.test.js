@@ -236,6 +236,15 @@ if [ -n "$ESTIMATE_FIELD_ID" ] && [ "$STATUS_LC" = "in progress" ] && [ -n "$EST
   SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }ESTIMATE_TOO_LONG"
 fi
 
+# NO_DESCRIPTION: raised when body is empty AND (item is epic OR estimate >= 0.1 weeks / 4 hours).
+# Items with no estimate or estimate < 0.1 are skipped.
+if [ -z "$ISSUE_BODY" ]; then
+  if [ "$HAS_SUB_ISSUES" = "true" ] || \
+     { [ -n "$ESTIMATE" ] && awk -v e="$ESTIMATE" 'BEGIN { exit !(e+0 >= 0.1) }'; }; then
+    SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }NO_DESCRIPTION"
+  fi
+fi
+
 echo "\$SYNC_STATUS_CODES"
 `;
   return bash(script);
@@ -484,6 +493,43 @@ test('ESTIMATE_TOO_LONG: not raised when estimate is absent (NO_ESTIMATE handles
   assert.ok(!codes.includes('ESTIMATE_TOO_LONG'), `Unexpected ESTIMATE_TOO_LONG for empty estimate: "${codes}"`);
 });
 
+// -- NO_DESCRIPTION --
+
+test('NO_DESCRIPTION: raised for epic with empty body', () => {
+  const codes = evalRule({ ...ALL_FIELDS, HAS_SUB_ISSUES: 'true', ISSUE_BODY: '' });
+  assert.ok(codes.includes('NO_DESCRIPTION'), `Expected NO_DESCRIPTION for epic with no body: "${codes}"`);
+});
+
+test('NO_DESCRIPTION: not raised for epic with a non-empty body', () => {
+  const codes = evalRule({ ...ALL_FIELDS, HAS_SUB_ISSUES: 'true', ISSUE_BODY: 'Some description.' });
+  assert.ok(!codes.includes('NO_DESCRIPTION'), `Unexpected NO_DESCRIPTION for epic with body: "${codes}"`);
+});
+
+test('NO_DESCRIPTION: raised for non-epic with estimate >= 0.1 (4h) and empty body', () => {
+  const codes = evalRule({ ...ALL_FIELDS, HAS_SUB_ISSUES: 'false', ESTIMATE: '0.1', ISSUE_BODY: '' });
+  assert.ok(codes.includes('NO_DESCRIPTION'), `Expected NO_DESCRIPTION for estimate=0.1 with no body: "${codes}"`);
+});
+
+test('NO_DESCRIPTION: raised for non-epic with estimate > 0.1 and empty body', () => {
+  const codes = evalRule({ ...ALL_FIELDS, HAS_SUB_ISSUES: 'false', ESTIMATE: '1', ISSUE_BODY: '' });
+  assert.ok(codes.includes('NO_DESCRIPTION'), `Expected NO_DESCRIPTION for estimate=1 with no body: "${codes}"`);
+});
+
+test('NO_DESCRIPTION: not raised for non-epic with estimate < 0.1 (< 4h) and empty body', () => {
+  const codes = evalRule({ ...ALL_FIELDS, HAS_SUB_ISSUES: 'false', ESTIMATE: '0.05', ISSUE_BODY: '' });
+  assert.ok(!codes.includes('NO_DESCRIPTION'), `Unexpected NO_DESCRIPTION for estimate=0.05: "${codes}"`);
+});
+
+test('NO_DESCRIPTION: not raised when estimate is absent and item is not an epic', () => {
+  const codes = evalRule({ ...ALL_FIELDS, HAS_SUB_ISSUES: 'false', ESTIMATE: '', ISSUE_BODY: '' });
+  assert.ok(!codes.includes('NO_DESCRIPTION'), `Unexpected NO_DESCRIPTION with no estimate and not epic: "${codes}"`);
+});
+
+test('NO_DESCRIPTION: not raised for non-epic with estimate >= 0.1 when body is present', () => {
+  const codes = evalRule({ ...ALL_FIELDS, HAS_SUB_ISSUES: 'false', ESTIMATE: '0.5', ISSUE_BODY: 'Implement the new feature.' });
+  assert.ok(!codes.includes('NO_DESCRIPTION'), `Unexpected NO_DESCRIPTION when body is present: "${codes}"`);
+});
+
 // -- Multiple alerts at once --
 
 test('multiple alerts: all applicable codes raised for a done item missing area, time spent', () => {
@@ -502,6 +548,7 @@ test('clean item: no alerts for a fully-populated in-progress item', () => {
     ESTIMATE:      '1',
     REMAINING_WORK:'0.5',
     TIME_SPENT:    '',   // TIME_SPENT only required for done
+    ISSUE_BODY:    'Implement the new feature as described in the spec.',
   });
   assert.equal(codes, '', `Expected no alerts, got: "${codes}"`);
 });
