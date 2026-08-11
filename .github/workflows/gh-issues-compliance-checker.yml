@@ -165,6 +165,17 @@ jobs:
             return 1  # No match
           }
 
+          # Check if a repo issue ever had a milestone by examining its timeline.
+          # Returns "true" if MILESTONED_EVENT exists in timeline, "false" otherwise.
+          # $1 = item JSON blob
+          repo_issue_had_milestone() {
+            local item_json="$1"
+            local has_milestoned=$(echo "$item_json" | \
+              jq '.content.timelineItems.nodes[] | select(.__typename=="MilestonedEvent")' | \
+              jq -s 'length > 0')
+            echo "$has_milestoned"
+          }
+
           # process_items reads one compact JSON item per line from stdin.
           # Reads PROJECT_ID, REPORTING_DATE_FIELD_ID, REPORTING_LOG_FIELD_ID, SYNC_STATUS_FIELD_ID,
           # EXTERNAL_REF_FIELD_ID, ISSUE_STATUS (associative array), TODAY from outer scope.
@@ -215,6 +226,77 @@ jobs:
               MILESTONE=$(get_field      "$item" "$MILESTONE_FIELD_NAME")
               EXTERNAL_REF=$(get_field   "$item" "External Reference")
               REPORTING_LOG=$(get_field  "$item" "Reporting Log")
+
+              # ---------------------------------------------------------------------------
+              # Repo → project milestone sync
+              # Sync the repo issue's native Milestone to the project's Target Milestone
+              # field only when:
+              #   1. The item is linked to a GH issue (ISSUE_NUMBER is set).
+              #   2. The milestone field is configured in the project (MILESTONE_FIELD_ID set).
+              # Rules:
+              #   a. Repo milestone set AND is a valid option → set project field if different.
+              #   b. Repo milestone not set AND project field is set → clear project field.
+              #   c. Repo milestone set but NOT a valid option → log and leave unchanged.
+              # ---------------------------------------------------------------------------
+              if [ -n "$ISSUE_NUMBER" ] && [ -n "$MILESTONE_FIELD_ID" ]; then
+                REPO_MILESTONE=$(echo "$item" | jq -r '.content.milestone.title // ""')
+                if [ -n "$REPO_MILESTONE" ]; then
+                  # Check whether the repo milestone title is a valid option
+                  if echo "$MILESTONE_OPTIONS" | grep -qxF "$REPO_MILESTONE"; then
+                    if [ "$MILESTONE" != "$REPO_MILESTONE" ]; then
+                      # Look up the option ID for this title
+                      MILESTONE_OPT_ID=$(echo "$MILESTONE_OPTION_IDS" | awk -F'\t' -v name="$REPO_MILESTONE" '$2==name{print $1; exit}')
+                      echo "  → Milestone sync: repo='$REPO_MILESTONE', project='${MILESTONE:-<empty>}' → setting to '$REPO_MILESTONE' (optionId=$MILESTONE_OPT_ID)"
+                      if [ "$DRY_RUN" != "true" ] && [ -n "$MILESTONE_OPT_ID" ]; then
+                        gh api graphql -f query='
+                          mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                            updateProjectV2ItemFieldValue(input: {
+                              projectId: $projectId
+                              itemId: $itemId
+                              fieldId: $fieldId
+                              value: { singleSelectOptionId: $optionId }
+                            }) { projectV2Item { id } }
+                          }
+                        ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                          -f fieldId="$MILESTONE_FIELD_ID" -f optionId="$MILESTONE_OPT_ID" > /dev/null
+                      fi
+                      [ "$DRY_RUN" = "true" ] && echo "  → [DRY-RUN] Would set ${MILESTONE_FIELD_NAME} to '$REPO_MILESTONE'"
+                      MILESTONE="$REPO_MILESTONE"
+                    else
+                      echo "  → Milestone sync: repo='$REPO_MILESTONE', project='$MILESTONE' → already in sync"
+                    fi
+                  else
+                    echo "  → Milestone sync: repo='$REPO_MILESTONE' is not a valid ${MILESTONE_FIELD_NAME} option — leaving project field unchanged (current: '${MILESTONE:-<empty>}')"
+                  fi
+                else
+                  # Repo has no milestone; check if it ever had one via timeline
+                  if [ -n "$MILESTONE" ]; then
+                    # Only clear if repo issue previously had a milestone (unset event)
+                    REPO_HAD_MILESTONE=$(repo_issue_had_milestone "$item")
+                    if [ "$REPO_HAD_MILESTONE" = "true" ]; then
+                      echo "  → Milestone sync: repo previously had milestone, now cleared → clearing ${MILESTONE_FIELD_NAME}"
+                      if [ "$DRY_RUN" != "true" ]; then
+                        gh api graphql -f query='
+                          mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!) {
+                            clearProjectV2ItemFieldValue(input: {
+                              projectId: $projectId
+                              itemId: $itemId
+                              fieldId: $fieldId
+                            }) { projectV2Item { id } }
+                          }
+                        ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                          -f fieldId="$MILESTONE_FIELD_ID" > /dev/null
+                      fi
+                      [ "$DRY_RUN" = "true" ] && echo "  → [DRY-RUN] Would clear ${MILESTONE_FIELD_NAME}"
+                      MILESTONE=""
+                    else
+                      echo "  → Milestone sync: repo never had milestone, project='${MILESTONE}' → skipping clear"
+                    fi
+                  else
+                    echo "  → Milestone sync: repo has no milestone, project field is empty → already in sync"
+                  fi
+                fi
+              fi
 
               # Parse tracked field values from the latest (first) entry in the log.
               # Log format: ENTRY1 | ENTRY2 | ... where each entry is DATE, AREA, STATUS, PRIORITY, MILESTONE, ESTIMATE, REMAINING_WORK, TIME_SPENT, EXTERNAL_REF
@@ -807,6 +889,7 @@ jobs:
                         ... on ProjectV2SingleSelectField {
                           id
                           name
+                          options { id name }
                         }
                       }
                     }
@@ -822,13 +905,21 @@ jobs:
                             url
                             body
                             stateReason
+                            milestone { title }
                             repository {
                               owner { login }
                               name
                             }
                             assignees(first: 5) { nodes { login } }
-                            timelineItems(first: 25, itemTypes: [CROSS_REFERENCED_EVENT]) {
+                            timelineItems(first: 50, itemTypes: [MILESTONED_EVENT, DEMILESTONED_EVENT, CROSS_REFERENCED_EVENT]) {
                               nodes {
+                                __typename
+                                ... on MilestonedEvent {
+                                  createdAt
+                                }
+                                ... on DemilestonedEvent {
+                                  createdAt
+                                }
                                 ... on CrossReferencedEvent {
                                   willCloseTarget
                                   source {
@@ -920,6 +1011,21 @@ jobs:
             else
               MILESTONE_FIELD_NAME="Target Milestone"
             fi
+            # Build a newline-separated list of allowed option names for the milestone field.
+            # Used during per-item sync to validate repo milestone titles before setting them.
+            # Format: one option name per line, e.g. "Future\n3.20\n2025.Q2"
+            MILESTONE_OPTIONS=$(echo "$PAGE_RESPONSE" | jq -r \
+              --arg n "$MILESTONE_FIELD_NAME" \
+              '.data.organization.projectV2.fields.nodes[]
+               | select(.name == $n)
+               | .options[]?.name // empty')
+            # Build a tab-separated id\tname list for option-ID lookup during updates
+            MILESTONE_OPTION_IDS=$(echo "$PAGE_RESPONSE" | jq -r \
+              --arg n "$MILESTONE_FIELD_NAME" \
+              '.data.organization.projectV2.fields.nodes[]
+               | select(.name == $n)
+               | .options[]?
+               | "\(.id)\t\(.name)"')
             
             # Check for Σ (sigma) aggregated fields
             SIGMA_ESTIMATE_FIELD_ID=$(echo "$PAGE_RESPONSE"       | jq -r '.data.organization.projectV2.fields.nodes[] | select(.name == "Σ Estimate")          | .id')
@@ -952,6 +1058,8 @@ jobs:
             echo "Remaining Work field ID: ${REMAINING_WORK_FIELD_ID:-not configured}"
             echo "Time Spent field ID    : ${TIME_SPENT_FIELD_ID:-not configured}"
             echo "${MILESTONE_FIELD_NAME} field ID: ${MILESTONE_FIELD_ID:-not configured}"
+            MILESTONE_OPTIONS_LOG=$(echo "$MILESTONE_OPTIONS" | tr '\n' ',' | sed 's/,$//')
+            echo "${MILESTONE_FIELD_NAME} options   : ${MILESTONE_OPTIONS_LOG:-none}"
             echo "Σ Estimate field ID    : ${SIGMA_ESTIMATE_FIELD_ID:-not configured}"
             echo "Σ Remaining field ID   : ${SIGMA_REMAINING_FIELD_ID:-not configured}"
             echo "Σ Time Spent field ID  : ${SIGMA_SPENT_FIELD_ID:-not configured}"
@@ -987,13 +1095,21 @@ jobs:
                               url
                               body
                               stateReason
+                              milestone { title }
                               repository {
                                 owner { login }
                                 name
                               }
                               assignees(first: 5) { nodes { login } }
-                              timelineItems(first: 25, itemTypes: [CROSS_REFERENCED_EVENT]) {
+                              timelineItems(first: 50, itemTypes: [MILESTONED_EVENT, DEMILESTONED_EVENT, CROSS_REFERENCED_EVENT]) {
                                 nodes {
+                                  __typename
+                                  ... on MilestonedEvent {
+                                    createdAt
+                                  }
+                                  ... on DemilestonedEvent {
+                                    createdAt
+                                  }
                                   ... on CrossReferencedEvent {
                                     willCloseTarget
                                     source {

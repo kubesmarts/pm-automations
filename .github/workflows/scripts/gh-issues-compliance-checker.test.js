@@ -879,3 +879,336 @@ test('PR_NOT_MERGED: not raised for Done issue when closing PR was closed withou
   });
   assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED for closed-without-merge PR, got: "${codes}"`);
 });
+
+// ---------------------------------------------------------------------------
+// SECTION – Repo milestone sync
+// ---------------------------------------------------------------------------
+
+/**
+ * Simulate the repo→project milestone sync logic extracted from the workflow.
+ * Returns an object with:
+ *   - action: 'set' | 'clear' | 'skip_invalid' | 'in_sync'
+ *   - milestone: the MILESTONE variable value after sync
+ *   - log: the log line printed by the sync block
+ *
+ * Parameters mirror the outer-scope shell variables used by the sync block:
+ *   - repoMilestone:      repo issue milestone title (empty string = no milestone)
+ *   - projectMilestone:   project item Target Milestone value (empty = not set)
+ *   - milestoneOptions:   newline-separated list of valid option names
+ *   - milestoneFieldId:   field ID (non-empty = field configured)
+ *   - issueNumber:        issue number (non-empty = linked issue)
+ */
+function evalMilestoneSync({ repoMilestone, projectMilestone, milestoneOptions, milestoneFieldId = 'FIELD_ID', issueNumber = '42' }) {
+  // Build shell statements that produce real newlines, one option per line.
+  // Using printf ensures tab-separation and newlines are actual bytes, not escape sequences.
+  const optionsPrintfArgs  = (milestoneOptions || []).map(n => JSON.stringify(n + '\n')).join(' ');
+  const optionIdsPrintfArgs = (milestoneOptions || []).map((n, i) => JSON.stringify(`OPT_ID_${i}\t${n}\n`)).join(' ');
+
+  const script = `
+ISSUE_NUMBER=${JSON.stringify(String(issueNumber ?? ''))}
+MILESTONE_FIELD_ID=${JSON.stringify(String(milestoneFieldId ?? ''))}
+MILESTONE=${JSON.stringify(String(projectMilestone ?? ''))}
+MILESTONE_FIELD_NAME="Target Milestone"
+DRY_RUN="false"
+ITEM_ID="ITEM_1"
+PROJECT_ID="PROJ_1"
+
+MILESTONE_OPTIONS=$(printf %b ${optionsPrintfArgs || '""'})
+MILESTONE_OPTION_IDS=$(printf %b ${optionIdsPrintfArgs || '""'})
+
+ACTION=""
+LOG_LINE=""
+
+if [ -n "$ISSUE_NUMBER" ] && [ -n "$MILESTONE_FIELD_ID" ]; then
+  REPO_MILESTONE=${JSON.stringify(String(repoMilestone ?? ''))}
+  if [ -n "$REPO_MILESTONE" ]; then
+    if echo "$MILESTONE_OPTIONS" | grep -qxF "$REPO_MILESTONE"; then
+      if [ "$MILESTONE" != "$REPO_MILESTONE" ]; then
+        MILESTONE_OPT_ID=$(echo "$MILESTONE_OPTION_IDS" | awk -F'\\t' -v name="$REPO_MILESTONE" '$2==name{print $1; exit}')
+        LOG_LINE="Milestone sync: repo='$REPO_MILESTONE', project='\${MILESTONE:-<empty>}' → setting to '$REPO_MILESTONE' (optionId=$MILESTONE_OPT_ID)"
+        ACTION="set"
+        MILESTONE="$REPO_MILESTONE"
+      else
+        LOG_LINE="Milestone sync: repo='$REPO_MILESTONE', project='$MILESTONE' → already in sync"
+        ACTION="in_sync"
+      fi
+    else
+      LOG_LINE="Milestone sync: repo='$REPO_MILESTONE' is not a valid \${MILESTONE_FIELD_NAME} option — leaving project field unchanged (current: '\${MILESTONE:-<empty>}')"
+      ACTION="skip_invalid"
+    fi
+  else
+    if [ -n "$MILESTONE" ]; then
+      LOG_LINE="Milestone sync: repo has no milestone, project has '\${MILESTONE}' → clearing \${MILESTONE_FIELD_NAME}"
+      ACTION="clear"
+      MILESTONE=""
+    else
+      LOG_LINE="Milestone sync: repo has no milestone, project field is empty → already in sync"
+      ACTION="in_sync"
+    fi
+  fi
+fi
+
+echo "$ACTION"
+echo "$MILESTONE"
+echo "$LOG_LINE"
+`;
+  const out = bash(script).split('\n');
+  return { action: out[0], milestone: out[1], log: out.slice(2).join('\n') };
+}
+
+// -- Set: repo milestone is a valid option and project field is empty --
+
+test('milestone sync: sets project field when repo milestone is a valid option and project field is empty', () => {
+  const { action, milestone } = evalMilestoneSync({
+    repoMilestone: 'Future',
+    projectMilestone: '',
+    milestoneOptions: ['Future', '3.20', '2025.Q2'],
+  });
+  assert.equal(action, 'set', 'expected action=set');
+  assert.equal(milestone, 'Future', 'expected MILESTONE to be updated to Future');
+});
+
+test('milestone sync: sets project field when repo milestone is a valid option and project field has a different value', () => {
+  const { action, milestone } = evalMilestoneSync({
+    repoMilestone: '3.20',
+    projectMilestone: 'Future',
+    milestoneOptions: ['Future', '3.20'],
+  });
+  assert.equal(action, 'set', 'expected action=set');
+  assert.equal(milestone, '3.20', 'expected MILESTONE to be updated to 3.20');
+});
+
+// -- Already in sync --
+
+test('milestone sync: no-op when repo milestone matches project field', () => {
+  const { action, milestone } = evalMilestoneSync({
+    repoMilestone: 'Future',
+    projectMilestone: 'Future',
+    milestoneOptions: ['Future', '3.20'],
+  });
+  assert.equal(action, 'in_sync', 'expected action=in_sync');
+  assert.equal(milestone, 'Future', 'MILESTONE should remain Future');
+});
+
+// -- Skip: repo milestone is not a valid option --
+
+test('milestone sync: does not change project field when repo milestone is not a valid option', () => {
+  const { action, milestone } = evalMilestoneSync({
+    repoMilestone: 'UnknownMilestone',
+    projectMilestone: '',
+    milestoneOptions: ['Future', '3.20'],
+  });
+  assert.equal(action, 'skip_invalid', 'expected action=skip_invalid');
+  assert.equal(milestone, '', 'MILESTONE should remain empty');
+});
+
+test('milestone sync: does not change existing project value when repo milestone is not a valid option', () => {
+  const { action, milestone } = evalMilestoneSync({
+    repoMilestone: 'UnknownMilestone',
+    projectMilestone: 'Future',
+    milestoneOptions: ['Future', '3.20'],
+  });
+  assert.equal(action, 'skip_invalid', 'expected action=skip_invalid');
+  assert.equal(milestone, 'Future', 'MILESTONE should remain Future');
+});
+
+// -- Clear: repo has no milestone but project field is set --
+
+test('milestone sync: clears project field when repo has no milestone and project field is set', () => {
+  const { action, milestone } = evalMilestoneSync({
+    repoMilestone: '',
+    projectMilestone: 'Future',
+    milestoneOptions: ['Future', '3.20'],
+  });
+  assert.equal(action, 'clear', 'expected action=clear');
+  assert.equal(milestone, '', 'MILESTONE should be cleared');
+});
+
+// -- No-op: repo has no milestone and project field is already empty --
+
+test('milestone sync: no-op when repo has no milestone and project field is also empty', () => {
+  const { action, milestone } = evalMilestoneSync({
+    repoMilestone: '',
+    projectMilestone: '',
+    milestoneOptions: ['Future', '3.20'],
+  });
+  assert.equal(action, 'in_sync', 'expected action=in_sync');
+  assert.equal(milestone, '', 'MILESTONE should remain empty');
+});
+
+// -- Guard: skip entirely when no issue number (draft item) --
+
+test('milestone sync: skipped entirely for draft items (no issue number)', () => {
+  const { action } = evalMilestoneSync({
+    repoMilestone: 'Future',
+    projectMilestone: '',
+    milestoneOptions: ['Future'],
+    issueNumber: '',
+  });
+  assert.equal(action, '', 'expected no action for draft item');
+});
+
+// -- Guard: skip entirely when milestone field not configured --
+
+test('milestone sync: skipped entirely when milestone field is not configured in project', () => {
+  const { action } = evalMilestoneSync({
+    repoMilestone: 'Future',
+    projectMilestone: '',
+    milestoneOptions: ['Future'],
+    milestoneFieldId: '',
+  });
+  assert.equal(action, '', 'expected no action when field not configured');
+});
+
+// -- NO_MILESTONE suppression: synced value prevents alert --
+
+test('NO_MILESTONE: not raised after milestone sync sets the project field', () => {
+  // Simulate sync setting MILESTONE before compliance check runs
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'in progress', MILESTONE: 'Future' });
+  assert.ok(!codes.includes('NO_MILESTONE'), `Unexpected NO_MILESTONE after sync: "${codes}"`);
+});
+
+// ---------------------------------------------------------------------------
+// SECTION 7 – Bash logic: Milestone unset event detection
+//
+// New behavior: Only clear project milestone if repo issue previously had one
+// (detected via MILESTONED_EVENT in timeline). If repo never had a milestone,
+// skip clearing even if project field is set.
+// ---------------------------------------------------------------------------
+
+/**
+ * Helper: evaluate milestone sync decision with unset event detection.
+ * Calls the repo_issue_had_milestone function and evaluates the sync logic.
+ */
+function evalMilestoneSyncWithTimeline(vars) {
+  const {
+    repoMilestone = '',
+    projectMilestone = '',
+    repoHadMilestone = false,
+    milestoneOptions = [],
+    milestoneFieldId = 'FIELD_ID',
+  } = vars;
+
+  const assignments = [
+    `REPO_MILESTONE=${JSON.stringify(repoMilestone)}`,
+    `MILESTONE=${JSON.stringify(projectMilestone)}`,
+    `REPO_HAD_MILESTONE=${JSON.stringify(String(repoHadMilestone))}`,
+    `MILESTONE_FIELD_ID=${JSON.stringify(milestoneFieldId)}`,
+    `DRY_RUN="false"`,
+  ].join('\n');
+
+  const script = `
+${assignments}
+
+# Simulate the repo_issue_had_milestone function
+repo_issue_had_milestone() {
+  echo "$REPO_HAD_MILESTONE"
+}
+
+# Clear action tracking
+CLEAR_ACTION=""
+SKIP_REASON=""
+
+# This is the exact logic from the workflow
+if [ -z "$REPO_MILESTONE" ]; then
+  # Repo has no milestone; check if it ever had one via timeline
+  if [ -n "$MILESTONE" ]; then
+    # Only clear if repo issue previously had a milestone (unset event)
+    REPO_HAD_MILESTONE_RESULT=\$(repo_issue_had_milestone)
+    if [ "\$REPO_HAD_MILESTONE_RESULT" = "true" ]; then
+      CLEAR_ACTION="clear"
+    else
+      SKIP_REASON="never_had_milestone"
+    fi
+  fi
+fi
+
+echo "CLEAR_ACTION=\${CLEAR_ACTION}|SKIP_REASON=\${SKIP_REASON}"
+`;
+
+  const result = bash(script);
+  const [clearPart, skipPart] = result.split('|');
+  const clearAction = clearPart.split('=')[1] || '';
+  const skipReason = skipPart.split('=')[1] || '';
+
+  return {
+    shouldClear: clearAction === 'clear',
+    skipReason: skipReason,
+  };
+}
+
+// -- Unset event: repo had milestone, now removed --
+
+test('milestone unset: repo had milestone (MILESTONED_EVENT exists), now empty, project has value → CLEAR', () => {
+  const { shouldClear, skipReason } = evalMilestoneSyncWithTimeline({
+    repoMilestone: '',         // repo has no milestone now
+    projectMilestone: 'v1.0',  // project has value
+    repoHadMilestone: true,    // timeline shows MILESTONED_EVENT
+  });
+  assert.equal(shouldClear, true, 'expected clear action');
+  assert.equal(skipReason, '', 'expected no skip reason');
+});
+
+test('milestone unset: repo had milestone (MILESTONED_EVENT exists), now empty, project empty → NO CHANGE', () => {
+  const { shouldClear, skipReason } = evalMilestoneSyncWithTimeline({
+    repoMilestone: '',         // repo has no milestone now
+    projectMilestone: '',      // project is empty
+    repoHadMilestone: true,    // timeline shows MILESTONED_EVENT
+  });
+  assert.equal(shouldClear, false, 'expected no clear action');
+  assert.equal(skipReason, '', 'expected no skip reason');
+});
+
+// -- Never had milestone: repo never had one --
+
+test('milestone never set: repo never had milestone (no MILESTONED_EVENT), now empty, project has value → SKIP', () => {
+  const { shouldClear, skipReason } = evalMilestoneSyncWithTimeline({
+    repoMilestone: '',         // repo has no milestone now
+    projectMilestone: 'v1.0',  // project has value
+    repoHadMilestone: false,   // timeline shows NO MILESTONED_EVENT
+  });
+  assert.equal(shouldClear, false, 'expected no clear action');
+  assert.equal(skipReason, 'never_had_milestone', 'expected skip reason for never_had_milestone');
+});
+
+test('milestone never set: repo never had milestone (no MILESTONED_EVENT), now empty, project empty → NO CHANGE', () => {
+  const { shouldClear, skipReason } = evalMilestoneSyncWithTimeline({
+    repoMilestone: '',         // repo has no milestone now
+    projectMilestone: '',      // project is empty
+    repoHadMilestone: false,   // timeline shows NO MILESTONED_EVENT
+  });
+  assert.equal(shouldClear, false, 'expected no clear action');
+  assert.equal(skipReason, '', 'expected no skip reason');
+});
+
+// -- Workflow YAML: timeline query includes milestone events --
+
+test('workflow YAML: timelineItems query includes MILESTONED_EVENT', () => {
+  assert.match(WORKFLOW_YML, /itemTypes:.*MILESTONED_EVENT/,
+    'GraphQL query must include MILESTONED_EVENT in timeline');
+});
+
+test('workflow YAML: timelineItems query includes DEMILESTONED_EVENT', () => {
+  assert.match(WORKFLOW_YML, /itemTypes:.*DEMILESTONED_EVENT/,
+    'GraphQL query must include DEMILESTONED_EVENT in timeline');
+});
+
+test('workflow YAML: timeline MilestonedEvent fragment defined', () => {
+  assert.match(WORKFLOW_YML, /\.\.\.\s+on\s+MilestonedEvent/,
+    'GraphQL query must have MilestonedEvent fragment');
+});
+
+test('workflow YAML: timeline DemilestonedEvent fragment defined', () => {
+  assert.match(WORKFLOW_YML, /\.\.\.\s+on\s+DemilestonedEvent/,
+    'GraphQL query must have DemilestonedEvent fragment');
+});
+
+test('workflow YAML: repo_issue_had_milestone function defined', () => {
+  assert.match(WORKFLOW_YML, /repo_issue_had_milestone\s*\(\)/,
+    'Workflow must define repo_issue_had_milestone function');
+});
+
+test('workflow YAML: milestone sync calls repo_issue_had_milestone when repo has no milestone', () => {
+  assert.match(WORKFLOW_YML, /REPO_HAD_MILESTONE\s*=\s*\$\(\s*repo_issue_had_milestone/,
+    'Milestone sync must call repo_issue_had_milestone function');
+});

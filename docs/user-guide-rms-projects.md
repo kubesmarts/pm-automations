@@ -25,7 +25,7 @@ You never need to trigger it manually. The workflow takes care of everything aut
 |-------|------|---------------|
 | `Status` | Single select | Lifecycle stage (see below) |
 | `Priority` | Single select | `Blocker`, `Critical`, `Major`, `Normal`, `Minor` |
-| `Target Milestone` | Text | Target release milestone (e.g. `3.20`, `2025.Q2`) |
+| `Target Milestone` | Single select | Target release milestone (e.g. `3.20`, `2025.Q2`). **Auto-synced from the repo issue's Milestone** — if the repo issue has a milestone set and its title matches a valid option, the workflow sets this field automatically. If the repo issue **previously had** a milestone and it has now been removed (unset event), this field is cleared automatically. If the repo issue never had a milestone, this field is not cleared automatically (manual edits are preserved). |
 | `Estimate` | Number | Total effort in **weeks** — e.g. `2` = 2 weeks, `0.4` = 2 days, `0.1` = 4 hours |
 | `Remaining Work` | Number | Remaining effort in weeks, same unit as Estimate |
 | `Time Spent` | Number | Actual time logged so far, in weeks |
@@ -186,7 +186,7 @@ Please review and resolve these alerts.
 |------|--------------|------------|
 | `NO_AREA` | `Area` is empty and the issue is past `Backlog` | Set the `Area` field |
 | `NO_PRIORITY` | `Priority` is empty and the issue is past `Backlog` | Set the `Priority` field |
-| `NO_MILESTONE` | `Target Milestone` is empty and the issue is past `Backlog` | Set the `Target Milestone` field |
+| `NO_MILESTONE` | `Target Milestone` is empty and the issue is past `Backlog` | **Option 1 (recommended):** Set the **Milestone** on the repo issue — the workflow will sync it to `Target Milestone` automatically on the next run. **Option 2:** Set `Target Milestone` directly on the project item. **Option 3:** Move the item back to `Backlog` if the milestone is not yet decided. **Note:** The workflow will NOT clear `Target Milestone` if you remove a milestone from a repo issue that never had one — only unset events (milestone removed after being set) trigger clearing. This preserves your manual edits. |
 | `NO_ESTIMATE` | `Estimate` is empty, status is past `Next`, and the issue is not an epic | Set the `Estimate` field. Epics (issues with sub-issues) are exempt — estimate is optional for them |
 | `ESTIMATE_TOO_LONG` | `Estimate` exceeds 2 weeks and status is `In Progress` | Break the work item into smaller pieces, or move it back to `Backlog` / `Next` if the large estimate is intentional at this stage |
 | `NO_REMAINING_WORK` | `Remaining Work` is empty and status is `In Progress` or `In Review`. For epics, only raised when their own `Estimate` is greater than 0 | Set the `Remaining Work` field. For epics whose all work is in sub-issues, keep `Estimate` at `0` to suppress this alert |
