@@ -79,6 +79,7 @@ The issue is actively being worked on. All planning fields must be filled in and
 | `Remaining Work` | **Yes** | Alerts: `NO_REMAINING_WORK` |
 | `Time Spent` | Update regularly | Will be required at `Done` |
 | Assignee (GH issue) | **Yes** | Alerts: `NO_ASSIGNEE` |
+| Issue body (description) | **Yes, if Estimate ≥ 4h** | Alerts: `NO_DESCRIPTION` |
 
 Keep `Remaining Work` up to date as you make progress. It represents how much work is left, not how much you've done.
 
@@ -192,6 +193,7 @@ Please review and resolve these alerts.
 | `IN_PROGRESS_NO_WORK_REMAINING` | `Remaining Work` is `0`, `Estimate` is greater than `0`, and status is `In Progress` — work appears complete but status not updated (not raised for zero-estimate items) | Move status to `In Review` or `Done`, or set the remaining effort to the correct non-zero value |
 | `NO_TIME_SPENT` | `Time Spent` is empty and status is `Done` | Enter the total time spent |
 | `NO_ASSIGNEE` | No assignee on the GH issue and status is `In Progress`, `In Review`, or `Done` | Assign the issue to the responsible person |
+| `NO_DESCRIPTION` | The GitHub issue body is empty **and** the item is either an epic (has sub-issues) or has an `Estimate` ≥ 4 hours (`0.1` weeks). Items with no estimate or an estimate below 4 hours are exempt | Add a description to the GitHub issue body |
 | `PR_NOT_MERGED` | Issue is `Done` but at least one linked pull request is still open / not merged | Merge or close all linked PRs — the alert clears on the next run once they are all merged |
 | `CHILDREN_STATUS` | Parent/child status mismatch detected (see below) | Align child statuses with the parent |
 | `JIRA_NOT_FOUND` | `External Reference` points to a JIRA ticket that doesn't exist | Verify or correct the JIRA key |
@@ -302,7 +304,7 @@ Most Epics serve purely as organizational containers. In this case:
 
 All time tracking should be done in the sub-issues. The Epic itself has no work associated with it.
 
-> **Compliance alerts:** The workflow automatically suppresses `NO_ESTIMATE` for all epics — estimate is optional. `NO_REMAINING_WORK` is also suppressed when the epic's own `Estimate` is `0` or empty. If you set a non-zero `Estimate` directly on the epic, `Remaining Work` becomes required (the same as for any regular issue with an estimate).
+> **Compliance alerts:** The workflow automatically suppresses `NO_ESTIMATE` for all epics — estimate is optional. `NO_REMAINING_WORK` is also suppressed when the epic's own `Estimate` is `0` or empty. If you set a non-zero `Estimate` directly on the epic, `Remaining Work` becomes required (the same as for any regular issue with an estimate). `NO_DESCRIPTION` is always enforced for epics — all epics must have a non-empty issue body regardless of estimate.
 
 **Example:**
 ```
