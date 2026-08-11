@@ -11,4 +11,4 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 7,16,https://github.com/kubesmarts/logic-operator/issues/7,LogicFlowService Controller,ricardozanini,Backlog,,Cloud,Blocker,Serverless Logic,OSL.Next,,,,,0.0,0.0,0.0,,,2026-06-30,
 6,16,https://github.com/kubesmarts/logic-operator/issues/6,LogicFlowDefinition Controller,ricardozanini,Backlog,,Cloud,Blocker,Serverless Logic,OSL.Next,,,,,0.0,0.0,0.0,,,2026-06-30,
 5,16,https://github.com/kubesmarts/logic-operator/issues/5,LogicFlowRuntime Controller,ricardozanini,In progress,,Cloud,Blocker,Serverless Logic,OSL.Next,,1.0,0.5,0.5,1.0,0.5,0.5,,,2026-08-08,
-4,16,https://github.com/kubesmarts/logic-operator/issues/4,Core CRDs & API Types,ricardozanini,In progress,,Cloud,Blocker,Serverless Logic,OSL.Next,,0.5,0.5,0.0,0.5,0.5,0.0,,,2026-08-08,IN_PROGRESS_NO_WORK_REMAINING
+4,16,https://github.com/kubesmarts/logic-operator/issues/4,Core CRDs & API Types,ricardozanini,In review,,Cloud,Blocker,Serverless Logic,OSL.Next,,0.5,0.5,0.0,0.5,0.5,0.0,,,2026-08-11,
