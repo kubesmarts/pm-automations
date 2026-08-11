@@ -56,10 +56,15 @@ GET {JIRA_BASE_URL}/rest/api/3/filter/{filterId}
 GET {JIRA_BASE_URL}/rest/api/3/search/jql?jql={encodedJQL}&fields=key,project,status,summary,assignee,issuetype,priority,labels,fixVersions,timetracking,worklog,parent,resolution,updated&maxResults=1000&startAt={offset}
 ```
 
-**Page size:** 1000 (Jira Cloud maximum). This avoids a confirmed Jira Cloud API bug where
-queries containing `NOT IN` with more than 100 results return `isLast: false` indefinitely,
-repeating the same first page regardless of `startAt`. Using 1000 fetches all typical filter
-results in a single request, bypassing the bug entirely.
+**Page size:** 1000 (Jira Cloud maximum). Used as the default; however the Jira Cloud API
+silently caps responses at 100 results per page for certain query shapes.
+
+**Key-prefix split workaround:** Queries containing `NOT IN` or complex `AND` clauses trigger
+a confirmed Jira Cloud API bug where the API returns `isLast: false` indefinitely and ignores
+`startAt`, repeating the same first page. To work around this, such queries are split into
+100 sub-queries using 2-digit key prefixes (`PROJECT-00*` through `PROJECT-99*`). Each
+sub-bucket stays well under 100 results, so the short-page termination heuristic reliably
+ends each bucket in a single request.
 
 **Pagination termination (priority order):**
 1. `isLast: true` in response — stop when API signals last page

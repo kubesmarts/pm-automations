@@ -76,29 +76,27 @@ class IssueDiscovery {
     async fetchIssuesFromFilter(filterId) {
         const filter = await this.jiraClient.fetchFilter(filterId);
         const jql = filter.jql;
-        
-        // Check if we should use the split workaround
+
         if (this.shouldUseSplitWorkaround(jql)) {
             const projectKey = this.extractProjectKey(jql);
             if (projectKey) {
-                console.log(`Filter ${filterId} uses complex JQL, applying key-prefix split workaround`);
+                console.log(`Filter ${filterId} uses complex JQL, applying 2-digit key-prefix split workaround`);
                 return await this.jiraClient.fetchAllIssuesFromJqlWithSplit(jql, projectKey);
             }
         }
-        
+
         return await this.jiraClient.fetchAllIssuesFromJql(jql);
     }
 
     async fetchIssuesFromJql(jql) {
-        // Check if we should use the split workaround
         if (this.shouldUseSplitWorkaround(jql)) {
             const projectKey = this.extractProjectKey(jql);
             if (projectKey) {
-                console.log(`JQL uses complex query, applying key-prefix split workaround`);
+                console.log(`JQL uses complex query, applying 2-digit key-prefix split workaround`);
                 return await this.jiraClient.fetchAllIssuesFromJqlWithSplit(jql, projectKey);
             }
         }
-        
+
         return await this.jiraClient.fetchAllIssuesFromJql(jql);
     }
 }

@@ -76,17 +76,20 @@ class JiraClient {
     }
 
     async fetchAllIssuesFromJqlWithSplit(jql, projectKey) {
-        console.log(`Using key-prefix split workaround for project ${projectKey}`);
+        console.log(`Using 2-digit key-prefix split workaround for project ${projectKey}`);
         const allIssues = [];
         const issueKeys = new Set(); // Track unique issue keys to avoid duplicates
 
-        // Split by key prefix 0-9 to work around JIRA API pagination bug
-        for (let digit = 0; digit <= 9; digit++) {
-            const splitJql = `${jql} AND key ~ "${projectKey}-${digit}*"`;
-            console.log(`  Fetching issues with key prefix ${projectKey}-${digit}*`);
-            
+        // Split by 2-digit prefix (00-99) to keep each sub-bucket well under 100 issues,
+        // working around the Jira Cloud API bug where NOT IN queries with >100 results
+        // return isLast:false indefinitely and ignore startAt.
+        for (let i = 0; i <= 99; i++) {
+            const prefix = String(i).padStart(2, '0');
+            const splitJql = `${jql} AND key ~ "${projectKey}-${prefix}*"`;
+            console.log(`  Fetching issues with key prefix ${projectKey}-${prefix}*`);
+
             const issues = await this.fetchAllIssuesFromJql(splitJql);
-            
+
             // Add only unique issues
             let addedCount = 0;
             for (const issue of issues) {
@@ -96,7 +99,7 @@ class JiraClient {
                     addedCount++;
                 }
             }
-            
+
             console.log(`    Found ${issues.length} issues, added ${addedCount} unique`);
         }
 
