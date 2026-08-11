@@ -45,7 +45,7 @@ class JiraClient {
         return await this.makeRequest(`/rest/api/3/filter/${filterId}`);
     }
 
-    async searchIssues(jql, startAt = 0, maxResults = 100) {
+    async searchIssues(jql, startAt = 0, maxResults = 1000) {
         const encodedJql = encodeURIComponent(jql);
         const fields = 'summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,project,issuetype,parent,updated,aggregatetimeoriginalestimate,aggregatetimespent,aggregatetimeestimate';
         const endpoint = `/rest/api/3/search/jql?jql=${encodedJql}&fields=${fields}&maxResults=${maxResults}&startAt=${startAt}`;
@@ -57,14 +57,17 @@ class JiraClient {
     async fetchAllIssuesFromJql(jql) {
         const allIssues = [];
         let startAt = 0;
-        const maxResults = 100;
+        // Use 1000 (Jira Cloud maximum) to avoid a confirmed API bug: queries with NOT IN
+        // and >100 results return isLast:false indefinitely, repeating the same first page
+        // regardless of startAt. A page size of 1000 fetches typical filter results in one
+        // request, bypassing the bug entirely.
+        const maxResults = 1000;
         let isLast = false;
 
         do {
             const result = await this.searchIssues(jql, startAt, maxResults);
             allIssues.push(...result.issues);
-            // JIRA API v3 uses 'isLast' instead of 'total'
-            isLast = result.isLast || result.issues.length < maxResults;
+            isLast = result.isLast === true || result.issues.length < maxResults;
             startAt += maxResults;
         } while (!isLast);
 

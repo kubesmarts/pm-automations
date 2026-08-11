@@ -53,8 +53,19 @@ The workflow uses the same hybrid discovery approach as the compliance checker:
 GET {JIRA_BASE_URL}/rest/api/3/filter/{filterId}
 
 # Execute JQL (with pagination support)
-GET {JIRA_BASE_URL}/rest/api/3/search/jql?jql={encodedJQL}&fields=key,project,status,summary,assignee,issuetype,priority,labels,fixVersions,timetracking,worklog,parent,resolution,updated&maxResults=100&startAt={offset}
+GET {JIRA_BASE_URL}/rest/api/3/search/jql?jql={encodedJQL}&fields=key,project,status,summary,assignee,issuetype,priority,labels,fixVersions,timetracking,worklog,parent,resolution,updated&maxResults=1000&startAt={offset}
 ```
+
+**Page size:** 1000 (Jira Cloud maximum). This avoids a confirmed Jira Cloud API bug where
+queries containing `NOT IN` with more than 100 results return `isLast: false` indefinitely,
+repeating the same first page regardless of `startAt`. Using 1000 fetches all typical filter
+results in a single request, bypassing the bug entirely.
+
+**Pagination termination (priority order):**
+1. `isLast: true` in response — stop when API signals last page
+2. Short page — stop when `issues.length < maxResults` (final fallback)
+
+Note: the Jira Cloud `/search/jql` endpoint does not return a `total` field.
 
 **Required Fields:**
 - `key` - Issue key (e.g., SRVLOGIC-900)

@@ -174,3 +174,60 @@ test('fetchLinkedPullRequests: returns empty array and warns on API error', asyn
   assert.deepEqual(prs, []);
   assert.ok(warnings.some(w => w.includes('10004')));
 });
+
+// ---------------------------------------------------------------------------
+// fetchAllIssuesFromJql — pagination termination
+// ---------------------------------------------------------------------------
+
+test('fetchAllIssuesFromJql: single page — terminates on short page (< 1000)', async () => {
+  // Typical filter: all results fit in one page
+  const issues103 = Array.from({ length: 103 }, (_, i) => ({ key: `P-${i + 1}` }));
+  const client = makeClient(async () => ({ issues: issues103, isLast: false }));
+  const issues = await client.fetchAllIssuesFromJql('project=P');
+  assert.equal(issues.length, 103);
+});
+
+test('fetchAllIssuesFromJql: terminates on isLast:true for full pages', async () => {
+  // Two full pages of 1000, second page signals isLast:true
+  const makeIssues = (n, offset) => Array.from({ length: n }, (_, i) => ({ key: `P-${offset + i + 1}` }));
+  let call = 0;
+  const client = makeClient(async () => {
+    call++;
+    if (call === 1) return { issues: makeIssues(1000, 0),    isLast: false };
+    if (call === 2) return { issues: makeIssues(1000, 1000),  isLast: true };
+    throw new Error('Should not be called after isLast:true');
+  });
+  const issues = await client.fetchAllIssuesFromJql('project=P');
+  assert.equal(issues.length, 2000);
+  assert.equal(call, 2);
+});
+
+test('fetchAllIssuesFromJql: does not infinite-loop when Jira returns isLast:false indefinitely (NOT IN bug)', async () => {
+  // Confirmed Jira Cloud bug: NOT IN queries with >100 results return isLast:false on every page,
+  // repeating the same results. With maxResults=1000 all 103 results fit in one page
+  // (< 1000), so the short-page heuristic terminates after a single call.
+  const issues103 = Array.from({ length: 103 }, (_, i) => ({ key: `P-${i + 1}` }));
+  let call = 0;
+  const client = makeClient(async () => {
+    call++;
+    if (call > 1) throw new Error('Infinite loop: short page should have terminated after call 1');
+    return { issues: issues103, isLast: false }; // isLast:false (API bug) — short page saves us
+  });
+  const issues = await client.fetchAllIssuesFromJql('project=P');
+  assert.equal(issues.length, 103);
+  assert.equal(call, 1);
+});
+
+test('fetchAllIssuesFromJql: terminates on short page when isLast absent', async () => {
+  // Neither isLast nor total present — must terminate on short page
+  let call = 0;
+  const client = makeClient(async () => {
+    call++;
+    if (call === 1) return { issues: Array.from({ length: 1000 }, (_, i) => ({ key: `P-${i + 1}` })) };
+    if (call === 2) return { issues: [{ key: 'P-1001' }, { key: 'P-1002' }] }; // short page
+    throw new Error('Should not be called after short page');
+  });
+  const issues = await client.fetchAllIssuesFromJql('project=P');
+  assert.equal(issues.length, 1002);
+  assert.equal(call, 2);
+});
