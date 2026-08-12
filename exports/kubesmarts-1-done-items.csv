@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-77,,https://github.com/kubesmarts/pm-automations/issues/77,New `NO_DESCRIPTION` alert for GH checker workflow,skavgou,,PM,Major,,,,0.2,0.2,2026-08-07,,,
+77,,https://github.com/kubesmarts/pm-automations/issues/77,New `NO_DESCRIPTION` alert for GH checker workflow,skavgou,,PM,Major,,,,0.2,0.2,2026-08-12,,,
 78,,https://github.com/kubesmarts/pm-automations/issues/78,GH checker: New `PR_NOT_MERGED` alert. Issues marked as Done must have all linked PRs merged,skavgou,,PM,Critical,,,,0.4,0.5,2026-08-05,,,
 92,,https://github.com/kubesmarts/pm-automations/issues/92,JIRA checker: New `PR_NOT_MERGED` alert. Tickets marked as Done must have all linked PRs merged,dgutierr,,PM,Critical,,,,0.1,0.1,2026-08-05,,,
 95,,https://github.com/kubesmarts/pm-automations/issues/95,Add workflow to archive GitHub Project v2 items by composable filter,dgutierr,,PM,Major,,,,0.1,0.05,2026-08-04,,,

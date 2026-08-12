@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,,Runtimes,Normal,,Future,XL,4.2,,2026-08-12,,,"NO_TIME_SPENT, CHILDREN_STATUS"
+23,,https://github.com/casehubio/engine/issues/23,External Event Ingestion,treblereel,,Runtimes,Normal,,Future,L,1.0,0.0,2026-08-12,,,
+454,,https://github.com/casehubio/engine/issues/454,feat(acl): add security-impl module with JPA-backed flat grant enforcement,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-08-12,,,
+9,,https://github.com/casehubio/engine/issues/9,YAML schema support for typed expressions,treblereel,,Runtimes,Normal,,Future,L,1.0,0.0,2026-08-12,,,
 343,,https://github.com/casehubio/work/issues/343,Consolidate Flyway migrations into single initial schemas,treblereel,,Runtimes,Major,,Future,M,0.2,0.0,2026-08-09,,,
 327,,https://github.com/casehubio/engine/issues/327,HumanTaskTarget: support runtime-evaluated expiresIn — static YAML Duration can't vary per case instance,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-08-07,,,
 6,,https://github.com/tkobayas/drlx-lsp/issues/6,Implement Maven classpath resolution via ClasspathProvider,tkobayas,,Tooling,Major,,Future,S,0.2,0.2,2026-08-04,,,

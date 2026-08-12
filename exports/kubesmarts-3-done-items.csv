@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+4,,https://github.com/kubesmarts/logic-operator/issues/4,Core CRDs & API Types,ricardozanini,,Cloud,Blocker,Serverless Logic,OSL.Next,,0.5,0.5,2026-08-12,,,
+5,,https://github.com/kubesmarts/logic-operator/issues/5,LogicFlowRuntime Controller,ricardozanini,,Cloud,Blocker,Serverless Logic,OSL.Next,,0.5,0.5,2026-08-12,,,
+6,,https://github.com/kubesmarts/logic-operator/issues/6,LogicFlowDefinition Controller,ricardozanini,,Cloud,Blocker,Serverless Logic,OSL.Next,,0.5,0.5,2026-08-12,,,
 32,,https://github.com/kubesmarts/logic-apps/issues/32,Data Index ingestion bottleneck in Mode 3 with Kafka and postgresql: consider grouping events,mcruzdev,,Runtimes,Major,Serverless Logic,OSL.Next,,0.4,0.4,2026-07-04,,,
 23,,https://github.com/kubesmarts/logic-apps/issues/23,Implement Kafka-based event ingestion service for PostgreSQL backend (MODE 3),mcruzdev,,Runtimes,Major,Serverless Logic,OSL.Next,,1.0,1,2026-07-02,,,
 3,,https://github.com/kubesmarts/logic-operator/issues/3,Codebase Cleanup & Preparation,ricardozanini,,Cloud,Blocker,Serverless Logic,OSL.Next,,0.4,0.4,2026-06-30,,,
