@@ -48,7 +48,7 @@ In every GitHub Project you want to track, make sure the following fields exist 
 |----------------------|---------------|-------------------------------------------------------------------------------------------|
 | `Status`             | Single select | e.g. Backlog, Next, In Progress, In Review, Done                                                           |
 | `Priority`           | Single select | e.g. `Blocker`, `Critical`, `Major`, `Normal`, `Minor`                                    |
-| `Target Milestone`   | Text          | Target release milestone (e.g. `3.20`, `2025.Q2`). For backward compatibility, `Version` field is also supported |
+| `Target Milestone`   | Single select | Target release milestone (e.g. `3.20`, `2025.Q2`). For backward compatibility, `Version` field is also supported. **Auto-synced from the repo issue's Milestone** — see [Repo milestone sync](#repo-milestone-sync) below. |
 | `Estimate`           | Number        | Estimated effort in weeks (e.g. `2` = 2 weeks, `0.4` = 2 days, `0.1` = 4 hours)         |
 | `Remaining Work`     | Number        | Remaining effort in weeks                                                                 |
 | `Time Spent`         | Number        | Time already spent in weeks                                                               |
@@ -115,7 +115,7 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 | `IN_PROGRESS_NO_WORK_REMAINING` | `Remaining Work` is explicitly `0`, `Estimate` is greater than `0`, and `Status` is `In Progress` — work appears complete but status has not been updated (not raised for zero-estimate items) |
 | `NO_AREA` | `Area` is empty and `Status` is not `Backlog` |
 | `NO_PRIORITY` | `Priority` is empty and `Status` is not `Backlog` |
-| `NO_MILESTONE` | `Target Milestone` is empty and `Status` is not `Backlog` |
+| `NO_MILESTONE` | `Target Milestone` is empty and `Status` is not `Backlog`. Not raised when the repo milestone sync sets the value during the same run. |
 | `NO_TIME_SPENT` | `Time Spent` is empty and `Status` is `Done` |
 | `NO_ASSIGNEE` | Issue has no assignee and `Status` is `In Progress`, `In Review`, or `Done` |
 | `JIRA_NOT_FOUND` | `External Reference` is set but the JIRA ticket does not exist (HTTP 404 with JIRA error body) |
@@ -135,6 +135,30 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 - Parent is **not** `Backlog` or `Next`, but at least one child is `Backlog`
 
 Multiple codes are separated by `, ` (e.g. `NO_ESTIMATE, CHILDREN_STATUS`).
+
+---
+
+### Repo milestone sync
+
+On every run, for each project item linked to a GitHub issue, the workflow compares the **repo issue's native Milestone** field with the project item's **`Target Milestone`** (or `Version`) single-select field and applies one of the following actions:
+
+| Repo milestone | Repo timeline history | Project `Target Milestone` | Action |
+|----------------|----------------------|----------------------------|--------|
+| Set, and the title is a valid option | — | Different value (or empty) | **Set** the project field to the repo milestone title |
+| Set, and the title is a valid option | — | Already matches | No change (logged as "already in sync") |
+| Set, but **not** a valid option | — | Any | No change (logged with reason) |
+| Not set | **Has MILESTONED_EVENT** | Set | **Clear** the project field (unset event detected) |
+| Not set | **Has MILESTONED_EVENT** | Empty | No change (logged as "already in sync") |
+| Not set | **No MILESTONED_EVENT** | Set | No change (repo never had milestone, skipping clear) |
+| Not set | **No MILESTONED_EVENT** | Empty | No change (logged as "already in sync") |
+
+**Unset event detection:** To distinguish between a repo issue that had a milestone removed (unset event) vs. one that never had a milestone, the workflow queries the repo issue's timeline for `MILESTONED_EVENT` entries. If any exist, the repo issue previously had a milestone; if none exist, it never did.
+
+Sync actions are applied **before** the `NO_MILESTONE` compliance check, so a value set by the sync will suppress that alert for the same run.
+
+The list of valid options is fetched once per project at the start of each run and printed to the Actions log as `Target Milestone options: …`. All sync decisions (set, clear, skip, already-in-sync, and skipping clear when repo never had milestone) are logged with a `→ Milestone sync:` prefix so you can audit every decision.
+
+Dry-run mode logs what **would** be changed without making any modifications.
 
 ---
 
@@ -254,7 +278,7 @@ The workflow supports a **dry-run mode** for safe testing and validation:
 - ✅ Performs all validation checks and compliance rules
 - ✅ Logs all actions that would be taken with `[DRY-RUN]` prefix
 - ✅ Shows what fields would be updated and their new values
-- ❌ Does NOT write to GitHub Project fields (Reporting Date, Reporting Log, Alerts, Σ fields)
+- ❌ Does NOT write to GitHub Project fields (Reporting Date, Reporting Log, Alerts, Target Milestone, Σ fields)
 - ❌ Does NOT sync to JIRA
 - ❌ Does NOT create or update GitHub issues for errors/alerts
 
@@ -310,6 +334,7 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **`Alerts` shows `ESTIMATE_TOO_LONG`** → the item's `Estimate` is greater than 2 weeks and it is `In Progress`; consider breaking it down into smaller pieces of work, or move it back to `Backlog` / `Next` if the large estimate is intentional at this stage
 - **`Alerts` shows `NO_AREA`** → set the `Area` field on the project item, or move it back to `Backlog` if area classification is not yet applicable
 - **`Alerts` shows `NO_PRIORITY`** → set the `Priority` field on the project item, or move it back to `Backlog` if prioritization is not yet applicable
+- **`Alerts` shows `NO_MILESTONE`** → set the repo issue's **Milestone** field (the sync will propagate it to the project on the next run), or set `Target Milestone` directly on the project item. Move the item back to `Backlog` if the milestone is not yet decided
 - **`Alerts` shows `NO_TIME_SPENT`** → the item is `Done` but `Time Spent` is empty; log the actual time spent
 - **`Alerts` shows `NO_ASSIGNEE`** → the item is `In Progress`, `In Review`, or `Done` but has no assignee; assign it to the responsible person
 - **`Alerts` shows `JIRA_NOT_FOUND`** → the ticket ID in `External Reference` does not exist in JIRA; correct or remove the reference
