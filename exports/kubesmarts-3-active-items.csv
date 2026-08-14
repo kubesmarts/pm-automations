@@ -8,4 +8,3 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 10,16,https://github.com/kubesmarts/logic-operator/issues/10,End-to-End Testing (Phase 1 Validation),ricardozanini,Backlog,,QE,Blocker,Serverless Logic,OSL.Next,,,,,0.0,0.0,0.0,,,2026-06-30,
 9,16,https://github.com/kubesmarts/logic-operator/issues/9,Data Index Integration,ricardozanini,Backlog,,Cloud,Blocker,Serverless Logic,OSL.Next,,,,,0.0,0.0,0.0,,,2026-06-30,
 8,16,https://github.com/kubesmarts/logic-operator/issues/8,LogicPlatform Controller (Local Mode),ricardozanini,Backlog,,Cloud,Blocker,Serverless Logic,OSL.Next,,,,,0.0,0.0,0.0,,,2026-06-30,
-7,16,https://github.com/kubesmarts/logic-operator/issues/7,LogicFlowService Controller,ricardozanini,Backlog,,Cloud,Blocker,Serverless Logic,OSL.Next,,,,,0.0,0.0,0.0,,,2026-06-30,
