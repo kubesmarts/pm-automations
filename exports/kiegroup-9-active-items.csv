@@ -1,10 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 6841,,https://github.com/apache/incubator-kie/issues/6841,Review slow tests,tkobayas,In progress,,CI,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,,2026-08-05,
 6683,,https://github.com/apache/incubator-kie/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,0.0,2.0,0.0,9.5,2.8,6.6,,Added some more issues after a review of Mark Proctor,2026-07-08,CHILDREN_STATUS
-2389,2313,https://github.com/apache/incubator-kie-issues/issues/2389,Refactor: Move PropagationEntry to drools-base from drools-core,Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,1.0,1.0,1.0,1.0,1.0,,,2026-08-11,
-2388,2313,https://github.com/apache/incubator-kie-issues/issues/2388,Refactor: Move util linked-list/iterator types from drools-core to drools-base,Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,1.0,1.0,1.0,1.0,1.0,,,2026-08-11,
 2380,2313,https://github.com/apache/incubator-kie-issues/issues/2380,Drools Sequential: Simple sequence() functionality,Rikkola,In progress,,Runtimes,Normal,,Future,M,1.0,0.0,1.0,1.0,0.0,1.0,,,2026-07-17,
 2314,,https://github.com/apache/incubator-kie-issues/issues/2314,DRLGEN Investigate best plain English formats for DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,2.0,1.0,1.0,2.0,1.0,1.0,,,2026-05-16,
-2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools Sequential,Rikkola,In progress,,Runtimes,Normal,,Future,XL,0.0,0.0,0.0,3.0,2.0,3.0,,,2026-07-18,
+2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools Sequential,Rikkola,In progress,,Runtimes,Normal,,Future,XL,0.0,0.0,0.0,3.0,2.0,2.0,,,2026-07-18,
 97,,https://github.com/tkobayas/drlx-parser/issues/97,DRLX syntax review,tkobayas,In progress,,Docs,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,,2026-06-26,
 9,,https://github.com/tkobayas/drlx-lsp/issues/9,Completion features gap — 18 missing use cases,tkobayas,In progress,,Tooling,Major,,Future,M,1.0,0.2,0.8,1.0,0.2,0.8,,,2026-08-05,
