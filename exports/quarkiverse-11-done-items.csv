@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+840,,https://github.com/quarkiverse/quarkus-flow/issues/840,NullPointerException in `LeaseService` catch handlers on connectivity failures,mcruzdev,,,,,,,,,2026-08-15,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
+844,,https://github.com/quarkiverse/quarkus-flow/issues/844,Flaky test on WorkflowDiagramEditorTest#shouldShowLoadingBeforeDiagramEditor,domhanak,,,,,1.0.0,,,,2026-08-15,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
+845,,https://github.com/quarkiverse/quarkus-flow/issues/845,API key namespaces property should be Optional to respect @WithDefault,mcruzdev,,,,,1.0.0,,,,2026-08-15,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 283,,https://github.com/open-workflow-specification/editor/issues/283,feat: Reduce warnings in build and test logs,fantonangeli,,Tooling,Normal,,2026/Q3,M,0.4,0.4,2026-08-14,,,
 741,,https://github.com/quarkiverse/quarkus-flow/issues/741,docs: Remove quarkus.flow.durable.kube.member.lease.acquire-timeout property from documentation as it's not implemented yet,mcruzdev,,Runtimes,Major,,1.0.0,M,0.0,0.0,2026-08-12,,,
 1526,,https://github.com/open-workflow-specification/sdk-java/issues/1526,Implement attemp.duration,"mcruzdev,fjtirado",,Runtimes,Normal,,1.0.0,M,0.4,0.3,2026-08-12,,,
