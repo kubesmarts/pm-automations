@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+22,,https://github.com/casehubio/engine/issues/22,SLA/SLO Tracking and Deadline Monitoring,treblereel,,Runtimes,Normal,,Future,L,1.0,0.0,2026-08-17,,,
 2388,,https://github.com/apache/incubator-kie-issues/issues/2388,Refactor: Move util linked-list/iterator types from drools-core to drools-base,Rikkola,,Runtimes,Normal,,Future,S,1.0,1.0,2026-08-15,,,
 2389,,https://github.com/apache/incubator-kie-issues/issues/2389,Refactor: Move PropagationEntry to drools-base from drools-core,Rikkola,,Runtimes,Normal,,Future,S,1.0,1.0,2026-08-14,,,
 2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,,Runtimes,Normal,,Future,XL,4.2,,2026-08-12,,,"NO_TIME_SPENT, CHILDREN_STATUS"
