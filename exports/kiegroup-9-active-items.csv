@@ -5,4 +5,3 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 2314,,https://github.com/apache/incubator-kie-issues/issues/2314,DRLGEN Investigate best plain English formats for DRL generation,Rikkola,In progress,,Runtimes,Minor,,Future,S,2.0,1.0,1.0,2.0,1.0,1.0,,,2026-05-16,
 2313,,https://github.com/apache/incubator-kie-issues/issues/2313,Drools Sequential,Rikkola,In progress,,Runtimes,Normal,,Future,XL,0.0,0.0,0.0,3.0,2.0,1.0,,,2026-07-18,
 97,,https://github.com/tkobayas/drlx-parser/issues/97,DRLX syntax review,tkobayas,In progress,,Docs,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,,2026-06-26,
-9,,https://github.com/tkobayas/drlx-lsp/issues/9,Completion features gap — 18 missing use cases,tkobayas,In progress,,Tooling,Major,,Future,M,1.0,0.2,0.8,1.0,0.2,0.8,,,2026-08-05,
