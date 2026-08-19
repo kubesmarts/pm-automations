@@ -1,8 +1,11 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+843,,https://github.com/quarkiverse/quarkus-flow/issues/843,Watch source path for new workflow definitions at runtime,ricardozanini,,Runtimes,Critical,,1.0.0,S,0.1,0.1,2026-08-19,,,
+850,,https://github.com/quarkiverse/quarkus-flow/issues/850,PoolMemberController must not acquire a lease that differs from applicationId,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.2,0.2,2026-08-19,,,
+859,,https://github.com/quarkiverse/quarkus-flow/issues/859,bug: greeting-runner and opentelemetry examples throwing error,mcruzdev,,,,,1.0.0,,,,2026-08-19,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
+860,,https://github.com/quarkiverse/quarkus-flow/issues/860,RCE via unrestricted Class.forName() in FuncJacksonModule deserialization,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,0.1,2026-08-19,,,
+861,,https://github.com/quarkiverse/quarkus-flow/issues/861,Runner security: auth disabled by default with admin roles + timing attack on API key comparison,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,,2026-08-19,,,NO_TIME_SPENT
 318,,https://github.com/open-workflow-specification/editor/issues/318,"feat: Implement state management, undo / redo capabilities and component API",handreyrc,,Tooling,Normal,,2026/Q3,M,1.0,0.7,2026-08-18,,,
 320,,https://github.com/open-workflow-specification/editor/issues/320,feat: Expose schema in sdk to editor,lornakelly,,Tooling,Normal,,2026/Q3,M,0.6,0.2,2026-08-18,,,
-843,,https://github.com/quarkiverse/quarkus-flow/issues/843,Watch source path for new workflow definitions at runtime,ricardozanini,,Runtimes,Critical,,1.0.0,S,0.4,,2026-08-18,,,NO_TIME_SPENT
-850,,https://github.com/quarkiverse/quarkus-flow/issues/850,PoolMemberController must not acquire a lease that differs from applicationId,ricardozanini,,,,,1.0.0,,,,2026-08-18,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 854,,https://github.com/quarkiverse/quarkus-flow/issues/854,@LookupIfProperty prevents auto-enabling metrics when Micrometer is on classpath,mcruzdev,,,,,1.0.0,,,,2026-08-18,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 840,,https://github.com/quarkiverse/quarkus-flow/issues/840,NullPointerException in `LeaseService` catch handlers on connectivity failures,mcruzdev,,,,,,,,,2026-08-15,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 844,,https://github.com/quarkiverse/quarkus-flow/issues/844,Flaky test on WorkflowDiagramEditorTest#shouldShowLoadingBeforeDiagramEditor,domhanak,,,,,1.0.0,,,,2026-08-15,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
