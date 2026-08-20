@@ -70,6 +70,11 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1005,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1005,Create release tickets,baldimir,Next,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0,0.025,0.025,,0.025,,,2026-08-13,
 1003,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1003,Build CR1,saumya1singh,In review,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,1,0.925,0.075,1,0.925,0.075,,,2026-08-18,
 1001,,https://redhat.atlassian.net/browse/SRVLOGIC-1001,Release of 1.39,saumya1singh,In review,Epic,Productization,Critical,Serverless logic,1.39.0 OSL,,0,0.25,0,5.225,4.825,1.1,,,2026-08-16,
+1144,,https://redhat.atlassian.net/browse/SRVLOGIC-1144, logic-operator-builder-config contains builder image tag reference with `main`,wmedvede,Next,Bug,Cloud,Major,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-08-20,
+1143,,https://redhat.atlassian.net/browse/SRVLOGIC-1143,Update Go in midstream CI,baldimir,In progress,Task,CI,Normal,Serverless logic,1.40.0 OSL,,0.1,0.025,0.075,0.1,0.025,0.075,,,2026-08-19,
+1142,,https://redhat.atlassian.net/browse/SRVLOGIC-1142,Update a security update of otel library. ,baldimir,In review,Task,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.125,0.125,0.025,0.125,0.125,0.025,,,2026-08-20,
+1141,,https://redhat.atlassian.net/browse/SRVLOGIC-1141,Backport security fixes to 1.39 from main #1,baldimir,In review,Task,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.2,0.175,0.025,0.2,0.175,0.025,,,2026-08-20,
+1140,,https://redhat.atlassian.net/browse/SRVLOGIC-1140,Update Maven caching GitHub Action in kubesmarts/kie-tools so it works with non-main branches. ,baldimir,Next,Task,CI,Normal,Serverless logic,1.40.0 OSL,,0.6,0,0.6,0.6,,0.6,,,2026-08-19,
 1139,,https://redhat.atlassian.net/browse/SRVLOGIC-1139,Enable 9.106.x nightly builds for 1.39,baldimir,In review,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.05,0.05,0,0.05,0.05,,,,2026-08-18,
 1134,,https://redhat.atlassian.net/browse/SRVLOGIC-1134,Remove last traces of Spring Boot from codebase,baldimir,In review,Task,Core,Major,Serverless logic,1.40.0 OSL,,0.1,0.1,0,0.1,0.1,,,,2026-08-17,
 1133,,https://redhat.atlassian.net/browse/SRVLOGIC-1133,1.39.0 Cut-off and prod build - incorrect update of CSV for operator,jankrystof-ibm,Next,Bug,,Blocker,Serverless logic,1.39.0 OSL,,0,0,0,,,,,,2026-08-15,NO_COMPONENT
