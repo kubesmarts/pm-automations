@@ -761,6 +761,20 @@ test('stateReason guard: non-Done status is never skipped regardless of stateRea
  *   state           {string}  — "OPEN", "CLOSED", "MERGED"
  *   merged          {boolean}
  */
+/**
+ * Build a timelineItem node for evalPRNotMerged / evalAllPRsMerged.
+ * type: 'cross' (CrossReferencedEvent, default) or 'connected' (ConnectedEvent).
+ */
+function makeTimelineNode({ type = 'cross', willCloseTarget = true, number, state, merged }) {
+  if (type === 'connected') {
+    return { subject: { number, state, merged } };
+  }
+  return {
+    willCloseTarget,
+    source: { number, state, merged },
+  };
+}
+
 function evalPRNotMerged({ statusLC, issueNumber, timelineItems }) {
   // Build a minimal item JSON matching what the GraphQL query returns.
   const itemJson = JSON.stringify({
@@ -878,4 +892,222 @@ test('PR_NOT_MERGED: not raised for Done issue when closing PR was closed withou
     timelineItems: [{ willCloseTarget: true, number: 10, state: 'CLOSED', merged: false }],
   });
   assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED for closed-without-merge PR, got: "${codes}"`);
+});
+
+// ---------------------------------------------------------------------------
+// ALL_PRS_MERGED tests (GH checker — bash script extracted from YAML)
+// ---------------------------------------------------------------------------
+
+/**
+ * Evaluates the ALL_PRS_MERGED bash rule extracted from the YAML workflow.
+ * Returns the trimmed stdout (SYNC_STATUS_CODES).
+ */
+function evalAllPRsMerged({ statusLC, issueNumber, timelineItems }) {
+  const itemJson = JSON.stringify({
+    content: {
+      number: issueNumber || null,
+      timelineItems: {
+        nodes: (timelineItems || []).map(pr =>
+          makeTimelineNode({
+            type: pr.type || 'cross',
+            willCloseTarget: pr.willCloseTarget,
+            number: pr.number,
+            state:  pr.state,
+            merged: pr.merged,
+          })
+        )
+      }
+    }
+  });
+
+  const script = `
+STATUS_LC=${JSON.stringify(statusLC)}
+ISSUE_NUMBER=${JSON.stringify(String(issueNumber ?? ''))}
+item=${JSON.stringify(itemJson)}
+SYNC_STATUS_CODES=""
+
+if [ "$STATUS_LC" != "done" ] && [ -n "$ISSUE_NUMBER" ]; then
+  MERGED_LINKED_PRS=$(echo "$item" | jq -r '
+    [.content.timelineItems.nodes[]? |
+     select(
+       ((.source.number != null) and .source.state == "MERGED") or
+       ((.subject.number != null) and .subject.state == "MERGED")
+     )] |
+    length')
+  OPEN_LINKED_PRS=$(echo "$item" | jq -r '
+    [.content.timelineItems.nodes[]? |
+     select(
+       ((.source.number != null) and .source.state == "OPEN") or
+       ((.subject.number != null) and .subject.state == "OPEN")
+     )] |
+    length')
+  if [ "\${MERGED_LINKED_PRS:-0}" -gt 0 ] && [ "\${OPEN_LINKED_PRS:-0}" -eq 0 ]; then
+    SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }ALL_PRS_MERGED"
+  fi
+fi
+
+echo "\$SYNC_STATUS_CODES"
+`;
+  return bash(script);
+}
+
+test('ALL_PRS_MERGED: raised for non-Done issue with all closing PRs merged', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '42',
+    timelineItems: [{ willCloseTarget: true, number: 10, state: 'MERGED', merged: true }],
+  });
+  assert.ok(codes.includes('ALL_PRS_MERGED'), `Expected ALL_PRS_MERGED, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: raised for In Review issue with all closing PRs merged', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in review',
+    issueNumber: '42',
+    timelineItems: [{ willCloseTarget: true, number: 10, state: 'MERGED', merged: true }],
+  });
+  assert.ok(codes.includes('ALL_PRS_MERGED'), `Expected ALL_PRS_MERGED for In Review, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: not raised when at least one closing PR is still open', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '42',
+    timelineItems: [
+      { willCloseTarget: true, number: 10, state: 'MERGED', merged: true },
+      { willCloseTarget: true, number: 11, state: 'OPEN',   merged: false },
+    ],
+  });
+  assert.ok(!codes.includes('ALL_PRS_MERGED'), `Unexpected ALL_PRS_MERGED when open PR exists, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: not raised when there are no linked closing PRs', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '42',
+    timelineItems: [],
+  });
+  assert.ok(!codes.includes('ALL_PRS_MERGED'), `Unexpected ALL_PRS_MERGED with no PRs, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: not raised for Done items even when all PRs are merged', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'done',
+    issueNumber: '42',
+    timelineItems: [{ willCloseTarget: true, number: 10, state: 'MERGED', merged: true }],
+  });
+  assert.ok(!codes.includes('ALL_PRS_MERGED'), `Unexpected ALL_PRS_MERGED for Done item, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: not raised for draft items (no issue number)', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '',
+    timelineItems: [{ willCloseTarget: true, number: 10, state: 'MERGED', merged: true }],
+  });
+  assert.ok(!codes.includes('ALL_PRS_MERGED'), `Unexpected ALL_PRS_MERGED for draft item, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: raised even when willCloseTarget is false (any linked merged PR counts)', () => {
+  // Real-world: PR mentions the issue but willCloseTarget is false — still a signal work is done.
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '42',
+    timelineItems: [{ willCloseTarget: false, number: 10, state: 'MERGED', merged: true }],
+  });
+  assert.ok(codes.includes('ALL_PRS_MERGED'), `Expected ALL_PRS_MERGED for willCloseTarget=false merged PR, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: raised with multiple merged closing PRs and no open ones', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '42',
+    timelineItems: [
+      { willCloseTarget: true, number: 10, state: 'MERGED', merged: true },
+      { willCloseTarget: true, number: 11, state: 'MERGED', merged: true },
+    ],
+  });
+  assert.ok(codes.includes('ALL_PRS_MERGED'), `Expected ALL_PRS_MERGED with multiple merged PRs, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: not raised when closing PR was closed without merging (no open, no merged)', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '42',
+    timelineItems: [{ willCloseTarget: true, number: 10, state: 'CLOSED', merged: false }],
+  });
+  assert.ok(!codes.includes('ALL_PRS_MERGED'), `Unexpected ALL_PRS_MERGED for closed-without-merge PR, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: raised for Next status with all closing PRs merged', () => {
+  for (const statusLC of ['next', 'backlog']) {
+    const codes = evalAllPRsMerged({
+      statusLC,
+      issueNumber: '42',
+      timelineItems: [{ willCloseTarget: true, number: 10, state: 'MERGED', merged: true }],
+    });
+    assert.ok(codes.includes('ALL_PRS_MERGED'),
+      `Expected ALL_PRS_MERGED for status "${statusLC}", got: "${codes}"`);
+  }
+});
+
+// ConnectedEvent variants (sidebar-linked PRs)
+test('PR_NOT_MERGED: raised for Done issue with open ConnectedEvent PR', () => {
+  const codes = evalPRNotMerged({
+    statusLC: 'done',
+    issueNumber: '42',
+    timelineItems: [{ type: 'connected', number: 10, state: 'OPEN', merged: false }],
+  });
+  assert.ok(codes.includes('PR_NOT_MERGED'), `Expected PR_NOT_MERGED for ConnectedEvent open PR, got: "${codes}"`);
+});
+
+test('PR_NOT_MERGED: not raised for Done issue with merged ConnectedEvent PR', () => {
+  const codes = evalPRNotMerged({
+    statusLC: 'done',
+    issueNumber: '42',
+    timelineItems: [{ type: 'connected', number: 10, state: 'MERGED', merged: true }],
+  });
+  assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED for ConnectedEvent merged PR, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: raised for non-Done issue with merged ConnectedEvent PR', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '42',
+    timelineItems: [{ type: 'connected', number: 10, state: 'MERGED', merged: true }],
+  });
+  assert.ok(codes.includes('ALL_PRS_MERGED'), `Expected ALL_PRS_MERGED for ConnectedEvent merged PR, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: not raised when ConnectedEvent PR is still open', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '42',
+    timelineItems: [{ type: 'connected', number: 10, state: 'OPEN', merged: false }],
+  });
+  assert.ok(!codes.includes('ALL_PRS_MERGED'), `Unexpected ALL_PRS_MERGED when ConnectedEvent PR is open, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: raised with mixed cross+connected PRs both merged', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '42',
+    timelineItems: [
+      { type: 'cross',     willCloseTarget: true, number: 10, state: 'MERGED', merged: true },
+      { type: 'connected',                        number: 11, state: 'MERGED', merged: true },
+    ],
+  });
+  assert.ok(codes.includes('ALL_PRS_MERGED'), `Expected ALL_PRS_MERGED for mixed merged PRs, got: "${codes}"`);
+});
+
+test('ALL_PRS_MERGED: not raised when ConnectedEvent PR is open alongside merged cross PR', () => {
+  const codes = evalAllPRsMerged({
+    statusLC: 'in progress',
+    issueNumber: '42',
+    timelineItems: [
+      { type: 'cross',     willCloseTarget: true, number: 10, state: 'MERGED', merged: true },
+      { type: 'connected',                        number: 11, state: 'OPEN',   merged: false },
+    ],
+  });
+  assert.ok(!codes.includes('ALL_PRS_MERGED'), `Unexpected ALL_PRS_MERGED when one ConnectedEvent PR is open, got: "${codes}"`);
 });

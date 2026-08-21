@@ -430,6 +430,32 @@ jobs:
                 fi
               fi
 
+              # ALL_PRS_MERGED: non-Done issue has linked PRs but all are already merged.
+              # Signals that work is complete but the item has not been transitioned to Done.
+              # Counts ALL linked PRs (any CrossReferencedEvent source or ConnectedEvent subject),
+              # regardless of willCloseTarget — any merged PR linked to the issue is signal enough.
+              # An open linked PR suppresses the alert (work is still in flight).
+              # PRs closed without merging (CLOSED state) are not counted.
+              if [ "$STATUS_LC" != "done" ] && [ -n "$ISSUE_NUMBER" ]; then
+                MERGED_LINKED_PRS=$(echo "$item" | jq -r '
+                  [.content.timelineItems.nodes[]? |
+                   select(
+                     ((.source.number != null) and .source.state == "MERGED") or
+                     ((.subject.number != null) and .subject.state == "MERGED")
+                   )] |
+                  length')
+                OPEN_LINKED_PRS=$(echo "$item" | jq -r '
+                  [.content.timelineItems.nodes[]? |
+                   select(
+                     ((.source.number != null) and .source.state == "OPEN") or
+                     ((.subject.number != null) and .subject.state == "OPEN")
+                   )] |
+                  length')
+                if [ "${MERGED_LINKED_PRS:-0}" -gt 0 ] && [ "${OPEN_LINKED_PRS:-0}" -eq 0 ]; then
+                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }ALL_PRS_MERGED"
+                fi
+              fi
+
               # Skip if nothing has changed; still write Alerts to reflect current validation results
               if [ "$AREA"           = "$LAST_AREA"           ] && \
                  [ "$STATUS"         = "$LAST_STATUS"         ] && \
@@ -827,11 +853,20 @@ jobs:
                               name
                             }
                             assignees(first: 5) { nodes { login } }
-                            timelineItems(first: 25, itemTypes: [CROSS_REFERENCED_EVENT]) {
+                            timelineItems(first: 25, itemTypes: [CROSS_REFERENCED_EVENT, CONNECTED_EVENT]) {
                               nodes {
                                 ... on CrossReferencedEvent {
                                   willCloseTarget
                                   source {
+                                    ... on PullRequest {
+                                      number
+                                      state
+                                      merged
+                                    }
+                                  }
+                                }
+                                ... on ConnectedEvent {
+                                  subject {
                                     ... on PullRequest {
                                       number
                                       state
@@ -992,11 +1027,20 @@ jobs:
                                 name
                               }
                               assignees(first: 5) { nodes { login } }
-                              timelineItems(first: 25, itemTypes: [CROSS_REFERENCED_EVENT]) {
+                              timelineItems(first: 25, itemTypes: [CROSS_REFERENCED_EVENT, CONNECTED_EVENT]) {
                                 nodes {
                                   ... on CrossReferencedEvent {
                                     willCloseTarget
                                     source {
+                                      ... on PullRequest {
+                                        number
+                                        state
+                                        merged
+                                      }
+                                    }
+                                  }
+                                  ... on ConnectedEvent {
+                                    subject {
                                       ... on PullRequest {
                                         number
                                         state
