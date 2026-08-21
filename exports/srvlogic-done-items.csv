@@ -1,4 +1,17 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1086,,https://redhat.atlassian.net/browse/SRVLOGIC-1086,Upgrade Quarkus to 3.27.4.1,baldimir,Task,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.125,0.0542,2026-08-20,,,
+1070,,https://redhat.atlassian.net/browse/SRVLOGIC-1070,Reuse midstream-mvn-config/settings.xml in all GitHub workflows in kubesmarts/kie-tools workflows. ,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0.4042,2026-08-20,,,
+1053,,https://redhat.atlassian.net/browse/SRVLOGIC-1053,[OSL nightly] Operator Bundle reintroduced relatedImages section again,baldimir,Bug,CI,Blocker,Serverless logic,1.39.0 OSL,,0.1,0.0583,2026-08-20,,,
+1039,,https://redhat.atlassian.net/browse/SRVLOGIC-1039,Upgrade Quarkus to 3.27.4,baldimir,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.2,0.1021,2026-08-20,,,
+1034,,https://redhat.atlassian.net/browse/SRVLOGIC-1034,Remove Dashbuilder from kie-tools samples catalog,fantonangeli,Task,Tooling,Critical,Serverless logic,1.39.0 OSL,,0.2,0.2042,2026-08-20,,,
+1031,,https://redhat.atlassian.net/browse/SRVLOGIC-1031,Nodejs needs to be updated to 24 in Jenkins machines. ,baldimir,Task,CI,Normal,Serverless logic,1.39.0 OSL,,0.1,0.0292,2026-08-20,,,
+1030,,https://redhat.atlassian.net/browse/SRVLOGIC-1030,Source ansible Python venv in provisioning jobs,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0.1,2026-08-20,,,
+1008,,https://redhat.atlassian.net/browse/SRVLOGIC-1008,Removal of non-OSL packages from kie-tools -> bpmn-editor and related packages,domhanak,Story,CI,Critical,Serverless logic,1.39.0 OSL,,1,0.4,2026-08-20,,,
+1007,,https://redhat.atlassian.net/browse/SRVLOGIC-1007,Remove RHBOP jobs,baldimir,Task,CI,Normal,Serverless logic,1.39.0 OSL,,0.1,0.0271,2026-08-20,,,
+987,,https://redhat.atlassian.net/browse/SRVLOGIC-987,Remove unneeded kiegroup/kogito-examples,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.2021,2026-08-20,,,
+986,,https://redhat.atlassian.net/browse/SRVLOGIC-986,Remove custom Maven artifacts automation from kie-tools. ,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0.4042,2026-08-20,,,
+984,,https://redhat.atlassian.net/browse/SRVLOGIC-984,kie-tools repository in Jenkins nightly builds doesn't properly use the settings.xml file from Jenkins,baldimir,Bug,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0.4021,2026-08-20,,,
+999,,https://redhat.atlassian.net/browse/SRVLOGIC-999,Remove Dashbuilder from kie-tools,fantonangeli,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,2,0.7063,2026-08-20,,,
 1002,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1002,Prepare for the cutoff,saumya1singh,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,2,0.425,2026-08-15,,,
 1098,1056,https://redhat.atlassian.net/browse/SRVLOGIC-1098,[IBM test migration] Update nodejs version and fix go PATH for go install,jakubschwan,Sub-task,,Major,Serverless logic,1.40.0 OSL,,0.1,0.1,2026-08-12,,,NO_COMPONENT
 1090,1056,https://redhat.atlassian.net/browse/SRVLOGIC-1090,[IBM test migration] Add kie-tools repo build tools to able playbooks,jakubschwan,Sub-task,,Blocker,Serverless logic,1.40.0 OSL,,0.1,0.1,2026-08-12,,,NO_COMPONENT
