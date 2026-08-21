@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+338,,https://github.com/open-workflow-specification/editor/issues/338,Bug: sdk-typescript workflow serialization to YAML is broken,handreyrc,,Tooling,Major,,2026/Q3,S,0.2,0.2,2026-08-21,,,
+868,,https://github.com/quarkiverse/quarkus-flow/issues/868,Preparation for 1.0.0 release,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,0.0,2026-08-21,,,
 861,,https://github.com/quarkiverse/quarkus-flow/issues/861,Runner security: auth disabled by default with admin roles + timing attack on API key comparison,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,0.1,2026-08-20,,,
 300,,https://github.com/open-workflow-specification/editor/issues/300,feat: Create/update Storybook Stories for Node Editing,cheryl7114,,Tooling,Normal,,2026/Q4,M,0.8,0.6,2026-08-20,,,
 862,,https://github.com/quarkiverse/quarkus-flow/issues/862,One malformed workflow file blocks all subsequent files and marks engine DOWN,mcruzdev,,,,,1.0.0,,,,2026-08-20,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
