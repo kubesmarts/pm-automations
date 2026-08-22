@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+859,,https://github.com/quarkiverse/quarkus-flow/issues/859,bug: greeting-runner and opentelemetry examples throwing error,"ricardozanini,mcruzdev",,Runtimes,Blocker,,1.0.0,S,0.1,0.1,2026-08-22,,,
+808,,https://github.com/quarkiverse/quarkus-flow/issues/808,inputFrom(CloudEvent::getData) fails — bare Function path uses asJavaObject() instead of model.as(),"ricardozanini,fjtirado",,Runtimes,Blocker,,1.0.0,XS,0.1,0.1,2026-08-22,,,
+325,,https://github.com/open-workflow-specification/editor/issues/325,"feat: Add core edit API for modifying the model (update, replace, add and  delete tasks)",handreyrc,,Tooling,Normal,,2026/Q3,S,0.3,0.3,2026-08-22,,,
+884,,https://github.com/quarkiverse/quarkus-flow/issues/884,"Add a ""References"" page to share blogs and talks about Quarkus Flow",mcruzdev,,,,,1.1.0,,,,2026-08-22,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 338,,https://github.com/open-workflow-specification/editor/issues/338,Bug: sdk-typescript workflow serialization to YAML is broken,handreyrc,,Tooling,Major,,2026/Q3,S,0.2,0.2,2026-08-21,,,
 868,,https://github.com/quarkiverse/quarkus-flow/issues/868,Preparation for 1.0.0 release,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,0.0,2026-08-21,,,
 861,,https://github.com/quarkiverse/quarkus-flow/issues/861,Runner security: auth disabled by default with admin roles + timing attack on API key comparison,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,0.1,2026-08-20,,,
@@ -7,7 +11,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 877,,https://github.com/quarkiverse/quarkus-flow/issues/877,Support run.shell / run.script / run.workflow (RunnableTaskBuilder SPI) under native image,mcruzdev,,,,,1.0.0,,,,2026-08-20,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 843,,https://github.com/quarkiverse/quarkus-flow/issues/843,Watch source path for new workflow definitions at runtime,ricardozanini,,Runtimes,Critical,,1.0.0,S,0.1,0.1,2026-08-19,,,
 850,,https://github.com/quarkiverse/quarkus-flow/issues/850,PoolMemberController must not acquire a lease that differs from applicationId,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.2,0.2,2026-08-19,,,
-859,,https://github.com/quarkiverse/quarkus-flow/issues/859,bug: greeting-runner and opentelemetry examples throwing error,mcruzdev,,,,,1.0.0,,,,2026-08-19,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 860,,https://github.com/quarkiverse/quarkus-flow/issues/860,RCE via unrestricted Class.forName() in FuncJacksonModule deserialization,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,0.1,2026-08-19,,,
 318,,https://github.com/open-workflow-specification/editor/issues/318,"feat: Implement state management, undo / redo capabilities and component API",handreyrc,,Tooling,Normal,,2026/Q3,M,1.0,0.7,2026-08-18,,,
 320,,https://github.com/open-workflow-specification/editor/issues/320,feat: Expose schema in sdk to editor,lornakelly,,Tooling,Normal,,2026/Q3,M,0.6,0.2,2026-08-18,,,
@@ -31,7 +34,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 810,,https://github.com/quarkiverse/quarkus-flow/issues/810,ContentBasedRouterEventsPublisher still uses MutinyEmitter<byte[]> in 0.15.0 — #799 fix incomplete,ricardozanini,,Runtimes,Blocker,,1.0.0,M,0.3,0.3,2026-08-12,,,
 799,,https://github.com/quarkiverse/quarkus-flow/issues/799,Messaging CloudEvent encoding is non-standard on both producer and consumer,ricardozanini,,Runtimes,Blocker,,1.0.0,M,0.2,0.2,2026-08-12,,,
 802,,https://github.com/quarkiverse/quarkus-flow/issues/802,Add select() and envelope().select() to DSL for CloudEvent data extraction,ricardozanini,,Runtimes,Major,,1.0.0,S,0.1,0.1,2026-08-12,,,
-808,,https://github.com/quarkiverse/quarkus-flow/issues/808,inputFrom(CloudEvent::getData) fails — bare Function path uses asJavaObject() instead of model.as(),"ricardozanini,fjtirado",,Runtimes,Blocker,,1.0.0,XS,0.1,0.1,2026-08-12,,,
 51,,https://github.com/quarkiverse/quarkus-flow/issues/51,epic: Integrate Serverless Workflow Editor into DevUI,lornakelly,,Tooling,Major,,1.0.0,,0.0,0.0,2026-08-12,,,
 773,,https://github.com/quarkiverse/quarkus-flow/issues/773,bug: Fix OIDC authentication and namespace authorization in Runner,gmunozfe,,Runtimes,Major,,1.0.0,M,0.8,0.7,2026-08-12,,,
 275,,https://github.com/open-workflow-specification/editor/issues/275,bug: Edges not centred in QF on start and end nodes,lornakelly,,Tooling,Major,,1.0.0,M,0.2,0.2,2026-08-12,,,
