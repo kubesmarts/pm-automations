@@ -1,5 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-1018,,https://redhat.atlassian.net/browse/SRVLOGIC-1018,Removal of non-OSL packages from kie-tools -> dmn-* and related packages,domhanak,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0,2026-08-25,,,NO_TIME_SPENT
+1018,,https://redhat.atlassian.net/browse/SRVLOGIC-1018,Removal of non-OSL packages from kie-tools -> dmn-* and related packages,domhanak,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,2026-08-25,,,NO_TIME_SPENT
+1012,,https://redhat.atlassian.net/browse/SRVLOGIC-1012,Removal of non-OSL packages from kie-tools -> pmml-vscode-extension,domhanak,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.025,0,2026-08-25,,,
+1139,,https://redhat.atlassian.net/browse/SRVLOGIC-1139,Enable 9.106.x nightly builds for 1.39,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.05,0.05,2026-08-25,,,
+1119,,https://redhat.atlassian.net/browse/SRVLOGIC-1119,Investigate failing kogito.nightllies - CDI issues,jankrystof-ibm,Task,CI,Critical,Serverless logic,1.39.0 OSL,,0,0.1375,2026-08-25,,,NO_ESTIMATE
+591,,https://redhat.atlassian.net/browse/SRVLOGIC-591,Publish bundle images to quay.io/kubesmarts ,baldimir,Story,CI,Critical,Serverless logic,1.39.0 OSL,,1,0.9,2026-08-25,,,
+707,,https://redhat.atlassian.net/browse/SRVLOGIC-707,Add Operator bundle into product build CI,baldimir,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0.4,0.1,2026-08-25,,,
 944,,https://redhat.atlassian.net/browse/SRVLOGIC-944,Update documentation of OSL productization process after OSL 1.38 release,saumya1singh,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.05,0.0125,2026-08-25,,,
 1071,,https://redhat.atlassian.net/browse/SRVLOGIC-1071,Weekly image publishing pipeline needs to override image names,baldimir,Bug,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0.075,2026-08-24,,,
 1029,,https://redhat.atlassian.net/browse/SRVLOGIC-1029,Remediate instance running smee-clients in rhos-d,domhanak,Spike,,Blocker,Serverless logic,1.39.0 OSL,,0.05,0.05,2026-08-24,,,
