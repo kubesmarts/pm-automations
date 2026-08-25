@@ -1,16 +1,15 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-1627,,https://github.com/open-workflow-specification/sdk-java/issues/1627,Register ProcessResult for GraalVM native-image reflection,mcruzdev,In progress,,Runtimes,,,,,,,,0.0,0.0,0.0,,,2026-08-20,"NO_ESTIMATE, NO_REMAINING_WORK, NO_PRIORITY, NO_MILESTONE"
+1627,,https://github.com/open-workflow-specification/sdk-java/issues/1627,Register ProcessResult for GraalVM native-image reflection,mcruzdev,In progress,,Runtimes,Major,,2026/Q3,,0.2,,0.1,0.2,0.0,0.1,,,2026-08-25,
 1613,,https://github.com/open-workflow-specification/sdk-java/issues/1613,Improve Json serialization for Collection interfaces,fjtirado,Next,,Runtimes,Major,,2026/Q3,M,0.5,,0.4,0.5,0.0,0.4,,,2026-08-12,
 1612,,https://github.com/open-workflow-specification/sdk-java/issues/1612,Add test for hard coded collections in For task,fjtirado,Next,,Runtimes,Normal,,2026/Q3,S,0.1,0.1,0.0,0.1,0.1,0.0,,Waiting on decision on workflow specification,2026-08-12,
 1607,,https://github.com/open-workflow-specification/sdk-java/issues/1607,Implement async call,mcruzdev,In progress,,Runtimes,Major,,2026/Q3,,2.0,0.4,1.6,2.0,0.4,1.6,,,2026-08-14,
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0.0,0.0,0.0,,,2026-08-12,
 1485,,https://github.com/open-workflow-specification/sdk-java/issues/1485,Handle missing a2a operations,fjtirado,Backlog,,Runtimes,,,2026/Q4,S,,,,0.0,0.0,0.0,,,2026-08-12,
-887,,https://github.com/quarkiverse/quarkus-flow/issues/887,Parallelize the Build with Integration Tests CI pipeline,mcruzdev,In progress,,,,,1.1.0,,,,,0.0,0.0,0.0,,,2026-08-22,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY"
 874,,https://github.com/quarkiverse/quarkus-flow/issues/874,Race condition in WorkflowInstrumentationContext.findEnclosingParentContext() causes NPE,wmedvede,Backlog,,,,,1.1.0,,,,,0.0,0.0,0.0,,,2026-08-20,
 867,,https://github.com/quarkiverse/quarkus-flow/issues/867,Migrate to Quarkus 4 and Jackson 3,ricardozanini,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-08-19,
 864,,https://github.com/quarkiverse/quarkus-flow/issues/864,JPA persistence entities missing @Version — lost updates and duplicate event processing,fjtirado,Backlog,,,,,1.1.0,,,,,0.0,0.0,0.0,,,2026-08-19,
 863,,https://github.com/quarkiverse/quarkus-flow/issues/863,Redis event correlation TOCTOU race causes duplicate workflow executions in multi-node deployments,fjtirado,Backlog,,,,,1.1.0,,,,,0.0,0.0,0.0,,,2026-08-19,
-852,,https://github.com/quarkiverse/quarkus-flow/issues/852,Add /instances REST endpoint to query running workflow instances,mcruzdev,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-08-18,
+852,,https://github.com/quarkiverse/quarkus-flow/issues/852,Add /instances REST endpoint to query running workflow instances,mcruzdev,In progress,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-08-18,
 851,,https://github.com/quarkiverse/quarkus-flow/issues/851,Periodic scan for workflow instances in DB but not in memory,mcruzdev,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-08-18,
 811,,https://github.com/quarkiverse/quarkus-flow/issues/811,feat: Bump diagram editor package,lornakelly,Next,,Tooling,Critical,,1.1.0,S,0.2,,0.2,0.2,0.0,0.2,,,2026-08-12,
 804,,https://github.com/quarkiverse/quarkus-flow/issues/804,feat: Implement test suite that validates example rendering in devui's openworkflow editor,domhanak,In progress,,QE,Critical,,1.1.0,L,1.0,0.1,0.9,1.0,0.1,0.9,,,2026-08-12,
@@ -23,7 +22,8 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 487,,https://github.com/quarkiverse/quarkus-flow/issues/487,docs: Expand Java DLS Cookbook with additional examples,domhanak,Backlog,,Docs,Major,,1.1.0,M,0.6,,0.6,0.6,0.0,0.6,,,2026-08-20,
 469,,https://github.com/quarkiverse/quarkus-flow/issues/469,feat: Test Framework for Workflow Event Assertions,mcruzdev,Next,,Runtimes,Normal,,2.0.0,,1.6,0.6,,1.6,0.6,0.0,,,2026-08-14,
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mcruzdev,Next,,Runtimes,Major,,Future,M,1.0,,0.8,1.0,0.0,0.8,,,2026-08-12,
-341,,https://github.com/open-workflow-specification/editor/issues/341,feat: Add ability to export workflow diagram as image,cheryl7114,Next,,Tooling,Normal,,2026/Q3,M,0.4,,0.4,0.4,0.0,0.4,,,2026-08-21,
+343,,https://github.com/open-workflow-specification/editor/issues/343,feat: enable netlify preview CI for feature branches,fantonangeli,Backlog,,Tooling,Major,,2026/Q3,S,0.2,,0.2,0.2,0.0,0.2,,,2026-08-25,
+341,,https://github.com/open-workflow-specification/editor/issues/341,feat: Add ability to export workflow diagram as image,cheryl7114,In progress,,Tooling,Normal,,2026/Q3,M,0.6,,0.6,0.6,0.0,0.6,,,2026-08-25,
 337,214,https://github.com/open-workflow-specification/editor/issues/337,Spike: Investigate approaches for traversing DSL schema and extracting field metadata,"lornakelly,handreyrc",In progress,,Tooling,Critical,,2026/Q3,M,0.8,0.2,0.2,0.8,0.2,0.2,,,2026-08-20,
 331,223,https://github.com/open-workflow-specification/editor/issues/331,feat: Integrate the language service with Monaco,fantonangeli,Next,,Tooling,Normal,,Future,M,1.5,,1.5,1.5,0.0,1.5,,,2026-08-15,
 330,289,https://github.com/open-workflow-specification/editor/issues/330,feat: Publish the language-service package to npm,fantonangeli,Backlog,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,2026-08-15,
