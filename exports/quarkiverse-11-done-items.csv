@@ -1,23 +1,24 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+884,,https://github.com/quarkiverse/quarkus-flow/issues/884,"Add a ""References"" page to share blogs and talks about Quarkus Flow",mcruzdev,,Docs,Normal,,1.1.0,XS,0.2,0.2,2026-08-25,,,
+862,,https://github.com/quarkiverse/quarkus-flow/issues/862,One malformed workflow file blocks all subsequent files and marks engine DOWN,mcruzdev,,Runtimes,Major,,1.0.0,S,0.2,0.2,2026-08-25,,,
+877,,https://github.com/quarkiverse/quarkus-flow/issues/877,Support run.shell / run.script / run.workflow (RunnableTaskBuilder SPI) under native image,mcruzdev,,Runtimes,Critical,,1.0.0,S,0.2,0.2,2026-08-25,,,
+854,,https://github.com/quarkiverse/quarkus-flow/issues/854,@LookupIfProperty prevents auto-enabling metrics when Micrometer is on classpath,mcruzdev,,Runtimes,Critical,,1.0.0,S,0.2,0.2,2026-08-25,,,
+840,,https://github.com/quarkiverse/quarkus-flow/issues/840,NullPointerException in `LeaseService` catch handlers on connectivity failures,mcruzdev,,Runtimes,Critical,,1.0.0,M,0.2,0.2,2026-08-25,,,
+845,,https://github.com/quarkiverse/quarkus-flow/issues/845,API key namespaces property should be Optional to respect @WithDefault,mcruzdev,,Runtimes,Critical,,1.0.0,M,0.2,0.2,2026-08-25,,,
+887,,https://github.com/quarkiverse/quarkus-flow/issues/887,Parallelize the Build with Integration Tests CI pipeline,mcruzdev,,CI,Major,,1.1.0,,0.4,0.0,2026-08-25,,,
 859,,https://github.com/quarkiverse/quarkus-flow/issues/859,bug: greeting-runner and opentelemetry examples throwing error,"ricardozanini,mcruzdev",,Runtimes,Blocker,,1.0.0,S,0.1,0.1,2026-08-22,,,
 808,,https://github.com/quarkiverse/quarkus-flow/issues/808,inputFrom(CloudEvent::getData) fails — bare Function path uses asJavaObject() instead of model.as(),"ricardozanini,fjtirado",,Runtimes,Blocker,,1.0.0,XS,0.1,0.1,2026-08-22,,,
 325,,https://github.com/open-workflow-specification/editor/issues/325,"feat: Add core edit API for modifying the model (update, replace, add and  delete tasks)",handreyrc,,Tooling,Normal,,2026/Q3,S,0.3,0.3,2026-08-22,,,
-884,,https://github.com/quarkiverse/quarkus-flow/issues/884,"Add a ""References"" page to share blogs and talks about Quarkus Flow",mcruzdev,,,,,1.1.0,,,,2026-08-22,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 338,,https://github.com/open-workflow-specification/editor/issues/338,Bug: sdk-typescript workflow serialization to YAML is broken,handreyrc,,Tooling,Major,,2026/Q3,S,0.2,0.2,2026-08-21,,,
 868,,https://github.com/quarkiverse/quarkus-flow/issues/868,Preparation for 1.0.0 release,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,0.0,2026-08-21,,,
 861,,https://github.com/quarkiverse/quarkus-flow/issues/861,Runner security: auth disabled by default with admin roles + timing attack on API key comparison,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,0.1,2026-08-20,,,
 300,,https://github.com/open-workflow-specification/editor/issues/300,feat: Create/update Storybook Stories for Node Editing,cheryl7114,,Tooling,Normal,,2026/Q4,M,0.8,0.6,2026-08-20,,,
-862,,https://github.com/quarkiverse/quarkus-flow/issues/862,One malformed workflow file blocks all subsequent files and marks engine DOWN,mcruzdev,,,,,1.0.0,,,,2026-08-20,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
-877,,https://github.com/quarkiverse/quarkus-flow/issues/877,Support run.shell / run.script / run.workflow (RunnableTaskBuilder SPI) under native image,mcruzdev,,,,,1.0.0,,,,2026-08-20,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 843,,https://github.com/quarkiverse/quarkus-flow/issues/843,Watch source path for new workflow definitions at runtime,ricardozanini,,Runtimes,Critical,,1.0.0,S,0.1,0.1,2026-08-19,,,
 850,,https://github.com/quarkiverse/quarkus-flow/issues/850,PoolMemberController must not acquire a lease that differs from applicationId,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.2,0.2,2026-08-19,,,
 860,,https://github.com/quarkiverse/quarkus-flow/issues/860,RCE via unrestricted Class.forName() in FuncJacksonModule deserialization,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,0.1,2026-08-19,,,
 318,,https://github.com/open-workflow-specification/editor/issues/318,"feat: Implement state management, undo / redo capabilities and component API",handreyrc,,Tooling,Normal,,2026/Q3,M,1.0,0.7,2026-08-18,,,
 320,,https://github.com/open-workflow-specification/editor/issues/320,feat: Expose schema in sdk to editor,lornakelly,,Tooling,Normal,,2026/Q3,M,0.6,0.2,2026-08-18,,,
-854,,https://github.com/quarkiverse/quarkus-flow/issues/854,@LookupIfProperty prevents auto-enabling metrics when Micrometer is on classpath,mcruzdev,,,,,1.0.0,,,,2026-08-18,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
-840,,https://github.com/quarkiverse/quarkus-flow/issues/840,NullPointerException in `LeaseService` catch handlers on connectivity failures,mcruzdev,,,,,,,,,2026-08-15,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 844,,https://github.com/quarkiverse/quarkus-flow/issues/844,Flaky test on WorkflowDiagramEditorTest#shouldShowLoadingBeforeDiagramEditor,domhanak,,,,,1.0.0,,,,2026-08-15,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
-845,,https://github.com/quarkiverse/quarkus-flow/issues/845,API key namespaces property should be Optional to respect @WithDefault,mcruzdev,,,,,1.0.0,,,,2026-08-15,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 283,,https://github.com/open-workflow-specification/editor/issues/283,feat: Reduce warnings in build and test logs,fantonangeli,,Tooling,Normal,,2026/Q3,M,0.4,0.4,2026-08-14,,,
 741,,https://github.com/quarkiverse/quarkus-flow/issues/741,docs: Remove quarkus.flow.durable.kube.member.lease.acquire-timeout property from documentation as it's not implemented yet,mcruzdev,,Runtimes,Major,,1.0.0,M,0.0,0.0,2026-08-12,,,
 1526,,https://github.com/open-workflow-specification/sdk-java/issues/1526,Implement attemp.duration,"mcruzdev,fjtirado",,Runtimes,Normal,,1.0.0,M,0.4,0.3,2026-08-12,,,
