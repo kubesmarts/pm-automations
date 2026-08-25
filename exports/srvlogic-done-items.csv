@@ -1,4 +1,14 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1018,,https://redhat.atlassian.net/browse/SRVLOGIC-1018,Removal of non-OSL packages from kie-tools -> dmn-* and related packages,domhanak,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0,2026-08-25,,,NO_TIME_SPENT
+944,,https://redhat.atlassian.net/browse/SRVLOGIC-944,Update documentation of OSL productization process after OSL 1.38 release,saumya1singh,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.05,0.0125,2026-08-25,,,
+1071,,https://redhat.atlassian.net/browse/SRVLOGIC-1071,Weekly image publishing pipeline needs to override image names,baldimir,Bug,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0.075,2026-08-24,,,
+1029,,https://redhat.atlassian.net/browse/SRVLOGIC-1029,Remediate instance running smee-clients in rhos-d,domhanak,Spike,,Blocker,Serverless logic,1.39.0 OSL,,0.05,0.05,2026-08-24,,,
+1028,,https://redhat.atlassian.net/browse/SRVLOGIC-1028,Onboard OSL builds to IBM Delivery Platform,baldimir,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.1,0.1125,2026-08-24,,,
+1010,,https://redhat.atlassian.net/browse/SRVLOGIC-1010,Adjust Jenkinsfile.prod.nightly job definition to use 111-SNAPSHOT,domhanak,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,0.05,0.05,2026-08-24,,,
+887,,https://redhat.atlassian.net/browse/SRVLOGIC-887,Improve the midstream XSD placement,baldimir,Task,Productization,Normal,Serverless logic,1.39.0 OSL,,0.2,0.1813,2026-08-24,,,
+928,,https://redhat.atlassian.net/browse/SRVLOGIC-928,Decouple serverless logic midstream repositories from Apache KIE ,baldimir,Epic,CI,Critical,Serverless logic,1.39.0 OSL,,1.5,1,2026-08-24,,,
+962,928,https://redhat.atlassian.net/browse/SRVLOGIC-962,Document a security workflow for fixing CVEs. ,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.2042,2026-08-24,,,
+972,,https://redhat.atlassian.net/browse/SRVLOGIC-972,Fix SonataFlow weekly image snapshots publishing,baldimir,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.1042,2026-08-24,,,
 1086,,https://redhat.atlassian.net/browse/SRVLOGIC-1086,Upgrade Quarkus to 3.27.4.1,baldimir,Task,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.125,0.0542,2026-08-20,,,
 1070,,https://redhat.atlassian.net/browse/SRVLOGIC-1070,Reuse midstream-mvn-config/settings.xml in all GitHub workflows in kubesmarts/kie-tools workflows. ,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0.4042,2026-08-20,,,
 1053,,https://redhat.atlassian.net/browse/SRVLOGIC-1053,[OSL nightly] Operator Bundle reintroduced relatedImages section again,baldimir,Bug,CI,Blocker,Serverless logic,1.39.0 OSL,,0.1,0.0583,2026-08-20,,,
