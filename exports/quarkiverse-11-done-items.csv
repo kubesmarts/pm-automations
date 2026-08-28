@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+286,,https://github.com/open-workflow-specification/editor/issues/286,Task: MVP Retro,lornakelly,,Tooling,Normal,,2026/Q3,S,0.2,0.2,2026-08-28,,,
+295,,https://github.com/open-workflow-specification/editor/issues/295,feat: Implement editable field components for scalar value types,kumaradityaraj,,Tooling,Normal,,2026/Q3,M,1.0,1.4,2026-08-28,,,
+343,,https://github.com/open-workflow-specification/editor/issues/343,feat: enable netlify preview CI for feature branches,fantonangeli,,Tooling,Major,,2026/Q3,S,0.2,0.2,2026-08-28,,,
+358,,https://github.com/open-workflow-specification/editor/issues/358,Spike: Evaluate form libraries,lornakelly,,Tooling,Normal,,2026/Q3,S,0.2,0.2,2026-08-28,,,
 337,,https://github.com/open-workflow-specification/editor/issues/337,Spike: Investigate approaches for traversing DSL schema and extracting field metadata,"lornakelly,handreyrc",,Tooling,Critical,,2026/Q3,M,1.0,1.0,2026-08-26,,,
 884,,https://github.com/quarkiverse/quarkus-flow/issues/884,"Add a ""References"" page to share blogs and talks about Quarkus Flow",mcruzdev,,Docs,Normal,,1.1.0,XS,0.2,0.2,2026-08-25,,,
 862,,https://github.com/quarkiverse/quarkus-flow/issues/862,One malformed workflow file blocks all subsequent files and marks engine DOWN,mcruzdev,,Runtimes,Major,,1.0.0,S,0.2,0.2,2026-08-25,,,
