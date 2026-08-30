@@ -5,6 +5,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1607,,https://github.com/open-workflow-specification/sdk-java/issues/1607,Implement async call,mcruzdev,In progress,,Runtimes,Major,,2026/Q3,,2.0,0.4,1.6,2.0,0.4,1.6,,,2026-08-14,
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0.0,0.0,0.0,,,2026-08-12,
 1485,,https://github.com/open-workflow-specification/sdk-java/issues/1485,Handle missing a2a operations,fjtirado,Backlog,,Runtimes,,,2026/Q4,S,,,,0.0,0.0,0.0,,,2026-08-12,
+908,,https://github.com/quarkiverse/quarkus-flow/issues/908,Create ADR: design solution for OpenTelemetry trace propagation gaps in CloudEvent-triggered workflows,mcruzdev,In progress,,,,,,,,,,0.0,0.0,0.0,,,2026-08-30,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY, NO_MILESTONE"
 898,,https://github.com/quarkiverse/quarkus-flow/issues/898,feat: quarkus-flow-db-migration-quartz extension for Quartz schema migrations,mcruzdev,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-08-28,
 897,,https://github.com/quarkiverse/quarkus-flow/issues/897,feat: quarkus-flow-db-migration-runtime extension for JPA schema migrations,mcruzdev,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-08-27,
 896,,https://github.com/quarkiverse/quarkus-flow/issues/896,ADR: Create extensions for schema migrations,mcruzdev,In progress,,,,,,,,,,0.0,0.0,0.0,,,2026-08-28,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY, NO_MILESTONE"
