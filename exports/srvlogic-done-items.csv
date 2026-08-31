@@ -1,4 +1,11 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1096,,https://redhat.atlassian.net/browse/SRVLOGIC-1096,UMB message does not contain correct data.,saumya1singh,Bug,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0.025,2026-08-31,,,
+1080,1079,https://redhat.atlassian.net/browse/SRVLOGIC-1080,Investigate and debug sonataflow-operator E2E test workflow failures,domhanak,Sub-task,CI,Blocker,Serverless logic,1.39.0 OSL,,1,0.8,2026-08-31,,,
+1069,,https://redhat.atlassian.net/browse/SRVLOGIC-1069,Update docker/docker go module to v29. ,ricardozanini,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0,0,2026-08-31,,,NO_ESTIMATE
+1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,2,2,2026-08-31,,,
+1002,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1002,Prepare for the cutoff,saumya1singh,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,2,0.425,2026-08-31,,,
+969,,https://redhat.atlassian.net/browse/SRVLOGIC-969,Operator Image Build Failing : Error in Hermeto due dependency fetching phase,saumya1singh,Bug,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0,2026-08-31,,,
+970,975,https://redhat.atlassian.net/browse/SRVLOGIC-970,Workflow deploy time validations via webhooks,wmedvede,Spike,Cloud,Normal,Serverless logic,1.39.0 OSL,,1,1,2026-08-31,,,
 1142,,https://redhat.atlassian.net/browse/SRVLOGIC-1142,Update a security update of otel library. ,baldimir,Task,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.125,0.125,2026-08-27,,,
 1100,,https://redhat.atlassian.net/browse/SRVLOGIC-1100,Upgrade to Quarkus 3.33.x stream,baldimir,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.6,0.6,2026-08-27,,,
 971,,https://redhat.atlassian.net/browse/SRVLOGIC-971,Fix OLM installation in BDD test suite,domhanak,Task,Cloud,Major,Serverless logic,1.38.0 OSL,,0.4,0.2,2026-08-27,,,
@@ -45,18 +52,14 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 986,,https://redhat.atlassian.net/browse/SRVLOGIC-986,Remove custom Maven artifacts automation from kie-tools. ,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0.4042,2026-08-20,,,
 984,,https://redhat.atlassian.net/browse/SRVLOGIC-984,kie-tools repository in Jenkins nightly builds doesn't properly use the settings.xml file from Jenkins,baldimir,Bug,CI,Major,Serverless logic,1.39.0 OSL,,0.4,0.4021,2026-08-20,,,
 999,,https://redhat.atlassian.net/browse/SRVLOGIC-999,Remove Dashbuilder from kie-tools,fantonangeli,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,2,0.7063,2026-08-20,,,
-1002,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1002,Prepare for the cutoff,saumya1singh,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,2,0.425,2026-08-15,,,
 1098,1056,https://redhat.atlassian.net/browse/SRVLOGIC-1098,[IBM test migration] Update nodejs version and fix go PATH for go install,jakubschwan,Sub-task,,Major,Serverless logic,1.40.0 OSL,,0.1,0.1,2026-08-12,,,NO_COMPONENT
 1090,1056,https://redhat.atlassian.net/browse/SRVLOGIC-1090,[IBM test migration] Add kie-tools repo build tools to able playbooks,jakubschwan,Sub-task,,Blocker,Serverless logic,1.40.0 OSL,,0.1,0.1,2026-08-12,,,NO_COMPONENT
-1096,,https://redhat.atlassian.net/browse/SRVLOGIC-1096,UMB message does not contain correct data.,saumya1singh,Bug,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0.025,2026-07-30,,,
 949,,https://redhat.atlassian.net/browse/SRVLOGIC-949,Duplicate Drools reference in 1.38.0.CR1,saumya1singh,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.05,0.05,2026-07-30,,,
-1080,1079,https://redhat.atlassian.net/browse/SRVLOGIC-1080,Investigate and debug sonataflow-operator E2E test workflow failures,domhanak,Sub-task,CI,Blocker,Serverless logic,1.39.0 OSL,,1,0.8,2026-07-29,,,
 1092,,https://redhat.atlassian.net/browse/SRVLOGIC-1092,Setup QE testing pipelines for 1.39.0,domhanak,Task,QE,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.075,2026-07-24,,,
 1083,,https://redhat.atlassian.net/browse/SRVLOGIC-1083,Nightly build from main fails when done on Java 17 after j2cl maven plugin patch update.  ,baldimir,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.05,2026-07-23,,,
 1079,,https://redhat.atlassian.net/browse/SRVLOGIC-1079,Split kie-tools e2e tests execution into separate workflows,baldimir,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,1,1,2026-07-22,,,
 1075,,https://redhat.atlassian.net/browse/SRVLOGIC-1075,Upload NodeJS version v24.18.0 to rcm-guest,saumya1singh,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.3,2026-07-22,,,
 950,,https://redhat.atlassian.net/browse/SRVLOGIC-950,OSL 1.38.0.CR1 community baselines ( smoke tests ) jobs failure analysis,domhanak,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.4,0.3,2026-07-12,,,
-1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,2,2,2026-07-11,,,
 677,,https://redhat.atlassian.net/browse/SRVLOGIC-677,Kubesmarts cors-proxy ERR_CERT_DATE_INVALID,fantonangeli,Bug,Runtimes,Critical,Serverless logic,1.38.0 OSL,,1,0.5,2026-07-10,,,
 1006,,https://redhat.atlassian.net/browse/SRVLOGIC-1006,Version of graphql-java library that is not publicly available is used in 1.38. ,mareknovotny,Bug,Productization,Critical,Serverless logic,1.39.0 OSL,,0.6,0.025,2026-07-09,,,
 360,,https://redhat.atlassian.net/browse/SRVLOGIC-360,New SWF Diagram Editor ts/ react / react flow - Milestone 0,handreyrc,Feature,Tooling,Normal,Serverless logic,1.38.0 OSL,,13.2,20,2026-07-07,,,
@@ -138,6 +141,5 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 823,,https://redhat.atlassian.net/browse/SRVLOGIC-823,Sonataflow does not support schema files longer than 65K,fjtirado,Bug,Runtimes,Critical,Serverless logic,1.37.2 OSL,,0.2,0.2,2026-05-19,,,
 822,,https://redhat.atlassian.net/browse/SRVLOGIC-822,"Update pnpm, nodejs and ensure new registry URLs are used for QE CI environment",domhanak,Task,QE,Blocker,Serverless logic,1.38.0 OSL,,0.025,0.0167,2026-05-19,,,
 974,,https://redhat.atlassian.net/browse/SRVLOGIC-974,Unable to execute qe primary-pipeline because of offline_maven_repo_upload job failure,domhanak,Bug,QE,Blocker,Serverless logic,1.38.0 OSL,,0.2,0.05,2026-05-19,,,
-970,975,https://redhat.atlassian.net/browse/SRVLOGIC-970,Workflow deploy time validations via webhooks,wmedvede,Spike,Cloud,Normal,Serverless logic,1.39.0 OSL,,1,1,2026-05-11,,,
 920,,https://redhat.atlassian.net/browse/SRVLOGIC-920,failure in - Sync main branch - with upstream,jankrystof-ibm,Bug,CI,Major,Serverless logic,1.38.0 OSL,,0.025,0.075,2026-05-08,,,
 883,,https://redhat.atlassian.net/browse/SRVLOGIC-883,Harden workflow against network failures and GraphQL errors,dgutierr,Story,PM,Critical,Serverless logic,Future,,1,0.4,2026-04-24,,,
