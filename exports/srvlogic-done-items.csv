@@ -1,10 +1,11 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1069,,https://redhat.atlassian.net/browse/SRVLOGIC-1069,Update docker/docker go module to v29. ,ricardozanini,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0,0,2026-09-01,,,"NO_ESTIMATE, NO_TIME_SPENT"
+969,,https://redhat.atlassian.net/browse/SRVLOGIC-969,Operator Image Build Failing : Error in Hermeto due dependency fetching phase,saumya1singh,Bug,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0,2026-09-01,,,NO_TIME_SPENT
+1099,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1099,Update Quarkus version to the latest LTS - 3.33.2.SP3,saumya1singh,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.225,2026-08-31,,,
 1096,,https://redhat.atlassian.net/browse/SRVLOGIC-1096,UMB message does not contain correct data.,saumya1singh,Bug,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0.025,2026-08-31,,,
 1080,1079,https://redhat.atlassian.net/browse/SRVLOGIC-1080,Investigate and debug sonataflow-operator E2E test workflow failures,domhanak,Sub-task,CI,Blocker,Serverless logic,1.39.0 OSL,,1,0.8,2026-08-31,,,
-1069,,https://redhat.atlassian.net/browse/SRVLOGIC-1069,Update docker/docker go module to v29. ,ricardozanini,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0,0,2026-08-31,,,NO_ESTIMATE
 1038,,https://redhat.atlassian.net/browse/SRVLOGIC-1038,Compare Data Index ingestion performance between SonataFlow and Quarkus Flow subflow workloads,gmunozfe,Task,Runtimes,Normal,Serverless logic,1.39.0 OSL,,2,2,2026-08-31,,,
 1002,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1002,Prepare for the cutoff,saumya1singh,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,2,0.425,2026-08-31,,,
-969,,https://redhat.atlassian.net/browse/SRVLOGIC-969,Operator Image Build Failing : Error in Hermeto due dependency fetching phase,saumya1singh,Bug,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0,2026-08-31,,,
 970,975,https://redhat.atlassian.net/browse/SRVLOGIC-970,Workflow deploy time validations via webhooks,wmedvede,Spike,Cloud,Normal,Serverless logic,1.39.0 OSL,,1,1,2026-08-31,,,
 1142,,https://redhat.atlassian.net/browse/SRVLOGIC-1142,Update a security update of otel library. ,baldimir,Task,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.125,0.125,2026-08-27,,,
 1100,,https://redhat.atlassian.net/browse/SRVLOGIC-1100,Upgrade to Quarkus 3.33.x stream,baldimir,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.6,0.6,2026-08-27,,,
