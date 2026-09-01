@@ -1,5 +1,12 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
 1069,,https://redhat.atlassian.net/browse/SRVLOGIC-1069,Update docker/docker go module to v29. ,ricardozanini,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0,0,2026-09-01,,,"NO_ESTIMATE, NO_TIME_SPENT"
+1150,,https://redhat.atlassian.net/browse/SRVLOGIC-1150,QE verification of SRVLOGIC-1121,hellowdan,Task,Runtimes,Critical,Serverless logic,1.39.0 OSL,,0.05,0.05,2026-09-01,,,
+1148,,https://redhat.atlassian.net/browse/SRVLOGIC-1148,QE verification of SRVLOGIC-1017,hellowdan,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,0.025,0.025,2026-09-01,,,
+1147,,https://redhat.atlassian.net/browse/SRVLOGIC-1147,QE verification of SRVLOGIC-936,hellowdan,Task,Runtimes,Critical,Serverless logic,1.39.0 OSL,,0.025,0.025,2026-09-01,,,
+1146,,https://redhat.atlassian.net/browse/SRVLOGIC-1146,QE verification of SRVLOGIC-935,gmunozfe,Task,Runtimes,Critical,Serverless logic,1.39.0 OSL,,0.025,0.025,2026-09-01,,,
+1121,,https://redhat.atlassian.net/browse/SRVLOGIC-1121,Upgrade to Quarkus 3.33 and Quarkus OpenAPI Generator 2.23.0 to fix REST client and authentication bugs,ricardozanini,Bug,Runtimes,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.2,2026-09-01,,,
+936,,https://redhat.atlassian.net/browse/SRVLOGIC-936,Built in MDC Logging for Workflow Process & Instance Correlation,fjtirado,Feature,Runtimes,Normal,Serverless logic,1.39.0 OSL,,0.3,0.2,2026-09-01,,,
+935,,https://redhat.atlassian.net/browse/SRVLOGIC-935,Built in sensitive data masking in sonataflow logging,fjtirado,Feature,Runtimes,Normal,Serverless logic,1.39.0 OSL,,0.4,0.3,2026-09-01,,,
 969,,https://redhat.atlassian.net/browse/SRVLOGIC-969,Operator Image Build Failing : Error in Hermeto due dependency fetching phase,saumya1singh,Bug,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0,2026-09-01,,,NO_TIME_SPENT
 1099,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1099,Update Quarkus version to the latest LTS - 3.33.2.SP3,saumya1singh,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.225,2026-08-31,,,
 1096,,https://redhat.atlassian.net/browse/SRVLOGIC-1096,UMB message does not contain correct data.,saumya1singh,Bug,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0.025,2026-08-31,,,
