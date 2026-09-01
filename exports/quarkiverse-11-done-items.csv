@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1612,,https://github.com/open-workflow-specification/sdk-java/issues/1612,Add test for hard coded collections in For task,fjtirado,,Runtimes,Normal,,2026/Q3,S,0.1,0.1,2026-09-01,,Waiting on decision on workflow specification,
+1627,,https://github.com/open-workflow-specification/sdk-java/issues/1627,Register ProcessResult for GraalVM native-image reflection,mcruzdev,,Runtimes,Major,,2026/Q3,,0.2,,2026-09-01,,,NO_TIME_SPENT
+359,,https://github.com/open-workflow-specification/editor/issues/359,feat: Add and configure chosen form library,lornakelly,,Tooling,Normal,,2026/Q3,M,0.3,0.1,2026-09-01,,,
 343,,https://github.com/open-workflow-specification/editor/issues/343,feat: enable netlify preview CI for feature branches,fantonangeli,,Tooling,Major,,2026/Q3,S,0.2,0.2,2026-08-29,,,
 209,,https://github.com/open-workflow-specification/editor/issues/209,Spike: Decide on approach for language service,fantonangeli,,Tooling,Major,,2026/Q3,M,0.4,0.6,2026-08-29,,,
 357,,https://github.com/open-workflow-specification/editor/issues/357,feat: Implement schema filter in the editor,handreyrc,,Tooling,Normal,,2026/Q3,M,0.4,0.4,2026-08-29,,,
