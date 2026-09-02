@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1638,,https://github.com/open-workflow-specification/sdk-java/issues/1638,Expose a shared enum for lifecycle event kinds,mcruzdev,,Runtimes,,,,,,,2026-09-02,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
+913,,https://github.com/quarkiverse/quarkus-flow/issues/913,Remove NativeImageBuildItem for ProcessResult record,mcruzdev,,,,,1.1.0,,,,2026-09-02,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
+915,,https://github.com/quarkiverse/quarkus-flow/issues/915,Updates `ForIn` DSL schema to match OWS patched 1.1.0 pre-release.,fjtirado,,Runtimes,Major,,1.1.0,S,0.1,0.1,2026-09-02,,,
+916,,https://github.com/quarkiverse/quarkus-flow/issues/916,Incorporate EventType enum from sdk-java to opentelemetry module,mcruzdev,,,,,1.1.0,,,,2026-09-02,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 1612,,https://github.com/open-workflow-specification/sdk-java/issues/1612,Add test for hard coded collections in For task,fjtirado,,Runtimes,Normal,,2026/Q3,S,0.1,0.1,2026-09-01,,Waiting on decision on workflow specification,
 1627,,https://github.com/open-workflow-specification/sdk-java/issues/1627,Register ProcessResult for GraalVM native-image reflection,mcruzdev,,Runtimes,Major,,2026/Q3,,0.2,,2026-09-01,,,NO_TIME_SPENT
 359,,https://github.com/open-workflow-specification/editor/issues/359,feat: Add and configure chosen form library,lornakelly,,Tooling,Normal,,2026/Q3,M,0.3,0.1,2026-09-01,,,

@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+867,,https://github.com/casehubio/engine/issues/867,feat: read identity from PropagationContext in CasehubDispatch,treblereel,,Runtimes,Normal,,Future,M,1.0,1.0,2026-09-02,,,
 226,,https://github.com/casehubio/platform/issues/226,Consolidate Flyway migrations — collapse incremental scripts into single initial schemas,treblereel,,Runtimes,Normal,,Future,L,2.0,0.0,2026-08-25,,,
 96,,https://github.com/tkobayas/drlx-parser/issues/96,Overlooked Tasks Catch-up,tkobayas,,Runtimes,Normal,,Future,S,0.1,0.1,2026-08-19,,,
 9,,https://github.com/tkobayas/drlx-lsp/issues/9,Completion features gap — 18 missing use cases,tkobayas,,Tooling,Major,,Future,M,1.0,1.0,2026-08-18,,,
