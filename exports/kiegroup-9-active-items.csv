@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
+7081,,https://github.com/apache/incubator-kie/issues/7081,Drools Sequential: Add support for not() inside the sequence,Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,0.5,0.5,1.0,0.5,0.5,,,2026-09-03,
+7059,,https://github.com/apache/incubator-kie/issues/7059,Drools Sequential: Simple sequence() functionality,Rikkola,In progress,,Runtimes,Normal,,Future,L,5.0,4.5,0.5,5.0,4.5,0.5,,,2026-09-03,ESTIMATE_TOO_LONG
 6841,,https://github.com/apache/incubator-kie/issues/6841,Review slow tests,tkobayas,In progress,,CI,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,,2026-08-05,
 6683,,https://github.com/apache/incubator-kie/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,0.0,2.0,0.0,9.5,2.8,6.6,,Added some more issues after a review of Mark Proctor,2026-07-08,CHILDREN_STATUS
 3672,,https://github.com/apache/incubator-kie-tools/issues/3672,Follow up DRL editor (release),tkobayas,In progress,,Tooling,Major,,Future,XS,0.1,0.05,0.05,0.1,0.05,0.05,,,2026-08-21,
