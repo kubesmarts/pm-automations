@@ -1,4 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+190,,https://github.com/open-workflow-specification/editor/issues/190,Epic: Serverless Workflow Editor Post MVP Planning,lornakelly,,Tooling,Major,,2026/Q3,M,0.0,0.0,2026-09-03,,,
+193,,https://github.com/open-workflow-specification/editor/issues/193,task: Break down accepted ADR into estimated tickets,lornakelly,,Tooling,Major,,2026/Q3,M,0.6,0.8,2026-09-03,,,
+329,,https://github.com/open-workflow-specification/editor/issues/329,feat: Create the language-service package,fantonangeli,,Tooling,Major,,2026/Q4,M,0.6,0.2,2026-09-03,,,
+863,,https://github.com/quarkiverse/quarkus-flow/issues/863,Redis/JPA TOCTOU race causes duplicate workflow executions in multi-node deployments,fjtirado,,Runtimes,Critical,,1.1.0,S,0.2,,2026-09-03,,,NO_TIME_SPENT
+922,,https://github.com/quarkiverse/quarkus-flow/issues/922,The namespace validation should work in the same way for DSL and YAML,mcruzdev,,,,,1.1.0,,,,2026-09-03,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 1638,,https://github.com/open-workflow-specification/sdk-java/issues/1638,Expose a shared enum for lifecycle event kinds,mcruzdev,,Runtimes,,,,,,,2026-09-02,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 913,,https://github.com/quarkiverse/quarkus-flow/issues/913,Remove NativeImageBuildItem for ProcessResult record,mcruzdev,,,,,1.1.0,,,,2026-09-02,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 915,,https://github.com/quarkiverse/quarkus-flow/issues/915,Updates `ForIn` DSL schema to match OWS patched 1.1.0 pre-release.,fjtirado,,Runtimes,Major,,1.1.0,S,0.1,0.1,2026-09-02,,,
