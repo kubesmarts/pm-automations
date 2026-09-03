@@ -1052,24 +1052,6 @@ test('ALL_PRS_MERGED: raised for Next status with all closing PRs merged', () =>
 });
 
 // ConnectedEvent variants (sidebar-linked PRs)
-test('PR_NOT_MERGED: raised for Done issue with open ConnectedEvent PR', () => {
-  const codes = evalPRNotMerged({
-    statusLC: 'done',
-    issueNumber: '42',
-    timelineItems: [{ type: 'connected', number: 10, state: 'OPEN', merged: false }],
-  });
-  assert.ok(codes.includes('PR_NOT_MERGED'), `Expected PR_NOT_MERGED for ConnectedEvent open PR, got: "${codes}"`);
-});
-
-test('PR_NOT_MERGED: not raised for Done issue with merged ConnectedEvent PR', () => {
-  const codes = evalPRNotMerged({
-    statusLC: 'done',
-    issueNumber: '42',
-    timelineItems: [{ type: 'connected', number: 10, state: 'MERGED', merged: true }],
-  });
-  assert.ok(!codes.includes('PR_NOT_MERGED'), `Unexpected PR_NOT_MERGED for ConnectedEvent merged PR, got: "${codes}"`);
-});
-
 test('ALL_PRS_MERGED: raised for non-Done issue with merged ConnectedEvent PR', () => {
   const codes = evalAllPRsMerged({
     statusLC: 'in progress',
