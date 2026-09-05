@@ -1,19 +1,24 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+923,,https://github.com/quarkiverse/quarkus-flow/issues/923,`@Blocking` is required when using `oauth2`,mcruzdev,,Runtimes,Critical,,1.1.0,M,0.2,0.2,2026-09-05,,,
+922,,https://github.com/quarkiverse/quarkus-flow/issues/922,The namespace validation should work in the same way for DSL and YAML,mcruzdev,,Runtimes,Critical,,1.1.0,M,0.2,0.2,2026-09-05,,,
+1638,,https://github.com/open-workflow-specification/sdk-java/issues/1638,Expose a shared enum for lifecycle event kinds,mcruzdev,,Runtimes,Minor,,1.1.0,M,0.2,0.2,2026-09-05,,,
+913,,https://github.com/quarkiverse/quarkus-flow/issues/913,Remove NativeImageBuildItem for ProcessResult record,mcruzdev,,Runtimes,Minor,,1.1.0,M,0.2,0.2,2026-09-05,,,
+916,,https://github.com/quarkiverse/quarkus-flow/issues/916,Incorporate EventType enum from sdk-java to opentelemetry module,mcruzdev,,Runtimes,Minor,,1.1.0,M,0.2,0.2,2026-09-05,,,
+1627,,https://github.com/open-workflow-specification/sdk-java/issues/1627,Register ProcessResult for GraalVM native-image reflection,mcruzdev,,Runtimes,Major,,2026/Q3,,0.2,0.2,2026-09-05,,,
+296,,https://github.com/open-workflow-specification/editor/issues/296,feat: Add form footer with dynamic states and change tracking,lornakelly,,Tooling,Normal,,2026/Q3,M,0.8,0.4,2026-09-05,,,
+934,,https://github.com/quarkiverse/quarkus-flow/issues/934,bug: Flow correlation metadata is missing from emitted CloudEvents in native mode,gmunozfe,,,,,,,,,2026-09-05,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
+940,,https://github.com/quarkiverse/quarkus-flow/issues/940,bug: gRPC workflow fails in native mode,gmunozfe,,,,,,,,,2026-09-05,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
+942,,https://github.com/quarkiverse/quarkus-flow/issues/942,bug: Quartz scheduled jobs fail to load in native mode,gmunozfe,,,,,,,,,2026-09-05,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
+944,,https://github.com/quarkiverse/quarkus-flow/issues/944,bug: grpc modules are missing in bom,baldimir,,Runtimes,Blocker,,2026/Q3,XS,0.1,0.1,2026-09-05,,,
 863,,https://github.com/quarkiverse/quarkus-flow/issues/863,Redis/JPA TOCTOU race causes duplicate workflow executions in multi-node deployments,fjtirado,,Runtimes,Critical,,1.1.0,S,0.2,0.2,2026-09-04,,,
 294,,https://github.com/open-workflow-specification/editor/issues/294,feat: Implement Draft State Management for Node Editing,handreyrc,,Tooling,Normal,,2026/Q3,M,0.8,0.5,2026-09-04,,,
 341,,https://github.com/open-workflow-specification/editor/issues/341,feat: Add ability to export workflow diagram as image,cheryl7114,,Tooling,Normal,,2026/Q3,M,0.6,0.6,2026-09-04,,,
 374,,https://github.com/open-workflow-specification/editor/issues/374,feat: EditableProperties Form,lornakelly,,Tooling,Normal,,2026/Q3,M,0.4,0.3,2026-09-04,,,
-923,,https://github.com/quarkiverse/quarkus-flow/issues/923,`@Blocking` is required when using `oauth2`,mcruzdev,,,,,,,,,2026-09-04,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 190,,https://github.com/open-workflow-specification/editor/issues/190,Epic: Serverless Workflow Editor Post MVP Planning,lornakelly,,Tooling,Major,,2026/Q3,M,0.0,0.0,2026-09-03,,,
 193,,https://github.com/open-workflow-specification/editor/issues/193,task: Break down accepted ADR into estimated tickets,lornakelly,,Tooling,Major,,2026/Q3,M,0.6,0.8,2026-09-03,,,
 329,,https://github.com/open-workflow-specification/editor/issues/329,feat: Create the language-service package,fantonangeli,,Tooling,Major,,2026/Q4,M,0.6,0.2,2026-09-03,,,
-922,,https://github.com/quarkiverse/quarkus-flow/issues/922,The namespace validation should work in the same way for DSL and YAML,mcruzdev,,,,,1.1.0,,,,2026-09-03,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
-1638,,https://github.com/open-workflow-specification/sdk-java/issues/1638,Expose a shared enum for lifecycle event kinds,mcruzdev,,Runtimes,,,,,,,2026-09-02,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
-913,,https://github.com/quarkiverse/quarkus-flow/issues/913,Remove NativeImageBuildItem for ProcessResult record,mcruzdev,,,,,1.1.0,,,,2026-09-02,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 915,,https://github.com/quarkiverse/quarkus-flow/issues/915,Updates `ForIn` DSL schema to match OWS patched 1.1.0 pre-release.,fjtirado,,Runtimes,Major,,1.1.0,S,0.1,0.1,2026-09-02,,,
-916,,https://github.com/quarkiverse/quarkus-flow/issues/916,Incorporate EventType enum from sdk-java to opentelemetry module,mcruzdev,,,,,1.1.0,,,,2026-09-02,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 1612,,https://github.com/open-workflow-specification/sdk-java/issues/1612,Add test for hard coded collections in For task,fjtirado,,Runtimes,Normal,,2026/Q3,S,0.1,0.1,2026-09-01,,Waiting on decision on workflow specification,
-1627,,https://github.com/open-workflow-specification/sdk-java/issues/1627,Register ProcessResult for GraalVM native-image reflection,mcruzdev,,Runtimes,Major,,2026/Q3,,0.2,,2026-09-01,,,NO_TIME_SPENT
 359,,https://github.com/open-workflow-specification/editor/issues/359,feat: Add and configure chosen form library,lornakelly,,Tooling,Normal,,2026/Q3,M,0.3,0.1,2026-09-01,,,
 343,,https://github.com/open-workflow-specification/editor/issues/343,feat: enable netlify preview CI for feature branches,fantonangeli,,Tooling,Major,,2026/Q3,S,0.2,0.2,2026-08-29,,,
 209,,https://github.com/open-workflow-specification/editor/issues/209,Spike: Decide on approach for language service,fantonangeli,,Tooling,Major,,2026/Q3,M,0.4,0.6,2026-08-29,,,
