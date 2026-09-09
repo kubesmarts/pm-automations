@@ -266,3 +266,89 @@ test('PR_NOT_MERGED: raised with mixed open and merged PRs (at least one open)',
     assert.ok(result.violations.includes('PR_NOT_MERGED'),
         `Expected PR_NOT_MERGED with mixed PRs, got: ${result.violations}`);
 });
+
+// ---------------------------------------------------------------------------
+// ALL_PRS_MERGED tests
+// ---------------------------------------------------------------------------
+
+/**
+ * A non-Done issue in In Progress state with all required fields set.
+ */
+function makeInProgressIssue() {
+    return makeIssue({ status: 'IN PROGRESS', estimateSeconds: ONE_WEEK_S });
+}
+
+const MERGED_PR_A = { id: '3', title: 'Implement feature', url: 'https://github.com/org/repo/pull/3', status: 'MERGED' };
+const MERGED_PR_B = { id: '4', title: 'Fix tests', url: 'https://github.com/org/repo/pull/4', status: 'MERGED' };
+
+test('ALL_PRS_MERGED: raised for In Progress issue when all linked PRs are merged', () => {
+    const validator = new PolicyValidator();
+    const issue = makeInProgressIssue();
+    const result = validator.validateIssue(issue, jiraClient, [], [MERGED_PR_A]);
+    assert.ok(result.violations.includes('ALL_PRS_MERGED'),
+        `Expected ALL_PRS_MERGED, got: ${result.violations}`);
+});
+
+test('ALL_PRS_MERGED: raised for In Review (CODE REVIEW) issue when all linked PRs are merged', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'CODE REVIEW', estimateSeconds: ONE_WEEK_S });
+    const result = validator.validateIssue(issue, jiraClient, [], [MERGED_PR_A]);
+    assert.ok(result.violations.includes('ALL_PRS_MERGED'),
+        `Expected ALL_PRS_MERGED for CODE REVIEW, got: ${result.violations}`);
+});
+
+test('ALL_PRS_MERGED: raised for In Review (ON_QA) issue when all linked PRs are merged', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'ON_QA', estimateSeconds: ONE_WEEK_S });
+    const result = validator.validateIssue(issue, jiraClient, [], [MERGED_PR_A]);
+    assert.ok(result.violations.includes('ALL_PRS_MERGED'),
+        `Expected ALL_PRS_MERGED for ON_QA, got: ${result.violations}`);
+});
+
+test('ALL_PRS_MERGED: not raised when at least one linked PR is still open', () => {
+    const validator = new PolicyValidator();
+    const issue = makeInProgressIssue();
+    const result = validator.validateIssue(issue, jiraClient, [OPEN_PR], [MERGED_PR_A]);
+    assert.ok(!result.violations.includes('ALL_PRS_MERGED'),
+        `Unexpected ALL_PRS_MERGED when open PR exists: ${result.violations}`);
+});
+
+test('ALL_PRS_MERGED: not raised when there are no linked PRs at all', () => {
+    const validator = new PolicyValidator();
+    const issue = makeInProgressIssue();
+    const result = validator.validateIssue(issue, jiraClient, [], []);
+    assert.ok(!result.violations.includes('ALL_PRS_MERGED'),
+        `Unexpected ALL_PRS_MERGED with no PRs: ${result.violations}`);
+});
+
+test('ALL_PRS_MERGED: not raised when mergedPullRequests parameter is omitted', () => {
+    const validator = new PolicyValidator();
+    const issue = makeInProgressIssue();
+    const result = validator.validateIssue(issue, jiraClient, []);
+    assert.ok(!result.violations.includes('ALL_PRS_MERGED'),
+        `Unexpected ALL_PRS_MERGED when parameter omitted: ${result.violations}`);
+});
+
+test('ALL_PRS_MERGED: not raised for Done issues even when all PRs are merged', () => {
+    const validator = new PolicyValidator();
+    const issue = makeDoneIssue();
+    const result = validator.validateIssue(issue, jiraClient, [], [MERGED_PR_A]);
+    assert.ok(!result.violations.includes('ALL_PRS_MERGED'),
+        `Unexpected ALL_PRS_MERGED for Done issue: ${result.violations}`);
+});
+
+test('ALL_PRS_MERGED: raised with multiple merged PRs and no open PRs', () => {
+    const validator = new PolicyValidator();
+    const issue = makeInProgressIssue();
+    const result = validator.validateIssue(issue, jiraClient, [], [MERGED_PR_A, MERGED_PR_B]);
+    assert.ok(result.violations.includes('ALL_PRS_MERGED'),
+        `Expected ALL_PRS_MERGED with multiple merged PRs, got: ${result.violations}`);
+});
+
+test('ALL_PRS_MERGED: raised for Backlog issue when all linked PRs are merged (work done, not transitioned)', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'BACKLOG', estimateSeconds: null });
+    const result = validator.validateIssue(issue, jiraClient, [], [MERGED_PR_A]);
+    assert.ok(result.violations.includes('ALL_PRS_MERGED'),
+        `Expected ALL_PRS_MERGED for Backlog with merged PR, got: ${result.violations}`);
+});
