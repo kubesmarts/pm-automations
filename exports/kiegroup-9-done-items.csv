@@ -1,4 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+24,,https://github.com/pibizza/drools-journal/issues/24,Upstream: separate NamedEntryPoint construction from initialisation in drools-kiesession,pibizza,,Runtimes,,,Future,,0.1,,2026-09-09,,,"NO_PRIORITY, NO_TIME_SPENT"
+33,,https://github.com/pibizza/drools-journal/issues/33,ChronicleJournalStorage thread safety for concurrent compaction,pibizza,,Runtimes,Critical,,Future,S,0.4,,2026-09-09,,,NO_TIME_SPENT
+34,,https://github.com/pibizza/drools-journal/issues/34,Compaction Step 4: retire source pages after COMMIT,pibizza,,Runtimes,Normal,,Future,S,0.2,,2026-09-09,,,NO_TIME_SPENT
+35,,https://github.com/pibizza/drools-journal/issues/35,ExternalRefStrategy.load() — implement or document extension contract,pibizza,,Runtimes,Minor,,Future,S,0.1,,2026-09-09,,,NO_TIME_SPENT
+37,,https://github.com/pibizza/drools-journal/issues/37,Add performance benchmarks for journal write and restore paths,pibizza,,Runtimes,Major,,Future,M,1.0,1.0,2026-09-09,,,
 867,,https://github.com/casehubio/engine/issues/867,feat: read identity from PropagationContext in CasehubDispatch,treblereel,,Runtimes,Normal,,Future,M,1.0,1.0,2026-09-02,,,
 226,,https://github.com/casehubio/platform/issues/226,Consolidate Flyway migrations — collapse incremental scripts into single initial schemas,treblereel,,Runtimes,Normal,,Future,L,2.0,0.0,2026-08-25,,,
 96,,https://github.com/tkobayas/drlx-parser/issues/96,Overlooked Tasks Catch-up,tkobayas,,Runtimes,Normal,,Future,S,0.1,0.1,2026-08-19,,,
