@@ -5,6 +5,7 @@ class IssueDiscovery {
 
     async discoverIssues(filters, jqlQueries, projects) {
         const issueMap = new Map(); // Use Map to deduplicate by issue key
+        const discoveryErrors = [];
 
         // Process JIRA Filters
         if (filters) {
@@ -17,6 +18,7 @@ class IssueDiscovery {
                     console.log(`Filter ${filterId}: Added ${issues.length} issues`);
                 } catch (error) {
                     console.error(`Error processing filter ${filterId}:`, error.message);
+                    discoveryErrors.push(`Filter ${filterId}: ${error.message}`);
                 }
             }
         }
@@ -33,6 +35,7 @@ class IssueDiscovery {
                     console.log(`JQL Query ${i + 1}: Added ${issues.length} issues`);
                 } catch (error) {
                     console.error(`Error processing JQL query "${jql}":`, error.message);
+                    discoveryErrors.push(`JQL query ${i + 1}: ${error.message}`);
                 }
             }
         }
@@ -49,13 +52,21 @@ class IssueDiscovery {
                     console.log(`Projects ${projectKeys.join(', ')}: Added ${issues.length} issues`);
                 } catch (error) {
                     console.error(`Error processing projects ${projectKeys.join(', ')}:`, error.message);
+                    discoveryErrors.push(`Projects ${projectKeys.join(', ')}: ${error.message}`);
                 }
             }
         }
 
         const uniqueIssues = Array.from(issueMap.values());
         console.log(`\n=== Total Unique Issues: ${uniqueIssues.length} ===\n`);
-        
+
+        if (discoveryErrors.length > 0) {
+            throw new Error(
+                `Issue discovery failed for ${discoveryErrors.length} source(s):\n` +
+                discoveryErrors.map(e => `  - ${e}`).join('\n')
+            );
+        }
+
         return uniqueIssues;
     }
 
