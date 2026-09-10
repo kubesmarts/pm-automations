@@ -695,6 +695,7 @@ test('GITHUB_OUTPUT: independent — errors and alerts can both be true simultan
 // Done items whose underlying GH issue was not closed as COMPLETED must be
 // skipped before any validation runs.  The guard sits right after STATUS_LC
 // is set and before field reads / alert generation.
+// When skipping, any stale alerts field must be cleared.
 // ---------------------------------------------------------------------------
 
 /**
@@ -723,6 +724,42 @@ fi
   return bash(script);
 }
 
+/**
+ * Simulate the stateReason skip+clear path.
+ * Returns the log output so tests can verify the "Alerts cleared." message.
+ * Uses a gh stub that records what it was called with instead of hitting the API.
+ *
+ * @param {{ syncStatusFieldId: string, dryRun: boolean }} opts
+ */
+function evalStateReasonClear({ syncStatusFieldId = 'FIELD_ID', dryRun = false } = {}) {
+  const script = `
+STATUS_LC=done
+STATE_REASON=NOT_PLANNED
+SYNC_STATUS_FIELD_ID=${JSON.stringify(syncStatusFieldId)}
+PROJECT_ID=PROJ_ID
+ITEM_ID=ITEM_ID
+DRY_RUN=${dryRun ? 'true' : 'false'}
+
+# Stub gh so it doesn't make real API calls
+gh() { echo "gh_called"; }
+export -f gh
+
+OUTPUT=""
+if [ "$STATUS_LC" = "done" ]; then
+  if [ "$STATE_REASON" != "COMPLETED" ]; then
+    if [ -n "$SYNC_STATUS_FIELD_ID" ] && [ "$DRY_RUN" != "true" ]; then
+      gh api graphql -f query='mutation($p:ID!,$i:ID!,$f:ID!,$t:String!){updateProjectV2ItemFieldValue(input:{projectId:$p itemId:$i fieldId:$f value:{text:$t}}){projectV2Item{id}}}' \
+        -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+        -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="" > /dev/null \
+        && echo "Alerts cleared." \
+        || echo "Warning: failed to clear alerts field."
+    fi
+  fi
+fi
+`;
+  return bash(script);
+}
+
 test('stateReason guard: Done + COMPLETED is processed', () => {
   assert.equal(evalStateReasonGuard({ statusLC: 'done', stateReason: 'COMPLETED' }), 'processed');
 });
@@ -744,6 +781,21 @@ test('stateReason guard: non-Done status is never skipped regardless of stateRea
   assert.equal(evalStateReasonGuard({ statusLC: 'backlog',     stateReason: 'NOT_PLANNED' }), 'processed');
   assert.equal(evalStateReasonGuard({ statusLC: 'next',        stateReason: 'NOT_PLANNED' }), 'processed');
   assert.equal(evalStateReasonGuard({ statusLC: 'in review',   stateReason: 'NOT_PLANNED' }), 'processed');
+});
+
+test('stateReason guard: clears alerts field when skipping a NOT_PLANNED Done item', () => {
+  const out = evalStateReasonClear({ syncStatusFieldId: 'FIELD_ID', dryRun: false });
+  assert.equal(out, 'Alerts cleared.');
+});
+
+test('stateReason guard: does NOT clear alerts field in dry-run mode', () => {
+  const out = evalStateReasonClear({ syncStatusFieldId: 'FIELD_ID', dryRun: true });
+  assert.equal(out, '');
+});
+
+test('stateReason guard: does NOT clear alerts field when SYNC_STATUS_FIELD_ID is unset', () => {
+  const out = evalStateReasonClear({ syncStatusFieldId: '', dryRun: false });
+  assert.equal(out, '');
 });
 
 // ---------------------------------------------------------------------------

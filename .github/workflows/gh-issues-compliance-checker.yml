@@ -212,6 +212,23 @@ jobs:
                 STATE_REASON=$(echo "$item" | jq -r '.content.stateReason // ""')
                 if [ "$STATE_REASON" != "COMPLETED" ]; then
                   echo "  → Skipping: issue is Done but stateReason is '${STATE_REASON:-null}' (not COMPLETED)."
+                  # Clear any stale compliance alerts — the item will never be re-evaluated,
+                  # so we must wipe them now or they persist forever.
+                  if [ -n "$SYNC_STATUS_FIELD_ID" ] && [ "$DRY_RUN" != "true" ]; then
+                    gh api graphql -f query='
+                      mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                        updateProjectV2ItemFieldValue(input: {
+                          projectId: $projectId
+                          itemId: $itemId
+                          fieldId: $fieldId
+                          value: { text: $text }
+                        }) { projectV2Item { id } }
+                      }
+                    ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                      -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="" > /dev/null \
+                      && echo "  → Alerts cleared." \
+                      || echo "  → Warning: failed to clear alerts field."
+                  fi
                   SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
                   continue
                 fi

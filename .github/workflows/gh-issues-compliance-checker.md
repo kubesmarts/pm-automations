@@ -15,7 +15,9 @@ No action is taken when non-tracked fields change (e.g. title, assignee).
 
 ### Skipping Issues Closed as "Not Planned"
 
-When a project item's **Status** is `Done`, the workflow checks the underlying GitHub issue's `stateReason`. If `stateReason` is not `COMPLETED` (e.g. the issue was closed as **"not planned"**, or is `REOPENED`, or has no `stateReason`), the item is **silently skipped** — no alerts are raised, no reporting fields are updated, and no JIRA sync is attempted.
+When a project item's **Status** is `Done`, the workflow checks the underlying GitHub issue's `stateReason`. If `stateReason` is not `COMPLETED` (e.g. the issue was closed as **"not planned"**, or is `REOPENED`, or has no `stateReason`), the item is **skipped** — no new alerts are raised, no reporting fields are updated, and no JIRA sync is attempted.
+
+Any **existing compliance alerts already on the item are cleared** at skip time. This is necessary because a previously In Progress item may have accumulated alerts (e.g. `NO_REMAINING_WORK`) before it was closed as not planned — without this cleanup those alerts would persist forever since the item is never re-evaluated.
 
 This prevents false compliance alerts (e.g. `NO_TIME_SPENT`, `NO_AREA`) from being raised against work that was intentionally abandoned or cancelled.
 
