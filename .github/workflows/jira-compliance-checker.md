@@ -146,6 +146,25 @@ The workflow will:
 - Verify filter IDs are correct
 - Test JQL queries in JIRA search
 
+### Workflow fails with "Issue discovery failed"
+The workflow now **fails the run** when any filter or JQL query returns an error (e.g. a 400 bad JQL response from the JIRA API). This is intentional: a discovery failure means some issues were silently skipped, leaving their stale compliance labels uncleaned.
+
+Common causes and fixes:
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `JIRA API error (400): Expecting ',' but got 'AND'` | Invalid JQL — usually `ORDER BY col AND …` instead of a valid clause | Fix the JQL in the saved JIRA filter |
+| `Filter XXXXX not found` | Filter ID was deleted or you lack permission to read it | Confirm the filter ID and that your service account can access it |
+| `JIRA API error (401)` | Expired or revoked API token | Rotate `PSYNC_PAT_JIRA` |
+
+The run log lists every failed source individually, e.g.:
+```
+Issue discovery failed for 1 source(s):
+  - Filter 109995: JIRA API error (400): ...
+```
+
+Any sources that **did** succeed are still fully processed — their compliance checks ran and their labels were updated. Only the failed sources are missing.
+
 ### Authentication errors
 - Verify `PSYNC_PAT_JIRA` secret is set correctly
 - Verify `PSYNC_JIRA_EMAIL` matches the API token owner
@@ -164,7 +183,7 @@ The workflow will:
 - Merge or close the open PRs, then the alert will clear on the next workflow run
 - If the JIRA dev-status API is not available (e.g. the GitHub integration is not configured), the check is silently skipped — no false positives will be raised
 
-### Workflow fails
+### Workflow fails (other reasons)
 - Check **Actions** tab for error logs
 - Verify all required configuration is set
 - Ensure JIRA base URL is correct (no trailing slash)
