@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
+9046,,https://redhat.atlassian.net/browse/QUARKUS-9046,Quarkus Flow platform participant misses three targeted extensions,baldimir,In progress,Bug,,Blocker,Quarkus,3.40.0.GA,,0.1,0,0.1,0.1,,0.1,,,2026-09-11,
+9022,,https://redhat.atlassian.net/browse/QUARKUS-9022,Duplicate extension Quarkus LangChain4j - Chat Scopes - Runtime in 3.39.0.ER2 metadata,baldimir,Next,Bug,,Blocker,Quarkus,3.40.0.GA,,0.025,0,0.025,0.025,,0.025,,,2026-09-11,
 8966,,https://redhat.atlassian.net/browse/QUARKUS-8966,Quartz scheduled jobs fail to load in native mode,gmunozfe,RESOLVED,Bug,Quarkus-flow,Major,Quarkus,3.40.0.GA,,0.05,0.05,0,0.05,0.05,,,,2026-09-09,
 8965,,https://redhat.atlassian.net/browse/QUARKUS-8965,gRPC workflow fails in native mode,gmunozfe,RESOLVED,Bug,Quarkus-flow,Major,Quarkus,3.40.0.GA,,0.2,0.2,0,0.2,0.2,,,,2026-09-09,
 8913,,https://redhat.atlassian.net/browse/QUARKUS-8913,Quarkus Flow application throws warnings about Jandex version in dev/test/build phase,ricardozanini,DEV COMPLETE,Bug,Quarkus-flow,Critical,Quarkus,3.40.0.GA,,0,0,0,,,,,,2026-09-07,
