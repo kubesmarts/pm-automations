@@ -4,7 +4,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1607,,https://github.com/open-workflow-specification/sdk-java/issues/1607,Implement async call,mcruzdev,In progress,,Runtimes,Major,,2026/Q3,,2.0,0.4,1.6,2.0,0.4,1.6,,,2026-08-14,
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0.0,0.0,0.0,,,2026-08-12,
 1485,,https://github.com/open-workflow-specification/sdk-java/issues/1485,Handle missing a2a operations,fjtirado,Backlog,,Runtimes,,,2026/Q4,S,,,,0.0,0.0,0.0,,,2026-08-12,
-961,,https://github.com/quarkiverse/quarkus-flow/issues/961,Refactor Redis persistence to single-hash-per-instance architecture,ricardozanini,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-10,
+961,,https://github.com/quarkiverse/quarkus-flow/issues/961,Refactor Redis persistence to single-hash-per-instance architecture,fjtirado,In progress,,,,,1.1.1,,,,,0.0,0.0,0.0,,,2026-09-11,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY"
 947,,https://github.com/quarkiverse/quarkus-flow/issues/947,Persistence Redis: ConnectionPoolTooBusyException on heavy load,mcruzdev,In progress,,Runtimes,Major,,2.0.0,,0.6,0.5,0.1,0.6,0.5,0.1,,,2026-09-10,
 908,,https://github.com/quarkiverse/quarkus-flow/issues/908,Create ADR: design solution for OpenTelemetry trace propagation gaps in CloudEvent-triggered workflows,mcruzdev,In progress,,Docs,Major,,2.0.0,,0.0,0.0,0.3,0.0,0.0,0.3,,,2026-09-02,
 901,,https://github.com/quarkiverse/quarkus-flow/issues/901,bug: AgenticAwareWorkflowModelDeserializer fails to deserialize application domain classes,ricardozanini,In progress,,Runtimes,Blocker,,1.1.1,XS,0.1,0.0,0.1,0.1,0.0,0.1,,,2026-09-09,
@@ -36,7 +36,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 404,398,https://github.com/open-workflow-specification/editor/issues/404,feat: Listen task,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
 403,398,https://github.com/open-workflow-specification/editor/issues/403,feat: For task,,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,,
 402,398,https://github.com/open-workflow-specification/editor/issues/402,feat: Fork task,,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,,
-401,398,https://github.com/open-workflow-specification/editor/issues/401,feat: Emit task,,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,,
+401,398,https://github.com/open-workflow-specification/editor/issues/401,feat: Emit task,handreyrc,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,2026-09-11,
 400,398,https://github.com/open-workflow-specification/editor/issues/400,feat: Do Task,,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,,
 399,398,https://github.com/open-workflow-specification/editor/issues/399,feat: Call task,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
 398,214,https://github.com/open-workflow-specification/editor/issues/398,epic: Implement dynamic form for task types,,Next,,Tooling,Normal,,2026/Q4,L,0.0,,0.0,2.8,0.0,2.8,,,,
@@ -45,7 +45,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 395,214,https://github.com/open-workflow-specification/editor/issues/395,feat: Disable editing of graph-structural and flow-routing fields,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
 394,207,https://github.com/open-workflow-specification/editor/issues/394,feat: Light and dark theme support for the text editor,kumaradityaraj,Next,,Tooling,Normal,,2026/Q3,M,0.6,,0.6,0.6,0.0,0.6,,,2026-09-10,
 387,,https://github.com/open-workflow-specification/editor/issues/387,feat: Deploy released Editor versions to GitHub Pages,"lornakelly,fantonangeli",In progress,,Tooling,Critical,,2026/Q4,M,0.4,0.4,0.2,0.4,0.4,0.2,,,2026-09-10,
-384,214,https://github.com/open-workflow-specification/editor/issues/384,feat: Generate task form from schema,handreyrc,In progress,,Tooling,Major,,2026/Q3,M,0.8,0.0,0.8,0.8,0.0,0.8,,,2026-09-05,
+384,214,https://github.com/open-workflow-specification/editor/issues/384,feat: Generate task form from schema,handreyrc,In review,,Tooling,Major,,2026/Q3,M,0.8,0.8,0.0,0.8,0.8,0.0,,,2026-09-11,
 380,223,https://github.com/open-workflow-specification/editor/issues/380,poc: Validate Text Editor and Language Service in vanilla Web Component,fantonangeli,Backlog,,Tooling,Major,,2026/Q4,M,0.6,,0.6,0.6,0.0,0.6,,,2026-09-03,
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mcruzdev,Next,,Runtimes,Major,,Future,M,1.0,,0.8,1.0,0.0,0.8,,,2026-08-12,
 370,225,https://github.com/open-workflow-specification/editor/issues/370,feat: Publish the dual-editor package to npm,fantonangeli,Backlog,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,2026-08-29,
@@ -85,5 +85,5 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 225,207,https://github.com/open-workflow-specification/editor/issues/225,feat: Scaffold Dual-editor package with resizable split-view layout,fantonangeli,Next,,Tooling,Normal,,2026/Q3,M,0.0,,0.0,2.0,0.0,2.0,,,2026-08-29,
 224,207,https://github.com/open-workflow-specification/editor/issues/224,feat: Host-agnostic editable text + change events,,Next,,Tooling,Normal,,2026/Q3,M,0.8,,0.8,0.8,0.0,0.8,,,,
 223,207,https://github.com/open-workflow-specification/editor/issues/223,feat: Scaffold the text-editor workspace package,fantonangeli,Next,,Tooling,Normal,,2026/Q3,M,0.0,,0.0,2.5,0.7,2.1,,,2026-08-29,
-214,,https://github.com/open-workflow-specification/editor/issues/214,Epic: Milestone 2 - Edit a node,lornakelly,In progress,,Tooling,Critical,,2026/Q4,XL,0.0,0.0,0.0,29.7,10.7,17.3,,Still adding tickets so estimate not final,2026-09-10,CHILDREN_STATUS
+214,,https://github.com/open-workflow-specification/editor/issues/214,Epic: Milestone 2 - Edit a node,lornakelly,In progress,,Tooling,Critical,,2026/Q4,XL,0.0,0.0,0.0,29.7,11.5,16.5,,Still adding tickets so estimate not final,2026-09-10,CHILDREN_STATUS
 207,,https://github.com/open-workflow-specification/editor/issues/207,Epic: Milestone 1 - Side-by-side text + diagram,lornakelly,In progress,,Tooling,Critical,,Future,XL,0.0,0.0,0.0,18.7,3.6,15.3,,Still adding tickets so estimate not final,2026-07-16,
