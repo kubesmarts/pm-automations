@@ -1,4 +1,12 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1670,,https://github.com/open-workflow-specification/sdk-java/issues/1670,Potential concurrent exception when closing the application,fjtirado,,Runtimes,Minor,,2026/Q3,XS,0.1,0.1,2026-09-12,,,
+387,,https://github.com/open-workflow-specification/editor/issues/387,feat: Deploy released Editor versions to GitHub Pages,"lornakelly,fantonangeli",,Tooling,Critical,,2026/Q4,M,0.4,0.9,2026-09-12,,,
+412,,https://github.com/open-workflow-specification/editor/issues/412,feat: add .github/dco.yml to enable individual DCO remediation commits,lornakelly,,Tooling,Normal,,2026/Q3,S,0.1,0.1,2026-09-12,,,
+864,,https://github.com/quarkiverse/quarkus-flow/issues/864,Concurrent updates when saving process state,fjtirado,,Runtimes,Major,,1.1.1,M,0.4,0.4,2026-09-12,,The SDK part of the job is done. Now is time to implement queue on Qflow runner,
+947,,https://github.com/quarkiverse/quarkus-flow/issues/947,Persistence Redis: ConnectionPoolTooBusyException on heavy load,mcruzdev,,Runtimes,Major,,2.0.0,,0.6,0.5,2026-09-12,,,
+961,,https://github.com/quarkiverse/quarkus-flow/issues/961,Refactor Redis persistence to single-hash-per-instance architecture,fjtirado,,Runtimes,Critical,,1.1.1,M,0.2,0.2,2026-09-12,,,
+964,,https://github.com/quarkiverse/quarkus-flow/issues/964,docs: Update documentation to incorporate the new diagram editor,lornakelly,,Tooling,Normal,,2026/Q3,S,0.1,0.1,2026-09-12,,,
+968,,https://github.com/quarkiverse/quarkus-flow/issues/968,bug: docs module cannot start in dev mode - missing wiremock.url / wiremock.secure.url,lornakelly,,Runtimes,Minor,,2026/Q3,S,0.1,0.1,2026-09-12,,,
 1657,,https://github.com/open-workflow-specification/sdk-java/issues/1657,A statuschangeevent might be incorrectly published when restoring a suspended workflow instance from db,fjtirado,,Runtimes,Normal,,2026/Q3,S,0.2,0.2,2026-09-10,,,
 372,,https://github.com/open-workflow-specification/editor/issues/372,Spike: Investigate approaches for adding field validation from react-hook-form,handreyrc,,Tooling,Major,,2026/Q3,M,0.7,0.6,2026-09-10,,,
 934,,https://github.com/quarkiverse/quarkus-flow/issues/934,bug: Flow correlation metadata is missing from emitted CloudEvents in native mode,gmunozfe,,Runtimes,Major,,1.1.1,M,1.0,1.0,2026-09-09,,,
