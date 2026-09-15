@@ -8,4 +8,5 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 10,16,https://github.com/kubesmarts/logic-operator/issues/10,End-to-End Testing (Phase 1 Validation),ricardozanini,Backlog,,QE,Blocker,Serverless Logic,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-10,
 9,16,https://github.com/kubesmarts/logic-operator/issues/9,Data Index Integration,ricardozanini,Backlog,,Cloud,Blocker,Serverless Logic,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-10,
 8,16,https://github.com/kubesmarts/logic-operator/issues/8,LogicPlatform Controller (Local Mode),ricardozanini,Backlog,,Cloud,Blocker,Serverless Logic,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-10,
-1,,https://github.com/open-workflow-specification/migration-tool/issues/1,Create a migration tool the convert 0.8 workflows into 1.0 workflows,,Next,,Tooling,Critical,,2.0.0,,,,,0.0,0.0,0.0,,,,
+2,1,https://github.com/open-workflow-specification/migration-tool/issues/2,Population of initial version of the migration tool,,In progress,,Tooling,Critical,,2.0.0,,0.8,,,,,,,,,
+1,,https://github.com/open-workflow-specification/migration-tool/issues/1,Create a migration tool the convert 0.8 workflows into 1.0 workflows,fjtirado,Next,,Tooling,Critical,,2.0.0,,,,,0.0,0.0,0.0,,,,
