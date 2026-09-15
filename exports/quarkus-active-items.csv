@@ -1,9 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-9046,,https://redhat.atlassian.net/browse/QUARKUS-9046,Quarkus Flow platform participant misses three targeted extensions,baldimir,In progress,Bug,,Blocker,Quarkus,3.40.0.GA,,0.1,0.025,0.075,0.1,0.025,0.075,,,2026-09-12,NO_AREA
+9046,,https://redhat.atlassian.net/browse/QUARKUS-9046,Quarkus Flow platform participant misses three targeted extensions,baldimir,In progress,Bug,Quarkus-flow,Blocker,Quarkus,3.40.0.GA,,0.1,0.025,0.075,0.1,0.025,0.075,,,2026-09-15,
 8966,,https://redhat.atlassian.net/browse/QUARKUS-8966,Quartz scheduled jobs fail to load in native mode,gmunozfe,RESOLVED,Bug,Quarkus-flow,Major,Quarkus,3.40.0.GA,,0.05,0.05,0,0.05,0.05,,,,2026-09-09,
 8965,,https://redhat.atlassian.net/browse/QUARKUS-8965,gRPC workflow fails in native mode,gmunozfe,RESOLVED,Bug,Quarkus-flow,Major,Quarkus,3.40.0.GA,,0.2,0.2,0,0.2,0.2,,,,2026-09-09,
 8913,,https://redhat.atlassian.net/browse/QUARKUS-8913,Quarkus Flow application throws warnings about Jandex version in dev/test/build phase,ricardozanini,DEV COMPLETE,Bug,Quarkus-flow,Critical,Quarkus,3.40.0.GA,,0,0,0,,,,,,2026-09-07,
-8374,,https://redhat.atlassian.net/browse/QUARKUS-8374,Prepare Quarkus Flow Exploratory Test Document,gmunozfe,REVIEW,Task,,Major,Quarkus,3.40.0.GA,,0.0013,1,0,0.0013,1,,,,2026-09-09,
+8374,,https://redhat.atlassian.net/browse/QUARKUS-8374,Prepare Quarkus Flow Exploratory Test Document,gmunozfe,REVIEW,Task,,Major,Quarkus,3.40.0.GA,,1.2,1.2,0,1.2,1.2,,,,2026-09-14,
 8094,7862,https://redhat.atlassian.net/browse/QUARKUS-8094,Implementation of Database Certifications tests for Workflow State Persistence,gmunozfe,In progress,Story,QE,Critical,Quarkus,3.40.0.GA,,2,1,1,2,1,1,,,2026-08-05,
 7875,7862,https://redhat.atlassian.net/browse/QUARKUS-7875,Implementation of RHEL Platform test pipelines for Quarkus Flow using native mode,gmunozfe,In progress,Story,QE,Critical,Quarkus,3.40.0.GA,,1,0.2,0.8,1,0.2,0.8,,,2026-09-04,
 7874,7862,https://redhat.atlassian.net/browse/QUARKUS-7874,Implementation of OpenShift Platform test pipeline for Quarkus Flow using native mode,domhanak,Next,Story,QE,Critical,Quarkus,3.40.0.GA,,1,0,1,1,,1,,,2026-06-17,
