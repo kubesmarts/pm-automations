@@ -81,6 +81,7 @@ Compliance alert codes:
 | `NO_REMAINING_WORK` | Missing remaining estimate. **For epics, only raised when their original estimate is > 0** |
 | `NO_TIME_SPENT` | Missing time spent |
 | `NO_ASSIGNEE` | Missing assignee |
+| `NO_QA_CONTACT` | `QA_CONTACT` is empty on an epic, an issue with child issues, or an individually estimated issue of 4 hours or more. Issues below 4 hours and individual issues without an estimate are exempt |
 | `REMAINING_WORK_NOT_CLEARED` | Remaining work not cleared when Done (auto-cleared by the workflow) |
 | `PR_NOT_MERGED` | One or more GitHub PRs linked to the ticket are still open. Only checked for `RELEASE PENDING` and `CLOSED` (resolution: Done) tickets. PRs are fetched via the JIRA dev-status API |
 
@@ -177,6 +178,10 @@ Any sources that **did** succeed are still fully processed — their compliance 
 
 ### `ESTIMATE_TOO_LONG` violation on an issue
 - The original estimate on the JIRA ticket exceeds 2 weeks (10 business days) and the ticket is `In Progress`; consider breaking the work into smaller issues, or move it back to `Backlog` / `New` if the large estimate is intentional at this stage
+
+### `NO_QA_CONTACT` violation on an issue
+- Set the `QA_CONTACT` field to at least one QA contact.
+- This is required for epics, issues with child issues, and individual issues whose original estimate is 4 hours or more. It is not required for individual issues estimated below 4 hours or with no estimate.
 
 ### `PR_NOT_MERGED` violation on an issue
 - One or more GitHub pull requests linked to the ticket are still open while the ticket is in `RELEASE PENDING` or `CLOSED` (Done) status

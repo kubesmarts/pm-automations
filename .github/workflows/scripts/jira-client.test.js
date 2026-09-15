@@ -132,6 +132,21 @@ test('extractComplianceAlerts: works when mention node precedes the text (real c
 });
 
 // ---------------------------------------------------------------------------
+// QA contact field extraction
+// ---------------------------------------------------------------------------
+
+test('extractQaContact: returns the QA_CONTACT field value', () => {
+  const client = makeClient(async () => ({}));
+  const qaContact = { displayName: 'Quinn' };
+  assert.equal(client.extractQaContact({ fields: { QA_CONTACT: qaContact } }), qaContact);
+});
+
+test('extractQaContact: returns null when QA_CONTACT is absent', () => {
+  const client = makeClient(async () => ({}));
+  assert.equal(client.extractQaContact({ fields: {} }), null);
+});
+
+// ---------------------------------------------------------------------------
 // fetchLinkedPullRequests
 // ---------------------------------------------------------------------------
 

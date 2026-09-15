@@ -27,6 +27,7 @@ A GitHub Actions workflow that validates JIRA issues against ABLE team's softwar
 | Remaining Work | Remaining Estimate | Time tracking | Must be set (any positive value). **For epics, only required when their own Original Estimate is > 0** |
 | Time Spent | Time Spent (worklog sum) | Time tracking | Must be set (can be 0, but field must exist/not be null) |
 | Assignee | Assignee | User | Must have at least one assignee |
+| QA Contact | QA_CONTACT | User or user array | Must be set for epics, issues with child issues, and individual issues with an original estimate of at least 4 hours. Individual issues below 4 hours or without an estimate are exempt |
 
 ### Component-to-Area Label Mapping (SRVLOGIC Issues Only)
 
@@ -208,6 +209,7 @@ for (label in labelsToRemove) {
 | `NO_REMAINING_WORK` | Remaining Estimate is empty | Required for In Progress, In Review — **suppressed for epics when their Original Estimate is ≤ 0** |
 | `NO_TIME_SPENT` | Time Spent field is null/not set | Required for Done (value can be 0, but field must exist) |
 | `NO_ASSIGNEE` | Assignee field is empty | Required for In Progress, In Review, Done |
+| `NO_QA_CONTACT` | QA_CONTACT is empty | Required for epics, issues with child issues, and individual issues whose Original Estimate is at least 4 hours |
 | `REMAINING_WORK_NOT_CLEARED` | Remaining Estimate > 0 when Done | Status is Done but Remaining Estimate not cleared |
 
 ## JIRA API Integration
@@ -224,12 +226,12 @@ for (label in labelsToRemove) {
 #### Get Filter and Execute
 ```
 GET {JIRA_BASE_URL}/rest/api/3/filter/{filterId}
-GET {JIRA_BASE_URL}/rest/api/3/search/jql?jql={filter.jql}&fields=key,status,priority,fixVersions,timetracking,worklog,assignee,labels,components&maxResults=100&startAt=0
+GET {JIRA_BASE_URL}/rest/api/3/search/jql?jql={filter.jql}&fields=key,status,priority,fixVersions,timetracking,worklog,assignee,labels,components,issuetype,subtasks,QA_CONTACT&maxResults=100&startAt=0
 ```
 
 #### Execute JQL Query
 ```
-GET {JIRA_BASE_URL}/rest/api/3/search/jql?jql={encodedJQL}&fields=key,status,priority,fixVersions,timetracking,worklog,assignee,labels,components&maxResults=100&startAt=0
+GET {JIRA_BASE_URL}/rest/api/3/search/jql?jql={encodedJQL}&fields=key,status,priority,fixVersions,timetracking,worklog,assignee,labels,components,issuetype,subtasks,QA_CONTACT&maxResults=100&startAt=0
 ```
 
 #### Update Issue Labels (Add/Remove)

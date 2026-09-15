@@ -47,7 +47,7 @@ class JiraClient {
 
     async searchIssues(jql, startAt = 0, maxResults = 1000) {
         const encodedJql = encodeURIComponent(jql);
-        const fields = 'summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,project,issuetype,parent,updated,aggregatetimeoriginalestimate,aggregatetimespent,aggregatetimeestimate';
+        const fields = 'summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,project,issuetype,parent,subtasks,QA_CONTACT,updated,aggregatetimeoriginalestimate,aggregatetimespent,aggregatetimeestimate';
         const endpoint = `/rest/api/3/search/jql?jql=${encodedJql}&fields=${fields}&maxResults=${maxResults}&startAt=${startAt}`;
 
         console.log(`Searching issues with JQL: ${jql} (startAt: ${startAt})`);
@@ -108,7 +108,7 @@ class JiraClient {
     }
 
     async fetchIssue(issueKey) {
-        const fields = 'summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components';
+        const fields = 'summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,issuetype,parent,subtasks,QA_CONTACT';
         return await this.makeRequest(`/rest/api/3/issue/${issueKey}?fields=${fields}`);
     }
 
@@ -183,6 +183,10 @@ class JiraClient {
 
     extractAssignee(issue) {
         return issue.fields.assignee?.displayName || null;
+    }
+
+    extractQaContact(issue) {
+        return issue.fields.QA_CONTACT || null;
     }
 
     extractAssigneeAccountId(issue) {

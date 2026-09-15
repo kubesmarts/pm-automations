@@ -37,6 +37,9 @@ class PolicyValidator {
         // Threshold for ESTIMATE_TOO_LONG: 2 weeks = 2 × 5 days × 8 hours × 3600 seconds
         this.estimateTooLongSeconds = 2 * 5 * 8 * 3600;
 
+        // Threshold for QA contact enforcement: 4 hours × 3600 seconds
+        this.qaContactEstimateSeconds = 4 * 3600;
+
         // Component-to-Area label mapping (for SRVLOGIC issues only)
         this.componentAreaMapping = {
             'CI:Midstream': 'area/ci',
@@ -89,6 +92,11 @@ class PolicyValidator {
      */
     isEpic(issue) {
         return Array.isArray(issue.fields.subtasks) && issue.fields.subtasks.length > 0;
+    }
+
+    hasQaContact(issue, jiraClient) {
+        const qaContact = jiraClient.extractQaContact(issue);
+        return Array.isArray(qaContact) ? qaContact.length > 0 : Boolean(qaContact);
     }
 
     validateIssue(issue, jiraClient, openPullRequests = []) {
@@ -153,6 +161,14 @@ class PolicyValidator {
             if (estimateSeconds != null && estimateSeconds > this.estimateTooLongSeconds) {
                 violations.push('ESTIMATE_TOO_LONG');
             }
+        }
+
+        // NO_QA_CONTACT: required for epics, issues with children, and individual issues estimated at least 4 hours.
+        const estimateSeconds = issue.fields.timetracking?.originalEstimateSeconds;
+        const requiresQaContact = issue.fields.issuetype?.name === 'Epic' ||
+            epic || estimateSeconds >= this.qaContactEstimateSeconds;
+        if (requiresQaContact && !this.hasQaContact(issue, jiraClient)) {
+            violations.push('NO_QA_CONTACT');
         }
 
         return {
