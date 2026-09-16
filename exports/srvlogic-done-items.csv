@@ -1,10 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1048,,https://redhat.atlassian.net/browse/SRVLOGIC-1048,[IBM build migration] Create a new CI system inside IBM infrastructure,jankrystof-ibm,Epic,CI,Blocker,Serverless logic,1.40.0 OSL,,0.6,0.625,2026-09-16,,,
+1005,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1005,Create release tickets,baldimir,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0.025,2026-09-16,,,
 1141,,https://redhat.atlassian.net/browse/SRVLOGIC-1141,Backport security fixes to 1.39 from main #1,baldimir,Task,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.2,0.2063,2026-09-16,,,
 1137,,https://redhat.atlassian.net/browse/SRVLOGIC-1137,Workflow serviceUrl has now a relative path in the ProcessDefinitions query,mcruzdev,Bug,Runtimes,Normal,Serverless logic,1.39.0 OSL,,0.2,0.175,2026-09-16,,,
-1127,,https://redhat.atlassian.net/browse/SRVLOGIC-1127,Wrong order in cloudevents publishing in Sonataflow with persistence,mcruzdev,Bug,Runtimes,Critical,Serverless logic,1.39.0 OSL,,0,0,2026-09-16,,,NO_ESTIMATE
-1048,1012,https://redhat.atlassian.net/browse/SRVLOGIC-1048,[IBM build migration] Create a new CI system inside IBM infrastructure,jankrystof-ibm,Story,CI,Blocker,Serverless logic,1.40.0 OSL,,0.6,0.625,2026-09-15,,,
+1127,,https://redhat.atlassian.net/browse/SRVLOGIC-1127,Wrong order in cloudevents publishing in Sonataflow with persistence,mcruzdev,Bug,Runtimes,Critical,Serverless logic,1.39.0 OSL,,0,0,2026-09-16,,,"NO_ESTIMATE, NO_TIME_SPENT"
 1040,,https://redhat.atlassian.net/browse/SRVLOGIC-1040,"Operator, DI, JS and Workflows migration from OSL 1.38.1 to OSL 1.39.0",wmedvede,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,0.6,0.4,2026-09-15,,,
-1005,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1005,Create release tickets,baldimir,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0,2026-09-15,,,NO_TIME_SPENT
 1003,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1003,Build CR1,saumya1singh,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,1,0.925,2026-09-15,,,
 1117,,https://redhat.atlassian.net/browse/SRVLOGIC-1117,"CI :: Build - Full: ""Check tests result"" step masks real failure with misleading error",jankrystof-ibm,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0.2,2026-09-15,,,
 737,,https://redhat.atlassian.net/browse/SRVLOGIC-737,Display version information and link to graphql ui from data index webapp,kumaradityaraj,Task,Tooling,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,2026-09-15,,,
