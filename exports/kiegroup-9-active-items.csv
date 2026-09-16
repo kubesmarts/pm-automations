@@ -6,4 +6,4 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 97,,https://github.com/tkobayas/drlx-parser/issues/97,DRLX syntax review,tkobayas,In progress,,Docs,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,,2026-06-26,
 56,6683,https://github.com/pibizza/drools-journal/issues/56,Make scan() return only live pages — two-tier catalog+data contract for JournalStorage,pibizza,In progress,,Runtimes,Normal,,Future,M,1.0,0.8,0.2,1.0,0.8,0.2,,,2026-09-12,
 38,6683,https://github.com/pibizza/drools-journal/issues/38,Unified durability: three-mode journal replacing drools-reliability,pibizza,Next,,Runtimes,Major,,Future,XL,2.0,,2.0,2.0,0.0,2.0,,Increased initial estimation. Once it is properly split it will become clearer.,2026-09-09,
-11,,https://github.com/tkobayas/drlx-lsp/issues/11,LSP features beyond completion — parity with drools-lsp,tkobayas,In progress,,Tooling,Normal,,Future,M,1.0,0.1,0.9,1.0,0.1,0.9,,,2026-08-21,
+11,,https://github.com/tkobayas/drlx-lsp/issues/11,LSP features beyond completion — parity with drools-lsp,tkobayas,In progress,,Tooling,Normal,,Future,M,1.0,0.3,0.7,1.0,0.1,0.9,,,2026-08-21,
