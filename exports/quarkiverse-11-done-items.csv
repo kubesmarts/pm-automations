@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+901,,https://github.com/quarkiverse/quarkus-flow/issues/901,bug: AgenticAwareWorkflowModelDeserializer fails to deserialize application domain classes,ricardozanini,,Runtimes,Blocker,,1.1.1,XS,0.1,0.0,2026-09-16,,,
+384,,https://github.com/open-workflow-specification/editor/issues/384,feat: Generate task form from schema,handreyrc,,Tooling,Major,,2026/Q3,L,0.8,0.8,2026-09-16,,,
+415,,https://github.com/open-workflow-specification/editor/issues/415,bug: Update code to match new linting rules,lornakelly,,Tooling,Normal,,2026/Q3,S,0.1,0.0,2026-09-16,,,
 423,,https://github.com/open-workflow-specification/editor/issues/423,bug: Enable Dependabot security updates,fantonangeli,,Tooling,Critical,,2026/Q4,XS,0.2,0.1,2026-09-15,,,
 1670,,https://github.com/open-workflow-specification/sdk-java/issues/1670,Potential concurrent exception when closing the application,fjtirado,,Runtimes,Minor,,2026/Q3,XS,0.1,0.1,2026-09-12,,,
 387,,https://github.com/open-workflow-specification/editor/issues/387,feat: Deploy released Editor versions to GitHub Pages,"lornakelly,fantonangeli",,Tooling,Critical,,2026/Q4,M,0.4,0.9,2026-09-12,,,
@@ -36,7 +39,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 343,,https://github.com/open-workflow-specification/editor/issues/343,feat: enable netlify preview CI for feature branches,fantonangeli,,Tooling,Major,,2026/Q3,S,0.2,0.2,2026-08-29,,,
 209,,https://github.com/open-workflow-specification/editor/issues/209,Spike: Decide on approach for language service,fantonangeli,,Tooling,Major,,2026/Q3,M,0.4,0.6,2026-08-29,,,
 357,,https://github.com/open-workflow-specification/editor/issues/357,feat: Implement schema filter in the editor,handreyrc,,Tooling,Normal,,2026/Q3,M,0.4,0.4,2026-08-29,,,
-901,,https://github.com/quarkiverse/quarkus-flow/issues/901,bug: AgenticAwareWorkflowModelDeserializer fails to deserialize application domain classes,ricardozanini,,Runtimes,Blocker,,1.1.0,XS,0.1,0.1,2026-08-29,,,
 286,,https://github.com/open-workflow-specification/editor/issues/286,Task: MVP Retro,lornakelly,,Tooling,Normal,,2026/Q3,S,0.2,0.2,2026-08-28,,,
 295,,https://github.com/open-workflow-specification/editor/issues/295,feat: Implement editable field components for scalar value types,kumaradityaraj,,Tooling,Normal,,2026/Q3,M,1.0,1.4,2026-08-28,,,
 358,,https://github.com/open-workflow-specification/editor/issues/358,Spike: Evaluate form libraries,lornakelly,,Tooling,Normal,,2026/Q3,S,0.2,0.2,2026-08-28,,,
