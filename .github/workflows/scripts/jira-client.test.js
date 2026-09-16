@@ -131,6 +131,54 @@ test('extractComplianceAlerts: works when mention node precedes the text (real c
   assert.equal(result, 'NO_PRIORITY');
 });
 
+
+// ---------------------------------------------------------------------------
+// upsertComplianceComment
+// ---------------------------------------------------------------------------
+
+test('upsertComplianceComment: skips update when violations are identical', async () => {
+  const existingBody = makeADFComment([
+    { type: 'text', text: 'Compliance violations detected: NO_REMAINING_WORK. Please review and resolve.' },
+  ]);
+  const requests = [];
+  const client = makeClient(async (endpoint, method) => {
+    requests.push({ endpoint, method });
+    return { comments: [{ id: '42', body: existingBody }] };
+  });
+  const result = await client.upsertComplianceComment('PROJ-1', ['NO_REMAINING_WORK'], null, null);
+  assert.equal(result.action, 'skipped');
+  // Only the GET comment fetch should have been made, no PUT
+  assert.ok(requests.every(r => !r.method || r.method === 'GET'), 'Expected no PUT when violations unchanged');
+});
+
+test('upsertComplianceComment: updates comment when violations change (subset match false positive regression)', async () => {
+  // Regression: old comment had NO_ESTIMATE, NO_REMAINING_WORK; now only NO_REMAINING_WORK.
+  // The old substring check would see "NO_REMAINING_WORK" inside the existing text and skip — wrong.
+  const existingBody = makeADFComment([
+    { type: 'text', text: 'Compliance violations detected: NO_ESTIMATE, NO_REMAINING_WORK. Please review and resolve.' },
+  ]);
+  const requests = [];
+  const client = makeClient(async (endpoint, method) => {
+    requests.push({ endpoint, method: method || 'GET' });
+    return { comments: [{ id: '42', body: existingBody }] };
+  });
+  const result = await client.upsertComplianceComment('PROJ-1', ['NO_REMAINING_WORK'], null, null);
+  assert.equal(result.action, 'updated', 'Expected comment to be updated when violation set changed');
+  assert.ok(requests.some(r => r.method === 'PUT'), 'Expected a PUT request to update the comment');
+});
+
+test('upsertComplianceComment: creates comment when none exists', async () => {
+  const requests = [];
+  const client = makeClient(async (endpoint, method) => {
+    requests.push({ endpoint, method: method || 'GET' });
+    return { comments: [] };
+  });
+  const result = await client.upsertComplianceComment('PROJ-2', ['NO_ESTIMATE'], null, null);
+  assert.equal(result.action, 'created');
+  assert.ok(requests.some(r => r.method === 'POST'), 'Expected a POST request to create the comment');
+});
+
+
 // ---------------------------------------------------------------------------
 // fetchLinkedPullRequests
 // ---------------------------------------------------------------------------

@@ -223,8 +223,10 @@ class JiraClient {
         const violationText = violations.join(', ');
 
         if (existingComment) {
-            const existingText = JSON.stringify(existingComment.body);
-            if (existingText.includes(violationText)) {
+            const existingExtracted = this._extractTextFromADF(existingComment.body);
+            const existingMatch = existingExtracted.match(/Compliance violations detected:\s*(.+?)\.\s*Please review and resolve/);
+            const existingViolationText = existingMatch ? existingMatch[1].trim() : null;
+            if (existingViolationText === violationText) {
                 return { action: 'skipped' };
             }
             await this.makeRequest(`/rest/api/3/issue/${issueKey}/comment/${existingComment.id}`, 'PUT', { body: newBody });
