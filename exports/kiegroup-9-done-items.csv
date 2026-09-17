@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+7079,,https://github.com/apache/incubator-kie/issues/7079,RuleUnit DSL: Support STREAM event processing and CEP temporal operators,tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-09-17,,,
+7095,,https://github.com/apache/incubator-kie/issues/7095,A ternary condition in an inline-eval results in a wrong constraint and class-reactive,tkobayas,,Runtimes,Critical,,Future,S,0.4,0.4,2026-09-17,,,
 7059,,https://github.com/apache/incubator-kie/issues/7059,Drools Sequential: Simple sequence() functionality,Rikkola,,Runtimes,Normal,,Future,L,2.0,1.5,2026-09-15,,,
 1026,,https://github.com/casehubio/engine/issues/1026,refactor: replace hardcoded CaseStatus terminal checks with isTerminal(),treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-09-14,,,
 1069,,https://github.com/casehubio/engine/issues/1069,Add drift-detection enforcer rule to engine build,treblereel,,Runtimes,Normal,,Future,M,0.6,0.6,2026-09-14,,,
