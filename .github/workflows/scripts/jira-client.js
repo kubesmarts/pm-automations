@@ -119,20 +119,33 @@ class JiraClient {
      * Returns an empty array when the API is unavailable or no PRs are linked.
      */
     async fetchLinkedPullRequests(issueId) {
-        try {
-            const endpoint = `/rest/dev-status/1.0/issue/detail?issueId=${issueId}&applicationType=GitHub&dataType=pullrequest`;
-            const data = await this.makeRequest(endpoint);
-            const repos = data?.detail?.[0]?.pullRequests ?? [];
-            return repos.map(pr => ({
-                id: pr.id,
-                title: pr.name,
-                url: pr.url,
-                status: pr.status  // 'OPEN', 'MERGED', 'DECLINED'
-            }));
-        } catch (error) {
-            console.warn(`  ⚠️  Could not fetch linked PRs for issue ${issueId}: ${error.message}`);
-            return [];
+        // The GitHub for Atlassian (OAuth) app registers as 'oAuth-com.github.integration.production';
+        // the older self-hosted GitHub connector uses 'GitHub'. Query both and merge results.
+        const appTypes = ['GitHub', 'oAuth-com.github.integration.production'];
+        const seen = new Set();
+        const prs = [];
+        for (const appType of appTypes) {
+            try {
+                const endpoint = `/rest/dev-status/1.0/issue/detail?issueId=${issueId}&applicationType=${encodeURIComponent(appType)}&dataType=pullrequest`;
+                const data = await this.makeRequest(endpoint);
+                for (const repo of data?.detail ?? []) {
+                    for (const pr of repo?.pullRequests ?? []) {
+                        if (!seen.has(pr.id)) {
+                            seen.add(pr.id);
+                            prs.push({
+                                id: pr.id,
+                                title: pr.name,
+                                url: pr.url,
+                                status: pr.status  // 'OPEN', 'MERGED', 'DECLINED'
+                            });
+                        }
+                    }
+                }
+            } catch (error) {
+                console.warn(`  ⚠️  Could not fetch linked PRs (${appType}) for issue ${issueId}: ${error.message}`);
+            }
         }
+        return prs;
     }
 
     async updateIssueLabels(issueKey, labelsToAdd, labelsToRemove) {

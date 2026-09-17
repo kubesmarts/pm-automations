@@ -183,7 +183,7 @@ test('upsertComplianceComment: creates comment when none exists', async () => {
 // fetchLinkedPullRequests
 // ---------------------------------------------------------------------------
 
-test('fetchLinkedPullRequests: returns mapped PR objects from dev-status API', async () => {
+test('fetchLinkedPullRequests: returns mapped PR objects from dev-status API (legacy GitHub appType)', async () => {
   const devStatusResponse = {
     detail: [{
       pullRequests: [
@@ -192,12 +192,41 @@ test('fetchLinkedPullRequests: returns mapped PR objects from dev-status API', a
       ]
     }]
   };
-  const client = makeClient(async () => devStatusResponse);
+  // First call (GitHub) returns PRs; second call (OAuth appType) returns empty
+  let callCount = 0;
+  const client = makeClient(async () => callCount++ === 0 ? devStatusResponse : { detail: [] });
   const prs = await client.fetchLinkedPullRequests('10001');
   assert.equal(prs.length, 2);
   assert.equal(prs[0].status, 'MERGED');
   assert.equal(prs[1].status, 'OPEN');
   assert.equal(prs[1].url, 'https://github.com/org/repo/pull/2');
+});
+
+test('fetchLinkedPullRequests: returns PRs from OAuth appType (oAuth-com.github.integration.production)', async () => {
+  const oauthResponse = {
+    detail: [{
+      pullRequests: [
+        { id: '3', name: 'OAuth PR', url: 'https://github.com/org/repo/pull/3', status: 'MERGED' },
+      ]
+    }]
+  };
+  // First call (GitHub) returns empty; second call (oAuth appType) returns PRs
+  let callCount = 0;
+  const client = makeClient(async () => callCount++ === 0 ? { detail: [] } : oauthResponse);
+  const prs = await client.fetchLinkedPullRequests('10005');
+  assert.equal(prs.length, 1);
+  assert.equal(prs[0].id, '3');
+  assert.equal(prs[0].status, 'MERGED');
+});
+
+test('fetchLinkedPullRequests: deduplicates PRs returned by both appTypes', async () => {
+  const sharedPR = { id: '1', name: 'Shared PR', url: 'https://github.com/org/repo/pull/1', status: 'MERGED' };
+  const response = { detail: [{ pullRequests: [sharedPR] }] };
+  // Both calls return the same PR
+  const client = makeClient(async () => response);
+  const prs = await client.fetchLinkedPullRequests('10006');
+  assert.equal(prs.length, 1, 'duplicate PR should be deduplicated');
+  assert.equal(prs[0].id, '1');
 });
 
 test('fetchLinkedPullRequests: returns empty array when no PRs linked', async () => {
