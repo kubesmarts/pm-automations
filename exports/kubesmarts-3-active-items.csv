@@ -1,4 +1,15 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
+72,,https://github.com/kubesmarts/logic-apps/issues/72,Placeholder - Database migration service,,Next,,Cloud,Major,,2.0.0,,,,,0.0,0.0,0.0,,,,
+71,,https://github.com/kubesmarts/logic-apps/issues/71,Document versioning and release process,ricardozanini,Next,,Cloud,Major,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-17,
+70,,https://github.com/kubesmarts/logic-apps/issues/70,Build and publish Kafka ingestion service image,ricardozanini,In progress,,Cloud,Major,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-17,"NO_ESTIMATE, NO_REMAINING_WORK"
+69,,https://github.com/kubesmarts/logic-apps/issues/69,Build and publish data-index-service Elasticsearch image,ricardozanini,In progress,,Cloud,Major,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-17,"NO_ESTIMATE, NO_REMAINING_WORK"
+68,,https://github.com/kubesmarts/logic-apps/issues/68,Build and publish data-index-service PostgreSQL image,ricardozanini,In progress,,Cloud,Major,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-17,"NO_ESTIMATE, NO_REMAINING_WORK"
+67,,https://github.com/kubesmarts/logic-apps/issues/67,Set up Quay.io image publishing pipeline,ricardozanini,In progress,,Cloud,Critical,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-17,"NO_ESTIMATE, NO_REMAINING_WORK"
+48,,https://github.com/kubesmarts/logic-operator/issues/48,[M5] Observability Enhancement - workflowApplicationId,ricardozanini,Next,,Cloud,Major,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-17,
+44,,https://github.com/kubesmarts/logic-operator/issues/44,[M4] [EPIC] Production Readiness - Observability & Security,ricardozanini,Next,,Cloud,Major,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-17,
+41,,https://github.com/kubesmarts/logic-operator/issues/41,[M3] [EPIC] Operator Integration & E2E Testing,ricardozanini,Next,,Cloud,Major,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-17,
+37,,https://github.com/kubesmarts/logic-operator/issues/37,[M2] [EPIC] Sticky Session Routing - Operations Support,ricardozanini,Next,,Cloud,Major,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-17,
+32,,https://github.com/kubesmarts/logic-operator/issues/32,[M1] [EPIC] Workflow Gateway MVP - Core Routing,ricardozanini,Next,,Cloud,Major,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-17,
 16,,https://github.com/kubesmarts/logic-operator/issues/16,[EPIC] Logic Operator v2.0 - Implementation Roadmap,ricardozanini,Next,,Cloud,Blocker,Serverless Logic,2.0.0,,,,,2.0,2.0,0.0,,,2026-09-10,
 15,16,https://github.com/kubesmarts/logic-operator/issues/15,Production Readiness,ricardozanini,Backlog,,Cloud,Blocker,Serverless Logic,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-10,
 14,16,https://github.com/kubesmarts/logic-operator/issues/14,Migration Guide & Documentation,ricardozanini,Backlog,,Docs,Blocker,Serverless Logic,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-10,
