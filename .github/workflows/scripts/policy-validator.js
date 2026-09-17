@@ -91,7 +91,7 @@ class PolicyValidator {
         return Array.isArray(issue.fields.subtasks) && issue.fields.subtasks.length > 0;
     }
 
-    validateIssue(issue, jiraClient, openPullRequests = []) {
+    validateIssue(issue, jiraClient, openPullRequests = [], mergedPullRequests = []) {
         const status = jiraClient.extractStatus(issue);
         const policyStage = this.mapStatusToPolicyStage(status);
         const requiredFields = this.requiredFields[policyStage] || [];
@@ -145,6 +145,12 @@ class PolicyValidator {
         // PR_NOT_MERGED: Done issues must have all linked PRs merged
         if (policyStage === 'Done' && openPullRequests.length > 0) {
             violations.push('PR_NOT_MERGED');
+        }
+
+        // ALL_PRS_MERGED: non-Done issues with at least one PR should still have an open PR.
+        // If all linked PRs are already merged, the item should be transitioned to Done.
+        if (policyStage !== 'Done' && mergedPullRequests.length > 0 && openPullRequests.length === 0) {
+            violations.push('ALL_PRS_MERGED');
         }
 
         // ESTIMATE_TOO_LONG: estimate is set but exceeds 2 weeks, only for In Progress
