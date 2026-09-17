@@ -1,5 +1,11 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-1048,,https://redhat.atlassian.net/browse/SRVLOGIC-1048,[IBM build migration] Create a new CI system inside IBM infrastructure,jankrystof-ibm,Epic,CI,Blocker,Serverless logic,1.40.0 OSL,,0.6,0.625,2026-09-16,,,
+1020,,https://redhat.atlassian.net/browse/SRVLOGIC-1020,ba-docker-registry.baqe.org Docker proxy is not available,jakubschwan,Bug,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0,2026-09-17,,,NO_TIME_SPENT
+1163,,https://redhat.atlassian.net/browse/SRVLOGIC-1163,Harden XML Document variable parsing against XXE injection,baldimir,Bug,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,2026-09-17,,,"NO_ESTIMATE, NO_TIME_SPENT"
+1160,,https://redhat.atlassian.net/browse/SRVLOGIC-1160,CI - kie-tools- refactoring,jankrystof-ibm,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.075,2026-09-17,,,
+1124,975,https://redhat.atlassian.net/browse/SRVLOGIC-1124,Endpoint calculation in the DI should include the version for workflows created with a runtime >= 1.39.0,fjtirado,Bug,Runtimes,Critical,Serverless logic,1.39.0 OSL,,0.2,0,2026-09-17,,,
+1095,,https://redhat.atlassian.net/browse/SRVLOGIC-1095,Investigate 2 failures in kogito-maven-repo-testsuite-smoke,domhanak,Task,QE,Critical,Serverless logic,1.39.0 OSL,,0.2,0.1,2026-09-16,,,
+1048,,https://redhat.atlassian.net/browse/SRVLOGIC-1048,[IBM build migration] Create a new CI system inside IBM infrastructure,jankrystof-ibm,Epic,CI,Major,Serverless logic,1.40.0 OSL,,0.6,0.625,2026-09-16,,,
+1015,,https://redhat.atlassian.net/browse/SRVLOGIC-1015,Add the ability to configure user provided labels in the Data Index and Job service pods according with the linked customer request.,wmedvede,Epic,Cloud,Normal,Serverless logic,1.39.0 OSL,,0.8,0.8,2026-09-16,,,
 1005,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1005,Create release tickets,baldimir,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.025,0.025,2026-09-16,,,
 1141,,https://redhat.atlassian.net/browse/SRVLOGIC-1141,Backport security fixes to 1.39 from main #1,baldimir,Task,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.2,0.2063,2026-09-16,,,
 1137,,https://redhat.atlassian.net/browse/SRVLOGIC-1137,Workflow serviceUrl has now a relative path in the ProcessDefinitions query,mcruzdev,Bug,Runtimes,Normal,Serverless logic,1.39.0 OSL,,0.2,0.175,2026-09-16,,,
