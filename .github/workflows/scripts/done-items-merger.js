@@ -64,19 +64,39 @@ function getLatestReportingDate(existingItems) {
 }
 
 /**
+ * Remove existing done-items rows whose Issue URL appears in the active set.
+ * Called before merging so that tickets which transitioned back to an active
+ * status do not leave a ghost row in the done-items CSV.
+ */
+function removeActiveItems(existingItems, activeUrls) {
+  if (!activeUrls || activeUrls.size === 0) return existingItems;
+
+  const evicted = existingItems.filter(item => activeUrls.has(item['Issue URL']));
+  if (evicted.length > 0) {
+    evicted.forEach(item => console.log(`  → Evicted ghost done-items row for ${item['Issue URL']} (ticket is now Active)`));
+  }
+
+  return existingItems.filter(item => !activeUrls.has(item['Issue URL']));
+}
+
+/**
  * Merge new done items with existing items
+ * - Evicts rows for tickets that are currently Active (ghost row cleanup)
  * - Filters new items by latest reporting date
  * - Removes duplicates (keeps newest)
  * - Sorts by reporting date descending
  */
-function mergeDoneItems(newItems, existingItems) {
+function mergeDoneItems(newItems, existingItems, activeUrls) {
   if (!existingItems || existingItems.length === 0) {
     // No existing items, just sort new items
     return sortByReportingDate([...newItems]);
   }
 
-  // Get latest reporting date from existing items
-  const latestDate = getLatestReportingDate(existingItems);
+  // Evict ghost rows for tickets that have transitioned back to Active
+  const cleanedExisting = removeActiveItems(existingItems, activeUrls);
+
+  // Get latest reporting date from cleaned existing items
+  const latestDate = getLatestReportingDate(cleanedExisting);
 
   // Filter new items - only keep items >= latest date
   const filteredNewItems = filterByReportingDate(newItems, latestDate);
@@ -84,7 +104,7 @@ function mergeDoneItems(newItems, existingItems) {
   console.log(`  → Filtered: ${filteredNewItems.length} of ${newItems.length} new items meet date threshold (>= ${latestDate})`);
 
   // Combine all items
-  const allItems = [...filteredNewItems, ...existingItems];
+  const allItems = [...filteredNewItems, ...cleanedExisting];
 
   // Remove duplicates (keeps newest by reporting date)
   const uniqueItems = removeDuplicates(allItems);
@@ -100,5 +120,6 @@ module.exports = {
   removeDuplicates,
   filterByReportingDate,
   getLatestReportingDate,
+  removeActiveItems,
   mergeDoneItems
 };

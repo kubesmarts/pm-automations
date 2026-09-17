@@ -524,6 +524,7 @@ const initiative = PROJECT_NAMES[projectKey] || projectKey
 
 2. **If file exists:**
    - Load existing entries
+   - **Evict ghost rows:** remove any existing done-items row whose Issue URL appears in the current active-items export for the same project (ticket transitioned back to Active)
    - For each new done item:
      - Check if Reporting Date ≥ first entry's Reporting Date
      - If YES: eligible to add
@@ -532,6 +533,10 @@ const initiative = PROJECT_NAMES[projectKey] || projectKey
    - Add new entries
    - Sort all entries by Reporting Date (newest first)
    - Write updated file
+
+**Ghost Row Eviction:**
+
+A ticket can transition from Done back to an active status (e.g. reopened, moved back to In Review). When this happens the done-items CSV retains a stale snapshot from when the ticket was first Done. On each export run, any existing done-items row whose `Issue URL` also appears in the current active-items export for the same project is removed before the merge step.
 
 **Duplicate Prevention:**
 
@@ -564,6 +569,20 @@ Result:
 2026-05-30, SRVLOGIC-101, ...  ← Updated entry
 2026-05-30, SRVLOGIC-100, ...  ← Kept existing
 2026-05-28, SRVLOGIC-102, ...  ← Kept existing
+```
+
+**Ghost Row Eviction Example:**
+
+```
+Existing done-items file:
+2026-09-16, SRVLOGIC-200, ...
+2026-08-25, SRVLOGIC-1119, Alerts=NO_ESTIMATE  ← ticket is now In Review
+
+Current active-items export contains SRVLOGIC-1119.
+
+After eviction:
+2026-09-16, SRVLOGIC-200, ...
+(SRVLOGIC-1119 ghost row removed)
 ```
 
 ## Output Directory
@@ -830,6 +849,10 @@ Summary:
 ### Scenario 11: Compliance Alerts — No Comment
 - **Setup:** Issue with `compliance-alerts` label but no compliance checker comment on the ticket
 - **Expected:** Issue is exported with `Alerts` column empty
+
+### Scenario 12: Ghost Done-Items Row Eviction
+- **Setup:** A ticket was previously exported to `done-items.csv` (e.g. `RELEASE PENDING`). It subsequently transitioned back to an active status (e.g. `In Review`). The done-items row retains stale field values (`Alerts=NO_ESTIMATE`, old estimate).
+- **Expected:** On the next export run, the ticket appears in the active-items export. The merger detects its URL in the active set and evicts the stale done-items row before writing the updated CSV. The ticket no longer appears in the done-items export.
 
 ## Next Steps
 

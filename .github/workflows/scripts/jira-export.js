@@ -195,6 +195,11 @@ function generateExports(projectActiveItems, projectDoneItems) {
   for (const [projectKey, newItems] of Object.entries(projectDoneItems)) {
     const fileName = `${projectKey.toLowerCase()}-done-items.csv`;
 
+    // Build set of active Issue URLs for this project (used to evict ghost rows)
+    const activeUrls = new Set(
+      (projectActiveItems[projectKey] || []).map(item => item['Issue URL'])
+    );
+
     // Read existing done items
     const existingItems = readExistingCSV(EXPORTS_DIR, fileName, DONE_ITEMS_COLUMNS);
 
@@ -209,9 +214,9 @@ function generateExports(projectActiveItems, projectDoneItems) {
         console.log(`[DRY RUN] Would create ${fileName}`);
       }
     } else {
-      // Merge with existing
+      // Merge with existing, evicting any ghost rows for tickets now Active
       console.log(`${fileName} → merging ${newItems.length} new items with ${existingItems.length} existing`);
-      const mergedItems = mergeDoneItems(newItems, existingItems);
+      const mergedItems = mergeDoneItems(newItems, existingItems, activeUrls);
       const addedCount = mergedItems.length - existingItems.length;
 
       console.log(`${fileName} → ${addedCount} new items added (total: ${mergedItems.length})`);

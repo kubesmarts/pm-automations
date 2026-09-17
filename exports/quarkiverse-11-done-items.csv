@@ -65,7 +65,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 860,,https://github.com/quarkiverse/quarkus-flow/issues/860,RCE via unrestricted Class.forName() in FuncJacksonModule deserialization,ricardozanini,,Runtimes,Blocker,,1.0.0,S,0.1,0.1,2026-08-19,,,
 318,,https://github.com/open-workflow-specification/editor/issues/318,"feat: Implement state management, undo / redo capabilities and component API",handreyrc,,Tooling,Normal,,2026/Q3,M,1.0,0.7,2026-08-18,,,
 320,,https://github.com/open-workflow-specification/editor/issues/320,feat: Expose schema in sdk to editor,lornakelly,,Tooling,Normal,,2026/Q3,M,0.6,0.2,2026-08-18,,,
-844,,https://github.com/quarkiverse/quarkus-flow/issues/844,Flaky test on WorkflowDiagramEditorTest#shouldShowLoadingBeforeDiagramEditor,domhanak,,,,,1.0.0,,,,2026-08-15,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 283,,https://github.com/open-workflow-specification/editor/issues/283,feat: Reduce warnings in build and test logs,fantonangeli,,Tooling,Normal,,2026/Q3,M,0.4,0.4,2026-08-14,,,
 741,,https://github.com/quarkiverse/quarkus-flow/issues/741,docs: Remove quarkus.flow.durable.kube.member.lease.acquire-timeout property from documentation as it's not implemented yet,mcruzdev,,Runtimes,Major,,1.0.0,M,0.0,0.0,2026-08-12,,,
 1526,,https://github.com/open-workflow-specification/sdk-java/issues/1526,Implement attemp.duration,"mcruzdev,fjtirado",,Runtimes,Normal,,1.0.0,M,0.4,0.3,2026-08-12,,,
@@ -146,7 +145,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1553,,https://github.com/open-workflow-specification/sdk-java/issues/1553,Java defined WFs tasks are serialized without the `call` field,fjtirado,,Runtimes,Critical,,2026/Q3,S,0.2,0.2,2026-07-24,,,
 1558,,https://github.com/open-workflow-specification/sdk-java/issues/1558,YAML serialization/deserialization fails if there is a number in query http,fjtirado,,Runtimes,Major,,2026/Q3,XS,0.1,0.1,2026-07-24,,,
 208,,https://github.com/open-workflow-specification/editor/issues/208,Spike: Evaluate embedded code editor,lornakelly,,Tooling,Major,,2026/Q3,S,0.4,0.4,2026-07-22,,,
-112,,https://github.com/quarkiverse/quarkus-flow/issues/112,epic: Benchmark and Load Testing,gmunozfe,,Runtimes,Major,,2026/Q3,L,7.0,6.0,2026-07-21,,,CHILDREN_STATUS
 260,,https://github.com/open-workflow-specification/editor/issues/260,bug: Start/End node styles reference unavailable Tailwind CSS variables inside Shadow DOM,fantonangeli,,Tooling,Blocker,,2026/Q2,M,0.4,0.2,2026-07-17,,,
 222,,https://github.com/open-workflow-specification/editor/issues/222,feat: Migrate to Open Workflow Specification,lornakelly,,Tooling,Critical,,2026/Q3,M,0.4,0.4,2026-07-16,,,
 1517,,https://github.com/serverlessworkflow/sdk-java/issues/1517,NPE in TryExecutor when retry is configured without explicit backoff strategy,"mcruzdev,fjtirado",,Runtimes,Blocker,,1.0,,0.2,0.2,2026-07-14,,,
