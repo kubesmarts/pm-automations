@@ -1,0 +1,57 @@
+{
+  "runDate": "2026-09-18T13:31:22.923Z",
+  "sources": {
+    "filters": [],
+    "jqlQueries": [],
+    "projects": [
+      "PAT"
+    ]
+  },
+  "totalIssues": 1,
+  "issuesWithViolations": 1,
+  "violations": [
+    {
+      "jiraKey": "PAT-1",
+      "jiraUrl": "https://skavgou.atlassian.net/browse/PAT-1",
+      "status": "In Progress",
+      "policyStage": "In Progress",
+      "violations": [
+        "NO_AREA",
+        "NO_VERSION",
+        "NO_QA_CONTACT"
+      ],
+      "labelsAdded": [
+        "compliance-alerts"
+      ],
+      "labelsRemoved": [],
+      "fields": {
+        "area": null,
+        "priority": "Medium",
+        "fixVersions": [],
+        "originalEstimate": "5h",
+        "remainingEstimate": "5h",
+        "timeSpent": null,
+        "assignee": "Sean Kavanagh"
+      }
+    }
+  ],
+  "summary": {
+    "byStatus": {
+      "In Progress": {
+        "total": 1,
+        "violations": 1
+      }
+    },
+    "byViolationType": {
+      "NO_AREA": 1,
+      "NO_VERSION": 1,
+      "NO_QA_CONTACT": 1
+    }
+  },
+  "jiraFilterUrls": {
+    "allViolations": "https://skavgou.atlassian.net/issues/?jql=labels%20IN%20(NO_AREA%2C%20NO_VERSION%2C%20NO_QA_CONTACT)",
+    "NO_AREA": "https://skavgou.atlassian.net/issues/?jql=labels%20%3D%20NO_AREA",
+    "NO_VERSION": "https://skavgou.atlassian.net/issues/?jql=labels%20%3D%20NO_VERSION",
+    "NO_QA_CONTACT": "https://skavgou.atlassian.net/issues/?jql=labels%20%3D%20NO_QA_CONTACT"
+  }
+}

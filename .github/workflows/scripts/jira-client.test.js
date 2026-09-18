@@ -14,6 +14,7 @@ const JiraClient = require('./jira-client');
  */
 function makeClient(makeRequestFn) {
   const client = new JiraClient('https://jira.example.com', 'user@example.com', 'token');
+  client.qaContactFieldId = 'customfield_10470';
   client.makeRequest = makeRequestFn;
   return client;
 }
@@ -141,9 +142,39 @@ test('extractQaContact: returns the QA_CONTACT field value', () => {
   assert.equal(client.extractQaContact({ fields: { QA_CONTACT: qaContact } }), qaContact);
 });
 
-test('extractQaContact: returns null when QA_CONTACT is absent', () => {
+test('extractQaContact: returns customfield value when qaContactFieldId is set', () => {
+  const client = makeClient(async () => ({}));
+  client.qaContactFieldId = 'customfield_10470';
+  const qaContact = { displayName: 'Quinn' };
+  assert.equal(client.extractQaContact({ fields: { customfield_10470: qaContact } }), qaContact);
+});
+
+test('extractQaContact: returns "QA Contact" field value as fallback', () => {
+  const client = makeClient(async () => ({}));
+  const qaContact = { displayName: 'Quinn' };
+  assert.equal(client.extractQaContact({ fields: { 'QA Contact': qaContact } }), qaContact);
+});
+
+test('extractQaContact: returns null when QA contact is absent', () => {
   const client = makeClient(async () => ({}));
   assert.equal(client.extractQaContact({ fields: {} }), null);
+});
+
+test('resolveQaContactFieldId: finds matching field id from /rest/api/3/field', async () => {
+  const client = new JiraClient('https://jira.example.com', 'user@example.com', 'token');
+  client.makeRequest = async (endpoint) => {
+    if (endpoint === '/rest/api/3/field') {
+      return [
+        { id: 'customfield_10001', name: 'Story Points' },
+        { id: 'customfield_10470', name: 'QA Contact' }
+      ];
+    }
+    return {};
+  };
+
+  const fieldId = await client.resolveQaContactFieldId();
+  assert.equal(fieldId, 'customfield_10470');
+  assert.equal(client.qaContactFieldId, 'customfield_10470');
 });
 
 // ---------------------------------------------------------------------------

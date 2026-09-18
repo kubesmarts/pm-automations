@@ -4,6 +4,30 @@ class JiraClient {
     constructor(baseUrl, email, token) {
         this.baseUrl = baseUrl;
         this.auth = Buffer.from(`${email}:${token}`).toString('base64');
+        this.qaContactFieldId = process.env.JIRA_QA_CONTACT_FIELD_ID || null;
+    }
+
+    async resolveQaContactFieldId() {
+        if (this.qaContactFieldId) return this.qaContactFieldId;
+
+        try {
+            const fields = await this.makeRequest('/rest/api/3/field');
+            if (Array.isArray(fields)) {
+                const qaField = fields.find(f => {
+                    const name = (f.name || '').toLowerCase().trim();
+                    const clause = (f.clauseNames || []).map(c => c.toLowerCase().trim());
+                    return name === 'qa contact' || name === 'qa_contact' || clause.includes('qa contact') || clause.includes('qa_contact');
+                });
+                if (qaField?.id) {
+                    this.qaContactFieldId = qaField.id;
+                    return this.qaContactFieldId;
+                }
+            }
+        } catch (error) {
+            console.warn(`  ⚠️  Could not resolve QA Contact custom field ID: ${error.message}`);
+        }
+
+        return this.qaContactFieldId;
     }
 
     async makeRequest(endpoint, method = 'GET', body = null) {
@@ -47,7 +71,9 @@ class JiraClient {
 
     async searchIssues(jql, startAt = 0, maxResults = 1000) {
         const encodedJql = encodeURIComponent(jql);
-        const fields = 'summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,project,issuetype,parent,subtasks,QA_CONTACT,updated,aggregatetimeoriginalestimate,aggregatetimespent,aggregatetimeestimate';
+        const qaField = await this.resolveQaContactFieldId();
+        const customQaField = qaField ? `,${qaField}` : '';
+        const fields = `summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,project,issuetype,parent,subtasks,QA_CONTACT${customQaField},updated,aggregatetimeoriginalestimate,aggregatetimespent,aggregatetimeestimate`;
         const endpoint = `/rest/api/3/search/jql?jql=${encodedJql}&fields=${fields}&maxResults=${maxResults}&startAt=${startAt}`;
 
         console.log(`Searching issues with JQL: ${jql} (startAt: ${startAt})`);
@@ -108,7 +134,9 @@ class JiraClient {
     }
 
     async fetchIssue(issueKey) {
-        const fields = 'summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,issuetype,parent,subtasks,QA_CONTACT';
+        const qaField = await this.resolveQaContactFieldId();
+        const customQaField = qaField ? `,${qaField}` : '';
+        const fields = `summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,issuetype,parent,subtasks,QA_CONTACT${customQaField}`;
         return await this.makeRequest(`/rest/api/3/issue/${issueKey}?fields=${fields}`);
     }
 
@@ -186,7 +214,11 @@ class JiraClient {
     }
 
     extractQaContact(issue) {
-        return issue.fields.QA_CONTACT || null;
+        if (!issue?.fields) return null;
+        if (this.qaContactFieldId && issue.fields[this.qaContactFieldId] != null) {
+            return issue.fields[this.qaContactFieldId];
+        }
+        return issue.fields['QA Contact'] || issue.fields.QA_CONTACT || null;
     }
 
     extractAssigneeAccountId(issue) {
