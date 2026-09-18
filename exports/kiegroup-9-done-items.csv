@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,,Runtimes,Normal,,Future,XL,,,2026-09-18,,,"NO_TIME_SPENT, CHILDREN_STATUS"
 7079,,https://github.com/apache/incubator-kie/issues/7079,RuleUnit DSL: Support STREAM event processing and CEP temporal operators,tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-09-17,,,
 7095,,https://github.com/apache/incubator-kie/issues/7095,A ternary condition in an inline-eval results in a wrong constraint and class-reactive,tkobayas,,Runtimes,Critical,,Future,S,0.4,0.4,2026-09-17,,,
 7059,,https://github.com/apache/incubator-kie/issues/7059,Drools Sequential: Simple sequence() functionality,Rikkola,,Runtimes,Normal,,Future,L,2.0,1.5,2026-09-15,,,
@@ -32,7 +33,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 22,,https://github.com/casehubio/engine/issues/22,SLA/SLO Tracking and Deadline Monitoring,treblereel,,Runtimes,Normal,,Future,L,1.0,0.0,2026-08-17,,,
 2388,,https://github.com/apache/incubator-kie-issues/issues/2388,Refactor: Move util linked-list/iterator types from drools-core to drools-base,Rikkola,,Runtimes,Normal,,Future,S,1.0,1.0,2026-08-15,,,
 2389,,https://github.com/apache/incubator-kie-issues/issues/2389,Refactor: Move PropagationEntry to drools-base from drools-core,Rikkola,,Runtimes,Normal,,Future,S,1.0,1.0,2026-08-14,,,
-2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,,Runtimes,Normal,,Future,XL,4.2,,2026-08-12,,,"NO_TIME_SPENT, CHILDREN_STATUS"
 23,,https://github.com/casehubio/engine/issues/23,External Event Ingestion,treblereel,,Runtimes,Normal,,Future,L,1.0,0.0,2026-08-12,,,
 454,,https://github.com/casehubio/engine/issues/454,feat(acl): add security-impl module with JPA-backed flat grant enforcement,treblereel,,Runtimes,Normal,,Future,M,0.6,0.0,2026-08-12,,,
 9,,https://github.com/casehubio/engine/issues/9,YAML schema support for typed expressions,treblereel,,Runtimes,Normal,,Future,L,1.0,0.0,2026-08-12,,,
