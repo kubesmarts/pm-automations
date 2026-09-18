@@ -1,6 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1165,,https://redhat.atlassian.net/browse/SRVLOGIC-1165,Bind acting identity to authenticated security principal by default,fjtirado,Bug,Runtimes,Minor,Serverless logic,1.39.0 OSL,,0.2,0,2026-09-18,,,NO_TIME_SPENT
+1163,,https://redhat.atlassian.net/browse/SRVLOGIC-1163,Harden XML Document variable parsing against XXE injection,baldimir,Bug,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,2026-09-18,,,
+1041,,https://redhat.atlassian.net/browse/SRVLOGIC-1041,"Fix kie-tools PR Checks not executing tests, e2e test and container builds",domhanak,Task,CI,Critical,Serverless logic,1.39.0 OSL,,0.6,1.0033,2026-09-17,,,
 1020,,https://redhat.atlassian.net/browse/SRVLOGIC-1020,ba-docker-registry.baqe.org Docker proxy is not available,jakubschwan,Bug,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0,2026-09-17,,,NO_TIME_SPENT
-1163,,https://redhat.atlassian.net/browse/SRVLOGIC-1163,Harden XML Document variable parsing against XXE injection,baldimir,Bug,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,2026-09-17,,,"NO_ESTIMATE, NO_TIME_SPENT"
 1160,,https://redhat.atlassian.net/browse/SRVLOGIC-1160,CI - kie-tools- refactoring,jankrystof-ibm,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.075,2026-09-17,,,
 1124,975,https://redhat.atlassian.net/browse/SRVLOGIC-1124,Endpoint calculation in the DI should include the version for workflows created with a runtime >= 1.39.0,fjtirado,Bug,Runtimes,Critical,Serverless logic,1.39.0 OSL,,0.2,0,2026-09-17,,,
 1095,,https://redhat.atlassian.net/browse/SRVLOGIC-1095,Investigate 2 failures in kogito-maven-repo-testsuite-smoke,domhanak,Task,QE,Critical,Serverless logic,1.39.0 OSL,,0.2,0.1,2026-09-16,,,
