@@ -241,6 +241,26 @@ test('NO_QA_CONTACT: not raised when a qualifying issue has a QA contact', () =>
     assert.ok(!result.violations.includes('NO_QA_CONTACT'));
 });
 
+test('NO_QA_CONTACT: not raised for Backlog issue with estimate >= 4h', () => {
+    const validator = new PolicyValidator();
+    // BACKLOG maps to policyStage "Backlog" — QA contact is not required regardless of estimate
+    const issue = makeIssue({ status: 'BACKLOG', estimateSeconds: 4 * 3600 });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_QA_CONTACT'),
+        `Unexpected NO_QA_CONTACT for Backlog issue: ${result.violations}`);
+});
+
+test('NO_QA_CONTACT: not raised for unknown-status issue (defaults to Backlog) with estimate >= 4h', () => {
+    const validator = new PolicyValidator();
+    // Unknown statuses (e.g. "Testing", "Resolved", "Review" from external projects) fall
+    // back to policyStage "Backlog" and must not fire NO_QA_CONTACT — this was the
+    // false-positive seen in QUARKUS-8965, QUARKUS-8374, QUARKUS-9046.
+    const issue = makeIssue({ status: 'Resolved', estimateSeconds: ONE_WEEK_S });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_QA_CONTACT'),
+        `Unexpected NO_QA_CONTACT for unknown-status (Backlog) issue: ${result.violations}`);
+});
+
 // ---------------------------------------------------------------------------
 // PR_NOT_MERGED tests
 // ---------------------------------------------------------------------------

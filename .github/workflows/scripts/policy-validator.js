@@ -170,9 +170,13 @@ class PolicyValidator {
         }
 
         // NO_QA_CONTACT: required for epics, issues with children, and individual issues estimated at least 4 hours.
+        // Suppressed for Backlog — same exemption applied to all other required-field checks.
         const estimateSeconds = issue.fields.timetracking?.originalEstimateSeconds;
-        const requiresQaContact = issue.fields.issuetype?.name === 'Epic' ||
-            epic || estimateSeconds >= this.qaContactEstimateSeconds;
+        const requiresQaContact = policyStage !== 'Backlog' && (
+            issue.fields.issuetype?.name === 'Epic' ||
+            epic ||
+            estimateSeconds >= this.qaContactEstimateSeconds
+        );
         if (requiresQaContact && !this.hasQaContact(issue, jiraClient)) {
             violations.push('NO_QA_CONTACT');
         }
