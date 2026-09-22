@@ -14,5 +14,5 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 11,16,https://github.com/kubesmarts/logic-operator/issues/11,Multi-Version Support & Traffic Splitting,ricardozanini,Backlog,,Cloud,Blocker,Serverless Logic,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-10,
 10,16,https://github.com/kubesmarts/logic-operator/issues/10,End-to-End Testing (Phase 1 Validation),ricardozanini,Backlog,,QE,Blocker,Serverless Logic,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-10,
 8,16,https://github.com/kubesmarts/logic-operator/issues/8,LogicPlatform Controller (Local Mode),ricardozanini,In progress,,Cloud,Blocker,Serverless Logic,2.0.0,,1.0,0.4,0.6,1.0,0.4,0.6,,,2026-09-19,
-2,1,https://github.com/open-workflow-specification/migration-tool/issues/2,Population of initial version of the migration tool,skavgou,In progress,,Tooling,Critical,,2.0.0,,0.8,,,0.8,0.0,0.0,,,2026-09-19,NO_REMAINING_WORK
-1,,https://github.com/open-workflow-specification/migration-tool/issues/1,Create a migration tool the convert 0.8 workflows into 1.0 workflows,fjtirado,Next,,Tooling,Critical,,2.0.0,,,,,0.8,0.0,0.8,,,2026-09-16,
+2,1,https://github.com/open-workflow-specification/migration-tool/issues/2,Population of initial version of the migration tool,skavgou,In progress,,Tooling,Critical,,2.0.0,,0.8,,0.0,0.8,0.0,0.0,,,2026-09-22,IN_PROGRESS_NO_WORK_REMAINING
+1,,https://github.com/open-workflow-specification/migration-tool/issues/1,Create a migration tool the convert 0.8 workflows into 1.0 workflows,fjtirado,Next,,Tooling,Critical,,2.0.0,,,,,0.8,0.0,0.0,,,2026-09-16,
