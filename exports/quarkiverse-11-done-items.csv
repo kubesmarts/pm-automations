@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+292,,https://github.com/open-workflow-specification/editor/issues/292,Spike: Object and array editable interface & UX (design),"lornakelly,cheryl7114",,Tooling,Normal,,2026/Q3,M,2.0,2.0,2026-09-23,,,
+804,,https://github.com/quarkiverse/quarkus-flow/issues/804,feat: Implement test suite that validates example rendering in devui's openworkflow editor,domhanak,,QE,Critical,,1.1.0,L,1.0,0.1,2026-09-23,,,
+908,,https://github.com/quarkiverse/quarkus-flow/issues/908,Create ADR: design solution for OpenTelemetry trace propagation gaps in CloudEvent-triggered workflows,mcruzdev,,Docs,Major,,2.0.0,,0.0,0.0,2026-09-23,,,
 990,,https://github.com/quarkiverse/quarkus-flow/issues/990,OidcClientWorkflowRegistrar.registerDynamicOidcClientFor blocks the calling thread,mcruzdev,,Runtimes,Critical,,2.0.0,S,0.2,0.2,2026-09-22,,,
 1677,,https://github.com/open-workflow-specification/sdk-java/issues/1677,Expose active workflow instances on WorkflowDefinition,mcruzdev,,Runtimes,Major,,1.1.1,XS,0.2,0.2,2026-09-22,,,
 986,,https://github.com/quarkiverse/quarkus-flow/issues/986,Remove Quarkus 3.33 LTS job from ecosystem CI,mcruzdev,,CI,Major,,1.1.1,S,0.2,,2026-09-22,,,NO_TIME_SPENT
