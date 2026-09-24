@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1712,,https://github.com/open-workflow-specification/sdk-java/issues/1712,Add writeObject method to MarshallingUtils,fjtirado,,Runtimes,Normal,,2026/Q3,XS,0.05,0.05,2026-09-24,,,
+852,,https://github.com/quarkiverse/quarkus-flow/issues/852,Add /instances REST endpoint to query running workflow instances,"mathecruz,fjtirado",,Runtimes,Normal,,2.0.0,M,0.3,0.3,2026-09-24,,,
 292,,https://github.com/open-workflow-specification/editor/issues/292,Spike: Object and array editable interface & UX (design),"lornakelly,cheryl7114",,Tooling,Normal,,2026/Q3,M,2.0,2.0,2026-09-23,,,
 804,,https://github.com/quarkiverse/quarkus-flow/issues/804,feat: Implement test suite that validates example rendering in devui's openworkflow editor,domhanak,,QE,Critical,,1.1.0,L,1.0,0.1,2026-09-23,,,
 908,,https://github.com/quarkiverse/quarkus-flow/issues/908,Create ADR: design solution for OpenTelemetry trace propagation gaps in CloudEvent-triggered workflows,mathecruz,,Docs,Major,,2.0.0,,0.0,0.0,2026-09-23,,,
