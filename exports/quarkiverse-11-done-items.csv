@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1007,,https://github.com/quarkiverse/quarkus-flow/issues/1007,Runner should exit with error when lease acquisition timeout is reached,ricardozanini,,Runtimes,Major,,2.0.0,S,0.1,0.1,2026-09-25,,,
+401,,https://github.com/open-workflow-specification/editor/issues/401,feat: Emit task,handreyrc,,Tooling,Normal,,2026/Q4,S,0.2,0.5,2026-09-25,,,
+405,,https://github.com/open-workflow-specification/editor/issues/405,feat: Raise task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.3,2026-09-25,,,
 1712,,https://github.com/open-workflow-specification/sdk-java/issues/1712,Add writeObject method to MarshallingUtils,fjtirado,,Runtimes,Normal,,2026/Q3,XS,0.05,0.05,2026-09-24,,,
 852,,https://github.com/quarkiverse/quarkus-flow/issues/852,Add /instances REST endpoint to query running workflow instances,"mathecruz,fjtirado",,Runtimes,Normal,,2.0.0,M,0.3,0.3,2026-09-24,,,
 292,,https://github.com/open-workflow-specification/editor/issues/292,Spike: Object and array editable interface & UX (design),"lornakelly,cheryl7114",,Tooling,Normal,,2026/Q3,M,2.0,2.0,2026-09-23,,,
