@@ -1,7 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 7121,,https://github.com/apache/incubator-kie/issues/7121,drools: NPE in TupleSetsImpl.removeInsert when a subnetwork CE is shared by a not() and an exists(),Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,0.0,1.0,1.0,0.0,1.0,,,2026-09-19,
 7115,,https://github.com/apache/incubator-kie/issues/7115,Drools: rule with `not` inside `exists` stops firing,Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,0.9,0.1,1.0,0.9,0.1,,,2026-09-18,
-7100,,https://github.com/apache/incubator-kie/issues/7100,Drools Sequential: Mixed alpha + beta expressions in one step → ClassCastException,Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,0.1,0.9,1.0,0.1,0.9,,,2026-09-18,
 7081,,https://github.com/apache/incubator-kie/issues/7081,Drools Sequential: Add support for not() inside the sequence,Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,0.5,0.5,1.0,0.5,0.5,,,2026-09-03,
 6841,,https://github.com/apache/incubator-kie/issues/6841,Review slow tests,tkobayas,In progress,,CI,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,,2026-08-05,
 6683,,https://github.com/apache/incubator-kie/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,0.0,2.0,0.0,11.0,5.4,5.6,,Added some more issues after a review of Mark Proctor,2026-07-08,
