@@ -1,6 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 9176,7862,https://redhat.atlassian.net/browse/QUARKUS-9176,CSD jobs for quarkus-flow are unable to checkout the repository via https url,domhanak,In progress,Bug,QE,Critical,Quarkus,3.40.0.GA,,0,0,0,,,,,,2026-09-23,"NO_ESTIMATE, NO_REMAINING_WORK"
-9046,,https://redhat.atlassian.net/browse/QUARKUS-9046,Quarkus Flow platform participant misses three targeted extensions,baldimir,DEV COMPLETE,Bug,Quarkus-flow,Blocker,Quarkus,3.40.0.GA,,0.1,0.025,0.075,0.1,0.025,0.075,,,2026-09-23,
+9046,,https://redhat.atlassian.net/browse/QUARKUS-9046,Quarkus Flow platform participant misses three targeted extensions,baldimir,DEV COMPLETE,Bug,Quarkus-flow,Blocker,Quarkus,3.40.0.GA,,0.1,0.025,0.075,0.1,0.025,0.075,,,2026-09-25,
 8968,,https://redhat.atlassian.net/browse/QUARKUS-8968,Quarkus Flow extension-support-overrides.json defines quarkus-flow-telemetry,baldimir,TESTING,Bug,Quarkus-flow,Critical,Quarkus,3.40.0.GA,,0.025,0.025,0,0.025,0.025,,,,2026-09-22,
 8967,,https://redhat.atlassian.net/browse/QUARKUS-8967,Quarkus Flow BOM is missing grpc artifacts,baldimir,TESTING,Bug,Quarkus-flow,Critical,Quarkus,3.40.0.GA,,0.05,0.025,0.025,0.05,0.025,0.025,,,2026-09-22,
 8966,,https://redhat.atlassian.net/browse/QUARKUS-8966,Quartz scheduled jobs fail to load in native mode,gmunozfe,RESOLVED,Bug,Quarkus-flow,Major,Quarkus,3.40.0.GA,,0.05,0.05,0,0.05,0.05,,,,2026-09-09,
@@ -15,4 +15,4 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 7870,7862,https://redhat.atlassian.net/browse/QUARKUS-7870,Implementation of OpenShift Platform test pipeline for Quarkus Flow using JVM mode,gmunozfe,In progress,Story,QE,Blocker,Quarkus,3.40.0.GA,,2,1.4,0.6,2,1.4,0.6,,,2026-09-22,
 7862,,https://redhat.atlassian.net/browse/QUARKUS-7862,Quarkus Flow in IBQ verification requirements,domhanak,In progress,Epic,QE,Critical,Quarkus,3.40.0.GA,,0,0,0,10.9,4.8,4.8,,,2026-09-23,NO_REMAINING_WORK
 7861,7862,https://redhat.atlassian.net/browse/QUARKUS-7861,Implementation of product maven artifacts tests (MaReTe) for Quarkus Flow,domhanak,In progress,Story,QE,Blocker,Quarkus,3.40.0.GA,,2,0.6,0.1,2,0.6,0.1,,,2026-09-10,
-7353,,https://redhat.atlassian.net/browse/QUARKUS-7353,Add Quarkus Flow into Platform,baldimir,In progress,Epic,Productization,Major,Quarkus,3.40.0.GA,,0,1,4,4.7,3.85,5.85,,,2026-08-13,
+7353,,https://redhat.atlassian.net/browse/QUARKUS-7353,Add Quarkus Flow into Platform,baldimir,In progress,Epic,Productization,Major,Quarkus,3.40.0.GA,,0,1,4,4.7,3.85,5.85,,,2026-09-25,
