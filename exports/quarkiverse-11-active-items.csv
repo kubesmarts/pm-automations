@@ -1,14 +1,14 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-1691,1645,https://github.com/open-workflow-specification/sdk-java/issues/1691,Implement metadata persistence in MVStore,fjtirado,In review,,Runtimes,Normal,,2026/Q3,M,0.3,0.6,,0.3,0.6,0.0,,,2026-09-26,NO_REMAINING_WORK
-1645,,https://github.com/open-workflow-specification/sdk-java/issues/1645,Cross-cutting data attached to a workflow instance by WorkflowExecutionListener should survive process restarts,fjtirado,In progress,,Runtimes,Major,,2026/Q3,M,0.4,,,0.85,0.75,0.4,,,2026-09-23,NO_REMAINING_WORK
+1723,,https://github.com/open-workflow-specification/sdk-java/issues/1723,HashMappingCoordinator to use a bounded Map,fjtirado,In progress,,Runtimes,,,,,,,,0.0,0.0,0.0,,,2026-09-29,"NO_ESTIMATE, NO_REMAINING_WORK, NO_PRIORITY, NO_MILESTONE"
 1613,,https://github.com/open-workflow-specification/sdk-java/issues/1613,Improve Json serialization for Collection interfaces,fjtirado,Backlog,,Runtimes,Major,,2026/Q3,M,0.5,,0.4,0.5,0.0,0.4,,,2026-09-01,
 1607,,https://github.com/open-workflow-specification/sdk-java/issues/1607,Implement async call,mathecruz,In progress,,Runtimes,Major,,2026/Q3,,2.0,0.4,1.6,2.0,0.4,1.6,,,2026-08-14,
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0.0,0.0,0.0,,,2026-08-12,
 1485,,https://github.com/open-workflow-specification/sdk-java/issues/1485,Handle missing a2a operations,fjtirado,Backlog,,Runtimes,,,2026/Q4,S,,,,0.0,0.0,0.0,,,2026-08-12,
-1021,998,https://github.com/quarkiverse/quarkus-flow/issues/1021,Persist additional objects on Redis,fjtirado,In review,,Runtimes,Major,,2.0.0,M,0.3,0.3,,0.3,0.3,0.0,,,2026-09-26,"NO_REMAINING_WORK, NO_DESCRIPTION"
-1020,998,https://github.com/quarkiverse/quarkus-flow/issues/1020,Persist additional objects on JPA,fjtirado,Next,,Runtimes,Major,,2.0.0,M,0.4,,,0.4,0.0,0.0,,,2026-09-26,NO_DESCRIPTION
+1027,,https://github.com/quarkiverse/quarkus-flow/issues/1027,feat: Replace modal Diagram Editor with full-screen view,lornakelly,Next,,Tooling,Minor,,2.0.0,S,0.2,,0.2,0.2,0.0,0.2,,,2026-09-29,
+1021,998,https://github.com/quarkiverse/quarkus-flow/issues/1021,Persist additional objects on Redis,fjtirado,In review,,Runtimes,Major,,2.0.0,M,0.3,0.3,0.0,0.3,0.3,0.0,,,2026-09-29,
+1020,998,https://github.com/quarkiverse/quarkus-flow/issues/1020,Persist additional objects on JPA,fjtirado,In progress,,Runtimes,Major,,2.0.0,M,0.4,,0.2,0.4,0.0,0.2,,,2026-09-29,
 1004,,https://github.com/quarkiverse/quarkus-flow/issues/1004,Use WorkflowModel instead Object (Defining a new REST sync method),fjtirado,Next,,Runtimes,Normal,,2.0.0,M,0.3,,,0.3,0.0,0.0,,,2026-09-23,
-998,,https://github.com/quarkiverse/quarkus-flow/issues/998,Persist additional objects associated to the process instance,fjtirado,In progress,,Runtimes,Major,,2.0.0,M,,,,0.7,0.3,0.4,,,2026-09-26,
+998,,https://github.com/quarkiverse/quarkus-flow/issues/998,Persist additional objects associated to the process instance,fjtirado,In progress,,Runtimes,Major,,2.0.0,M,,,,0.7,0.3,0.2,,,2026-09-26,
 966,,https://github.com/quarkiverse/quarkus-flow/issues/966,bug: LoopAgent when parsed shows a error in DevUI,lornakelly,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-16,
 898,,https://github.com/quarkiverse/quarkus-flow/issues/898,feat: quarkus-flow-db-migration-quartz extension for Quartz schema migrations,mathecruz,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-08-28,
 897,,https://github.com/quarkiverse/quarkus-flow/issues/897,feat: quarkus-flow-db-migration-runtime extension for JPA schema migrations,mathecruz,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-08-27,
@@ -34,7 +34,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 408,398,https://github.com/open-workflow-specification/editor/issues/408,feat: Try/Catch task,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
 407,398,https://github.com/open-workflow-specification/editor/issues/407,feat: Switch task,lornakelly,In review,,Tooling,Normal,,2026/Q4,S,0.2,0.3,0.0,0.2,0.3,0.0,,,2026-09-26,
 406,398,https://github.com/open-workflow-specification/editor/issues/406,feat: Run task,lornakelly,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,2026-09-24,
-404,398,https://github.com/open-workflow-specification/editor/issues/404,feat: Listen task,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
+404,398,https://github.com/open-workflow-specification/editor/issues/404,feat: Listen task,handreyrc,In progress,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,2026-09-29,
 403,398,https://github.com/open-workflow-specification/editor/issues/403,feat: For task,,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,,
 402,398,https://github.com/open-workflow-specification/editor/issues/402,feat: Fork task,,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,,
 400,398,https://github.com/open-workflow-specification/editor/issues/400,feat: Do Task,,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,,
@@ -44,6 +44,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 396,214,https://github.com/open-workflow-specification/editor/issues/396,feat: Move taskBase Fields into collapsible Section,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,2026-09-19,
 395,214,https://github.com/open-workflow-specification/editor/issues/395,feat: Disable editing of graph-structural and flow-routing fields,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
 380,223,https://github.com/open-workflow-specification/editor/issues/380,poc: Validate Text Editor and Language Service in vanilla Web Component,fantonangeli,Next,,Tooling,Major,,2026/Q4,M,0.6,,0.6,0.6,0.0,0.6,,,2026-09-24,
+379,,https://github.com/open-workflow-specification/editor/issues/379,bug: Diagram does not fit the view when the content prop changes,lornakelly,In progress,,Tooling,Normal,,Future,M,0.4,,0.4,0.4,0.0,0.4,,,2026-09-29,
 378,,https://github.com/open-workflow-specification/editor/issues/378,bug: Toasts displayed in wrong position in Quarkus Flow,kumaradityaraj,In review,,Tooling,Normal,,2026/Q3,M,0.4,0.6,0.0,0.4,0.6,0.0,,Team decided to remove toast notification,2026-09-23,
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mathecruz,Next,,Runtimes,Major,,Future,M,1.0,,0.8,1.0,0.0,0.8,,,2026-08-12,
 375,,https://github.com/open-workflow-specification/editor/issues/375,bug: styling issue in Quarkus Flow,kumaradityaraj,In review,,Tooling,Normal,,2026/Q3,M,0.4,0.6,0.0,0.4,0.6,0.0,,,2026-09-23,
