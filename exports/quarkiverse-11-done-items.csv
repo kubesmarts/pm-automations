@@ -1,4 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1000,,https://github.com/quarkiverse/quarkus-flow/issues/1000,bug: HTTP tasks using URI templates fail in native mode because URITemplateResolver is not registered,fjtirado,,Runtimes,Critical,,2.0.0,XS,0.1,0.1,2026-09-29,,,
+1685,,https://github.com/open-workflow-specification/sdk-java/issues/1685,Missing for native JacksonModelCollectionSerializer and deserializer,fjtirado,,Runtimes,Critical,,1.1.1,XS,0.1,0.1,2026-09-29,,,
+1645,,https://github.com/open-workflow-specification/sdk-java/issues/1645,Cross-cutting data attached to a workflow instance by WorkflowExecutionListener should survive process restarts,fjtirado,,Runtimes,Major,,2026/Q3,M,,,2026-09-29,,,NO_TIME_SPENT
+1691,,https://github.com/open-workflow-specification/sdk-java/issues/1691,Implement metadata persistence in MVStore,fjtirado,,Runtimes,Normal,,2026/Q3,M,0.3,0.6,2026-09-29,,,
+455,,https://github.com/open-workflow-specification/editor/issues/455,feat: Add Changeset Bot to Repository,"ricardozanini,lornakelly",,Tooling,Minor,,2026/Q4,S,0.1,0.1,2026-09-29,,,
 1007,,https://github.com/quarkiverse/quarkus-flow/issues/1007,Runner should exit with error when lease acquisition timeout is reached,ricardozanini,,Runtimes,Major,,2.0.0,S,0.1,0.1,2026-09-25,,,
 401,,https://github.com/open-workflow-specification/editor/issues/401,feat: Emit task,handreyrc,,Tooling,Normal,,2026/Q4,S,0.2,0.5,2026-09-25,,,
 405,,https://github.com/open-workflow-specification/editor/issues/405,feat: Raise task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.3,2026-09-25,,,
@@ -11,8 +16,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1677,,https://github.com/open-workflow-specification/sdk-java/issues/1677,Expose active workflow instances on WorkflowDefinition,mathecruz,,Runtimes,Major,,1.1.1,XS,0.2,0.2,2026-09-22,,,
 986,,https://github.com/quarkiverse/quarkus-flow/issues/986,Remove Quarkus 3.33 LTS job from ecosystem CI,mathecruz,,CI,Major,,1.1.1,S,0.2,,2026-09-22,,,NO_TIME_SPENT
 993,,https://github.com/quarkiverse/quarkus-flow/issues/993,bug: Topologies of workflows with loops or conditions are not rendered in the quarkus dev-ui,ricardozanini,,Runtimes,Major,,2.0.0,M,0.2,0.2,2026-09-19,,,
-1000,,https://github.com/quarkiverse/quarkus-flow/issues/1000,bug: HTTP tasks using URI templates fail in native mode because URITemplateResolver is not registered,fjtirado,,,,,2.0.0,,,,2026-09-19,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
-1685,,https://github.com/open-workflow-specification/sdk-java/issues/1685,Missing for native JacksonModelCollectionSerializer and deserializer,fjtirado,,Runtimes,Critical,,1.1.1,XS,0.1,,2026-09-19,,,NO_TIME_SPENT
 1690,,https://github.com/open-workflow-specification/sdk-java/issues/1690,Add metadata() method so persistence modules can access existing metadata associated to processinstance,fjtirado,,Runtimes,Major,,1.2.0,S,0.1,0.1,2026-09-19,,,
 298,,https://github.com/open-workflow-specification/editor/issues/298,feat: Add navigation guard dialog for dirty drafts,lornakelly,,Tooling,Normal,,2026/Q3,M,0.6,0.3,2026-09-19,,,
 321,,https://github.com/open-workflow-specification/editor/issues/321,feat: Implement volar-service-json for JSON language support,fantonangeli,,Tooling,Major,,2026/Q4,M,1.0,0.5,2026-09-19,,,
