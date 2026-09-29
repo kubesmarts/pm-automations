@@ -22,6 +22,7 @@ Go to **Repository → Settings → Secrets and variables → Actions → Variab
 - **Automatic:** Runs daily at 00:30 UTC (30 min after gh-issues-compliance-checker)
 - **Manual:** Go to **Actions → JIRA Issues Compliance Checker → Run workflow**
   - Optional: Enable "Dry run mode" to test without updating JIRA
+  - Optional: Enter a comma-separated list of JIRA filter IDs in "JIRA filter IDs" to override `PSYNC_JIRA_FILTERS` for that run
 
 ## How It Works
 
@@ -139,6 +140,17 @@ The workflow will:
 - ✅ Validate compliance
 - ✅ Generate report
 - ❌ NOT update JIRA labels
+
+## Testing with a Subset of Filters
+
+When testing a PR (e.g. new compliance rules or script changes) you can point the workflow at a small test JIRA filter instead of running against all filters in `PSYNC_JIRA_FILTERS`.
+
+1. Go to **Actions → JIRA Issues Compliance Checker → Run workflow**
+2. Select **"true"** for "Dry run mode" (recommended during PR testing)
+3. Enter one or more filter IDs in the **"JIRA filter IDs"** field (e.g. `99999` or `99999,88888`)
+4. Click **"Run workflow"**
+
+When the `jira_filters` input is provided it **overrides** `PSYNC_JIRA_FILTERS` for that single run — `PSYNC_JIRA_JQL` and `PSYNC_JIRA_PROJECTS` are still used as normal. When the field is left blank the workflow falls back to `PSYNC_JIRA_FILTERS` unchanged.
 
 ## Troubleshooting
 
