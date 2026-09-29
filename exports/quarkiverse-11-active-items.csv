@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-1723,,https://github.com/open-workflow-specification/sdk-java/issues/1723,HashMappingCoordinator to use a bounded Map,fjtirado,In progress,,Runtimes,,,,,,,,0.0,0.0,0.0,,,2026-09-29,"NO_ESTIMATE, NO_REMAINING_WORK, NO_PRIORITY, NO_MILESTONE"
+1723,,https://github.com/open-workflow-specification/sdk-java/issues/1723,HashMappingCoordinator to use a bounded Map,fjtirado,In review,,Runtimes,Normal,,2026/Q3,M,0.3,0.3,0.1,0.0,0.0,0.0,,,2026-09-29,"NO_ESTIMATE, NO_REMAINING_WORK, NO_PRIORITY, NO_MILESTONE"
 1613,,https://github.com/open-workflow-specification/sdk-java/issues/1613,Improve Json serialization for Collection interfaces,fjtirado,Backlog,,Runtimes,Major,,2026/Q3,M,0.5,,0.4,0.5,0.0,0.4,,,2026-09-01,
 1607,,https://github.com/open-workflow-specification/sdk-java/issues/1607,Implement async call,mathecruz,In progress,,Runtimes,Major,,2026/Q3,,2.0,0.4,1.6,2.0,0.4,1.6,,,2026-08-14,
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0.0,0.0,0.0,,,2026-08-12,
@@ -25,12 +25,11 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 488,,https://github.com/quarkiverse/quarkus-flow/issues/488,task: Refactor docs module: Reorganize DSL examples and enable Maven test execution,domhanak,Backlog,,Docs,Major,,2.0.0,M,0.6,,0.6,0.6,0.0,0.6,,,2026-09-16,
 487,,https://github.com/quarkiverse/quarkus-flow/issues/487,docs: Expand Java DLS Cookbook with additional examples,domhanak,Backlog,,Docs,Major,,2.0.0,M,0.6,,0.6,0.6,0.0,0.6,,,2026-09-16,
 469,,https://github.com/quarkiverse/quarkus-flow/issues/469,feat: Test Framework for Workflow Event Assertions,mathecruz,Next,,Runtimes,Normal,,2.0.0,,1.6,0.6,,1.6,0.6,0.0,,,2026-08-14,
-450,,https://github.com/open-workflow-specification/editor/issues/450,bug: SwitchTask sets default case incorrectly,lornakelly,In review,,Tooling,Normal,,2026/Q4,S,0.2,0.1,0.0,0.2,0.1,0.0,,,2026-09-26,
 446,398,https://github.com/open-workflow-specification/editor/issues/446,feat: task base fields,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
 445,214,https://github.com/open-workflow-specification/editor/issues/445,bug: Incorrect dirty draft count in footer on nested objects,lornakelly,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,2026-09-23,
 441,,https://github.com/open-workflow-specification/editor/issues/441,feat: Create a Core Package for Shared Hooks and Utilities,kumaradityaraj,Next,,Tooling,Normal,,2026/Q4,M,0.6,,0.6,0.6,0.0,0.6,,,2026-09-22,
 418,207,https://github.com/open-workflow-specification/editor/issues/418,feat: handle blank canvas state in Diagram Editor,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
-409,398,https://github.com/open-workflow-specification/editor/issues/409,feat: Wait task,kumaradityaraj,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,2026-09-17,
+409,398,https://github.com/open-workflow-specification/editor/issues/409,feat: Wait task,kumaradityaraj,In progress,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,2026-09-17,
 408,398,https://github.com/open-workflow-specification/editor/issues/408,feat: Try/Catch task,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
 407,398,https://github.com/open-workflow-specification/editor/issues/407,feat: Switch task,lornakelly,In review,,Tooling,Normal,,2026/Q4,S,0.2,0.3,0.0,0.2,0.3,0.0,,,2026-09-26,
 406,398,https://github.com/open-workflow-specification/editor/issues/406,feat: Run task,lornakelly,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,2026-09-24,
@@ -44,10 +43,8 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 396,214,https://github.com/open-workflow-specification/editor/issues/396,feat: Move taskBase Fields into collapsible Section,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,2026-09-19,
 395,214,https://github.com/open-workflow-specification/editor/issues/395,feat: Disable editing of graph-structural and flow-routing fields,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0.0,0.4,,,,
 380,223,https://github.com/open-workflow-specification/editor/issues/380,poc: Validate Text Editor and Language Service in vanilla Web Component,fantonangeli,Next,,Tooling,Major,,2026/Q4,M,0.6,,0.6,0.6,0.0,0.6,,,2026-09-24,
-379,,https://github.com/open-workflow-specification/editor/issues/379,bug: Diagram does not fit the view when the content prop changes,lornakelly,In progress,,Tooling,Normal,,Future,M,0.4,,0.4,0.4,0.0,0.4,,,2026-09-29,
-378,,https://github.com/open-workflow-specification/editor/issues/378,bug: Toasts displayed in wrong position in Quarkus Flow,kumaradityaraj,In review,,Tooling,Normal,,2026/Q3,M,0.4,0.6,0.0,0.4,0.6,0.0,,Team decided to remove toast notification,2026-09-23,
+379,,https://github.com/open-workflow-specification/editor/issues/379,bug: Diagram does not fit the view when the content prop changes,lornakelly,In review,,Tooling,Normal,,Future,M,0.4,0.2,0.0,0.4,0.0,0.4,,,2026-09-29,
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mathecruz,Next,,Runtimes,Major,,Future,M,1.0,,0.8,1.0,0.0,0.8,,,2026-08-12,
-375,,https://github.com/open-workflow-specification/editor/issues/375,bug: styling issue in Quarkus Flow,kumaradityaraj,In review,,Tooling,Normal,,2026/Q3,M,0.4,0.6,0.0,0.4,0.6,0.0,,,2026-09-23,
 370,225,https://github.com/open-workflow-specification/editor/issues/370,feat: Publish the dual-editor package to npm,fantonangeli,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0.0,0.2,,,2026-09-16,
 369,225,https://github.com/open-workflow-specification/editor/issues/369,feat: Integrate the dual-editor in vanilla-web-component,fantonangeli,Next,,Tooling,Normal,,2026/Q4,M,1.0,,1.0,1.0,0.0,1.0,,,2026-09-16,
 368,225,https://github.com/open-workflow-specification/editor/issues/368,feat: Create the dual-editor package with resizable split-view layout,fantonangeli,Next,,Tooling,Normal,,2026/Q4,M,0.8,,0.8,0.8,0.0,0.8,,,2026-09-16,
