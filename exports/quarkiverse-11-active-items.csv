@@ -1,14 +1,14 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-1723,,https://github.com/open-workflow-specification/sdk-java/issues/1723,HashMappingCoordinator to use a bounded Map,fjtirado,In review,,Runtimes,Normal,,2026/Q3,M,0.3,0.3,0.1,0.3,0.3,0.1,,,2026-09-30,
 1613,,https://github.com/open-workflow-specification/sdk-java/issues/1613,Improve Json serialization for Collection interfaces,fjtirado,Backlog,,Runtimes,Major,,2026/Q3,M,0.5,,0.4,0.5,0.0,0.4,,,2026-09-01,
 1607,,https://github.com/open-workflow-specification/sdk-java/issues/1607,Implement async call,mathecruz,In progress,,Runtimes,Major,,2026/Q3,,2.0,0.4,1.6,2.0,0.4,1.6,,,2026-08-14,
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0.0,0.0,0.0,,,2026-08-12,
 1485,,https://github.com/open-workflow-specification/sdk-java/issues/1485,Handle missing a2a operations,fjtirado,Backlog,,Runtimes,,,2026/Q4,S,,,,0.0,0.0,0.0,,,2026-08-12,
-1027,,https://github.com/quarkiverse/quarkus-flow/issues/1027,feat: Replace modal Diagram Editor with full-screen view,lornakelly,Next,,Tooling,Minor,,2.0.0,S,0.2,,0.2,0.2,0.0,0.2,,,2026-09-29,
+1027,,https://github.com/quarkiverse/quarkus-flow/issues/1027,feat: Replace modal Diagram Editor with full-screen view,lornakelly,In progress,,Tooling,Minor,,2.0.0,S,0.2,0.1,0.0,0.2,0.1,0.0,,,2026-10-01,IN_PROGRESS_NO_WORK_REMAINING
 1021,998,https://github.com/quarkiverse/quarkus-flow/issues/1021,Persist additional objects on Redis,fjtirado,In review,,Runtimes,Major,,2.0.0,M,0.3,0.3,0.0,0.3,0.3,0.0,,,2026-09-29,
 1020,998,https://github.com/quarkiverse/quarkus-flow/issues/1020,Persist additional objects on JPA,fjtirado,In progress,,Runtimes,Major,,2.0.0,M,0.4,,0.2,0.4,0.0,0.2,,,2026-09-29,
 1004,,https://github.com/quarkiverse/quarkus-flow/issues/1004,Use WorkflowModel instead Object (Defining a new REST sync method),fjtirado,Next,,Runtimes,Normal,,2.0.0,M,0.3,,,0.3,0.0,0.0,,,2026-09-23,
 998,,https://github.com/quarkiverse/quarkus-flow/issues/998,Persist additional objects associated to the process instance,fjtirado,In progress,,Runtimes,Major,,2.0.0,M,,,,0.7,0.3,0.2,,,2026-09-26,
+989,48,https://github.com/quarkiverse/quarkus-flow/issues/989,Add workflowApplicationId to lifecycle events,,In progress,,Cloud,Major,,2.0.0,M,0.4,,0.4,0.4,0.0,0.4,,,,
 966,,https://github.com/quarkiverse/quarkus-flow/issues/966,bug: LoopAgent when parsed shows a error in DevUI,lornakelly,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-09-16,
 898,,https://github.com/quarkiverse/quarkus-flow/issues/898,feat: quarkus-flow-db-migration-quartz extension for Quartz schema migrations,mathecruz,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-08-28,
 897,,https://github.com/quarkiverse/quarkus-flow/issues/897,feat: quarkus-flow-db-migration-runtime extension for JPA schema migrations,mathecruz,Backlog,,,,,2.0.0,,,,,0.0,0.0,0.0,,,2026-08-27,
