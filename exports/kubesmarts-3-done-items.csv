@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+10,,https://github.com/kubesmarts/logic-operator/issues/10,End-to-End Testing (Phase 1 Validation),ricardozanini,,QE,Blocker,Serverless Logic,2.0.0,,1.0,1,2026-10-02,,,
+13,,https://github.com/kubesmarts/logic-operator/issues/13,Runtime Autoscaling,ricardozanini,,Cloud,Blocker,Serverless Logic,2.0.0,,1.0,0.5,2026-10-02,,,
 8,,https://github.com/kubesmarts/logic-operator/issues/8,LogicPlatform Controller (Local Mode),ricardozanini,,Cloud,Blocker,Serverless Logic,2.0.0,,1.0,0.4,2026-10-01,,,
 67,,https://github.com/kubesmarts/logic-apps/issues/67,Set up Quay.io image publishing pipeline,ricardozanini,,Cloud,Critical,,2.0.0,,0.4,0.4,2026-09-18,,,
 68,,https://github.com/kubesmarts/logic-apps/issues/68,Build and publish data-index-service PostgreSQL image,ricardozanini,,Cloud,Major,,2.0.0,,0.4,0.4,2026-09-18,,,
