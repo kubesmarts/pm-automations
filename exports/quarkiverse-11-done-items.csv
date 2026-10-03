@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+399,,https://github.com/open-workflow-specification/editor/issues/399,feat: Call task,handreyrc,,Tooling,Normal,,2026/Q4,M,1.0,1.0,2026-10-03,,,
 804,,https://github.com/quarkiverse/quarkus-flow/issues/804,feat: Implement test suite that validates example rendering in devui's openworkflow editor,domhanak,,QE,Critical,,,L,1.0,0.1,2026-10-02,,,NO_MILESTONE
 922,,https://github.com/quarkiverse/quarkus-flow/issues/922,The namespace validation should work in the same way for DSL and YAML,mathecruz,,Runtimes,Critical,,,M,0.2,0.2,2026-10-02,,,NO_MILESTONE
 1638,,https://github.com/open-workflow-specification/sdk-java/issues/1638,Expose a shared enum for lifecycle event kinds,mathecruz,,Runtimes,Minor,,,M,0.2,0.2,2026-10-02,,,NO_MILESTONE
