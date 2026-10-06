@@ -17,7 +17,7 @@ const TWO_WEEKS_S = 2 * ONE_WEEK_S;
  * Only the fields exercised by the ESTIMATE_TOO_LONG rule are required here;
  * all other required fields are pre-populated so other rules don't fire.
  */
-function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST-1', subtasks = [] } = {}) {
+function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST-1', subtasks = [], issueType = 'Task', qaContact = null } = {}) {
     return {
         key,
         fields: {
@@ -29,6 +29,8 @@ function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST
             labels:       ['area/runtimes'],
             components:   [],
             subtasks,
+            issuetype:    { name: issueType },
+            QA_CONTACT:   qaContact,
             timetracking: {
                 originalEstimateSeconds:  estimateSeconds,
                 originalEstimate:         estimateSeconds != null ? `${Math.round(estimateSeconds / 3600)}h` : undefined,
@@ -63,6 +65,7 @@ const jiraClient = {
     },
     extractAssignee:         (i) => i.fields.assignee?.displayName || null,
     extractAssigneeAccountId:(i) => i.fields.assignee?.accountId || null,
+    extractQaContact:        (i) => i.fields.QA_CONTACT || null,
     extractAreaLabel:        (i) => (i.fields.labels || []).find(l => l.startsWith('area/')) || null,
     extractAreaLabels:       (i) => (i.fields.labels || []).filter(l => l.startsWith('area/')),
     extractFirstComponent:   (i) => i.fields.components?.[0]?.name || null,
@@ -190,6 +193,72 @@ test('NO_REMAINING_WORK: raised for In Progress epic when estimate > 0 and remai
     const result = validator.validateIssue(issue, jiraClient);
     assert.ok(result.violations.includes('NO_REMAINING_WORK'),
         `Expected NO_REMAINING_WORK for epic with estimate>0 and no remaining: ${result.violations}`);
+});
+
+// ---------------------------------------------------------------------------
+// NO_QA_CONTACT tests
+// ---------------------------------------------------------------------------
+
+test('NO_QA_CONTACT: raised for an Epic without a QA contact', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ issueType: 'Epic', estimateSeconds: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_QA_CONTACT'));
+});
+
+test('NO_QA_CONTACT: raised for an issue with child issues without a QA contact', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ estimateSeconds: null, subtasks: [STUB_SUBTASK] });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_QA_CONTACT'));
+});
+
+test('NO_QA_CONTACT: raised for any non-Backlog issue without a QA contact (with estimate)', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ estimateSeconds: 4 * 3600 });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_QA_CONTACT'));
+});
+
+test('NO_QA_CONTACT: raised for any non-Backlog issue without a QA contact (no estimate)', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ estimateSeconds: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_QA_CONTACT'));
+});
+
+test('NO_QA_CONTACT: raised for any non-Backlog issue without a QA contact (below old 4-hour threshold)', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ estimateSeconds: 4 * 3600 - 1 });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_QA_CONTACT'));
+});
+
+test('NO_QA_CONTACT: not raised when any non-Backlog issue has a QA contact', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ estimateSeconds: null, qaContact: { displayName: 'Quinn' } });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_QA_CONTACT'));
+});
+
+test('NO_QA_CONTACT: not raised for Backlog issue with estimate >= 4h', () => {
+    const validator = new PolicyValidator();
+    // BACKLOG maps to policyStage "Backlog" — QA contact is not required regardless of estimate
+    const issue = makeIssue({ status: 'BACKLOG', estimateSeconds: 4 * 3600 });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_QA_CONTACT'),
+        `Unexpected NO_QA_CONTACT for Backlog issue: ${result.violations}`);
+});
+
+test('NO_QA_CONTACT: not raised for unknown-status issue (defaults to Backlog) with estimate >= 4h', () => {
+    const validator = new PolicyValidator();
+    // Unknown statuses (e.g. "Testing", "Resolved", "Review" from external projects) fall
+    // back to policyStage "Backlog" and must not fire NO_QA_CONTACT — this was the
+    // false-positive seen in QUARKUS-8965, QUARKUS-8374, QUARKUS-9046.
+    const issue = makeIssue({ status: 'Resolved', estimateSeconds: ONE_WEEK_S });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_QA_CONTACT'),
+        `Unexpected NO_QA_CONTACT for unknown-status (Backlog) issue: ${result.violations}`);
 });
 
 // ---------------------------------------------------------------------------

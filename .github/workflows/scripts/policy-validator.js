@@ -91,6 +91,11 @@ class PolicyValidator {
         return Array.isArray(issue.fields.subtasks) && issue.fields.subtasks.length > 0;
     }
 
+    hasQaContact(issue, jiraClient) {
+        const qaContact = jiraClient.extractQaContact(issue);
+        return Array.isArray(qaContact) ? qaContact.length > 0 : Boolean(qaContact);
+    }
+
     validateIssue(issue, jiraClient, openPullRequests = [], mergedPullRequests = []) {
         const status = jiraClient.extractStatus(issue);
         const policyStage = this.mapStatusToPolicyStage(status);
@@ -159,6 +164,11 @@ class PolicyValidator {
             if (estimateSeconds != null && estimateSeconds > this.estimateTooLongSeconds) {
                 violations.push('ESTIMATE_TOO_LONG');
             }
+        }
+
+        // NO_QA_CONTACT: required for all non-Backlog issues.
+        if (policyStage !== 'Backlog' && !this.hasQaContact(issue, jiraClient)) {
+            violations.push('NO_QA_CONTACT');
         }
 
         return {
