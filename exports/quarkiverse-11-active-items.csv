@@ -4,9 +4,10 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0.0,0.0,0.0,,,2026-08-12,
 1485,,https://github.com/open-workflow-specification/sdk-java/issues/1485,Handle missing a2a operations,fjtirado,Backlog,,Runtimes,,,2026/Q4,S,,,,0.0,0.0,0.0,,,2026-08-12,
 1040,,https://github.com/quarkiverse/quarkus-flow/issues/1040,OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,In progress,,Runtimes,Major,,2026/Q4,L,1.6,,0.3,1.6,0.0,0.3,,,2026-10-06,
-1036,,https://github.com/quarkiverse/quarkus-flow/issues/1036,Implement quarkus-flow-db-migration extensions per ADR,mathecruz,In progress,,,,,,,,,,0.0,0.0,0.0,,,2026-10-02,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY, NO_MILESTONE"
-1021,998,https://github.com/quarkiverse/quarkus-flow/issues/1021,Persist additional objects on Redis,fjtirado,In review,,Runtimes,Major,,2.0.0,M,0.3,0.3,0.0,0.3,0.3,0.0,,,2026-09-29,
-1020,998,https://github.com/quarkiverse/quarkus-flow/issues/1020,Persist additional objects on JPA,fjtirado,In progress,,Runtimes,Major,,2.0.0,M,0.4,,0.2,0.4,0.0,0.2,,,2026-09-29,
+1036,,https://github.com/quarkiverse/quarkus-flow/issues/1036,Implement quarkus-flow-db-migration extensions per ADR,mathecruz,In progress,,Runtimes,Major,,1.2.0,M,0.4,0.4,,0.0,0.0,0.0,,,2026-10-02,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY, NO_MILESTONE"
+1021,998,https://github.com/quarkiverse/quarkus-flow/issues/1021,Persist additional objects on Redis,fjtirado,In review,,Runtimes,Major,,2.0.0,M,0.3,0.4,0.0,0.3,0.3,0.0,,,2026-09-29,
+1020,998,https://github.com/quarkiverse/quarkus-flow/issues/1020,Persist additional objects on JPA,fjtirado,In progress,,Runtimes,Major,,2.0.0,M,0.4,0.4,0.1,0.4,0.0,0.2,,,2026-09-29,
+1017,,https://github.com/open-workflow-specification/sdk-java/issues/1017,docs: Add documentation for all modules to help the user when using it,mathecruz,Next,,Tooling,Normal,,Future,L,0.0,0.0,,0.0,0.0,0.0,,,2026-09-17,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 1004,,https://github.com/quarkiverse/quarkus-flow/issues/1004,Use WorkflowModel instead Object (Defining a new REST sync method),fjtirado,Next,,Runtimes,Normal,,2.0.0,M,0.3,,,0.3,0.0,0.0,,,2026-09-23,
 998,,https://github.com/quarkiverse/quarkus-flow/issues/998,Persist additional objects associated to the process instance,fjtirado,In progress,,Runtimes,Major,,2.0.0,M,,,,0.7,0.3,0.2,,,2026-09-26,
 989,48,https://github.com/quarkiverse/quarkus-flow/issues/989,Add workflowApplicationId to lifecycle events,,In progress,,Cloud,Major,,2.0.0,M,0.4,,0.4,0.4,0.0,0.4,,,,
