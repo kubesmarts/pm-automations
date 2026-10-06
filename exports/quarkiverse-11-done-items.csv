@@ -1,4 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1738,,https://github.com/open-workflow-specification/sdk-java/issues/1738,Metadata is getting overwriten when a workflow is restored from a persistence state,fjtirado,,Runtimes,,,,,,,2026-10-06,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
+1740,,https://github.com/open-workflow-specification/sdk-java/issues/1740,Add test for HashMapping coordinator cache reload.,fjtirado,,Runtimes,,,,,,,2026-10-06,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
+407,,https://github.com/open-workflow-specification/editor/issues/407,feat: Switch task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.3,2026-10-06,,,
+464,,https://github.com/open-workflow-specification/editor/issues/464,bug: Test files are not covered by TypeScript typechecking,fantonangeli,,Tooling,Major,,2026/Q4,XS,0.2,0.1,2026-10-06,,,
+465,,https://github.com/open-workflow-specification/editor/issues/465,Suppress Rolldown module-level directive warnings,fantonangeli,,Tooling,Major,,2026/Q4,XS,0.1,0.1,2026-10-06,,,
 399,,https://github.com/open-workflow-specification/editor/issues/399,feat: Call task,handreyrc,,Tooling,Normal,,2026/Q4,M,1.0,1.0,2026-10-03,,,
 804,,https://github.com/quarkiverse/quarkus-flow/issues/804,feat: Implement test suite that validates example rendering in devui's openworkflow editor,domhanak,,QE,Critical,,,L,1.0,0.1,2026-10-02,,,NO_MILESTONE
 922,,https://github.com/quarkiverse/quarkus-flow/issues/922,The namespace validation should work in the same way for DSL and YAML,mathecruz,,Runtimes,Critical,,,M,0.2,0.2,2026-10-02,,,NO_MILESTONE
