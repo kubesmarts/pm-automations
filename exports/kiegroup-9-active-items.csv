@@ -1,5 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-7161,,https://github.com/apache/incubator-kie/issues/7161,Drools Sequence no Anchor,Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,0.0,1.0,1.0,0.0,1.0,,,2026-10-03,
+7161,,https://github.com/apache/incubator-kie/issues/7161,Drools: Sequence should work without an anchor,Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,0.0,1.0,1.0,0.0,1.0,,,2026-10-03,
 7134,,https://github.com/apache/incubator-kie/issues/7134,Drools: not( X() and Y() from $list ) silently stops firing after cross-package segment split,Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,0.5,0.5,1.0,0.5,0.5,,,2026-10-03,
 7081,,https://github.com/apache/incubator-kie/issues/7081,Drools Sequential: Add support for not() inside the sequence,Rikkola,In progress,,Runtimes,Normal,,Future,S,1.0,0.5,0.5,1.0,0.5,0.5,,,2026-09-03,
 6841,,https://github.com/apache/incubator-kie/issues/6841,Review slow tests,tkobayas,In progress,,CI,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,,2026-08-05,
