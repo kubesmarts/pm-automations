@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1048,,https://github.com/quarkiverse/quarkus-flow/issues/1048,Update example SQL after latest DB changes,gmunozfe,,,,,2.0.0,,,,2026-10-07,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
+403,,https://github.com/open-workflow-specification/editor/issues/403,feat: For task,handreyrc,,Tooling,Normal,,2026/Q4,S,0.2,0.2,2026-10-07,,,
+404,,https://github.com/open-workflow-specification/editor/issues/404,feat: Listen task,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.6,2026-10-07,,,
 1738,,https://github.com/open-workflow-specification/sdk-java/issues/1738,Metadata is getting overwriten when a workflow is restored from a persistence state,fjtirado,,Runtimes,,,,,,,2026-10-06,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 1740,,https://github.com/open-workflow-specification/sdk-java/issues/1740,Add test for HashMapping coordinator cache reload.,fjtirado,,Runtimes,,,,,,,2026-10-06,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 407,,https://github.com/open-workflow-specification/editor/issues/407,feat: Switch task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.3,2026-10-06,,,
