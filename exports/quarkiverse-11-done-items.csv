@@ -1,4 +1,15 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+804,,https://github.com/quarkiverse/quarkus-flow/issues/804,feat: Implement test suite that validates example rendering in devui's openworkflow editor,domhanak,,QE,Critical,,1.1.0,L,1.0,0.1,2026-10-08,,,
+922,,https://github.com/quarkiverse/quarkus-flow/issues/922,The namespace validation should work in the same way for DSL and YAML,mathecruz,,Runtimes,Critical,,1.1.0,M,0.2,0.2,2026-10-08,,,
+913,,https://github.com/quarkiverse/quarkus-flow/issues/913,Remove NativeImageBuildItem for ProcessResult record,mathecruz,,Runtimes,Minor,,1.1.0,M,0.2,0.2,2026-10-08,,,
+916,,https://github.com/quarkiverse/quarkus-flow/issues/916,Incorporate EventType enum from sdk-java to opentelemetry module,mathecruz,,Runtimes,Minor,,1.1.0,M,0.2,0.2,2026-10-08,,,
+863,,https://github.com/quarkiverse/quarkus-flow/issues/863,Redis/JPA TOCTOU race causes duplicate workflow executions in multi-node deployments,fjtirado,,Runtimes,Critical,,1.1.0,S,0.2,0.2,2026-10-08,,,
+915,,https://github.com/quarkiverse/quarkus-flow/issues/915,Updates `ForIn` DSL schema to match OWS patched 1.1.0 pre-release.,fjtirado,,Runtimes,Major,,1.1.0,S,0.1,0.1,2026-10-08,,,
+884,,https://github.com/quarkiverse/quarkus-flow/issues/884,"Add a ""References"" page to share blogs and talks about Quarkus Flow",mathecruz,,Docs,Normal,,1.1.0,XS,0.2,0.2,2026-10-08,,,
+887,,https://github.com/quarkiverse/quarkus-flow/issues/887,Parallelize the Build with Integration Tests CI pipeline,mathecruz,,CI,Major,,1.1.0,,0.4,0.0,2026-10-08,,,
+1507,,https://github.com/open-workflow-specification/sdk-java/issues/1507,Allow loading of HttpRequestDecorator as additionalObject,fjtirado,,Runtimes,Normal,,1.1.0,S,0.2,0.2,2026-10-08,,,
+1745,,https://github.com/open-workflow-specification/sdk-java/issues/1745,WorkflowExecutionListenerAdapter don't propagate the close() method execution the enclosed listener.,wmedvede,,Runtimes,,,,,,,2026-10-08,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
+331,,https://github.com/open-workflow-specification/editor/issues/331,feat: Integrate the language service with Monaco,fantonangeli,,Tooling,Major,,2026/Q4,M,2.0,2.1,2026-10-08,,,
 1048,,https://github.com/quarkiverse/quarkus-flow/issues/1048,Update example SQL after latest DB changes,gmunozfe,,,,,2.0.0,,,,2026-10-07,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 403,,https://github.com/open-workflow-specification/editor/issues/403,feat: For task,handreyrc,,Tooling,Normal,,2026/Q4,S,0.2,0.2,2026-10-07,,,
 404,,https://github.com/open-workflow-specification/editor/issues/404,feat: Listen task,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.6,2026-10-07,,,
@@ -8,15 +19,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 464,,https://github.com/open-workflow-specification/editor/issues/464,bug: Test files are not covered by TypeScript typechecking,fantonangeli,,Tooling,Major,,2026/Q4,XS,0.2,0.1,2026-10-06,,,
 465,,https://github.com/open-workflow-specification/editor/issues/465,Suppress Rolldown module-level directive warnings,fantonangeli,,Tooling,Major,,2026/Q4,XS,0.1,0.1,2026-10-06,,,
 399,,https://github.com/open-workflow-specification/editor/issues/399,feat: Call task,handreyrc,,Tooling,Normal,,2026/Q4,M,1.0,1.0,2026-10-03,,,
-804,,https://github.com/quarkiverse/quarkus-flow/issues/804,feat: Implement test suite that validates example rendering in devui's openworkflow editor,domhanak,,QE,Critical,,,L,1.0,0.1,2026-10-02,,,NO_MILESTONE
-922,,https://github.com/quarkiverse/quarkus-flow/issues/922,The namespace validation should work in the same way for DSL and YAML,mathecruz,,Runtimes,Critical,,,M,0.2,0.2,2026-10-02,,,NO_MILESTONE
 1638,,https://github.com/open-workflow-specification/sdk-java/issues/1638,Expose a shared enum for lifecycle event kinds,mathecruz,,Runtimes,Minor,,,M,0.2,0.2,2026-10-02,,,NO_MILESTONE
-913,,https://github.com/quarkiverse/quarkus-flow/issues/913,Remove NativeImageBuildItem for ProcessResult record,mathecruz,,Runtimes,Minor,,,M,0.2,0.2,2026-10-02,,,NO_MILESTONE
-916,,https://github.com/quarkiverse/quarkus-flow/issues/916,Incorporate EventType enum from sdk-java to opentelemetry module,mathecruz,,Runtimes,Minor,,,M,0.2,0.2,2026-10-02,,,NO_MILESTONE
-863,,https://github.com/quarkiverse/quarkus-flow/issues/863,Redis/JPA TOCTOU race causes duplicate workflow executions in multi-node deployments,fjtirado,,Runtimes,Critical,,,S,0.2,0.2,2026-10-02,,,NO_MILESTONE
-915,,https://github.com/quarkiverse/quarkus-flow/issues/915,Updates `ForIn` DSL schema to match OWS patched 1.1.0 pre-release.,fjtirado,,Runtimes,Major,,,S,0.1,0.1,2026-10-02,,,NO_MILESTONE
-884,,https://github.com/quarkiverse/quarkus-flow/issues/884,"Add a ""References"" page to share blogs and talks about Quarkus Flow",mathecruz,,Docs,Normal,,,XS,0.2,0.2,2026-10-02,,,NO_MILESTONE
-887,,https://github.com/quarkiverse/quarkus-flow/issues/887,Parallelize the Build with Integration Tests CI pipeline,mathecruz,,CI,Major,,,,0.4,0.0,2026-10-02,,,NO_MILESTONE
 1027,,https://github.com/quarkiverse/quarkus-flow/issues/1027,feat: Replace modal Diagram Editor with full-screen view,lornakelly,,Tooling,Minor,,2.0.0,S,0.2,0.1,2026-10-02,,,
 379,,https://github.com/open-workflow-specification/editor/issues/379,bug: Diagram does not fit the view when the content prop changes,lornakelly,,Tooling,Normal,,Future,M,0.4,0.2,2026-10-02,,,
 1723,,https://github.com/open-workflow-specification/sdk-java/issues/1723,HashMappingCoordinator to use a bounded Map,fjtirado,,Runtimes,Normal,,2026/Q3,M,0.3,0.3,2026-10-01,,,
