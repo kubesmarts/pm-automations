@@ -1,4 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1199,,https://redhat.atlassian.net/browse/SRVLOGIC-1199,Release OpenShift Serverless Logic 1.38.1 patch release,saumya1singh,Epic,Productization,Major,Serverless logic,1.38.1 OSL,,0.4,0.175,2026-10-09,,,
+1256,1199,https://redhat.atlassian.net/browse/SRVLOGIC-1256,Productization of Kn Workflow plugin 1.38.1,saumya1singh,Task,Productization,Critical,Serverless logic,1.38.1 OSL,,0.125,0.075,2026-10-09,,,
+1254,1199,https://redhat.atlassian.net/browse/SRVLOGIC-1254,Build 1.38.1 (Operator & Bundle)  Manual Container Images ,saumya1singh,Task,Productization,Critical,Serverless logic,1.38.1 OSL,,0.15,0.125,2026-10-09,,,
+1201,1199,https://redhat.atlassian.net/browse/SRVLOGIC-1201,Build 1.38.1 CR1 container images,baldimir,Task,Productization,Major,Serverless logic,1.38.1 OSL,,0.1,0.05,2026-10-09,,,
+1200,1199,https://redhat.atlassian.net/browse/SRVLOGIC-1200,Build 1.38.1 PNC CR1 artifacts,saumya1singh,Task,Productization,Major,Serverless logic,1.38.1 OSL,,0.125,0.0125,2026-10-09,,,
 1098,1056,https://redhat.atlassian.net/browse/SRVLOGIC-1098,[IBM test migration] Update nodejs version and fix go PATH for go install,jakubschwan,Sub-task,QE,Major,Serverless logic,1.40.0 OSL,,0.1,0.1,2026-10-06,,,NO_QA_CONTACT
 1090,1056,https://redhat.atlassian.net/browse/SRVLOGIC-1090,[IBM test migration] Add kie-tools repo build tools to able playbooks,jakubschwan,Sub-task,QE,Blocker,Serverless logic,1.40.0 OSL,,0.1,0.1,2026-10-06,,,NO_QA_CONTACT
 1177,,https://redhat.atlassian.net/browse/SRVLOGIC-1177,Bundle CVP Failing ,saumya1singh,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.25,2026-10-06,,,NO_QA_CONTACT

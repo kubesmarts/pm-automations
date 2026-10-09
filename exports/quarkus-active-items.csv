@@ -1,6 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 9176,7862,https://redhat.atlassian.net/browse/QUARKUS-9176,CSD jobs for quarkus-flow are unable to checkout the repository via https url,domhanak,VERIFIED,Bug,QE,Critical,Quarkus,3.40.0.GA,,0.075,0.075,0,0.075,0.075,,,,2026-10-06,
-9046,,https://redhat.atlassian.net/browse/QUARKUS-9046,Quarkus Flow platform participant misses three targeted extensions,baldimir,TESTING,Bug,Quarkus-flow,Blocker,Quarkus,3.40.0.GA,,0.1,0.025,0.075,0.1,0.025,0.075,,,2026-10-07,
+9046,,https://redhat.atlassian.net/browse/QUARKUS-9046,Quarkus Flow platform participant misses three targeted extensions,baldimir,TESTING,Bug,Quarkus-flow,Blocker,Quarkus,3.40.0.GA,,0.1,0.025,0.075,0.1,0.025,0.075,,,2026-10-08,
 8968,,https://redhat.atlassian.net/browse/QUARKUS-8968,Quarkus Flow extension-support-overrides.json defines quarkus-flow-telemetry,baldimir,TESTING,Bug,Quarkus-flow,Critical,Quarkus,3.40.0.GA,,0.025,0.025,0,0.025,0.025,,,,2026-10-07,
 8967,,https://redhat.atlassian.net/browse/QUARKUS-8967,Quarkus Flow BOM is missing grpc artifacts,baldimir,TESTING,Bug,Quarkus-flow,Critical,Quarkus,3.40.0.GA,,0.05,0.025,0.025,0.05,0.025,0.025,,,2026-10-07,
 8966,,https://redhat.atlassian.net/browse/QUARKUS-8966,Quartz scheduled jobs fail to load in native mode,gmunozfe,RESOLVED,Bug,Quarkus-flow,Major,Quarkus,3.40.0.GA,,0.05,0.05,0,0.05,0.05,,,,2026-09-09,
