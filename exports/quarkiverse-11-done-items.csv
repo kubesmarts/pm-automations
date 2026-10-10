@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1040,,https://github.com/quarkiverse/quarkus-flow/issues/1040,OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,,Runtimes,Major,,1.2.0,L,1.6,,2026-10-10,,,NO_TIME_SPENT
+851,,https://github.com/quarkiverse/quarkus-flow/issues/851,Periodic scan for workflow instances in DB but not in memory,mathecruz,,,,,2.0.0,,,,2026-10-10,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
+896,,https://github.com/quarkiverse/quarkus-flow/issues/896,ADR: Create extensions for schema migrations,mathecruz,,Docs,Major,,2.0.0,,0.5,0.2,2026-10-10,,,
 1749,,https://github.com/open-workflow-specification/sdk-java/issues/1749,`cancel()` on a WAITING instance clears instance metadata before `onWorkflowCancelled` is published,"edeandrea,fjtirado",,Runtimes,Critical,,2026/Q4,S,0.2,0.2,2026-10-09,,,
 400,,https://github.com/open-workflow-specification/editor/issues/400,feat: Do Task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.1,2026-10-09,,,
 406,,https://github.com/open-workflow-specification/editor/issues/406,feat: Run task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.3,2026-10-09,,,
