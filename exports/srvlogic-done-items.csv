@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+975,,https://redhat.atlassian.net/browse/SRVLOGIC-975,Workflow Multi version support or individual fixes,wmedvede,Epic,Cloud,Blocker,Serverless logic,1.39.0 OSL,,0,0,2026-10-10,,,"NO_ESTIMATE, NO_TIME_SPENT"
+1017,975,https://redhat.atlassian.net/browse/SRVLOGIC-1017,Startup check to validate user provided workflow id and version are available in the runtime,wmedvede,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,1,1,2026-10-09,,,
 1199,,https://redhat.atlassian.net/browse/SRVLOGIC-1199,Release OpenShift Serverless Logic 1.38.1 patch release,saumya1singh,Epic,Productization,Major,Serverless logic,1.38.1 OSL,,0.4,0.175,2026-10-09,,,
 1256,1199,https://redhat.atlassian.net/browse/SRVLOGIC-1256,Productization of Kn Workflow plugin 1.38.1,saumya1singh,Task,Productization,Critical,Serverless logic,1.38.1 OSL,,0.125,0.075,2026-10-09,,,
 1254,1199,https://redhat.atlassian.net/browse/SRVLOGIC-1254,Build 1.38.1 (Operator & Bundle)  Manual Container Images ,saumya1singh,Task,Productization,Critical,Serverless logic,1.38.1 OSL,,0.15,0.125,2026-10-09,,,
