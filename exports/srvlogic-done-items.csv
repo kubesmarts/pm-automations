@@ -1,7 +1,11 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1003,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1003,Build CR1,saumya1singh,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,1,0.925,2026-10-13,,,
+1001,,https://redhat.atlassian.net/browse/SRVLOGIC-1001,Release of 1.39,saumya1singh,Epic,Productization,Critical,Serverless logic,1.39.0 OSL,,0,0.25,2026-10-13,,,
+1257,,https://redhat.atlassian.net/browse/SRVLOGIC-1257,QE testing OCP cluster are not available,jakubschwan,Bug,QE,Blocker,Serverless logic,1.39.0 OSL,,0.1,0.0625,2026-10-13,,,
+1228,,https://redhat.atlassian.net/browse/SRVLOGIC-1228,KN Workflow Plugin product tests enhancement,domhanak,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,0.1,0.15,2026-10-13,,,NO_REMAINING_WORK
+1199,,https://redhat.atlassian.net/browse/SRVLOGIC-1199,Release OpenShift Serverless Logic 1.38.1 patch release,saumya1singh,Epic,Productization,Major,Serverless logic,1.38.1 OSL,,0.4,0.175,2026-10-12,,,
 975,,https://redhat.atlassian.net/browse/SRVLOGIC-975,Workflow Multi version support or individual fixes,wmedvede,Epic,Cloud,Blocker,Serverless logic,1.39.0 OSL,,0,0,2026-10-10,,,"NO_ESTIMATE, NO_TIME_SPENT"
 1017,975,https://redhat.atlassian.net/browse/SRVLOGIC-1017,Startup check to validate user provided workflow id and version are available in the runtime,wmedvede,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,1,1,2026-10-09,,,
-1199,,https://redhat.atlassian.net/browse/SRVLOGIC-1199,Release OpenShift Serverless Logic 1.38.1 patch release,saumya1singh,Epic,Productization,Major,Serverless logic,1.38.1 OSL,,0.4,0.175,2026-10-09,,,
 1256,1199,https://redhat.atlassian.net/browse/SRVLOGIC-1256,Productization of Kn Workflow plugin 1.38.1,saumya1singh,Task,Productization,Critical,Serverless logic,1.38.1 OSL,,0.125,0.075,2026-10-09,,,
 1254,1199,https://redhat.atlassian.net/browse/SRVLOGIC-1254,Build 1.38.1 (Operator & Bundle)  Manual Container Images ,saumya1singh,Task,Productization,Critical,Serverless logic,1.38.1 OSL,,0.15,0.125,2026-10-09,,,
 1201,1199,https://redhat.atlassian.net/browse/SRVLOGIC-1201,Build 1.38.1 CR1 container images,baldimir,Task,Productization,Major,Serverless logic,1.38.1 OSL,,0.1,0.05,2026-10-09,,,
@@ -26,7 +30,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1137,,https://redhat.atlassian.net/browse/SRVLOGIC-1137,Workflow serviceUrl has now a relative path in the ProcessDefinitions query,mathecruz,Bug,Runtimes,Normal,Serverless logic,1.39.0 OSL,,0.2,0.175,2026-09-16,,,
 1127,,https://redhat.atlassian.net/browse/SRVLOGIC-1127,Wrong order in cloudevents publishing in Sonataflow with persistence,mathecruz,Bug,Runtimes,Critical,Serverless logic,1.39.0 OSL,,0,0,2026-09-16,,,"NO_ESTIMATE, NO_TIME_SPENT"
 1040,,https://redhat.atlassian.net/browse/SRVLOGIC-1040,"Operator, DI, JS and Workflows migration from OSL 1.38.1 to OSL 1.39.0",wmedvede,Task,Cloud,Critical,Serverless logic,1.39.0 OSL,,0.6,0.4,2026-09-15,,,
-1003,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1003,Build CR1,saumya1singh,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,1,0.925,2026-09-15,,,
 1117,,https://redhat.atlassian.net/browse/SRVLOGIC-1117,"CI :: Build - Full: ""Check tests result"" step masks real failure with misleading error",jankrystof-ibm,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.1,0.2,2026-09-15,,,
 737,,https://redhat.atlassian.net/browse/SRVLOGIC-737,Display version information and link to graphql ui from data index webapp,kumaradityaraj,Task,Tooling,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,2026-09-15,,,
 1037,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1037,Build DR1 - testing release,saumya1singh,Task,CI,Major,Serverless logic,1.39.0 OSL,,1,3,2026-09-14,,,
