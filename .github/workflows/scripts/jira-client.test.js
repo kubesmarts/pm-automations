@@ -15,6 +15,7 @@ const JiraClient = require('./jira-client');
 function makeClient(makeRequestFn) {
   const client = new JiraClient('https://jira.example.com', 'user@example.com', 'token');
   client.qaContactFieldId = 'customfield_10470';
+  client._customFieldsResolved = true;
   client.makeRequest = makeRequestFn;
   return client;
 }
@@ -208,6 +209,31 @@ test('extractQaContact: returns null when QA contact is absent', () => {
   assert.equal(client.extractQaContact({ fields: {} }), null);
 });
 
+test('extractQaContact: returns "Tester" field value when QA Contact is absent', () => {
+  const client = makeClient(async () => ({}));
+  const tester = { displayName: 'Tess' };
+  assert.equal(client.extractQaContact({ fields: { Tester: tester } }), tester);
+});
+
+test('extractQaContact: returns testerFieldId customfield value when set', () => {
+  const client = makeClient(async () => ({}));
+  client.testerFieldId = 'customfield_10999';
+  const tester = { displayName: 'Tess' };
+  assert.equal(client.extractQaContact({ fields: { customfield_10999: tester } }), tester);
+});
+
+test('extractQaContact: prefers QA Contact customfield over Tester when both present', () => {
+  const client = makeClient(async () => ({}));
+  client.qaContactFieldId = 'customfield_10470';
+  client.testerFieldId = 'customfield_10999';
+  const qaContact = { displayName: 'Quinn' };
+  const tester = { displayName: 'Tess' };
+  assert.equal(
+    client.extractQaContact({ fields: { customfield_10470: qaContact, customfield_10999: tester } }),
+    qaContact
+  );
+});
+
 test('resolveQaContactFieldId: finds matching field id from /rest/api/3/field', async () => {
   const client = new JiraClient('https://jira.example.com', 'user@example.com', 'token');
   client.makeRequest = async (endpoint) => {
@@ -223,6 +249,22 @@ test('resolveQaContactFieldId: finds matching field id from /rest/api/3/field', 
   const fieldId = await client.resolveQaContactFieldId();
   assert.equal(fieldId, 'customfield_10470');
   assert.equal(client.qaContactFieldId, 'customfield_10470');
+});
+
+test('resolveQaContactFieldId: also resolves Tester field id', async () => {
+  const client = new JiraClient('https://jira.example.com', 'user@example.com', 'token');
+  client.makeRequest = async (endpoint) => {
+    if (endpoint === '/rest/api/3/field') {
+      return [
+        { id: 'customfield_10001', name: 'Story Points' },
+        { id: 'customfield_10999', name: 'Tester' }
+      ];
+    }
+    return {};
+  };
+
+  await client.resolveQaContactFieldId();
+  assert.equal(client.testerFieldId, 'customfield_10999');
 });
 
 // ---------------------------------------------------------------------------
