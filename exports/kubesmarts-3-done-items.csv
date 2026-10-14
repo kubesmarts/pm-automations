@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+35,,https://github.com/kubesmarts/logic-operator/issues/35,[M1] Implement runtime selection logic,ricardozanini,,Cloud,Blocker,Serverless Logic,2.0.0,,0.5,0.5,2026-10-14,,,
+36,,https://github.com/kubesmarts/logic-operator/issues/36,[M1] Data Index discovery and instance query proxy,ricardozanini,,Cloud,Critical,Serverless Logic,2.0.0,,2.0,0.2,2026-10-14,,,
 33,,https://github.com/kubesmarts/logic-operator/issues/33,[M1] Create workflow-gateway module scaffold,ricardozanini,,Cloud,Critical,Serverless Logic,2.0.0,,0.4,0.1,2026-10-08,,,
 34,,https://github.com/kubesmarts/logic-operator/issues/34,[M1] Implement CRD discovery and watching,ricardozanini,,Cloud,Critical,Serverless Logic,2.0.0,,1.0,0.3,2026-10-08,,,
 11,,https://github.com/kubesmarts/logic-operator/issues/11,Multi-Version Support & Traffic Splitting,ricardozanini,,Cloud,Blocker,Serverless Logic,2.0.0,,1.0,1,2026-10-03,,,

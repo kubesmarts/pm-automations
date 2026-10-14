@@ -1,8 +1,11 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+851,,https://github.com/quarkiverse/quarkus-flow/issues/851,Periodic scan for workflow instances in DB but not in memory,mathecruz,,Runtimes,Major,,2.0.0,M,0.2,0.2,2026-10-14,,,
+1676,,https://github.com/open-workflow-specification/sdk-java/issues/1676,Rebrand to Open Workflow Specification,fjtirado,,Runtimes,Major,,2.0.0,M,0.3,0.2,2026-10-14,,,
+396,,https://github.com/open-workflow-specification/editor/issues/396,feat: Move taskBase Fields into collapsible Section,lornakelly,,Tooling,Normal,,2026/Q4,M,0.0,0.0,2026-10-14,,,
+409,,https://github.com/open-workflow-specification/editor/issues/409,feat: Wait task,kumaradityaraj,,Tooling,Normal,,2026/Q4,S,0.2,2.0,2026-10-14,,,
 402,,https://github.com/open-workflow-specification/editor/issues/402,feat: Fork task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.1,2026-10-13,,,
 408,,https://github.com/open-workflow-specification/editor/issues/408,feat: Try/Catch task,handreyrc,,Tooling,Normal,,2026/Q4,M,0.6,0.5,2026-10-13,,,
 1040,,https://github.com/quarkiverse/quarkus-flow/issues/1040,OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,,Runtimes,Major,,1.2.0,L,1.6,,2026-10-10,,,NO_TIME_SPENT
-851,,https://github.com/quarkiverse/quarkus-flow/issues/851,Periodic scan for workflow instances in DB but not in memory,mathecruz,,,,,2.0.0,,,,2026-10-10,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 896,,https://github.com/quarkiverse/quarkus-flow/issues/896,ADR: Create extensions for schema migrations,mathecruz,,Docs,Major,,2.0.0,,0.5,0.2,2026-10-10,,,
 1749,,https://github.com/open-workflow-specification/sdk-java/issues/1749,`cancel()` on a WAITING instance clears instance metadata before `onWorkflowCancelled` is published,"edeandrea,fjtirado",,Runtimes,Critical,,2026/Q4,S,0.2,0.2,2026-10-09,,,
 400,,https://github.com/open-workflow-specification/editor/issues/400,feat: Do Task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.1,2026-10-09,,,
