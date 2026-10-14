@@ -210,11 +210,13 @@ jobs:
               STATUS=$(get_field         "$item" "Status")
               STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
 
-              # Skip Done items whose underlying GH issue was not closed as completed
-              # (e.g. closed as "not planned"). stateReason must be COMPLETED for Done items.
+              # Skip Done items whose underlying GH issue was closed but not as completed
+              # (e.g. closed as "not planned"). Done items whose repo issue is still OPEN are
+              # NOT skipped: they are evaluated and get the REPO_ISSUE_OPEN alert.
+              ISSUE_STATE=$(echo "$item" | jq -r '.content.state // ""')
               if [ "$STATUS_LC" = "done" ]; then
                 STATE_REASON=$(echo "$item" | jq -r '.content.stateReason // ""')
-                if [ "$STATE_REASON" != "COMPLETED" ]; then
+                if [ "$ISSUE_STATE" != "OPEN" ] && [ "$STATE_REASON" != "COMPLETED" ]; then
                   echo "  → Skipping: issue is Done but stateReason is '${STATE_REASON:-null}' (not COMPLETED)."
                   # Clear any stale compliance alerts — the item will never be re-evaluated,
                   # so we must wipe them now or they persist forever.
@@ -516,6 +518,18 @@ jobs:
                     SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }CHILDREN_STATUS"
                   fi
                 fi
+              fi
+
+              # REPO_ISSUE_OPEN: item is Done in the project but the repository issue is still open.
+              # Clears automatically once the issue is closed as completed or the item leaves Done.
+              if [ "$STATUS_LC" = "done" ] && [ -n "$ISSUE_NUMBER" ] && [ "$ISSUE_STATE" = "OPEN" ]; then
+                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }REPO_ISSUE_OPEN"
+              fi
+
+              # REPO_ISSUE_CLOSED: repository issue is already closed but the item is not Done in the project.
+              # Clears automatically once the item is moved to Done or the repository issue is reopened.
+              if [ "$STATUS_LC" != "done" ] && [ -n "$ISSUE_NUMBER" ] && [ "$ISSUE_STATE" = "CLOSED" ]; then
+                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }REPO_ISSUE_CLOSED"
               fi
 
               # PR_NOT_MERGED: Done issue must have at least one closing PR still open.
@@ -954,6 +968,7 @@ jobs:
                             title
                             url
                             body
+                            state
                             stateReason
                             milestone { title }
                             repository {
@@ -1153,6 +1168,7 @@ jobs:
                               title
                               url
                               body
+                              state
                               stateReason
                               milestone { title }
                               repository {

@@ -142,6 +142,44 @@ test('workflow: re-export message includes title, URL and the changed columns', 
         'Message must include issue number, title, URL and the changed exported values');
 });
 
+/** Simulate the stateReason guard of the export loop. Returns 'skipped' or 'exported'. */
+function evalExportStateGuard({ state, stateReason }) {
+    return bash(`
+ISSUE_STATE=${JSON.stringify(state)}
+STATE_REASON=${JSON.stringify(stateReason)}
+if [ "$ISSUE_STATE" != "OPEN" ] && [ "$STATE_REASON" != "COMPLETED" ]; then
+  echo skipped
+else
+  echo exported
+fi
+`);
+}
+
+test('workflow: GraphQL queries request the issue state (first page and pagination)', () => {
+    const matches = WORKFLOW_YML.match(/^\s+state\n\s+stateReason$/gm) || [];
+    assert.equal(matches.length, 2, 'Both queries must request state alongside stateReason');
+});
+
+test('workflow: stateReason guard in the YAML only skips issues that are not OPEN', () => {
+    assert.match(WORKFLOW_YML, /if \[ "\$ISSUE_STATE" != "OPEN" \] && \[ "\$STATE_REASON" != "COMPLETED" \]; then/,
+        'Done items whose repo issue is still open must not be skipped');
+});
+
+test('export guard: Done item with an OPEN repo issue is exported whatever the stateReason', () => {
+    for (const stateReason of ['', 'REOPENED', 'NOT_PLANNED', 'COMPLETED']) {
+        assert.equal(evalExportStateGuard({ state: 'OPEN', stateReason }), 'exported',
+            `stateReason='${stateReason}' with an open issue must be exported`);
+    }
+});
+
+test('export guard: CLOSED + COMPLETED is exported', () => {
+    assert.equal(evalExportStateGuard({ state: 'CLOSED', stateReason: 'COMPLETED' }), 'exported');
+});
+
+test('export guard: CLOSED + NOT_PLANNED is still skipped', () => {
+    assert.equal(evalExportStateGuard({ state: 'CLOSED', stateReason: 'NOT_PLANNED' }), 'skipped');
+});
+
 // ---------------------------------------------------------------------------
 // SECTION 2 – build_rows and compare Python scripts
 // ---------------------------------------------------------------------------

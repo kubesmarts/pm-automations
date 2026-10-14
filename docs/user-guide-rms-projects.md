@@ -195,6 +195,8 @@ Please review and resolve these alerts.
 | `NO_ASSIGNEE` | No assignee on the GH issue and status is `In Progress`, `In Review`, or `Done` | Assign the issue to the responsible person |
 | `NO_DESCRIPTION` | The GitHub issue body is empty **and** the item is either an epic (has sub-issues) or has an `Estimate` ≥ 4 hours (`0.1` weeks). Items with no estimate or an estimate below 4 hours are exempt | Add a description to the GitHub issue body |
 | `NO_QA_CONTACT` | QA Contact field on JIRA is empty for any non-Backlog issue (Next, In Progress, In Review, or Done) | Set the `QA Contact` field on the JIRA ticket |
+| `REPO_ISSUE_OPEN` | Item is `Done` in the project but the underlying repository issue is still open | Close the repository issue as completed, or move the item out of `Done` — the alert clears on the next run. While the issue is open the item is still included in the Done export |
+| `REPO_ISSUE_CLOSED` | The underlying repository issue is already closed but the item's status is not `Done` | Move the item to `Done`, or reopen the repository issue if the work is not finished — the alert clears on the next run |
 | `PR_NOT_MERGED` | Issue is `Done` but at least one linked pull request is still open / not merged | Merge or close all linked PRs — the alert clears on the next run once they are all merged |
 | `CHILDREN_STATUS` | Parent/child status mismatch detected (see below) | Align child statuses with the parent |
 | `JIRA_NOT_FOUND` | `External Reference` points to a JIRA ticket that doesn't exist | Verify or correct the JIRA key |
