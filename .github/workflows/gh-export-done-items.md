@@ -1,6 +1,6 @@
 # Export Done Items Workflow
 
-Automatically exports completed items from GitHub Projects to a single CSV file per project in the repository. Runs weekly and maintains incremental exports with items sorted by Reporting Date in descending order.
+Automatically exports completed items from GitHub Projects to a single CSV file per project in the repository. Runs daily and maintains incremental exports with items sorted by Reporting Date in descending order.
 
 ## Overview
 
@@ -9,7 +9,7 @@ This workflow:
 - Exports items with Status = "Done" from all configured projects
 - Maintains one CSV file per project in the `exports/` directory
 - Only exports items without validation alerts
-- Performs incremental exports (only new Done items since last export)
+- Performs incremental exports (new Done items, plus updates to already-exported items whose fields changed)
 - New items are prepended at the beginning, sorted by Reporting Date (descending)
 - On first run, exports all historical Done items
 
@@ -62,8 +62,9 @@ An item is exported **only if ALL** conditions are met:
 2. ✅ **GitHub issue `stateReason` is `COMPLETED`** — issues closed as "not planned", reopened, or with no `stateReason` are skipped
 3. ✅ **Has GitHub issue number** (not a draft item)
 4. ✅ **Not archived**
-5. ✅ **Reporting Date > last export date** (or first run)
+5. ✅ **Reporting Date is set**
 6. ✅ **Assignee is in contributor whitelist** (if `contributors.csv` exists)
+7. ✅ **Either:** URL not yet in the CSV (new item) **OR** any exported column except Reporting Date and Parent Issue differs from the stored CSV row
 
 Items are exported regardless of whether they have validation alerts. The `Alerts` column in the CSV shows any active alerts for filtering purposes.
 
@@ -131,11 +132,14 @@ When the CSV file doesn't exist or is empty for a project:
 ### Subsequent Runs (Incremental)
 
 When the CSV file exists and has data:
-- Reads the Reporting Date from the first data line (most recent item)
-- Exports only items where Reporting Date exists and > last export date
-- New items are sorted by Reporting Date in descending order
-- New items are prepended at the beginning of the file (after header)
-- Skips items without Reporting Date
+- Loads all existing CSV rows into a `URL → row` map (O(1) lookup per item, no date cursor needed).
+- An item is (re-)exported if (fixes [issue #115](https://github.com/kubesmarts/pm-automations/issues/115)):
+  - **New item**: URL is not present in the map (never exported before), OR
+  - **Updated item**: any exported column built from the project differs from the stored row — title, assignees, type, area, priority, initiative, target milestone, size, estimate, time spent, external reference, comments or alerts (e.g. Priority or Estimate filled in after the original export). **Reporting Date** and **Parent Issue** are not compared: the Reporting Date moves whenever any tracked field changes (including ones that are not exported), and the parent is derived from sub-issue links.
+- When a known item is re-exported, the log shows the issue number, title, URL and exactly which columns changed, e.g. `→ Re-exporting issue #895 "Title" (https://…): exported values changed — Priority: 'Normal' -> 'Major'; Estimate: '0.6' -> '0.8'`. Values longer than 80 characters are truncated in the message.
+- Change detection compares the exported columns only (the `Reporting Log` project field itself is **not** stored in the CSV, so it is not used). Unchanged items are skipped; an item whose compared columns are all empty is still recognised as known.
+- Rows are merged and deduplicated by Issue URL; the freshly exported row replaces the stored one. The result is sorted by Reporting Date (newest first).
+- Skips items without Reporting Date.
 - File: `exports/<owner>-<number>-done-items.csv` (updated in place)
 
 ### No New Items
@@ -198,7 +202,7 @@ Example: `Export Done items 2026-03-30`
 
 **Possible causes:**
 - No items with Status = "Done"
-- All Done items already exported (Reporting Date ≤ last export date)
+- All Done items already exported and none of their compared exported values have changed
 - All Done items are draft items (no GitHub issue number)
 - All Done items closed as "not planned" (stateReason != COMPLETED)
 

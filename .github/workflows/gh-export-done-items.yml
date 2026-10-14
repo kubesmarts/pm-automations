@@ -10,6 +10,12 @@ on:
     - cron: '30 1 * * *'   # Daily at 01:30 UTC
     - cron: '56 12 * * 2'  # Tuesdays at 12:56 UTC (pre-meeting refresh)
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run — scan for changes and print a summary but do not write or commit any CSV files'
+        required: false
+        type: boolean
+        default: false
 
 # Requires a PAT with 'project' and 'read:org' scopes stored as secret PSYNC_PAT_GH.
 # Uses the same PSYNC_PROJECTS variable as the sync workflow.
@@ -21,6 +27,7 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.PSYNC_PAT_GH }}
       PROJECTS: ${{ vars.PSYNC_PROJECTS }}
+      DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,6 +42,11 @@ jobs:
         id: export
         run: |
           set -e
+
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "*** DRY RUN MODE — no files will be written ***"
+            echo ""
+          fi
 
           TODAY=$(date -u +%Y-%m-%d)
           EXPORT_BASE_DIR="exports"
@@ -153,20 +165,27 @@ jobs:
 
             # Single export file per project
             EXPORT_FILE="${EXPORT_BASE_DIR}/${PROJECT_OWNER}-${PROJECT_NUMBER}-done-items.csv"
-            
-            # Determine last export date from first line of existing file
+
+            # Load all existing CSV rows into { issue_url: [columns] } (issue #115).
+            # An item is (re-)exported if:
+            #   - It is not in the map (new item never exported before), OR
+            #   - Any exported column except Reporting Date and Parent Issue, built from the
+            #     project, differs from the stored row (values changed since the last export).
+            # This fully replaces the old Reporting Date cursor approach, which missed
+            # same-day corrections and required reasoning about dates.
+            # The map is kept in a temp file (not argv) because full rows can be large.
+            EXISTING_ROWS_FILE=$(mktemp)
+            echo "{}" > "$EXISTING_ROWS_FILE"
             if [ ! -f "$EXPORT_FILE" ] || [ ! -s "$EXPORT_FILE" ]; then
               echo "First export for ${PROJECT_OWNER}:${PROJECT_NUMBER} - exporting all Done items"
-              LAST_EXPORT_DATE="1970-01-01"
             else
-              # Get Reporting Date from first data line (line 2, after header)
-              # Use Python to properly parse CSV with quoted fields
-              LAST_EXPORT_DATE=$(python3 -c "import csv; f = open('$EXPORT_FILE', 'r'); reader = csv.reader(f); next(reader); row = next(reader, None); print(row[13].strip() if row and len(row) >= 14 else '')" 2>/dev/null || echo "")
-              if [ -z "$LAST_EXPORT_DATE" ]; then
-                echo "Warning: Could not read last export date, treating as first export"
-                LAST_EXPORT_DATE="1970-01-01"
+              # Script is base64-encoded to keep the YAML valid (no multiline -c blocks).
+              if echo 'aW1wb3J0IGNzdiwganNvbiwgc3lzCnJvd3MgPSB7fQp3aXRoIG9wZW4oc3lzLmFyZ3ZbMV0sIG5ld2xpbmU9IiIpIGFzIGY6CiAgICByZWFkZXIgPSBjc3YucmVhZGVyKGYpCiAgICBuZXh0KHJlYWRlciwgTm9uZSkKICAgIGZvciByb3cgaW4gcmVhZGVyOgogICAgICAgIGlmIGxlbihyb3cpID49IDE3IGFuZCByb3dbMl0uc3RyaXAoKToKICAgICAgICAgICAgcm93c1tyb3dbMl0uc3RyaXAoKV0gPSByb3dbOjE3XQpwcmludChqc29uLmR1bXBzKHJvd3MpKQo=' | base64 -d | python3 - "$EXPORT_FILE" > "$EXISTING_ROWS_FILE" 2>/dev/null; then
+                EXISTING_COUNT=$(python3 -c "import json,sys; print(len(json.load(open(sys.argv[1]))))" "$EXISTING_ROWS_FILE")
+                echo "Loaded $EXISTING_COUNT existing exported items for change detection"
               else
-                echo "Incremental export since ${LAST_EXPORT_DATE}"
+                echo "Warning: Could not read existing export, treating as first export"
+                echo "{}" > "$EXISTING_ROWS_FILE"
               fi
             fi
 
@@ -349,7 +368,7 @@ jobs:
             while IFS= read -r item; do
               IS_ARCHIVED=$(echo "$item" | jq -r '.isArchived')
               ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
-              
+
               # Skip archived items and draft items (no issue number)
               [ "$IS_ARCHIVED" = "true" ] && continue
               [ -z "$ISSUE_NUMBER" ] && continue
@@ -357,7 +376,7 @@ jobs:
               # Get status and check if Done
               STATUS=$(get_field "$item" "Status")
               STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
-              
+
               [ "$STATUS_LC" != "done" ] && continue
 
               # Skip Done items whose underlying GH issue was not closed as completed
@@ -368,18 +387,12 @@ jobs:
                 continue
               fi
 
-              # Get Reporting Date - skip if empty or not greater than last export
+              # Get Reporting Date - skip if empty
               REPORTING_DATE=$(get_field "$item" "Reporting Date")
-              
+
               if [ -z "$REPORTING_DATE" ]; then
                 echo "  → Skipping issue #${ISSUE_NUMBER}: no Reporting Date"
                 SKIPPED_NO_DATE=$((SKIPPED_NO_DATE + 1))
-                continue
-              fi
-              
-              # Only export if Reporting Date is strictly greater than last export date
-              if [ "$REPORTING_DATE" \< "$LAST_EXPORT_DATE" ] || [ "$REPORTING_DATE" = "$LAST_EXPORT_DATE" ]; then
-                SKIPPED_OLD_DATE=$((SKIPPED_OLD_DATE + 1))
                 continue
               fi
 
@@ -434,6 +447,21 @@ jobs:
               CSV_LINE+="$(escape_csv "$COMMENTS"),"
               CSV_LINE+="$(escape_csv "$ALERTS")"
 
+              # Compare the freshly built row with the stored row for this URL (issue #115).
+              # Prints "NEW" (never exported), "SAME" or "CHANGED: <column>: 'old' -> 'new'; ...".
+              # Every exported column is compared except Reporting Date and Parent Issue (plus the
+              # identity columns Issue Number / Issue URL). Reporting Date moves whenever any tracked
+              # field changes, including ones that are not exported, and Parent Issue is derived.
+              ROW_STATUS=$(echo 'aW1wb3J0IGNzdiwgaW8sIGpzb24sIHN5cwpIID0gWyJJc3N1ZSBOdW1iZXIiLCAiUGFyZW50IElzc3VlIiwgIklzc3VlIFVSTCIsICJUaXRsZSIsICJBc3NpZ25lZXMiLCAiVHlwZSIsICJBcmVhIiwgIlByaW9yaXR5IiwgIkluaXRpYXRpdmUiLCAiVGFyZ2V0IE1pbGVzdG9uZSIsICJTaXplIiwgIkVzdGltYXRlIiwgIlRpbWUgU3BlbnQiLCAiUmVwb3J0aW5nIERhdGUiLCAiRXh0ZXJuYWwgUmVmZXJlbmNlIiwgIkNvbW1lbnRzIiwgIkFsZXJ0cyJdCiMgTm90IGNvbXBhcmVkOiBpZGVudGl0eSBjb2x1bW5zIChJc3N1ZSBOdW1iZXIsIElzc3VlIFVSTCkgcGx1cyBQYXJlbnQgSXNzdWUgYW5kIFJlcG9ydGluZyBEYXRlLgpTS0lQID0gezAsIDEsIDIsIDEzfQpkZWYgY3V0KHYpOgogICAgcmV0dXJuIHYgaWYgbGVuKHYpIDw9IDgwIGVsc2Ugdls6NzddICsgIi4uLiIKd2l0aCBvcGVuKHN5cy5hcmd2WzFdKSBhcyBmOgogICAgcm93cyA9IGpzb24ubG9hZChmKQpuZXcgPSBuZXh0KGNzdi5yZWFkZXIoaW8uU3RyaW5nSU8oc3lzLmFyZ3ZbMl0pKSkKb2xkID0gcm93cy5nZXQobmV3WzJdKQppZiBvbGQgaXMgTm9uZToKICAgIHByaW50KCJORVciKQplbHNlOgogICAgZCA9IFtdCiAgICBmb3IgaSwgbmFtZSBpbiBlbnVtZXJhdGUoSCk6CiAgICAgICAgaWYgaSBpbiBTS0lQOgogICAgICAgICAgICBjb250aW51ZQogICAgICAgIGEgPSBvbGRbaV0gaWYgaSA8IGxlbihvbGQpIGVsc2UgIiIKICAgICAgICBiID0gbmV3W2ldIGlmIGkgPCBsZW4obmV3KSBlbHNlICIiCiAgICAgICAgaWYgYSAhPSBiOgogICAgICAgICAgICBkLmFwcGVuZCgiJXM6ICclcycgLT4gJyVzJyIgJSAobmFtZSwgY3V0KGEpLCBjdXQoYikpKQogICAgcHJpbnQoIkNIQU5HRUQ6ICIgKyAiOyAiLmpvaW4oZCkgaWYgZCBlbHNlICJTQU1FIikK' | base64 -d | python3 - "$EXISTING_ROWS_FILE" "$CSV_LINE" 2>/dev/null || echo "CHANGED: unable to compare")
+              if [ "$ROW_STATUS" = "SAME" ]; then
+                # Known item, nothing changed — skip
+                SKIPPED_OLD_DATE=$((SKIPPED_OLD_DATE + 1))
+                continue
+              fi
+              if [ "$ROW_STATUS" != "NEW" ]; then
+                echo "  → Re-exporting issue #${ISSUE_NUMBER} \"${TITLE}\" (${ISSUE_URL}): exported values changed — ${ROW_STATUS#CHANGED: }"
+              fi
+
               # Store with reporting date for sorting
               echo "${REPORTING_DATE}|${CSV_LINE}" >> "$NEW_ITEMS_FILE"
               EXPORTED_COUNT=$((EXPORTED_COUNT + 1))
@@ -467,7 +495,7 @@ jobs:
               fi
             fi
 
-            # Process and update export file if we have new items
+            # Process and update export file if we have new or updated items
             if [ $EXPORTED_COUNT -gt 0 ]; then
               # Sort new items by Reporting Date in descending order
               SORTED_NEW_ITEMS=$(mktemp)
@@ -485,39 +513,50 @@ jobs:
                 # Append new items
                 cat "$SORTED_NEW_ITEMS" >> "$TEMP_MERGED"
 
-                # Deduplicate using Python for proper CSV parsing
+                # Deduplicate by Issue URL (col 3). Existing rows come first and freshly
+                # exported rows last; only new or changed items are exported, so the last
+                # row for a URL reflects the current project state and always wins.
+                # Script is base64-encoded to keep the YAML valid (no multiline -c blocks).
                 DEDUPED_FILE=$(mktemp)
-                python3 -c "import csv, sys; url_map = {}; [url_map.update({row[2]: row}) if row[2] not in url_map or row[13] > url_map[row[2]][13] else None for row in csv.reader(open('$TEMP_MERGED')) if len(row) >= 17]; [csv.writer(sys.stdout).writerow(row) for row in sorted(url_map.values(), key=lambda x: x[13], reverse=True)]" > "$DEDUPED_FILE"
+                echo 'aW1wb3J0IGNzdiwgc3lzCnVybF9tYXAgPSB7fQp3aXRoIG9wZW4oc3lzLmFyZ3ZbMV0sIG5ld2xpbmU9IiIpIGFzIGY6CiAgICBmb3Igcm93IGluIGNzdi5yZWFkZXIoZik6CiAgICAgICAgaWYgbGVuKHJvdykgPCAxNzoKICAgICAgICAgICAgY29udGludWUKICAgICAgICB1cmxfbWFwW3Jvd1syXV0gPSByb3cKd3JpdGVyID0gY3N2LndyaXRlcihzeXMuc3Rkb3V0KQpmb3Igcm93IGluIHNvcnRlZCh1cmxfbWFwLnZhbHVlcygpLCBrZXk9bGFtYmRhIHg6IHhbMTNdLCByZXZlcnNlPVRydWUpOgogICAgd3JpdGVyLndyaXRlcm93KHJvdykK' | base64 -d | python3 - "$TEMP_MERGED" > "$DEDUPED_FILE"
 
-                # Write final file with header
-                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts" > "$EXPORT_FILE"
-                cat "$DEDUPED_FILE" >> "$EXPORT_FILE"
+                if [ "$DRY_RUN" != "true" ]; then
+                  # Write final file with header
+                  echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts" > "$EXPORT_FILE"
+                  cat "$DEDUPED_FILE" >> "$EXPORT_FILE"
+                fi
 
                 rm -f "$TEMP_MERGED" "$DEDUPED_FILE"
               else
-                # First export - create file with header and new items
-                echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts" > "$EXPORT_FILE"
-                cat "$SORTED_NEW_ITEMS" >> "$EXPORT_FILE"
+                if [ "$DRY_RUN" != "true" ]; then
+                  # First export - create file with header and new items
+                  echo "Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts" > "$EXPORT_FILE"
+                  cat "$SORTED_NEW_ITEMS" >> "$EXPORT_FILE"
+                fi
               fi
 
               rm -f "$SORTED_NEW_ITEMS"
             fi
             
-            rm -f "$NEW_ITEMS_FILE"
+            rm -f "$NEW_ITEMS_FILE" "$EXISTING_ROWS_FILE"
 
             echo ""
             if [ $EXPORTED_COUNT -gt 0 ]; then
-              echo "✓ Exported $EXPORTED_COUNT item(s) to ${EXPORT_FILE}"
+              if [ "$DRY_RUN" = "true" ]; then
+                echo "[DRY RUN] Would export $EXPORTED_COUNT item(s) to ${EXPORT_FILE}"
+              else
+                echo "✓ Exported $EXPORTED_COUNT item(s) to ${EXPORT_FILE}"
+              fi
               TOTAL_EXPORTED=$((TOTAL_EXPORTED + EXPORTED_COUNT))
             else
-              echo "No new Done items to export"
+              echo "No new or updated Done items to export"
             fi
-            
+
             if [ $SKIPPED_NO_DATE -gt 0 ]; then
               echo "  Skipped $SKIPPED_NO_DATE item(s) without Reporting Date"
             fi
             if [ $SKIPPED_OLD_DATE -gt 0 ]; then
-              echo "  Skipped $SKIPPED_OLD_DATE item(s) already exported"
+              echo "  Skipped $SKIPPED_OLD_DATE item(s) already up to date (exported values unchanged)"
             fi
 
           done
@@ -527,15 +566,15 @@ jobs:
           echo "Total: $TOTAL_EXPORTED item(s) exported across all projects"
           echo "========================================"
 
-          # Set output for commit step
-          if [ $TOTAL_EXPORTED -gt 0 ]; then
+          # Set output for commit step (never commit in dry-run mode)
+          if [ $TOTAL_EXPORTED -gt 0 ] && [ "$DRY_RUN" != "true" ]; then
             echo "has_exports=true" >> "$GITHUB_OUTPUT"
           else
             echo "has_exports=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Commit and push exports
-        if: steps.export.outputs.has_exports == 'true'
+        if: steps.export.outputs.has_exports == 'true' && github.event.inputs.dry_run != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
