@@ -1,0 +1,78 @@
+name: GH Issues Export
+
+# ---------------------------------------------------------------------------
+# Schedule configuration
+# Runs daily at 02:00 UTC to export active and done items:
+# - Active: All non-Done, non-Cancelled items; Backlog items with target version
+# - Done: All Done items with Reporting Date, evicting ghost rows for active items
+# Also runs on Tuesdays at 12:55 UTC (5 min before the 3 PM CEST status meeting)
+# ---------------------------------------------------------------------------
+on:
+  schedule:
+    - cron: '0 2 * * *'    # Daily at 02:00 UTC
+    - cron: '55 12 * * 2'  # Tuesdays at 12:55 UTC (pre-meeting refresh)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run — scan for changes and print a summary but do not write or commit any CSV files'
+        required: false
+        type: boolean
+        default: false
+
+# Requires a PAT with 'project' and 'read:org' scopes stored as secret PSYNC_PAT_GH.
+# Uses the same PSYNC_PROJECTS variable as the sync workflow.
+
+permissions:
+  contents: write
+
+jobs:
+  export-gh-issues:
+    name: Export GitHub project items to CSV
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd .github/workflows/scripts
+          npm install node-fetch@2
+
+      - name: Export GitHub issues
+        env:
+          GH_TOKEN: ${{ secrets.PSYNC_PAT_GH }}
+          PROJECTS: ${{ vars.PSYNC_PROJECTS }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          node .github/workflows/scripts/gh-export.js
+
+      - name: Upload export artifacts
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gh-exports-${{ github.run_number }}
+          path: exports/*.csv
+          retention-days: 30
+
+      - name: Commit and push export files
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Check if there are changes to commit
+          if [[ -n $(git status --porcelain exports/) ]]; then
+            git add exports/
+            git commit -m "Export GH items $(date -u +%Y-%m-%d)"
+            git push
+            echo "Export files committed and pushed"
+          else
+            echo "No changes to export files"
+          fi
