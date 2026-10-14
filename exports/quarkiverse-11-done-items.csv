@@ -24,13 +24,13 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1048,,https://github.com/quarkiverse/quarkus-flow/issues/1048,Update example SQL after latest DB changes,gmunozfe,,,,,2.0.0,,,,2026-10-07,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 403,,https://github.com/open-workflow-specification/editor/issues/403,feat: For task,handreyrc,,Tooling,Normal,,2026/Q4,S,0.2,0.2,2026-10-07,,,
 404,,https://github.com/open-workflow-specification/editor/issues/404,feat: Listen task,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.6,2026-10-07,,,
-1738,,https://github.com/open-workflow-specification/sdk-java/issues/1738,Metadata is getting overwriten when a workflow is restored from a persistence state,fjtirado,,Runtimes,,,,,,,2026-10-06,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
-1740,,https://github.com/open-workflow-specification/sdk-java/issues/1740,Add test for HashMapping coordinator cache reload.,fjtirado,,Runtimes,,,,,,,2026-10-06,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
+1738,,https://github.com/open-workflow-specification/sdk-java/issues/1738,Metadata is getting overwriten when a workflow is restored from a persistence state,fjtirado,,Runtimes,Critical,,2026/Q3,S,0.2,0.2,2026-10-06,,,
+1740,,https://github.com/open-workflow-specification/sdk-java/issues/1740,Add test for HashMapping coordinator cache reload.,fjtirado,,Runtimes,Critical,,2026/Q3,S,0.1,0.1,2026-10-06,,,
 407,,https://github.com/open-workflow-specification/editor/issues/407,feat: Switch task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.3,2026-10-06,,,
 464,,https://github.com/open-workflow-specification/editor/issues/464,bug: Test files are not covered by TypeScript typechecking,fantonangeli,,Tooling,Major,,2026/Q4,XS,0.2,0.1,2026-10-06,,,
 465,,https://github.com/open-workflow-specification/editor/issues/465,Suppress Rolldown module-level directive warnings,fantonangeli,,Tooling,Major,,2026/Q4,XS,0.1,0.1,2026-10-06,,,
 399,,https://github.com/open-workflow-specification/editor/issues/399,feat: Call task,handreyrc,,Tooling,Normal,,2026/Q4,M,1.0,1.0,2026-10-03,,,
-1638,,https://github.com/open-workflow-specification/sdk-java/issues/1638,Expose a shared enum for lifecycle event kinds,mathecruz,,Runtimes,Minor,,,M,0.2,0.2,2026-10-02,,,NO_MILESTONE
+1638,,https://github.com/open-workflow-specification/sdk-java/issues/1638,Expose a shared enum for lifecycle event kinds,mathecruz,,Runtimes,Minor,,2026/Q3,M,0.2,0.2,2026-10-02,,,
 1027,,https://github.com/quarkiverse/quarkus-flow/issues/1027,feat: Replace modal Diagram Editor with full-screen view,lornakelly,,Tooling,Minor,,2.0.0,S,0.2,0.1,2026-10-02,,,
 379,,https://github.com/open-workflow-specification/editor/issues/379,bug: Diagram does not fit the view when the content prop changes,lornakelly,,Tooling,Normal,,Future,M,0.4,0.2,2026-10-02,,,
 1723,,https://github.com/open-workflow-specification/sdk-java/issues/1723,HashMappingCoordinator to use a bounded Map,fjtirado,,Runtimes,Normal,,2026/Q3,M,0.3,0.3,2026-10-01,,,
@@ -51,7 +51,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 908,,https://github.com/quarkiverse/quarkus-flow/issues/908,Create ADR: design solution for OpenTelemetry trace propagation gaps in CloudEvent-triggered workflows,mathecruz,,Docs,Major,,2.0.0,,0.0,0.0,2026-09-23,,,
 990,,https://github.com/quarkiverse/quarkus-flow/issues/990,OidcClientWorkflowRegistrar.registerDynamicOidcClientFor blocks the calling thread,mathecruz,,Runtimes,Critical,,2.0.0,S,0.2,0.2,2026-09-22,,,
 1677,,https://github.com/open-workflow-specification/sdk-java/issues/1677,Expose active workflow instances on WorkflowDefinition,mathecruz,,Runtimes,Major,,1.1.1,XS,0.2,0.2,2026-09-22,,,
-986,,https://github.com/quarkiverse/quarkus-flow/issues/986,Remove Quarkus 3.33 LTS job from ecosystem CI,mathecruz,,CI,Major,,1.1.1,S,0.2,,2026-09-22,,,NO_TIME_SPENT
+986,,https://github.com/quarkiverse/quarkus-flow/issues/986,Remove Quarkus 3.33 LTS job from ecosystem CI,mathecruz,,CI,Major,,1.1.1,S,0.2,0.2,2026-09-22,,,
 993,,https://github.com/quarkiverse/quarkus-flow/issues/993,bug: Topologies of workflows with loops or conditions are not rendered in the quarkus dev-ui,ricardozanini,,Runtimes,Major,,2.0.0,M,0.2,0.2,2026-09-19,,,
 1690,,https://github.com/open-workflow-specification/sdk-java/issues/1690,Add metadata() method so persistence modules can access existing metadata associated to processinstance,fjtirado,,Runtimes,Major,,1.2.0,S,0.1,0.1,2026-09-19,,,
 298,,https://github.com/open-workflow-specification/editor/issues/298,feat: Add navigation guard dialog for dirty drafts,lornakelly,,Tooling,Normal,,2026/Q3,M,0.6,0.3,2026-09-19,,,
@@ -59,7 +59,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 394,,https://github.com/open-workflow-specification/editor/issues/394,feat: Light and dark theme support for the text editor,kumaradityaraj,,Tooling,Normal,,2026/Q3,M,0.6,0.6,2026-09-19,,,
 970,,https://github.com/quarkiverse/quarkus-flow/issues/970,"feat: Implement suspend, cancel, resume on runner Rest resource",fjtirado,,Runtimes,Normal,,2.0.0,M,0.4,0.3,2026-09-19,,,
 410,,https://github.com/open-workflow-specification/editor/issues/410,bug: Handles are not disabled in edit mode,kumaradityaraj,,Tooling,Normal,,2026/Q3,S,0.2,0.2,2026-09-18,,,
-1017,,https://github.com/open-workflow-specification/sdk-java/issues/1017,docs: Add documentation for all modules to help the user when using it,mathecruz,,,,,,,,,2026-09-17,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 431,,https://github.com/open-workflow-specification/editor/issues/431,feat: Update contributing guide,lornakelly,,Tooling,Normal,,2026/Q3,S,0.1,0.1,2026-09-17,,,
 901,,https://github.com/quarkiverse/quarkus-flow/issues/901,bug: AgenticAwareWorkflowModelDeserializer fails to deserialize application domain classes,ricardozanini,,Runtimes,Blocker,,1.1.1,XS,0.1,0.0,2026-09-16,,,
 384,,https://github.com/open-workflow-specification/editor/issues/384,feat: Generate task form from schema,handreyrc,,Tooling,Major,,2026/Q3,L,0.8,0.8,2026-09-16,,,
