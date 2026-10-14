@@ -17,7 +17,7 @@ const TWO_WEEKS_S = 2 * ONE_WEEK_S;
  * Only the fields exercised by the ESTIMATE_TOO_LONG rule are required here;
  * all other required fields are pre-populated so other rules don't fire.
  */
-function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST-1', subtasks = [], issueType = 'Task', qaContact = null } = {}) {
+function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST-1', subtasks = [], issueType = 'Task', qaContact = null, tester = null } = {}) {
     return {
         key,
         fields: {
@@ -31,6 +31,7 @@ function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST
             subtasks,
             issuetype:    { name: issueType },
             QA_CONTACT:   qaContact,
+            Tester:       tester,
             timetracking: {
                 originalEstimateSeconds:  estimateSeconds,
                 originalEstimate:         estimateSeconds != null ? `${Math.round(estimateSeconds / 3600)}h` : undefined,
@@ -65,7 +66,7 @@ const jiraClient = {
     },
     extractAssignee:         (i) => i.fields.assignee?.displayName || null,
     extractAssigneeAccountId:(i) => i.fields.assignee?.accountId || null,
-    extractQaContact:        (i) => i.fields.QA_CONTACT || null,
+    extractQaContact:        (i) => i.fields.QA_CONTACT || i.fields.Tester || null,
     extractAreaLabel:        (i) => (i.fields.labels || []).find(l => l.startsWith('area/')) || null,
     extractAreaLabels:       (i) => (i.fields.labels || []).filter(l => l.startsWith('area/')),
     extractFirstComponent:   (i) => i.fields.components?.[0]?.name || null,
@@ -237,6 +238,13 @@ test('NO_QA_CONTACT: raised for any non-Backlog issue without a QA contact (belo
 test('NO_QA_CONTACT: not raised when any non-Backlog issue has a QA contact', () => {
     const validator = new PolicyValidator();
     const issue = makeIssue({ estimateSeconds: null, qaContact: { displayName: 'Quinn' } });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_QA_CONTACT'));
+});
+
+test('NO_QA_CONTACT: not raised when a non-Backlog issue has a Tester set (and no QA Contact)', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ estimateSeconds: null, tester: { displayName: 'Tess' } });
     const result = validator.validateIssue(issue, jiraClient);
     assert.ok(!result.violations.includes('NO_QA_CONTACT'));
 });
