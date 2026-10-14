@@ -15,7 +15,9 @@ No action is taken when non-tracked fields change (e.g. title, assignee).
 
 ### Skipping Issues Closed as "Not Planned"
 
-When a project item's **Status** is `Done`, the workflow checks the underlying GitHub issue's `stateReason`. If `stateReason` is not `COMPLETED` (e.g. the issue was closed as **"not planned"**, or is `REOPENED`, or has no `stateReason`), the item is **skipped** — no new alerts are raised, no reporting fields are updated, and no JIRA sync is attempted.
+When a project item's **Status** is `Done`, the workflow checks the underlying GitHub issue. If the issue is **closed** and its `stateReason` is not `COMPLETED` (e.g. the issue was closed as **"not planned"**), the item is **skipped** — no new alerts are raised, no reporting fields are updated, and no JIRA sync is attempted.
+
+Done items whose repository issue is still **open** are **not** skipped: they are evaluated normally and receive the `REPO_ISSUE_OPEN` alert (see below).
 
 Any **existing compliance alerts already on the item are cleared** at skip time. This is necessary because a previously In Progress item may have accumulated alerts (e.g. `NO_REMAINING_WORK`) before it was closed as not planned — without this cleanup those alerts would persist forever since the item is never re-evaluated.
 
@@ -128,6 +130,8 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 | `JIRA_CREATE_ERROR NO_ISSUE` | A `CREATE` directive was detected but the item is not linked to a GH issue |
 | `JIRA_CREATE_ERROR NO_EXT_REF_FIELD` | A `CREATE` directive was detected but the `External Reference` field is not configured in the project |
 | `NO_DESCRIPTION` | Issue body is empty **and** the item is either an epic (has sub-issues) **or** has an `Estimate` ≥ 4 hours (`0.1` weeks). Items with no estimate or an estimate smaller than 4 hours are not checked. |
+| `REPO_ISSUE_OPEN` | `Status` is `Done` but the underlying repository issue is still open. Clears once the issue is closed as completed or the item is moved out of `Done` |
+| `REPO_ISSUE_CLOSED` | `Status` is not `Done` but the underlying repository issue is already closed. Clears once the item is moved to `Done` or the repository issue is reopened |
 | `PR_NOT_MERGED` | Issue is `Done` but at least one linked pull request has not been merged yet |
 | `ALL_PRS_MERGED` | Issue is **not** `Done` but has at least one linked pull request and all of them have already been merged — the item should be transitioned to a Done state |
 | `CHILDREN_STATUS` | Parent/child status inconsistency detected (see below) |
@@ -368,6 +372,8 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **`Alerts` shows `JIRA_ENDPOINT_ERROR HTTP_404`** → the JIRA endpoint returned a 404 with no JIRA error body; verify `PSYNC_JIRA_BASE_URL` is correct and reachable
 - **`Alerts` shows `JIRA_SYNC_NOT_ALLOWED`** → the JIRA ticket exists but lacks the `gh-issue-<number>` label; add it (e.g. `gh-issue-3`) to the JIRA ticket to opt it in to syncing
 - **`Alerts` shows `JIRA_SYNC_ERROR HTTP_<code>`** → a JIRA API call failed; check the Actions log for the response body and consult the JIRA troubleshooting entries below
+- **`Alerts` shows `REPO_ISSUE_OPEN`** → the item is `Done` in the project but the repository issue is still open; close the repository issue as completed, or move the item out of `Done`
+- **`Alerts` shows `REPO_ISSUE_CLOSED`** → the repository issue is closed but the item is not `Done` in the project; move the item to `Done`, or reopen the repository issue if the work is not finished
 - **`Alerts` shows `PR_NOT_MERGED`** → the issue is `Done` but one or more linked pull requests are still open; merge or close the outstanding PRs and the alert will clear on the next run
 - **`Alerts` shows `ALL_PRS_MERGED`** → the issue is not `Done` but all linked pull requests have already been merged; transition the item to the appropriate Done status (e.g. `Done`) and the alert will clear on the next run
 - **`Alerts` shows `NO_DESCRIPTION`** → add a description to the GitHub issue body. This alert fires when the issue has no body and is either a parent issue (has sub-issues) or has an `Estimate` of 4 hours (`0.1` weeks) or more. Small issues with no estimate or a sub-4-hour estimate are exempt.

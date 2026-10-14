@@ -218,6 +218,7 @@ jobs:
                             number
                             title
                             url
+                            state
                             stateReason
                             body
                             assignees(first: 10) { nodes { login } }
@@ -294,6 +295,7 @@ jobs:
                               number
                               title
                               url
+                              state
                               stateReason
                               body
                               assignees(first: 10) { nodes { login } }
@@ -379,10 +381,12 @@ jobs:
 
               [ "$STATUS_LC" != "done" ] && continue
 
-              # Skip Done items whose underlying GH issue was not closed as completed
-              # (e.g. closed as "not planned"). stateReason must be COMPLETED for Done items.
+              # Skip Done items whose underlying GH issue was closed but not as completed
+              # (e.g. closed as "not planned"). Done items whose repo issue is still OPEN are
+              # exported (the compliance checker flags them with REPO_ISSUE_OPEN).
+              ISSUE_STATE=$(echo "$item" | jq -r '.content.state // ""')
               STATE_REASON=$(echo "$item" | jq -r '.content.stateReason // ""')
-              if [ "$STATE_REASON" != "COMPLETED" ]; then
+              if [ "$ISSUE_STATE" != "OPEN" ] && [ "$STATE_REASON" != "COMPLETED" ]; then
                 echo "  → Skipping issue #${ISSUE_NUMBER}: Done but stateReason is '${STATE_REASON:-null}' (not COMPLETED)."
                 continue
               fi

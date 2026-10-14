@@ -702,15 +702,16 @@ test('GITHUB_OUTPUT: independent — errors and alerts can both be true simultan
  * Simulate the stateReason skip guard from process_items().
  * Returns 'skipped' when the item would be skipped, 'processed' otherwise.
  */
-function evalStateReasonGuard({ statusLC, stateReason }) {
+function evalStateReasonGuard({ statusLC, stateReason, state = 'CLOSED' }) {
   const script = `
 STATUS_LC=${JSON.stringify(statusLC)}
-# Simulate jq extracting stateReason from the item JSON
+# Simulate jq extracting state / stateReason from the item JSON
+ISSUE_STATE=${JSON.stringify(state)}
 STATE_REASON=${JSON.stringify(stateReason ?? '')}
 
 SKIPPED=false
 if [ "$STATUS_LC" = "done" ]; then
-  if [ "$STATE_REASON" != "COMPLETED" ]; then
+  if [ "$ISSUE_STATE" != "OPEN" ] && [ "$STATE_REASON" != "COMPLETED" ]; then
     SKIPPED=true
   fi
 fi
@@ -734,6 +735,7 @@ fi
 function evalStateReasonClear({ syncStatusFieldId = 'FIELD_ID', dryRun = false } = {}) {
   const script = `
 STATUS_LC=done
+ISSUE_STATE=CLOSED
 STATE_REASON=NOT_PLANNED
 SYNC_STATUS_FIELD_ID=${JSON.stringify(syncStatusFieldId)}
 PROJECT_ID=PROJ_ID
@@ -746,7 +748,7 @@ export -f gh
 
 OUTPUT=""
 if [ "$STATUS_LC" = "done" ]; then
-  if [ "$STATE_REASON" != "COMPLETED" ]; then
+  if [ "$ISSUE_STATE" != "OPEN" ] && [ "$STATE_REASON" != "COMPLETED" ]; then
     if [ -n "$SYNC_STATUS_FIELD_ID" ] && [ "$DRY_RUN" != "true" ]; then
       gh api graphql -f query='mutation($p:ID!,$i:ID!,$f:ID!,$t:String!){updateProjectV2ItemFieldValue(input:{projectId:$p itemId:$i fieldId:$f value:{text:$t}}){projectV2Item{id}}}' \
         -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
@@ -776,6 +778,13 @@ test('stateReason guard: Done + null stateReason is skipped', () => {
   assert.equal(evalStateReasonGuard({ statusLC: 'done', stateReason: '' }), 'skipped');
 });
 
+test('stateReason guard: Done + OPEN repo issue is NOT skipped, whatever the stateReason', () => {
+  for (const stateReason of ['', 'REOPENED', 'NOT_PLANNED', 'COMPLETED']) {
+    assert.equal(evalStateReasonGuard({ statusLC: 'done', stateReason, state: 'OPEN' }), 'processed',
+      `stateReason='${stateReason}' with an open issue must be processed`);
+  }
+});
+
 test('stateReason guard: non-Done status is never skipped regardless of stateReason', () => {
   assert.equal(evalStateReasonGuard({ statusLC: 'in progress', stateReason: 'NOT_PLANNED' }), 'processed');
   assert.equal(evalStateReasonGuard({ statusLC: 'backlog',     stateReason: 'NOT_PLANNED' }), 'processed');
@@ -796,6 +805,100 @@ test('stateReason guard: does NOT clear alerts field in dry-run mode', () => {
 test('stateReason guard: does NOT clear alerts field when SYNC_STATUS_FIELD_ID is unset', () => {
   const out = evalStateReasonClear({ syncStatusFieldId: '', dryRun: false });
   assert.equal(out, '');
+});
+
+// ---------------------------------------------------------------------------
+// SECTION – REPO_ISSUE_OPEN alert
+// ---------------------------------------------------------------------------
+
+/**
+ * Simulate the REPO_ISSUE_OPEN check from process_items().
+ */
+function evalRepoIssueOpen({ statusLC, issueNumber, state }) {
+  const script = `
+STATUS_LC=${JSON.stringify(statusLC)}
+ISSUE_NUMBER=${JSON.stringify(String(issueNumber ?? ''))}
+ISSUE_STATE=${JSON.stringify(state ?? '')}
+SYNC_STATUS_CODES=""
+
+if [ "$STATUS_LC" = "done" ] && [ -n "$ISSUE_NUMBER" ] && [ "$ISSUE_STATE" = "OPEN" ]; then
+  SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }REPO_ISSUE_OPEN"
+fi
+
+echo "$SYNC_STATUS_CODES"
+`;
+  return bash(script);
+}
+
+test('REPO_ISSUE_OPEN: raised for Done item whose repo issue is OPEN', () => {
+  assert.equal(evalRepoIssueOpen({ statusLC: 'done', issueNumber: '757', state: 'OPEN' }), 'REPO_ISSUE_OPEN');
+});
+
+test('REPO_ISSUE_OPEN: not raised once the repo issue is CLOSED', () => {
+  assert.equal(evalRepoIssueOpen({ statusLC: 'done', issueNumber: '757', state: 'CLOSED' }), '');
+});
+
+test('REPO_ISSUE_OPEN: not raised when the item is not Done', () => {
+  for (const statusLC of ['in progress', 'in review', 'next', 'backlog']) {
+    assert.equal(evalRepoIssueOpen({ statusLC, issueNumber: '757', state: 'OPEN' }), '',
+      `Unexpected REPO_ISSUE_OPEN for status '${statusLC}'`);
+  }
+});
+
+test('REPO_ISSUE_OPEN: not raised for draft items (no issue number)', () => {
+  assert.equal(evalRepoIssueOpen({ statusLC: 'done', issueNumber: '', state: '' }), '');
+});
+
+test('REPO_ISSUE_OPEN: workflow wiring — state is queried and the alert is raised in the YAML', () => {
+  assert.ok(WORKFLOW_YML.includes('REPO_ISSUE_OPEN'), 'REPO_ISSUE_OPEN missing from workflow');
+  const stateFields = WORKFLOW_YML.match(/^\s+state\n\s+stateReason$/gm) || [];
+  assert.equal(stateFields.length, 2, 'Both GraphQL queries (first page + pagination) must request state');
+});
+
+// ---------------------------------------------------------------------------
+// SECTION – REPO_ISSUE_CLOSED alert
+// ---------------------------------------------------------------------------
+
+/**
+ * Simulate the REPO_ISSUE_CLOSED check from process_items().
+ */
+function evalRepoIssueClosed({ statusLC, issueNumber, state }) {
+  const script = `
+STATUS_LC=${JSON.stringify(statusLC)}
+ISSUE_NUMBER=${JSON.stringify(String(issueNumber ?? ''))}
+ISSUE_STATE=${JSON.stringify(state ?? '')}
+SYNC_STATUS_CODES=""
+
+if [ "$STATUS_LC" != "done" ] && [ -n "$ISSUE_NUMBER" ] && [ "$ISSUE_STATE" = "CLOSED" ]; then
+  SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }REPO_ISSUE_CLOSED"
+fi
+
+echo "$SYNC_STATUS_CODES"
+`;
+  return bash(script);
+}
+
+test('REPO_ISSUE_CLOSED: raised for every non-Done status when the repo issue is CLOSED', () => {
+  for (const statusLC of ['backlog', 'next', 'in progress', 'in review']) {
+    assert.equal(evalRepoIssueClosed({ statusLC, issueNumber: '42', state: 'CLOSED' }), 'REPO_ISSUE_CLOSED',
+      `Expected REPO_ISSUE_CLOSED for status '${statusLC}'`);
+  }
+});
+
+test('REPO_ISSUE_CLOSED: not raised when the item is Done', () => {
+  assert.equal(evalRepoIssueClosed({ statusLC: 'done', issueNumber: '42', state: 'CLOSED' }), '');
+});
+
+test('REPO_ISSUE_CLOSED: not raised while the repo issue is OPEN', () => {
+  assert.equal(evalRepoIssueClosed({ statusLC: 'in progress', issueNumber: '42', state: 'OPEN' }), '');
+});
+
+test('REPO_ISSUE_CLOSED: not raised for draft items (no issue number)', () => {
+  assert.equal(evalRepoIssueClosed({ statusLC: 'in progress', issueNumber: '', state: '' }), '');
+});
+
+test('REPO_ISSUE_CLOSED: workflow wiring — alert is raised in the YAML', () => {
+  assert.ok(WORKFLOW_YML.includes('REPO_ISSUE_CLOSED'), 'REPO_ISSUE_CLOSED missing from workflow');
 });
 
 // ---------------------------------------------------------------------------

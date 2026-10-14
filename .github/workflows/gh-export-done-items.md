@@ -59,7 +59,7 @@ schedule:
 An item is exported **only if ALL** conditions are met:
 
 1. ✅ **Status = "Done"** (case-insensitive)
-2. ✅ **GitHub issue `stateReason` is `COMPLETED`** — issues closed as "not planned", reopened, or with no `stateReason` are skipped
+2. ✅ **GitHub issue is closed as completed (`stateReason` = `COMPLETED`) _or_ still open** — issues closed as "not planned", or closed with no `stateReason`, are skipped. Items that are `Done` in the project while the repository issue is still **open** are exported (the compliance checker flags them with the `REPO_ISSUE_OPEN` alert, which appears in the `Alerts` column)
 3. ✅ **Has GitHub issue number** (not a draft item)
 4. ✅ **Not archived**
 5. ✅ **Reporting Date is set**
@@ -204,7 +204,7 @@ Example: `Export Done items 2026-03-30`
 - No items with Status = "Done"
 - All Done items already exported and none of their compared exported values have changed
 - All Done items are draft items (no GitHub issue number)
-- All Done items closed as "not planned" (stateReason != COMPLETED)
+- All Done items closed as "not planned" (closed issue with stateReason != COMPLETED)
 
 **Solution:** Check the workflow log for skip reasons
 
