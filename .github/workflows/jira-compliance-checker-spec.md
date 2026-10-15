@@ -211,6 +211,8 @@ for (label in labelsToRemove) {
 | `NO_ASSIGNEE` | Assignee field is empty | Required for In Progress, In Review, Done |
 | `NO_QA_CONTACT` | QA_CONTACT is empty | Next, In Progress, In Review, Done (all non-Backlog stages) |
 | `REMAINING_WORK_NOT_CLEARED` | Remaining Estimate > 0 when Done | Status is Done but Remaining Estimate not cleared |
+| `PR_OPEN` | At least one linked GitHub PR is still open | Done stage only (`RELEASE PENDING`, `CLOSED` with resolution Done) |
+| `PRS_CLOSED` | At least one linked GitHub PR and all of them are closed (merged or declined), but the ticket is not Done | Backlog, Next, In Progress, In Review (any non-Done stage) |
 
 ## JIRA API Integration
 

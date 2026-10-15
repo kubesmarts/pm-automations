@@ -11,6 +11,7 @@ const {
   isWhitelisted,
   getField,
   buildParentMap,
+  getItemType,
   itemToActiveRow,
   itemToDoneRow,
   isActiveEligible,
@@ -189,7 +190,7 @@ test('buildParentMap: maps child composite key to parent issue number', () => {
 // SECTION 4: Row Conversion & Columns
 // ---------------------------------------------------------------------------
 
-test('itemToActiveRow: produces 22 active columns', () => {
+test('itemToActiveRow: produces 23 active columns', () => {
   const item = makeProjectItem({
     number: 42,
     title: 'Active Task',
@@ -219,7 +220,7 @@ test('itemToActiveRow: produces 22 active columns', () => {
   assert.equal(Object.keys(row).length, ACTIVE_ITEMS_COLUMNS.length);
 });
 
-test('itemToDoneRow: produces 17 done columns', () => {
+test('itemToDoneRow: produces 18 done columns', () => {
   const item = makeProjectItem({
     number: 43,
     title: 'Done Task',
@@ -503,4 +504,157 @@ test('runExport: in dry-run mode, does not write any files', async () => {
 
   assert.equal(result.activeExported, 1);
   assert.equal(fs.existsSync(exportsDir), false);
+});
+
+// ---------------------------------------------------------------------------
+// SECTION 8: PR Items
+// ---------------------------------------------------------------------------
+
+/**
+ * Build a minimal PR project item fixture.
+ * A PR item differs from an issue item: it has a `merged` field (no `stateReason`).
+ */
+function makePRItem({
+  number = 100,
+  title = 'Test PR',
+  url = 'https://github.com/org/repo/pull/100',
+  repoOwner = 'org',
+  repoName = 'repo',
+  state = 'MERGED',
+  merged = true,
+  assignees = ['alice'],
+  fields = {}
+} = {}) {
+  return {
+    id: `item_pr_${number}`,
+    isArchived: false,
+    content: {
+      number,
+      title,
+      url,
+      state,
+      merged,
+      repository: {
+        name: repoName,
+        owner: { login: repoOwner }
+      },
+      assignees: {
+        nodes: assignees.map(login => ({ login }))
+      }
+    },
+    fieldValues: makeFieldValues(fields)
+  };
+}
+
+test('getItemType: returns "PR" for a PR item and "Issue" for a regular issue', () => {
+  const prItem = makePRItem();
+  const issueItem = makeProjectItem();
+  assert.equal(getItemType(prItem), 'PR');
+  assert.equal(getItemType(issueItem), 'Issue');
+});
+
+test('itemToActiveRow: Item Type column is "PR" for PR item and "Issue" for issue item', () => {
+  const prRow = itemToActiveRow(makePRItem({ fields: { Status: 'In Progress' } }), new Map());
+  const issueRow = itemToActiveRow(makeProjectItem({ fields: { Status: 'In Progress' } }), new Map());
+  assert.equal(prRow['Item Type'], 'PR');
+  assert.equal(issueRow['Item Type'], 'Issue');
+});
+
+test('itemToDoneRow: Item Type column is "PR" for PR item and "Issue" for issue item', () => {
+  const prRow = itemToDoneRow(makePRItem({ fields: { Status: 'Done', 'Reporting Date': '2026-01-01' } }), new Map());
+  const issueRow = itemToDoneRow(makeProjectItem({ fields: { Status: 'Done', 'Reporting Date': '2026-01-01' } }), new Map());
+  assert.equal(prRow['Item Type'], 'PR');
+  assert.equal(issueRow['Item Type'], 'Issue');
+});
+
+test('isDoneEligible: merged PR item is eligible', () => {
+  const item = makePRItem({
+    state: 'MERGED',
+    merged: true,
+    assignees: ['alice'],
+    fields: { Status: 'Done', 'Reporting Date': '2026-01-01' }
+  });
+  assert.equal(isDoneEligible(item, 'Done', null).eligible, true);
+});
+
+test('isDoneEligible: open PR item in Done is eligible', () => {
+  const item = makePRItem({
+    state: 'OPEN',
+    merged: false,
+    assignees: ['alice'],
+    fields: { Status: 'Done', 'Reporting Date': '2026-01-01' }
+  });
+  assert.equal(isDoneEligible(item, 'Done', null).eligible, true);
+});
+
+test('isDoneEligible: PR item closed without merging is NOT eligible', () => {
+  const item = makePRItem({
+    state: 'CLOSED',
+    merged: false,
+    assignees: ['alice'],
+    fields: { Status: 'Done', 'Reporting Date': '2026-01-01' }
+  });
+  const result = isDoneEligible(item, 'Done', null);
+  assert.equal(result.eligible, false);
+  assert.match(result.reason, /PR closed without merging/);
+});
+
+test('isDoneEligible: non-Done PR item is not eligible', () => {
+  const item = makePRItem({
+    state: 'MERGED',
+    merged: true,
+    fields: { Status: 'In Progress', 'Reporting Date': '2026-01-01' }
+  });
+  assert.equal(isDoneEligible(item, 'In Progress', null).eligible, false);
+});
+
+test('processProjectItems: includes merged Done PR item in done export', () => {
+  const prItem = makePRItem({
+    number: 200,
+    url: 'https://github.com/org/repo/pull/200',
+    state: 'MERGED',
+    merged: true,
+    assignees: ['alice'],
+    fields: { Status: 'Done', 'Reporting Date': '2026-04-01' }
+  });
+
+  const result = processProjectItems('org', 1, [prItem], null, null);
+  assert.equal(result.finalDoneRows.length, 1);
+  assert.equal(result.finalDoneRows[0]['Issue Number'], '200');
+  assert.equal(result.finalDoneRows[0]['Item Type'], 'PR');
+});
+
+test('processProjectItems: excludes Done PR item closed without merging', () => {
+  const prItem = makePRItem({
+    number: 201,
+    url: 'https://github.com/org/repo/pull/201',
+    state: 'CLOSED',
+    merged: false,
+    assignees: ['alice'],
+    fields: { Status: 'Done', 'Reporting Date': '2026-04-01' }
+  });
+
+  const result = processProjectItems('org', 1, [prItem], null, null);
+  assert.equal(result.finalDoneRows.length, 0);
+});
+
+test('processProjectItems: PR item has no Parent Issue (PR items have no sub-issues)', () => {
+  const prItem = makePRItem({
+    number: 202,
+    url: 'https://github.com/org/repo/pull/202',
+    state: 'MERGED',
+    merged: true,
+    assignees: ['alice'],
+    fields: { Status: 'Done', 'Reporting Date': '2026-04-01' }
+  });
+
+  const result = processProjectItems('org', 1, [prItem], null, null);
+  assert.equal(result.finalDoneRows[0]['Parent Issue'], '');
+});
+
+test('gh-export GraphQL query includes PullRequest fragment with state and merged', () => {
+  const { PROJECT_QUERY } = require('./gh-export');
+  assert.ok(PROJECT_QUERY.includes('... on PullRequest'), 'PROJECT_QUERY must include PullRequest fragment');
+  assert.ok(PROJECT_QUERY.includes('merged'), 'PullRequest fragment must request merged field');
+  assert.ok(PROJECT_QUERY.includes('state'), 'PullRequest fragment must request state field');
 });

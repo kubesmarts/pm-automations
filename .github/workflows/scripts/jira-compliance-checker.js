@@ -98,25 +98,25 @@ async function main() {
             }
 
             // Fetch linked PRs for Done, In Progress, and In Review stages.
-            // PR_NOT_MERGED needs the open list; ALL_PRS_MERGED needs the merged list.
+            // PR_OPEN needs the open list; PRS_CLOSED needs the closed (merged or declined) list.
             let openPullRequests = [];
-            let mergedPullRequests = [];
+            let closedPullRequests = [];
             const preCheckStage = policyValidator.mapStatusToPolicyStage(jiraClient.extractStatus(issue));
             if (preCheckStage === 'Done' || preCheckStage === 'In Progress' || preCheckStage === 'In Review') {
                 const issueId = issue.id;
                 const allPRs = await jiraClient.fetchLinkedPullRequests(issueId);
                 openPullRequests = allPRs.filter(pr => pr.status === 'OPEN');
-                mergedPullRequests = allPRs.filter(pr => pr.status === 'MERGED');
+                closedPullRequests = allPRs.filter(pr => pr.status === 'MERGED' || pr.status === 'DECLINED');
                 if (openPullRequests.length > 0) {
                     console.log(`  Open PRs: ${openPullRequests.length} (${openPullRequests.map(pr => pr.url).join(', ')})`);
                 }
-                if (mergedPullRequests.length > 0 && openPullRequests.length === 0 && preCheckStage !== 'Done') {
-                    console.log(`  Merged PRs: ${mergedPullRequests.length} — all PRs merged for non-Done issue`);
+                if (closedPullRequests.length > 0 && openPullRequests.length === 0 && preCheckStage !== 'Done') {
+                    console.log(`  Closed PRs: ${closedPullRequests.length} — all PRs merged or declined for non-Done issue`);
                 }
             }
 
             // Validate issue
-            const validationResult = policyValidator.validateIssue(issue, jiraClient, openPullRequests, mergedPullRequests);
+            const validationResult = policyValidator.validateIssue(issue, jiraClient, openPullRequests, closedPullRequests);
             console.log(`  Status: ${validationResult.status} (${validationResult.policyStage})`);
 
             // Auto-clear remaining estimate for Done issues

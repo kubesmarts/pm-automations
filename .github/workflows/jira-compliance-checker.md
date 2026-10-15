@@ -84,8 +84,8 @@ Compliance alert codes:
 | `NO_ASSIGNEE` | Missing assignee |
 | `NO_QA_CONTACT` | QA Contact (`QA Contact`, `QA_CONTACT`, or dynamic custom field ID / `JIRA_QA_CONTACT_FIELD_ID`) is empty. Checked for all non-backlog issues. |
 | `REMAINING_WORK_NOT_CLEARED` | Remaining work not cleared when Done (auto-cleared by the workflow) |
-| `PR_NOT_MERGED` | One or more GitHub PRs linked to the ticket are still open. Only checked for `RELEASE PENDING` and `CLOSED` (resolution: Done) tickets. PRs are fetched via the JIRA dev-status API |
-| `ALL_PRS_MERGED` | The ticket is not in a Done state (`RELEASE PENDING` or `CLOSED`/Done) but has at least one linked GitHub PR and all of them are already merged — the ticket should be transitioned to a Done state. Checked for `IN PROGRESS`, `ON_DEV`, `CODE REVIEW`, and `ON_QA` tickets |
+| `PR_OPEN` | One or more GitHub PRs linked to the ticket are still open. Only checked for `RELEASE PENDING` and `CLOSED` (resolution: Done) tickets. PRs are fetched via the JIRA dev-status API |
+| `PRS_CLOSED` | The ticket is not in a Done state (`RELEASE PENDING` or `CLOSED`/Done) but has at least one linked GitHub PR and all of them are already closed (merged or declined) — the ticket should be transitioned to a Done state. Checked for all non-Done tickets (e.g. `NEW`, `IN PROGRESS`, `ON_DEV`, `CODE REVIEW`, `ON_QA`) |
 
 ### 4. Compliance Report
 A JSON report is generated with:
@@ -197,13 +197,13 @@ Any sources that **did** succeed are still fully processed — their compliance 
 - This is required for all non-backlog issues.
 - The workflow dynamically queries Jira's field metadata to discover the instance's custom field ID (such as `customfield_10470`), or uses the optional `JIRA_QA_CONTACT_FIELD_ID` environment variable.
 
-### `PR_NOT_MERGED` violation on an issue
+### `PR_OPEN` violation on an issue
 - One or more GitHub pull requests linked to the ticket are still open while the ticket is in `RELEASE PENDING` or `CLOSED` (Done) status
 - Merge or close the open PRs, then the alert will clear on the next workflow run
 - If the JIRA dev-status API is not available (e.g. the GitHub integration is not configured), the check is silently skipped — no false positives will be raised
 
-### `ALL_PRS_MERGED` violation on an issue
-- All linked GitHub pull requests have been merged but the ticket is still in an active state (`IN PROGRESS`, `ON_DEV`, `CODE REVIEW`, or `ON_QA`)
+### `PRS_CLOSED` violation on an issue
+- All linked GitHub pull requests have been closed (merged or declined, i.e. closed without merging) but the ticket is still in an active state (any non-Done status, e.g. `IN PROGRESS`, `ON_DEV`, `CODE REVIEW`, or `ON_QA`)
 - Transition the ticket to `RELEASE PENDING` or `CLOSED` (resolution: Done) to reflect that the work is complete
 - The alert will clear on the next workflow run once the ticket is in a Done state
 

@@ -99,7 +99,7 @@ class PolicyValidator {
         return Array.isArray(qaContact) ? qaContact.length > 0 : Boolean(qaContact);
     }
 
-    validateIssue(issue, jiraClient, openPullRequests = [], mergedPullRequests = []) {
+    validateIssue(issue, jiraClient, openPullRequests = [], closedPullRequests = []) {
         const status = jiraClient.extractStatus(issue);
         const policyStage = this.mapStatusToPolicyStage(status);
         const requiredFields = this.requiredFields[policyStage] || [];
@@ -156,15 +156,15 @@ class PolicyValidator {
             violations.push('REMAINING_WORK_NOT_CLEARED');
         }
 
-        // PR_NOT_MERGED: Done issues must have all linked PRs merged
+        // PR_OPEN: Done issues must have all linked PRs closed (merged or declined)
         if (policyStage === 'Done' && openPullRequests.length > 0) {
-            violations.push('PR_NOT_MERGED');
+            violations.push('PR_OPEN');
         }
 
-        // ALL_PRS_MERGED: non-Done issues with at least one PR should still have an open PR.
-        // If all linked PRs are already merged, the item should be transitioned to Done.
-        if (policyStage !== 'Done' && mergedPullRequests.length > 0 && openPullRequests.length === 0) {
-            violations.push('ALL_PRS_MERGED');
+        // PRS_CLOSED: non-Done issues with at least one PR should still have an open PR.
+        // If all linked PRs are already closed (merged or declined), the item should be transitioned to Done.
+        if (policyStage !== 'Done' && closedPullRequests.length > 0 && openPullRequests.length === 0) {
+            violations.push('PRS_CLOSED');
         }
 
         // ESTIMATE_TOO_LONG: estimate is set but exceeds 2 weeks, only for In Progress

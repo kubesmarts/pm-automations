@@ -175,7 +175,7 @@ jobs:
           repo_issue_had_milestone() {
             local item_json="$1"
             local has_milestoned=$(echo "$item_json" | \
-              jq '.content.timelineItems.nodes[] | select(.__typename=="MilestonedEvent")' | \
+              jq '.content.timelineItems.nodes[]? | select(.__typename=="MilestonedEvent")' | \
               jq -s 'length > 0')
             echo "$has_milestoned"
           }
@@ -190,8 +190,10 @@ jobs:
               IS_ARCHIVED=$(echo "$item" | jq -r '.isArchived')
               ISSUE_NUMBER=$(echo "$item" | jq -r '.content.number // ""')
               ISSUE_TITLE=$(echo "$item" | jq -r '.content.title // ""')
+              # Detect whether this item is a PR (PullRequest) or a regular issue.
+              IS_PR=$(echo "$item" | jq -r 'if .content | has("merged") then "true" else "false" end')
               echo ""
-              echo "Item $ITEM_ID${ISSUE_NUMBER:+ (GH #$ISSUE_NUMBER)}${ISSUE_TITLE:+: $ISSUE_TITLE}"
+              echo "Item $ITEM_ID${ISSUE_NUMBER:+ (GH #$ISSUE_NUMBER)}${ISSUE_TITLE:+: $ISSUE_TITLE}${IS_PR:+${IS_PR/#true/ [PR]}}"
               [ -z "$ISSUE_NUMBER" ] && echo "  (draft item — no linked GH issue)"
               if [ "$IS_ARCHIVED" = "true" ]; then
                 echo "  → Skipping: item is archived."
@@ -210,33 +212,64 @@ jobs:
               STATUS=$(get_field         "$item" "Status")
               STATUS_LC=$(echo "$STATUS" | tr '[:upper:]' '[:lower:]')
 
-              # Skip Done items whose underlying GH issue was closed but not as completed
-              # (e.g. closed as "not planned"). Done items whose repo issue is still OPEN are
-              # NOT skipped: they are evaluated and get the REPO_ISSUE_OPEN alert.
-              ISSUE_STATE=$(echo "$item" | jq -r '.content.state // ""')
-              if [ "$STATUS_LC" = "done" ]; then
-                STATE_REASON=$(echo "$item" | jq -r '.content.stateReason // ""')
-                if [ "$ISSUE_STATE" != "OPEN" ] && [ "$STATE_REASON" != "COMPLETED" ]; then
-                  echo "  → Skipping: issue is Done but stateReason is '${STATE_REASON:-null}' (not COMPLETED)."
-                  # Clear any stale compliance alerts — the item will never be re-evaluated,
-                  # so we must wipe them now or they persist forever.
-                  if [ -n "$SYNC_STATUS_FIELD_ID" ] && [ "$DRY_RUN" != "true" ]; then
-                    gh api graphql -f query='
-                      mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
-                        updateProjectV2ItemFieldValue(input: {
-                          projectId: $projectId
-                          itemId: $itemId
-                          fieldId: $fieldId
-                          value: { text: $text }
-                        }) { projectV2Item { id } }
-                      }
-                    ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                      -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="" > /dev/null \
-                      && echo "  → Alerts cleared." \
-                      || echo "  → Warning: failed to clear alerts field."
+              ITEM_STATE=$(echo "$item" | jq -r '.content.state // ""')
+
+              if [ "$IS_PR" = "true" ]; then
+                # PR items: CLOSED without merge = equivalent of "not planned" for issues.
+                # Skip when Done (stale alerts cleared), raise PRS_CLOSED when not Done.
+                PR_MERGED=$(echo "$item" | jq -r '.content.merged // false')
+                if [ "$ITEM_STATE" = "CLOSED" ] && [ "$PR_MERGED" != "true" ]; then
+                  if [ "$STATUS_LC" = "done" ]; then
+                    echo "  → Skipping: PR item is Done but the PR was closed without merging."
+                    # Clear any stale compliance alerts.
+                    if [ -n "$SYNC_STATUS_FIELD_ID" ] && [ "$DRY_RUN" != "true" ]; then
+                      gh api graphql -f query='
+                        mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                          updateProjectV2ItemFieldValue(input: {
+                            projectId: $projectId
+                            itemId: $itemId
+                            fieldId: $fieldId
+                            value: { text: $text }
+                          }) { projectV2Item { id } }
+                        }
+                      ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                        -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="" > /dev/null \
+                        && echo "  → Alerts cleared." \
+                        || echo "  → Warning: failed to clear alerts field."
+                    fi
+                    SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+                    continue
                   fi
-                  SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
-                  continue
+                  # Not Done: fall through to normal evaluation; PRS_CLOSED will be raised below.
+                fi
+              else
+                # Issue items: skip Done items whose underlying GH issue was closed but not as completed
+                # (e.g. closed as "not planned"). Done items whose repo issue is still OPEN are
+                # NOT skipped: they are evaluated and get the REPO_ISSUE_OPEN alert.
+                if [ "$STATUS_LC" = "done" ]; then
+                  STATE_REASON=$(echo "$item" | jq -r '.content.stateReason // ""')
+                  if [ "$ITEM_STATE" != "OPEN" ] && [ "$STATE_REASON" != "COMPLETED" ]; then
+                    echo "  → Skipping: issue is Done but stateReason is '${STATE_REASON:-null}' (not COMPLETED)."
+                    # Clear any stale compliance alerts — the item will never be re-evaluated,
+                    # so we must wipe them now or they persist forever.
+                    if [ -n "$SYNC_STATUS_FIELD_ID" ] && [ "$DRY_RUN" != "true" ]; then
+                      gh api graphql -f query='
+                        mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                          updateProjectV2ItemFieldValue(input: {
+                            projectId: $projectId
+                            itemId: $itemId
+                            fieldId: $fieldId
+                            value: { text: $text }
+                          }) { projectV2Item { id } }
+                        }
+                      ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                        -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="" > /dev/null \
+                        && echo "  → Alerts cleared." \
+                        || echo "  → Warning: failed to clear alerts field."
+                    fi
+                    SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+                    continue
+                  fi
                 fi
               fi
 
@@ -491,8 +524,8 @@ jobs:
               fi
 
               # Check CHILDREN_STATUS: detect parent/child status inconsistencies.
-              # Only runs when the item is linked to a GH issue with sub-issues in this project.
-              if [ -n "$ISSUE_NUMBER" ]; then
+              # Only runs for issue items (PR items have no sub-issues) linked to a GH issue.
+              if [ "$IS_PR" != "true" ] && [ -n "$ISSUE_NUMBER" ]; then
                 # Get parent repository info for composite key building
                 PARENT_REPO_OWNER=$(echo "$item" | jq -r '.content.repository.owner.login // ""')
                 PARENT_REPO_NAME=$(echo "$item" | jq -r '.content.repository.name // ""')
@@ -523,59 +556,74 @@ jobs:
                 fi
               fi
 
-              # REPO_ISSUE_OPEN: item is Done in the project but the repository issue is still open.
-              # Clears automatically once the issue is closed as completed or the item leaves Done.
-              if [ "$STATUS_LC" = "done" ] && [ -n "$ISSUE_NUMBER" ] && [ "$ISSUE_STATE" = "OPEN" ]; then
-                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }REPO_ISSUE_OPEN"
-              fi
-
-              # REPO_ISSUE_CLOSED: repository issue is already closed but the item is not Done in the project.
-              # Clears automatically once the item is moved to Done or the repository issue is reopened.
-              if [ "$STATUS_LC" != "done" ] && [ -n "$ISSUE_NUMBER" ] && [ "$ISSUE_STATE" = "CLOSED" ]; then
-                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }REPO_ISSUE_CLOSED"
-              fi
-
-              # PR_NOT_MERGED: Done issue must have at least one closing PR still open.
-              # Only PRs that are explicitly linked to close the issue (willCloseTarget == true)
-              # are checked — casual mentions in comments are ignored.
-              if [ "$STATUS_LC" = "done" ] && [ -n "$ISSUE_NUMBER" ]; then
-                LINKED_PRS=$(echo "$item" | jq -r '
-                  [.content.timelineItems.nodes[]? |
-                   select(.willCloseTarget == true) |
-                   select(.source.number != null) |
-                   select(.source.state == "OPEN")] |
-                  length')
-                if [ "${LINKED_PRS:-0}" -gt 0 ]; then
-                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }PR_NOT_MERGED"
+              if [ "$IS_PR" = "true" ]; then
+                # PR_OPEN: item is Done in the project but the PR is still open.
+                # Clears automatically once the PR is closed (merged or closed) or the item leaves Done.
+                if [ "$STATUS_LC" = "done" ] && [ -n "$ISSUE_NUMBER" ] && [ "$ITEM_STATE" = "OPEN" ]; then
+                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }PR_OPEN"
                 fi
-              fi
 
-              # ALL_PRS_MERGED: non-Done issue has linked PRs but all are already merged.
-              # Signals that work is complete but the item has not been transitioned to Done.
-              # Only counts PRs that are explicitly linked to close the issue:
-              #   - CrossReferencedEvent with willCloseTarget == true (closing keyword in PR body)
-              #   - ConnectedEvent subject (sidebar Development link — always a closing link)
-              # Casual cross-references (willCloseTarget == false) are intentionally excluded to
-              # avoid false positives from PRs that merely mention the issue (e.g. in a comment).
-              # An open closing-linked PR suppresses the alert (work is still in flight).
-              # PRs closed without merging (CLOSED state) are not counted.
-              if [ "$STATUS_LC" != "done" ] && [ -n "$ISSUE_NUMBER" ]; then
-                MERGED_LINKED_PRS=$(echo "$item" | jq -r '
-                  [.content.timelineItems.nodes[]? |
-                   select(
-                     (.willCloseTarget == true and (.source.number != null) and .source.state == "MERGED") or
-                     ((.subject.number != null) and .subject.state == "MERGED")
-                   )] |
-                  length')
-                OPEN_LINKED_PRS=$(echo "$item" | jq -r '
-                  [.content.timelineItems.nodes[]? |
-                   select(
-                     (.willCloseTarget == true and (.source.number != null) and .source.state == "OPEN") or
-                     ((.subject.number != null) and .subject.state == "OPEN")
-                   )] |
-                  length')
-                if [ "${MERGED_LINKED_PRS:-0}" -gt 0 ] && [ "${OPEN_LINKED_PRS:-0}" -eq 0 ]; then
-                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }ALL_PRS_MERGED"
+                # PRS_CLOSED: PR is already closed or merged but the item is not Done in the project.
+                # Clears automatically once the item is moved to Done or the PR is reopened.
+                # Note: CLOSED without merge also raises PRS_CLOSED (PR is "abandoned" but item still open).
+                if [ "$STATUS_LC" != "done" ] && [ -n "$ISSUE_NUMBER" ] && [ "$ITEM_STATE" != "OPEN" ]; then
+                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }PRS_CLOSED"
+                fi
+              else
+                # REPO_ISSUE_OPEN: item is Done in the project but the repository issue is still open.
+                # Clears automatically once the issue is closed as completed or the item leaves Done.
+                if [ "$STATUS_LC" = "done" ] && [ -n "$ISSUE_NUMBER" ] && [ "$ITEM_STATE" = "OPEN" ]; then
+                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }REPO_ISSUE_OPEN"
+                fi
+
+                # REPO_ISSUE_CLOSED: repository issue is already closed but the item is not Done in the project.
+                # Clears automatically once the item is moved to Done or the repository issue is reopened.
+                if [ "$STATUS_LC" != "done" ] && [ -n "$ISSUE_NUMBER" ] && [ "$ITEM_STATE" = "CLOSED" ]; then
+                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }REPO_ISSUE_CLOSED"
+                fi
+
+                # PR_OPEN: Done issue must have all linked PRs closed (merged or closed).
+                # Only PRs that are explicitly linked to close the issue (willCloseTarget == true)
+                # are checked — casual mentions in comments are ignored.
+                if [ "$STATUS_LC" = "done" ] && [ -n "$ISSUE_NUMBER" ]; then
+                  LINKED_PRS=$(echo "$item" | jq -r '
+                    [.content.timelineItems.nodes[]? |
+                     select(.willCloseTarget == true) |
+                     select(.source.number != null) |
+                     select(.source.state == "OPEN")] |
+                    length')
+                  if [ "${LINKED_PRS:-0}" -gt 0 ]; then
+                    SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }PR_OPEN"
+                  fi
+                fi
+
+                # PRS_CLOSED: non-Done issue has linked PRs but all are already closed (merged or closed).
+                # Signals that work is complete (or abandoned) but the item has not been transitioned to Done.
+                # Only counts PRs that are explicitly linked to close the issue:
+                #   - CrossReferencedEvent with willCloseTarget == true (closing keyword in PR body)
+                #   - ConnectedEvent subject (sidebar Development link — always a closing link)
+                # Casual cross-references (willCloseTarget == false) are intentionally excluded to
+                # avoid false positives from PRs that merely mention the issue (e.g. in a comment).
+                # An open closing-linked PR suppresses the alert (work is still in flight).
+                # PRs in either MERGED or CLOSED (closed without merging) state count as closed.
+                if [ "$STATUS_LC" != "done" ] && [ -n "$ISSUE_NUMBER" ]; then
+                  CLOSED_LINKED_PRS=$(echo "$item" | jq -r '
+                    [.content.timelineItems.nodes[]? |
+                     select(
+                       (.willCloseTarget == true and (.source.number != null) and (.source.state == "MERGED" or .source.state == "CLOSED")) or
+                       ((.subject.number != null) and (.subject.state == "MERGED" or .subject.state == "CLOSED"))
+                     )] |
+                    length')
+                  OPEN_LINKED_PRS=$(echo "$item" | jq -r '
+                    [.content.timelineItems.nodes[]? |
+                     select(
+                       (.willCloseTarget == true and (.source.number != null) and .source.state == "OPEN") or
+                       ((.subject.number != null) and .subject.state == "OPEN")
+                     )] |
+                    length')
+                  if [ "${CLOSED_LINKED_PRS:-0}" -gt 0 ] && [ "${OPEN_LINKED_PRS:-0}" -eq 0 ]; then
+                    SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }PRS_CLOSED"
+                  fi
                 fi
               fi
 
@@ -1024,6 +1072,9 @@ jobs:
                             number
                             title
                             url
+                            body
+                            state
+                            merged
                             assignees(first: 5) { nodes { login } }
                           }
                         }
@@ -1224,6 +1275,9 @@ jobs:
                               number
                               title
                               url
+                              body
+                              state
+                              merged
                               assignees(first: 5) { nodes { login } }
                             }
                           }

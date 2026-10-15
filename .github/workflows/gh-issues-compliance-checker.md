@@ -13,13 +13,15 @@ This is an **automation workflow** designed to **validate GitHub issues complian
 
 No action is taken when non-tracked fields change (e.g. title, assignee).
 
-### Skipping Issues Closed as "Not Planned"
+### Skipping items for abandoned work
 
-When a project item's **Status** is `Done`, the workflow checks the underlying GitHub issue. If the issue is **closed** and its `stateReason` is not `COMPLETED` (e.g. the issue was closed as **"not planned"**), the item is **skipped** — no new alerts are raised, no reporting fields are updated, and no JIRA sync is attempted.
+**Issue items** whose `Status` is `Done` are checked against the underlying GitHub issue. If the issue is **closed** and its `stateReason` is not `COMPLETED` (e.g. the issue was closed as **"not planned"**), the item is **skipped** — no new alerts are raised, no reporting fields are updated, and no JIRA sync is attempted.
 
 Done items whose repository issue is still **open** are **not** skipped: they are evaluated normally and receive the `REPO_ISSUE_OPEN` alert (see below).
 
-Any **existing compliance alerts already on the item are cleared** at skip time. This is necessary because a previously In Progress item may have accumulated alerts (e.g. `NO_REMAINING_WORK`) before it was closed as not planned — without this cleanup those alerts would persist forever since the item is never re-evaluated.
+**PR items** (project items backed by a pull request) follow the same logic: if the PR was **closed without being merged**, the item is the PR equivalent of "not planned". If the item is `Done`, it is skipped with stale alerts cleared. If the item is **not** `Done`, it is evaluated normally and receives the `PRS_CLOSED` alert.
+
+Any **existing compliance alerts already on the item are cleared** at skip time. This is necessary because a previously In Progress item may have accumulated alerts (e.g. `NO_REMAINING_WORK`) before the work was abandoned — without this cleanup those alerts would persist forever since the item is never re-evaluated.
 
 This prevents false compliance alerts (e.g. `NO_TIME_SPENT`, `NO_AREA`) from being raised against work that was intentionally abandoned or cancelled.
 
@@ -130,11 +132,11 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 | `JIRA_CREATE_ERROR NO_ISSUE` | A `CREATE` directive was detected but the item is not linked to a GH issue |
 | `JIRA_CREATE_ERROR NO_EXT_REF_FIELD` | A `CREATE` directive was detected but the `External Reference` field is not configured in the project |
 | `NO_DESCRIPTION` | Issue body is empty **and** the item is either an epic (has sub-issues) **or** has an `Estimate` ≥ 4 hours (`0.1` weeks). Items with no estimate or an estimate smaller than 4 hours are not checked. |
-| `REPO_ISSUE_OPEN` | `Status` is `Done` but the underlying repository issue is still open. Clears once the issue is closed as completed or the item is moved out of `Done` |
-| `REPO_ISSUE_CLOSED` | `Status` is not `Done` but the underlying repository issue is already closed. Clears once the item is moved to `Done` or the repository issue is reopened |
-| `PR_NOT_MERGED` | Issue is `Done` but at least one linked pull request has not been merged yet |
-| `ALL_PRS_MERGED` | Issue is **not** `Done` but has at least one linked pull request and all of them have already been merged — the item should be transitioned to a Done state |
-| `CHILDREN_STATUS` | Parent/child status inconsistency detected (see below) |
+| `REPO_ISSUE_OPEN` | (Issue items only) `Status` is `Done` but the underlying repository issue is still open. Clears once the issue is closed as completed or the item is moved out of `Done` |
+| `REPO_ISSUE_CLOSED` | (Issue items only) `Status` is not `Done` but the underlying repository issue is already closed. Clears once the item is moved to `Done` or the repository issue is reopened |
+| `PR_OPEN` | `Status` is `Done` but at least one linked PR (for issue items) or the PR itself (for PR items) is still open. Clears once all linked PRs are closed/merged or the item is moved out of `Done` |
+| `PRS_CLOSED` | `Status` is not `Done` but all linked PRs are already closed or merged (for issue items), or the PR itself is already closed or merged (for PR items). Clears once the item is moved to `Done` or a PR is reopened |
+| `CHILDREN_STATUS` | (Issue items only) Parent/child status inconsistency detected (see below) |
 
 **`CHILDREN_STATUS` rules** — only sub-issues that are also tracked in the same project are considered:
 
@@ -374,8 +376,8 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **`Alerts` shows `JIRA_SYNC_ERROR HTTP_<code>`** → a JIRA API call failed; check the Actions log for the response body and consult the JIRA troubleshooting entries below
 - **`Alerts` shows `REPO_ISSUE_OPEN`** → the item is `Done` in the project but the repository issue is still open; close the repository issue as completed, or move the item out of `Done`
 - **`Alerts` shows `REPO_ISSUE_CLOSED`** → the repository issue is closed but the item is not `Done` in the project; move the item to `Done`, or reopen the repository issue if the work is not finished
-- **`Alerts` shows `PR_NOT_MERGED`** → the issue is `Done` but one or more linked pull requests are still open; merge or close the outstanding PRs and the alert will clear on the next run
-- **`Alerts` shows `ALL_PRS_MERGED`** → the issue is not `Done` but all linked pull requests have already been merged; transition the item to the appropriate Done status (e.g. `Done`) and the alert will clear on the next run
+- **`Alerts` shows `PR_OPEN`** → for issue items: the item is `Done` but one or more linked pull requests are still open; merge or close the outstanding PRs. For PR items: the item is `Done` but the pull request is still open; merge the pull request or move the item out of `Done`. The alert clears on the next run
+- **`Alerts` shows `PRS_CLOSED`** → for issue items: the item is not `Done` but all linked pull requests have already been closed or merged; transition the item to `Done`. For PR items: the PR is already closed or merged but the item is not `Done`; move the item to `Done` or reopen the pull request if the work is not finished. The alert clears on the next run
 - **`Alerts` shows `NO_DESCRIPTION`** → add a description to the GitHub issue body. This alert fires when the issue has no body and is either a parent issue (has sub-issues) or has an `Estimate` of 4 hours (`0.1` weeks) or more. Small issues with no estimate or a sub-4-hour estimate are exempt.
 - **`Alerts` shows `CHILDREN_STATUS`** → resolve the status inconsistency: if the parent is `Done`, all children must also be `Done`; if the parent is active (not `Backlog`/`Next`), no child should still be in `Backlog`
 - **JIRA sync skipped with "does not have the 'gh-issue-<number>' label"** → add the label `gh-issue-<number>` to the JIRA ticket to opt it in to syncing

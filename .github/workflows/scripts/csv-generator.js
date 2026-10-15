@@ -44,6 +44,7 @@ function arrayToCSV(data, columns) {
  */
 const ACTIVE_ITEMS_COLUMNS = [
   'Issue Number',
+  'Item Type',
   'Parent Issue',
   'Issue URL',
   'Title',
@@ -72,6 +73,7 @@ const ACTIVE_ITEMS_COLUMNS = [
  */
 const DONE_ITEMS_COLUMNS = [
   'Issue Number',
+  'Item Type',
   'Parent Issue',
   'Issue URL',
   'Title',
