@@ -23,7 +23,7 @@ A GitHub Actions workflow that validates JIRA issues against ABLE team's softwar
 | Area | area/\<value\> label | Label | Must have one label matching pattern `area/*` (e.g., area/ci, area/runtimes, area/tooling, area/cloud, area/qe, area/docs). For SRVLOGIC issues, automatically synced with Component field |
 | Priority | Priority | Single select | Must be set to one of: Blocker, Critical, Major, Normal, Minor |
 | Version | Fix Versions | Array | Must have at least one version set |
-| Estimate | Original Estimate | Time tracking | Must be set (any positive value). **Optional for epics** (issues with sub-tasks) |
+| Estimate | Original Estimate | Time tracking | Must be set (any positive value). **Optional for epics** (issues of type Epic or with sub-tasks) |
 | Remaining Work | Remaining Estimate | Time tracking | Must be set (any positive value). **For epics, only required when their own Original Estimate is > 0** |
 | Time Spent | Time Spent (worklog sum) | Time tracking | Must be set (can be 0, but field must exist/not be null) |
 | Assignee | Assignee | User | Must have at least one assignee |
@@ -205,7 +205,7 @@ for (label in labelsToRemove) {
 | `NO_AREA` | No area/* label found | Required for Next, In Progress, In Review, Done (after Component/Area sync for SRVLOGIC) |
 | `NO_PRIORITY` | Priority field is empty | Required for Next, In Progress, In Review, Done |
 | `NO_VERSION` | Fix Versions is empty | Required for Next, In Progress, In Review, Done |
-| `NO_ESTIMATE` | Original Estimate is empty | Required for In Progress, In Review, Done — **suppressed for epics** (issues with sub-tasks) |
+| `NO_ESTIMATE` | Original Estimate is empty | Required for In Progress, In Review, Done — **suppressed for epics** (issues of type Epic or with sub-tasks) |
 | `NO_REMAINING_WORK` | Remaining Estimate is empty | Required for In Progress, In Review — **suppressed for epics when their Original Estimate is ≤ 0** |
 | `NO_TIME_SPENT` | Time Spent field is null/not set | Required for Done (value can be 0, but field must exist) |
 | `NO_ASSIGNEE` | Assignee field is empty | Required for In Progress, In Review, Done |

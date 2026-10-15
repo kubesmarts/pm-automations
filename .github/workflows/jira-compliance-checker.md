@@ -77,7 +77,7 @@ Compliance alert codes:
 | `NO_AREA` | Missing area/* label |
 | `NO_PRIORITY` | Missing priority |
 | `NO_VERSION` | Missing fix versions |
-| `NO_ESTIMATE` | Missing original estimate. **Not raised for epics** (issues with sub-tasks) — estimate is optional for them |
+| `NO_ESTIMATE` | Missing original estimate. **Not raised for epics** (issues of type Epic or with sub-tasks) — estimate is optional for them |
 | `ESTIMATE_TOO_LONG` | Original estimate exceeds 2 weeks and status is `In Progress` |
 | `NO_REMAINING_WORK` | Missing remaining estimate. **For epics, only raised when their original estimate is > 0** |
 | `NO_TIME_SPENT` | Missing time spent |

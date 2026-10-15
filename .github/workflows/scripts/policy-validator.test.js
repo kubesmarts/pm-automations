@@ -156,7 +156,7 @@ test('ESTIMATE_TOO_LONG: not raised for Done items even with large estimate', ()
 /** A stub sub-task entry — only the presence matters for isEpic(). */
 const STUB_SUBTASK = { key: 'TEST-2', fields: { summary: 'child' } };
 
-test('NO_ESTIMATE: not raised for In Progress epic with no estimate', () => {
+test('NO_ESTIMATE: not raised for In Progress epic with subtasks and no estimate', () => {
     const validator = new PolicyValidator();
     // Epic with no estimate — originalEstimateSeconds is null
     const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: null, subtasks: [STUB_SUBTASK] });
@@ -165,10 +165,28 @@ test('NO_ESTIMATE: not raised for In Progress epic with no estimate', () => {
         `Unexpected NO_ESTIMATE for epic: ${result.violations}`);
 });
 
+test('NO_ESTIMATE: not raised for In Progress epic (issueType=Epic) with no subtasks and no estimate', () => {
+    const validator = new PolicyValidator();
+    // Epic issue type without subtasks and no estimate
+    const issue = makeIssue({ status: 'IN PROGRESS', issueType: 'Epic', estimateSeconds: null, subtasks: [] });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_ESTIMATE'),
+        `Unexpected NO_ESTIMATE for epic issue type: ${result.violations}`);
+});
+
+test('NO_ESTIMATE: not raised for In Progress epic with hierarchyLevel > 0 and no estimate', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: null, subtasks: [] });
+    issue.fields.issuetype = { name: 'Feature', hierarchyLevel: 1 };
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_ESTIMATE'),
+        `Unexpected NO_ESTIMATE for hierarchyLevel > 0: ${result.violations}`);
+});
+
 test('NO_ESTIMATE: raised for non-epic In Progress item with no estimate', () => {
     const validator = new PolicyValidator();
-    // Non-epic (no subtasks) with no estimate — should still fire
-    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: null, subtasks: [] });
+    // Non-epic (no subtasks, Task issue type) with no estimate — should still fire
+    const issue = makeIssue({ status: 'IN PROGRESS', issueType: 'Task', estimateSeconds: null, subtasks: [] });
     const result = validator.validateIssue(issue, jiraClient);
     assert.ok(result.violations.includes('NO_ESTIMATE'),
         `Expected NO_ESTIMATE for non-epic without estimate: ${result.violations}`);
@@ -183,6 +201,14 @@ test('NO_REMAINING_WORK: not raised for In Progress epic with no estimate', () =
         `Unexpected NO_REMAINING_WORK for epic with estimate=0: ${result.violations}`);
 });
 
+test('NO_REMAINING_WORK: not raised for In Progress epic (issueType=Epic, subtasks=[]) with no estimate', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', issueType: 'Epic', estimateSeconds: 0, subtasks: [] });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_REMAINING_WORK'),
+        `Unexpected NO_REMAINING_WORK for epic (issueType=Epic) with estimate=0: ${result.violations}`);
+});
+
 test('NO_REMAINING_WORK: raised for In Progress epic when estimate > 0 and remaining work is absent', () => {
     const validator = new PolicyValidator();
     // Epic with a real estimate — remaining work IS required
@@ -194,6 +220,16 @@ test('NO_REMAINING_WORK: raised for In Progress epic when estimate > 0 and remai
     const result = validator.validateIssue(issue, jiraClient);
     assert.ok(result.violations.includes('NO_REMAINING_WORK'),
         `Expected NO_REMAINING_WORK for epic with estimate>0 and no remaining: ${result.violations}`);
+});
+
+test('NO_REMAINING_WORK: raised for In Progress epic (issueType=Epic, subtasks=[]) when estimate > 0 and remaining work is absent', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', issueType: 'Epic', estimateSeconds: ONE_WEEK_S, subtasks: [] });
+    issue.fields.timetracking.remainingEstimateSeconds = null;
+    issue.fields.timetracking.remainingEstimate = undefined;
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_REMAINING_WORK'),
+        `Expected NO_REMAINING_WORK for epic (issueType=Epic) with estimate>0 and no remaining: ${result.violations}`);
 });
 
 // ---------------------------------------------------------------------------
