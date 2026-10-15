@@ -120,7 +120,7 @@ When the optional `Alerts` field is present in a project, the workflow writes on
 | `NO_AREA` | `Area` is empty and `Status` is not `Backlog` |
 | `NO_PRIORITY` | `Priority` is empty and `Status` is not `Backlog` |
 | `NO_MILESTONE` | `Target Milestone` is empty and `Status` is not `Backlog`. Not raised when the repo milestone sync sets the value during the same run. |
-| `NO_TIME_SPENT` | `Time Spent` is empty and `Status` is `Done` |
+| `NO_TIME_SPENT` | `Time Spent` is empty and `Status` is `Done`. For epics, only raised when their own `Estimate` is greater than 0 |
 | `NO_ASSIGNEE` | Issue has no assignee and `Status` is `In Progress`, `In Review`, or `Done` |
 | `JIRA_NOT_FOUND` | `External Reference` is set but the JIRA ticket does not exist (HTTP 404 with JIRA error body) |
 | `JIRA_ENDPOINT_ERROR HTTP_404` | JIRA returned HTTP 404 with no JIRA error body — endpoint unreachable or `PSYNC_JIRA_BASE_URL` misconfigured |
@@ -366,7 +366,7 @@ Change a field that is **not** tracked (e.g. title or assignee). After the next 
 - **`Alerts` shows `NO_AREA`** → set the `Area` field on the project item, or move it back to `Backlog` if area classification is not yet applicable
 - **`Alerts` shows `NO_PRIORITY`** → set the `Priority` field on the project item, or move it back to `Backlog` if prioritization is not yet applicable
 - **`Alerts` shows `NO_MILESTONE`** → set the repo issue's **Milestone** field (the sync will propagate it to the project on the next run), or set `Target Milestone` directly on the project item. Move the item back to `Backlog` if the milestone is not yet decided
-- **`Alerts` shows `NO_TIME_SPENT`** → the item is `Done` but `Time Spent` is empty; log the actual time spent
+- **`Alerts` shows `NO_TIME_SPENT`** → the item is `Done` but `Time Spent` is empty; log the actual time spent. For epics whose work is in sub-issues, keep `Estimate` at `0` to suppress this alert
 - **`Alerts` shows `NO_ASSIGNEE`** → the item is `In Progress`, `In Review`, or `Done` but has no assignee; assign it to the responsible person
 - **`Alerts` shows `JIRA_NOT_FOUND`** → the ticket ID in `External Reference` does not exist in JIRA; correct or remove the reference
 - **`Alerts` shows `JIRA_ENDPOINT_ERROR HTTP_404`** → the JIRA endpoint returned a 404 with no JIRA error body; verify `PSYNC_JIRA_BASE_URL` is correct and reachable

@@ -225,9 +225,11 @@ if [ -n "$MILESTONE_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "bac
   SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }NO_MILESTONE"
 fi
 
-# NO_TIME_SPENT
+# NO_TIME_SPENT: for epics, only raised when estimate is set and > 0.
 if [ -n "$TIME_SPENT_FIELD_ID" ] && [ "$STATUS_LC" = "done" ] && [ -z "$TIME_SPENT" ]; then
-  SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }NO_TIME_SPENT"
+  if [ "$HAS_SUB_ISSUES" != "true" ] || awk -v e="$ESTIMATE" 'BEGIN { exit !(e+0 > 0) }'; then
+    SYNC_STATUS_CODES="\${SYNC_STATUS_CODES:+\${SYNC_STATUS_CODES}, }NO_TIME_SPENT"
+  fi
 fi
 
 # ESTIMATE_TOO_LONG
@@ -454,6 +456,21 @@ test('NO_TIME_SPENT: not raised for in-progress items', () => {
 test('NO_TIME_SPENT: not raised when time spent is set', () => {
   const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'done', TIME_SPENT: '1.5' });
   assert.ok(!codes.includes('NO_TIME_SPENT'), `Unexpected NO_TIME_SPENT when set: "${codes}"`);
+});
+
+test('NO_TIME_SPENT: not raised for epic with no estimate', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'done', HAS_SUB_ISSUES: 'true', ESTIMATE: '', TIME_SPENT: '' });
+  assert.ok(!codes.includes('NO_TIME_SPENT'), `Unexpected NO_TIME_SPENT for epic with no estimate: "${codes}"`);
+});
+
+test('NO_TIME_SPENT: not raised for epic with estimate=0', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'done', HAS_SUB_ISSUES: 'true', ESTIMATE: '0', TIME_SPENT: '' });
+  assert.ok(!codes.includes('NO_TIME_SPENT'), `Unexpected NO_TIME_SPENT for epic with estimate=0: "${codes}"`);
+});
+
+test('NO_TIME_SPENT: raised for epic when estimate > 0 and time spent is empty', () => {
+  const codes = evalRule({ ...ALL_FIELDS, STATUS_LC: 'done', HAS_SUB_ISSUES: 'true', ESTIMATE: '1', TIME_SPENT: '' });
+  assert.ok(codes.includes('NO_TIME_SPENT'), `Expected NO_TIME_SPENT for epic with estimate>0: "${codes}"`);
 });
 
 // -- ESTIMATE_TOO_LONG --

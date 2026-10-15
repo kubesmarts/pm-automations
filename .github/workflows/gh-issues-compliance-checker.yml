@@ -451,8 +451,11 @@ jobs:
               if [ -n "$MILESTONE_FIELD_ID" ] && [ -n "$STATUS_LC" ] && [ "$STATUS_LC" != "backlog" ] && [ -z "$MILESTONE" ]; then
                 SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_MILESTONE"
               fi
+              # NO_TIME_SPENT: for epics, only raised when estimate is set and > 0.
               if [ -n "$TIME_SPENT_FIELD_ID" ] && [ "$STATUS_LC" = "done" ] && [ -z "$TIME_SPENT" ]; then
-                SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_TIME_SPENT"
+                if [ "$HAS_SUB_ISSUES" != "true" ] || awk -v e="$ESTIMATE" 'BEGIN { exit !(e+0 > 0) }'; then
+                  SYNC_STATUS_CODES="${SYNC_STATUS_CODES:+${SYNC_STATUS_CODES}, }NO_TIME_SPENT"
+                fi
               fi
               # Auto-clear Remaining Work for any Done item that still has a value (zero or non-zero).
               if [ "$STATUS_LC" = "done" ] && [ -n "$REMAINING_WORK" ] && [ -n "$REMAINING_WORK_FIELD_ID" ]; then

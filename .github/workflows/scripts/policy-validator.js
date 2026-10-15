@@ -84,11 +84,14 @@ class PolicyValidator {
     }
 
     /**
-     * Returns true when the issue is an epic — i.e. it has at least one sub-task/sub-issue.
-     * Both JIRA subtasks and the newer "child issues" are stored in issue.fields.subtasks.
+     * Returns true when the issue is an epic — i.e. its issue type is Epic (or hierarchy level > 0),
+     * or it has at least one sub-task/sub-issue.
      */
     isEpic(issue) {
-        return Array.isArray(issue.fields.subtasks) && issue.fields.subtasks.length > 0;
+        const typeName = issue.fields?.issuetype?.name?.toLowerCase();
+        const isEpicType = typeName === 'epic' || (issue.fields?.issuetype?.hierarchyLevel != null && issue.fields.issuetype.hierarchyLevel > 0);
+        const hasSubtasks = Array.isArray(issue.fields?.subtasks) && issue.fields.subtasks.length > 0;
+        return Boolean(isEpicType || hasSubtasks);
     }
 
     hasQaContact(issue, jiraClient) {
@@ -133,6 +136,12 @@ class PolicyValidator {
 
             // NO_REMAINING_WORK is suppressed for epics unless their own estimate is > 0.
             if (field === 'remainingEstimate' && epic) {
+                const estimateSeconds = issue.fields.timetracking?.originalEstimateSeconds ?? 0;
+                if (estimateSeconds <= 0) continue;
+            }
+
+            // NO_TIME_SPENT is suppressed for epics unless their own estimate is > 0.
+            if (field === 'timeSpent' && epic) {
                 const estimateSeconds = issue.fields.timetracking?.originalEstimateSeconds ?? 0;
                 if (estimateSeconds <= 0) continue;
             }

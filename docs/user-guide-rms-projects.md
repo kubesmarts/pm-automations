@@ -191,7 +191,7 @@ Please review and resolve these alerts.
 | `ESTIMATE_TOO_LONG` | `Estimate` exceeds 2 weeks and status is `In Progress` | Break the work item into smaller pieces, or move it back to `Backlog` / `Next` if the large estimate is intentional at this stage |
 | `NO_REMAINING_WORK` | `Remaining Work` is empty and status is `In Progress` or `In Review`. For epics, only raised when their own `Estimate` is greater than 0 | Set the `Remaining Work` field. For epics whose all work is in sub-issues, keep `Estimate` at `0` to suppress this alert |
 | `IN_PROGRESS_NO_WORK_REMAINING` | `Remaining Work` is `0`, `Estimate` is greater than `0`, and status is `In Progress` — work appears complete but status not updated (not raised for zero-estimate items) | Move status to `In Review` or `Done`, or set the remaining effort to the correct non-zero value |
-| `NO_TIME_SPENT` | `Time Spent` is empty and status is `Done` | Enter the total time spent |
+| `NO_TIME_SPENT` | `Time Spent` is empty and status is `Done`. For epics, only raised when their own `Estimate` is greater than 0 | Enter the total time spent. For epics whose all work is in sub-issues, keep `Estimate` at `0` to suppress this alert |
 | `NO_ASSIGNEE` | No assignee on the GH issue and status is `In Progress`, `In Review`, or `Done` | Assign the issue to the responsible person |
 | `NO_DESCRIPTION` | The GitHub issue body is empty **and** the item is either an epic (has sub-issues) or has an `Estimate` ≥ 4 hours (`0.1` weeks). Items with no estimate or an estimate below 4 hours are exempt | Add a description to the GitHub issue body |
 | `NO_QA_CONTACT` | QA Contact field on JIRA is empty for any non-Backlog issue (Next, In Progress, In Review, or Done) | Set the `QA Contact` field on the JIRA ticket |
@@ -307,7 +307,7 @@ Most Epics serve purely as organizational containers. In this case:
 
 All time tracking should be done in the sub-issues. The Epic itself has no work associated with it.
 
-> **Compliance alerts:** The workflow automatically suppresses `NO_ESTIMATE` for all epics — estimate is optional. `NO_REMAINING_WORK` is also suppressed when the epic's own `Estimate` is `0` or empty. If you set a non-zero `Estimate` directly on the epic, `Remaining Work` becomes required (the same as for any regular issue with an estimate). `NO_DESCRIPTION` is always enforced for epics — all epics must have a non-empty issue body regardless of estimate.
+> **Compliance alerts:** The workflow automatically suppresses `NO_ESTIMATE` for all epics — estimate is optional. `NO_REMAINING_WORK` and `NO_TIME_SPENT` are also suppressed when the epic's own `Estimate` is `0` or empty. If you set a non-zero `Estimate` directly on the epic, `Remaining Work` and `Time Spent` become required (the same as for any regular issue with an estimate). `NO_DESCRIPTION` is always enforced for epics — all epics must have a non-empty issue body regardless of estimate.
 
 **Example:**
 ```
