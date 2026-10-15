@@ -17,7 +17,7 @@ const TWO_WEEKS_S = 2 * ONE_WEEK_S;
  * Only the fields exercised by the ESTIMATE_TOO_LONG rule are required here;
  * all other required fields are pre-populated so other rules don't fire.
  */
-function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST-1', subtasks = [], issueType = 'Task', qaContact = null, tester = null } = {}) {
+function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST-1', subtasks = [], issueType = 'Task', qaContact = null, tester = null, description = 'Some description.' } = {}) {
     return {
         key,
         fields: {
@@ -32,6 +32,7 @@ function makeIssue({ status = 'IN PROGRESS', estimateSeconds = null, key = 'TEST
             issuetype:    { name: issueType },
             QA_CONTACT:   qaContact,
             Tester:       tester,
+            description:  description ? { type: 'doc', version: 1, content: [{ type: 'paragraph', content: [{ type: 'text', text: description }] }] } : null,
             timetracking: {
                 originalEstimateSeconds:  estimateSeconds,
                 originalEstimate:         estimateSeconds != null ? `${Math.round(estimateSeconds / 3600)}h` : undefined,
@@ -71,6 +72,18 @@ const jiraClient = {
     extractAreaLabels:       (i) => (i.fields.labels || []).filter(l => l.startsWith('area/')),
     extractFirstComponent:   (i) => i.fields.components?.[0]?.name || null,
     extractLabels:           (i) => i.fields.labels || [],
+    extractDescription:      (i) => {
+        // Mirrors JiraClient.extractDescription: ADF doc → plain text, null if empty
+        const desc = i.fields?.description;
+        if (!desc) return null;
+        function extractText(node) {
+            if (!node) return '';
+            if (node.type === 'text') return node.text || '';
+            if (Array.isArray(node.content)) return node.content.map(extractText).join('');
+            return '';
+        }
+        return extractText(desc).trim() || null;
+    },
 };
 
 // ---------------------------------------------------------------------------
@@ -507,4 +520,132 @@ test('ALL_PRS_MERGED: raised for Backlog issue when all linked PRs are merged (w
     const result = validator.validateIssue(issue, jiraClient, [], [MERGED_PR_A]);
     assert.ok(result.violations.includes('ALL_PRS_MERGED'),
         `Expected ALL_PRS_MERGED for Backlog with merged PR, got: ${result.violations}`);
+});
+
+// ---------------------------------------------------------------------------
+// NO_DESCRIPTION tests
+// ---------------------------------------------------------------------------
+
+// 4 hours in seconds = 14400 s
+const FOUR_HOURS_S = 4 * 3600;
+
+// -- Epics (type Epic) --
+
+test('NO_DESCRIPTION: raised for Epic-type issue with empty description (In Progress)', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: null, issueType: 'Epic', description: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_DESCRIPTION'),
+        `Expected NO_DESCRIPTION for Epic with no description, got: ${result.violations}`);
+});
+
+test('NO_DESCRIPTION: not raised for Epic-type issue with a non-empty description', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', issueType: 'Epic', description: 'Implement the new Epic.' });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_DESCRIPTION'),
+        `Unexpected NO_DESCRIPTION for Epic with description, got: ${result.violations}`);
+});
+
+// -- Epics (issue with subtasks — same fix as #122) --
+
+test('NO_DESCRIPTION: raised for non-Epic-type issue with subtasks and empty description', () => {
+    // Issue type is "Task" but has children — isEpic() returns true via subtasks check
+    const validator = new PolicyValidator();
+    const STUB_SUBTASK = { key: 'TEST-2', fields: { summary: 'child' } };
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: null, issueType: 'Task', subtasks: [STUB_SUBTASK], description: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_DESCRIPTION'),
+        `Expected NO_DESCRIPTION for parent-issue-with-subtasks with no description, got: ${result.violations}`);
+});
+
+test('NO_DESCRIPTION: not raised for non-Epic-type issue with subtasks when description is present', () => {
+    const validator = new PolicyValidator();
+    const STUB_SUBTASK = { key: 'TEST-2', fields: { summary: 'child' } };
+    const issue = makeIssue({ status: 'IN PROGRESS', issueType: 'Task', subtasks: [STUB_SUBTASK], description: 'This task is a parent.' });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_DESCRIPTION'),
+        `Unexpected NO_DESCRIPTION for parent-issue with description, got: ${result.violations}`);
+});
+
+// -- Non-epic items: estimate threshold --
+
+test('NO_DESCRIPTION: raised for non-epic In Progress item with estimate >= 4h and empty description', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: FOUR_HOURS_S, issueType: 'Task', description: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_DESCRIPTION'),
+        `Expected NO_DESCRIPTION for estimate=4h with no description, got: ${result.violations}`);
+});
+
+test('NO_DESCRIPTION: raised for non-epic item with estimate > 4h and empty description', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: FOUR_HOURS_S + 1, issueType: 'Task', description: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_DESCRIPTION'),
+        `Expected NO_DESCRIPTION for estimate > 4h with no description, got: ${result.violations}`);
+});
+
+test('NO_DESCRIPTION: not raised for non-epic item with estimate < 4h and empty description', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: FOUR_HOURS_S - 1, issueType: 'Task', description: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_DESCRIPTION'),
+        `Unexpected NO_DESCRIPTION for estimate < 4h, got: ${result.violations}`);
+});
+
+test('NO_DESCRIPTION: not raised for non-epic item with no estimate and empty description', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: null, issueType: 'Task', description: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_DESCRIPTION'),
+        `Unexpected NO_DESCRIPTION for no estimate, got: ${result.violations}`);
+});
+
+test('NO_DESCRIPTION: not raised for non-epic item with estimate >= 4h when description is present', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: FOUR_HOURS_S, issueType: 'Task', description: 'Implement the new feature.' });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_DESCRIPTION'),
+        `Unexpected NO_DESCRIPTION when description is present, got: ${result.violations}`);
+});
+
+// -- Backlog exemption --
+
+test('NO_DESCRIPTION: not raised for Backlog item even when Epic with empty description', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'BACKLOG', estimateSeconds: FOUR_HOURS_S * 10, issueType: 'Epic', description: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(!result.violations.includes('NO_DESCRIPTION'),
+        `Unexpected NO_DESCRIPTION for Backlog item, got: ${result.violations}`);
+});
+
+// -- All non-Backlog stages --
+
+test('NO_DESCRIPTION: raised for Next (NEW) Epic with empty description', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'NEW', estimateSeconds: null, issueType: 'Epic', description: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_DESCRIPTION'),
+        `Expected NO_DESCRIPTION for Next Epic with no description, got: ${result.violations}`);
+});
+
+test('NO_DESCRIPTION: raised for Done (RELEASE PENDING) Epic with empty description', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'RELEASE PENDING', estimateSeconds: null, issueType: 'Epic', description: null });
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_DESCRIPTION'),
+        `Expected NO_DESCRIPTION for Done Epic with no description, got: ${result.violations}`);
+});
+
+// -- hierarchyLevel epic detection (same as #122 fix) --
+
+test('NO_DESCRIPTION: raised for issue with hierarchyLevel > 0 (Epic variant) and empty description', () => {
+    const validator = new PolicyValidator();
+    const issue = makeIssue({ status: 'IN PROGRESS', estimateSeconds: null, issueType: 'Story', description: null });
+    // Override issuetype to have hierarchyLevel > 0
+    issue.fields.issuetype = { name: 'Story', hierarchyLevel: 1 };
+    const result = validator.validateIssue(issue, jiraClient);
+    assert.ok(result.violations.includes('NO_DESCRIPTION'),
+        `Expected NO_DESCRIPTION for hierarchyLevel > 0 with no description, got: ${result.violations}`);
 });
