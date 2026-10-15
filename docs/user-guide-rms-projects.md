@@ -6,7 +6,7 @@ This guide is for team members who work with GitHub Projects that use the **repo
 
 ## How it works
 
-A workflow runs automatically **once a day** (00:00 UTC). Every run it looks at every issue in every configured project and:
+A workflow runs automatically **once a day** (00:00 UTC). Every run it looks at every **issue** and **pull request** item in every configured project and:
 
 1. Detects whether any tracked field has changed since the last run.
 2. If something changed, stamps today's date on **`Reporting Date`** and adds a snapshot line to **`Reporting Log`**.
@@ -152,7 +152,7 @@ When synced to JIRA, the workflow automatically converts these values to JIRA's 
 
 The `Alerts` field is updated on every workflow run. An empty value means everything is healthy. When one or more rules are violated, comma-separated codes appear — for example: `NO_AREA, NO_ESTIMATE`.
 
-The `Alerts` value is also included in the **active items CSV export**. Issues with compliance alerts are exported (not skipped), and their violation codes appear in the `Alerts` column so consumers of the CSV can identify and track items that need attention.
+The `Alerts` value is also included in the **active items CSV export**. Items (issues and PR items) with compliance alerts are exported (not skipped), and their violation codes appear in the `Alerts` column so consumers of the CSV can identify and track items that need attention.
 
 ### Email notifications
 
@@ -195,16 +195,19 @@ Please review and resolve these alerts.
 | `NO_ASSIGNEE` | No assignee on the GH issue and status is `In Progress`, `In Review`, or `Done` | Assign the issue to the responsible person |
 | `NO_DESCRIPTION` | The GitHub issue body is empty **and** the item is either an epic (has sub-issues) or has an `Estimate` ≥ 4 hours (`0.1` weeks). Items with no estimate or an estimate below 4 hours are exempt | Add a description to the GitHub issue body |
 | `NO_QA_CONTACT` | QA Contact field on JIRA is empty for any non-Backlog issue (Next, In Progress, In Review, or Done) | Set the `QA Contact` field on the JIRA ticket |
-| `REPO_ISSUE_OPEN` | Item is `Done` in the project but the underlying repository issue is still open | Close the repository issue as completed, or move the item out of `Done` — the alert clears on the next run. While the issue is open the item is still included in the Done export |
-| `REPO_ISSUE_CLOSED` | The underlying repository issue is already closed but the item's status is not `Done` | Move the item to `Done`, or reopen the repository issue if the work is not finished — the alert clears on the next run |
-| `PR_NOT_MERGED` | Issue is `Done` but at least one linked pull request is still open / not merged | Merge or close all linked PRs — the alert clears on the next run once they are all merged |
-| `CHILDREN_STATUS` | Parent/child status mismatch detected (see below) | Align child statuses with the parent |
+| `REPO_ISSUE_OPEN` | (Issue items only) Item is `Done` in the project but the underlying repository issue is still open | Close the repository issue as completed, or move the item out of `Done` — the alert clears on the next run. While the issue is open the item is still included in the Done export |
+| `REPO_ISSUE_CLOSED` | (Issue items only) The underlying repository issue is already closed but the item's status is not `Done` | Move the item to `Done`, or reopen the repository issue if the work is not finished — the alert clears on the next run |
+| `PR_OPEN` | Item is `Done` but at least one linked PR (for issue items) or the PR itself (for PR items) is still open | For issue items: merge or close all linked PRs. For PR items: merge the pull request or move the item out of `Done` — the alert clears on the next run |
+| `PRS_CLOSED` | Item is not `Done` but all linked PRs are merged (for issue items), or the PR itself is closed/merged (for PR items) | For issue items: move the item to `Done`. For PR items: move the item to `Done` or reopen the PR if the work is not finished — the alert clears on the next run |
+| `CHILDREN_STATUS` | (Issue items only) Parent/child status mismatch detected (see below) | Align child statuses with the parent |
 | `JIRA_NOT_FOUND` | `External Reference` points to a JIRA ticket that doesn't exist | Verify or correct the JIRA key |
 | `JIRA_SYNC_NOT_ALLOWED` | The JIRA ticket exists but doesn't have the `gh-issue-<N>` label | Add the label to the JIRA ticket (e.g. `gh-issue-3`) |
 | `JIRA_SYNC_ERROR HTTP_<code>` | A JIRA API call failed | Check the Actions log for details |
 | `JIRA_CREATE_ERROR ...` | Automatic JIRA ticket creation failed | See [JIRA integration](#jira-integration) for details |
 
 ### Parent/child status consistency (`CHILDREN_STATUS`)
+
+> **Note:** `CHILDREN_STATUS` applies only to **issue items**. PR items are never flagged because pull requests cannot have sub-issues.
 
 When an issue has sub-issues that are also tracked in the same project, the workflow checks that their statuses are consistent:
 
