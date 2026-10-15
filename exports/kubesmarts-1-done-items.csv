@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+114,,https://github.com/kubesmarts/pm-automations/issues/114,gh-export-done-items: evict rows when an issue moves back to an active status,dgutierr,,PM,Critical,,,,0.1,,2026-10-15,,,NO_TIME_SPENT
+115,,https://github.com/kubesmarts/pm-automations/issues/115,gh-export-done-items: same-day field corrections are not picked up by the incremental exporter,dgutierr,,PM,Critical,,,,0.2,0.2,2026-10-15,,,
+117,,https://github.com/kubesmarts/pm-automations/issues/117,Add REPO_ISSUE_OPEN and REPO_ISSUE_CLOSED alerts for project status / repository issue state mismatches,dgutierr,,PM,Normal,,,,0.05,0.05,2026-10-15,,,
 100,,https://github.com/kubesmarts/pm-automations/issues/100,New NO_QA_CONTACT alert for JIRA checker workflow,skavgou,,PM,Major,,,,0.5,0.6,2026-10-07,,,
 90,,https://github.com/kubesmarts/pm-automations/issues/90,JIRA Checker: add workflow input to override PSYNC_JIRA_FILTERS,skavgou,,PM,Major,,,,0.2,0.2,2026-10-06,,,
 89,,https://github.com/kubesmarts/pm-automations/issues/89,GH Checker: add workflow input to override PSYNC_PROJECTS,skavgou,,PM,Major,,,,0.5,0.6,2026-09-26,,,
@@ -57,4 +60,4 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 15,2,https://github.com/kubesmarts/pm-automations/issues/15,feat: Add NO_VERSION alert: issues past Backlog must have Version set,dgutierr,,PM,Major,,,,0.1,0.1,2026-03-13,,,
 17,2,https://github.com/kubesmarts/pm-automations/issues/17,feat: rename workflow variables to PSYNC_ prefix,dgutierr,,PM,Normal,,,,0.1,0.1,2026-03-13,,,
 2,1,https://github.com/kubesmarts/pm-automations/issues/2,feat: Add Sync Status field with sync status codes to project items,dgutierr,,PM,Major,,,,0.4,0.3,2026-03-13,,,
-5,1,https://github.com/kubesmarts/pm-automations/issues/5,feat: Add Area field with alert and JIRA label sync,dgutierr,,PM,Major,,,,0.4,0.2,2026-03-13,,,
+5,1,https://github.com/kubesmarts/pm-automations/issues/5,feat: Add Area field with alert and JIRA label sync,dgutierr,,PM,Major,,,,0.4,0.2,2026-03-13,,,
