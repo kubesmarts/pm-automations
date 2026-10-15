@@ -116,7 +116,8 @@ class PolicyValidator {
             remainingEstimate: jiraClient.extractRemainingEstimate(issue),
             timeSpent: jiraClient.extractTimeSpent(issue),
             assignee: jiraClient.extractAssignee(issue),
-            component: jiraClient.extractFirstComponent(issue)
+            component: jiraClient.extractFirstComponent(issue),
+            description: jiraClient.extractDescription(issue)
         };
 
         // Component/Area validation for SRVLOGIC issues only
@@ -148,6 +149,20 @@ class PolicyValidator {
 
             if (!this.isFieldValid(field, fieldValues[field])) {
                 violations.push(this.violationCodes[field]);
+            }
+        }
+
+        // NO_DESCRIPTION: raised when the issue body is empty AND:
+        //   - it is an epic (type Epic or has subtasks), OR
+        //   - its original estimate is >= 4 hours (14400 seconds / 0.1 weeks).
+        // Exemptions: Backlog items are always exempt. Non-epic items with no estimate
+        //   or an estimate below 4 hours are also exempt.
+        // NOTE: "epic" is detected by isEpic() — issue type Epic OR subtasks.length > 0.
+        //   This matches the fix from #122 and avoids the prior bug of using subtasks only.
+        if (policyStage !== 'Backlog' && !fieldValues.description) {
+            const estimateSeconds = issue.fields.timetracking?.originalEstimateSeconds ?? 0;
+            if (epic || estimateSeconds >= 14400) {
+                violations.push('NO_DESCRIPTION');
             }
         }
 

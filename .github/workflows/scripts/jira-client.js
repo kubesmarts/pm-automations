@@ -85,7 +85,7 @@ class JiraClient {
         const qaField = await this.resolveQaContactFieldId();
         const customQaField = qaField ? `,${qaField}` : '';
         const customTesterField = this.testerFieldId ? `,${this.testerFieldId}` : '';
-        const fields = `summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,project,issuetype,parent,subtasks,QA_CONTACT${customQaField}${customTesterField},updated,aggregatetimeoriginalestimate,aggregatetimespent,aggregatetimeestimate`;
+        const fields = `summary,description,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,project,issuetype,parent,subtasks,QA_CONTACT${customQaField}${customTesterField},updated,aggregatetimeoriginalestimate,aggregatetimespent,aggregatetimeestimate`;
         const endpoint = `/rest/api/3/search/jql?jql=${encodedJql}&fields=${fields}&maxResults=${maxResults}&startAt=${startAt}`;
 
         console.log(`Searching issues with JQL: ${jql} (startAt: ${startAt})`);
@@ -149,7 +149,7 @@ class JiraClient {
         const qaField = await this.resolveQaContactFieldId();
         const customQaField = qaField ? `,${qaField}` : '';
         const customTesterField = this.testerFieldId ? `,${this.testerFieldId}` : '';
-        const fields = `summary,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,issuetype,parent,subtasks,QA_CONTACT${customQaField}${customTesterField}`;
+        const fields = `summary,description,key,status,resolution,priority,fixVersions,timetracking,worklog,assignee,labels,components,issuetype,parent,subtasks,QA_CONTACT${customQaField}${customTesterField}`;
         return await this.makeRequest(`/rest/api/3/issue/${issueKey}?fields=${fields}`);
     }
 
@@ -253,6 +253,20 @@ class JiraClient {
 
     extractAssigneeAccountId(issue) {
         return issue.fields.assignee?.accountId || null;
+    }
+
+    /**
+     * Returns true when the JIRA issue has a non-empty description.
+     * The JIRA Cloud REST API v3 returns description as an Atlassian Document Format (ADF)
+     * object. A null/undefined field means no description was set. An ADF doc with no text
+     * content (empty paragraphs) is also treated as empty.
+     */
+    extractDescription(issue) {
+        const desc = issue.fields?.description;
+        if (!desc) return null;
+        // ADF object: extract all text and check if there is any non-whitespace content
+        const text = this._extractTextFromADF(desc);
+        return text.trim() || null;
     }
 
     buildComplianceCommentBody(violations, assigneeAccountId, assigneeDisplayName) {

@@ -83,6 +83,7 @@ Compliance alert codes:
 | `NO_TIME_SPENT` | Missing time spent. **For epics, only raised when their original estimate is > 0** |
 | `NO_ASSIGNEE` | Missing assignee |
 | `NO_QA_CONTACT` | QA Contact (`QA Contact`, `QA_CONTACT`, or dynamic custom field ID / `JIRA_QA_CONTACT_FIELD_ID`) is empty. Checked for all non-backlog issues. |
+| `NO_DESCRIPTION` | Issue description (body) is empty. Raised for: epics (type Epic, `hierarchyLevel > 0`, or has sub-tasks) at any non-Backlog stage; non-epic issues with Original Estimate ≥ 4 hours. Backlog items are always exempt. |
 | `REMAINING_WORK_NOT_CLEARED` | Remaining work not cleared when Done (auto-cleared by the workflow) |
 | `PR_NOT_MERGED` | One or more GitHub PRs linked to the ticket are still open. Only checked for `RELEASE PENDING` and `CLOSED` (resolution: Done) tickets. PRs are fetched via the JIRA dev-status API |
 | `ALL_PRS_MERGED` | The ticket is not in a Done state (`RELEASE PENDING` or `CLOSED`/Done) but has at least one linked GitHub PR and all of them are already merged — the ticket should be transitioned to a Done state. Checked for `IN PROGRESS`, `ON_DEV`, `CODE REVIEW`, and `ON_QA` tickets |
@@ -201,6 +202,13 @@ Any sources that **did** succeed are still fully processed — their compliance 
 - One or more GitHub pull requests linked to the ticket are still open while the ticket is in `RELEASE PENDING` or `CLOSED` (Done) status
 - Merge or close the open PRs, then the alert will clear on the next workflow run
 - If the JIRA dev-status API is not available (e.g. the GitHub integration is not configured), the check is silently skipped — no false positives will be raised
+
+### `NO_DESCRIPTION` violation on an issue
+- The JIRA issue description (body) is empty and the issue requires one based on its type or size
+- **Epics** (type Epic, hierarchyLevel > 0, or issues with sub-tasks) must always have a non-empty description at any non-Backlog stage
+- **Non-epic issues** require a description when their Original Estimate is ≥ 4 hours
+- Add a meaningful description to the JIRA issue body, then the alert will clear on the next workflow run
+- Backlog items are always exempt regardless of type or estimate
 
 ### `ALL_PRS_MERGED` violation on an issue
 - All linked GitHub pull requests have been merged but the ticket is still in an active state (`IN PROGRESS`, `ON_DEV`, `CODE REVIEW`, or `ON_QA`)

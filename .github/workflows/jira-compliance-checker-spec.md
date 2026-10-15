@@ -28,6 +28,7 @@ A GitHub Actions workflow that validates JIRA issues against ABLE team's softwar
 | Time Spent | Time Spent (worklog sum) | Time tracking | Must be set (can be 0, but field must exist/not be null). **For epics, only required when their own Original Estimate is > 0** |
 | Assignee | Assignee | User | Must have at least one assignee |
 | QA Contact | QA_CONTACT | User or user array | Must have at least 1 contact set. |
+| Description | description | Rich text (ADF) | Must be non-empty for: epics (type Epic, hierarchyLevel > 0, or has sub-tasks), and non-epic issues with Original Estimate ≥ 4 hours. Backlog items are always exempt. |
 
 ### Component-to-Area Label Mapping (SRVLOGIC Issues Only)
 
@@ -210,6 +211,7 @@ for (label in labelsToRemove) {
 | `NO_TIME_SPENT` | Time Spent field is null/not set | Required for Done — **suppressed for epics when their Original Estimate is ≤ 0** |
 | `NO_ASSIGNEE` | Assignee field is empty | Required for In Progress, In Review, Done |
 | `NO_QA_CONTACT` | QA_CONTACT is empty | Next, In Progress, In Review, Done (all non-Backlog stages) |
+| `NO_DESCRIPTION` | Issue description (body) is empty | Next, In Progress, In Review, Done — raised for epics (type Epic, hierarchyLevel > 0, or has sub-tasks) always; for non-epics only when Original Estimate ≥ 4 hours |
 | `REMAINING_WORK_NOT_CLEARED` | Remaining Estimate > 0 when Done | Status is Done but Remaining Estimate not cleared |
 
 ## JIRA API Integration
