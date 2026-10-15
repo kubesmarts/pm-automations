@@ -126,6 +126,14 @@ function extractCompositeKey(item) {
   return `${repoOwner}/${repoName}#${issueNum}`;
 }
 
+/**
+ * Returns 'PR' if the item is a PullRequest project item, 'Issue' otherwise.
+ * A PullRequest item has a `merged` field (boolean) that issues never have.
+ */
+function getItemType(item) {
+  return Object.prototype.hasOwnProperty.call(item.content || {}, 'merged') ? 'PR' : 'Issue';
+}
+
 function extractAssignees(item) {
   const nodes = item.content?.assignees?.nodes || [];
   return nodes.map(n => n.login).filter(Boolean).join(',');
@@ -144,6 +152,7 @@ function itemToActiveRow(item, parentMap) {
 
   return {
     'Issue Number': issueNumber,
+    'Item Type': getItemType(item),
     'Parent Issue': parentIssue,
     'Issue URL': issueUrl,
     'Title': title,
@@ -181,6 +190,7 @@ function itemToDoneRow(item, parentMap) {
 
   return {
     'Issue Number': issueNumber,
+    'Item Type': getItemType(item),
     'Parent Issue': parentIssue,
     'Issue URL': issueUrl,
     'Title': title,
@@ -250,13 +260,23 @@ function isDoneEligible(item, status, whitelist) {
     return { eligible: false, reason: `Status is ${status} (not Done)` };
   }
 
-  // Done items whose underlying GH issue was closed but not as completed
-  // (e.g. closed as "not planned") are skipped.
-  // Done items whose repo issue is still OPEN are exported.
   const state = item.content?.state || '';
-  const stateReason = item.content?.stateReason || '';
-  if (state !== 'OPEN' && stateReason !== 'COMPLETED') {
-    return { eligible: false, reason: `Closed with stateReason '${stateReason || 'null'}' (not COMPLETED)` };
+
+  if (getItemType(item) === 'PR') {
+    // PR items: CLOSED without merge = equivalent of "not planned" — skip.
+    // MERGED and OPEN PR items in Done are eligible.
+    const merged = item.content?.merged || false;
+    if (state === 'CLOSED' && !merged) {
+      return { eligible: false, reason: `PR closed without merging` };
+    }
+  } else {
+    // Issue items: Done items whose underlying GH issue was closed but not as completed
+    // (e.g. closed as "not planned") are skipped.
+    // Done items whose repo issue is still OPEN are exported.
+    const stateReason = item.content?.stateReason || '';
+    if (state !== 'OPEN' && stateReason !== 'COMPLETED') {
+      return { eligible: false, reason: `Closed with stateReason '${stateReason || 'null'}' (not COMPLETED)` };
+    }
   }
 
   const reportingDate = getField(item, 'Reporting Date');
@@ -359,6 +379,18 @@ query($owner: String!, $number: Int!, $cursor: String) {
                   }
                 }
               }
+            }
+            ... on PullRequest {
+              number
+              title
+              url
+              state
+              merged
+              repository {
+                name
+                owner { login }
+              }
+              assignees(first: 10) { nodes { login } }
             }
           }
           fieldValues(first: 30) {
@@ -719,11 +751,13 @@ module.exports = {
   isWhitelisted,
   getField,
   buildParentMap,
+  getItemType,
   itemToActiveRow,
   itemToDoneRow,
   isActiveEligible,
   isDoneEligible,
   compareDoneRows,
   processProjectItems,
+  PROJECT_QUERY,
   runExport
 };

@@ -28,20 +28,23 @@ Exports current work-in-progress, ready work, and planned backlog items:
   - `Backlog` items without a specific target milestone.
   - Archived and draft items.
 - **Sorting**: Sorted by `Issue Number` descending (numeric order, newest first).
-- **Columns (22)**:
-  `Issue Number`, `Parent Issue`, `Issue URL`, `Title`, `Assignees`, `Status`, `Type`, `Area`, `Priority`, `Initiative`, `Target Milestone`, `Size`, `Estimate`, `Time Spent`, `Remaining Work`, `Σ Estimate`, `Σ Time Spent`, `Σ Remaining Work`, `External Reference`, `Comments`, `Reporting Date`, `Alerts`.
+- **Columns (23)**:
+  `Issue Number`, `Item Type`, `Parent Issue`, `Issue URL`, `Title`, `Assignees`, `Status`, `Type`, `Area`, `Priority`, `Initiative`, `Target Milestone`, `Size`, `Estimate`, `Time Spent`, `Remaining Work`, `Σ Estimate`, `Σ Time Spent`, `Σ Remaining Work`, `External Reference`, `Comments`, `Reporting Date`, `Alerts`.
+  - **`Item Type`**: `Issue` or `PR` — distinguishes pull request project items from issue items.
 
 ### 2. Done Items (`exports/<owner>-<number>-done-items.csv`)
 
 Exports completed items and maintains historical tracking:
 - **Included**:
   - Status is `Done`.
-  - Underlying GitHub issue is closed as completed (`stateReason: COMPLETED`) _or_ still open (open items marked Done are exported with the `REPO_ISSUE_OPEN` alert).
+  - **Issue items**: underlying GitHub issue is closed as completed (`stateReason: COMPLETED`) _or_ still open (open items marked Done are exported with the `REPO_ISSUE_OPEN` alert).
+  - **PR items**: PR is merged (`state: MERGED`) _or_ still open (`state: OPEN`). PR items closed without merging are excluded (PR equivalent of "not planned").
   - Has a valid `Reporting Date`.
   - Whitelisted assignee (if `contributors.csv` exists).
   - New items, or updated items where exported values changed.
 - **Excluded**:
-  - Closed as "not planned" (`stateReason: NOT_PLANNED` or missing).
+  - Issue items closed as "not planned" (`stateReason: NOT_PLANNED` or missing).
+  - PR items whose PR was closed without merging.
   - Items missing `Reporting Date`.
   - Non-whitelisted contributors (when whitelist is active).
   - Unchanged items on incremental runs.
@@ -50,8 +53,9 @@ Exports completed items and maintains historical tracking:
   When an issue previously recorded in `done-items.csv` transitions back to an active status (e.g. reopened or moved to `In Progress`, `Next`, or `Backlog`), the workflow automatically evicts the stale row from `done-items.csv` and moves it to `active-items.csv`.
 - **Change Detection ([Issue #115](https://github.com/kubesmarts/pm-automations/issues/115))**:
   Compares exported columns (`Title`, `Assignees`, `Type`, `Area`, `Priority`, `Initiative`, `Target Milestone`, `Size`, `Estimate`, `Time Spent`, `External Reference`, `Comments`, `Alerts`). Ignores `Reporting Date` and `Parent Issue` to avoid spurious updates.
-- **Columns (17)**:
-  `Issue Number`, `Parent Issue`, `Issue URL`, `Title`, `Assignees`, `Type`, `Area`, `Priority`, `Initiative`, `Target Milestone`, `Size`, `Estimate`, `Time Spent`, `Reporting Date`, `External Reference`, `Comments`, `Alerts`.
+- **Columns (18)**:
+  `Issue Number`, `Item Type`, `Parent Issue`, `Issue URL`, `Title`, `Assignees`, `Type`, `Area`, `Priority`, `Initiative`, `Target Milestone`, `Size`, `Estimate`, `Time Spent`, `Reporting Date`, `External Reference`, `Comments`, `Alerts`.
+  - **`Item Type`**: `Issue` or `PR` — distinguishes pull request project items from issue items. PR items always have an empty `Parent Issue` column (PRs have no sub-issues).
 
 ## Configuration
 
@@ -103,11 +107,11 @@ Runs on schedule daily at 01:00 UTC and Tuesdays at 12:55 UTC.
 
 ### Items Missing from Export
 - **Active Export**: Verify the issue status is not `Done`/`Cancelled`, and if in `Backlog`, that a specific target milestone (not `"Future"`) is configured.
-- **Done Export**: Check that `Reporting Date` is set, the issue was not closed as "not planned", and assignees are on `contributors.csv` if active.
+- **Done Export**: Check that `Reporting Date` is set. For issue items, verify the issue was not closed as "not planned". For PR items, verify the PR was not closed without merging. Also confirm assignees are on `contributors.csv` if a whitelist is active.
 
 ### Ghost Rows or Status Transitions
 If an issue was previously marked `Done` and moved back to active work, running this workflow will immediately evict the item from `<owner>-<number>-done-items.csv` and place it into `<owner>-<number>-active-items.csv`.
 
 ---
 
-*Last updated: 2026-04-15*
+*Last updated: 2026-07-01*
