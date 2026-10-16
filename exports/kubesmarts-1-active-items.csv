@@ -1,3 +1,2 @@
-Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-119,,https://github.com/kubesmarts/pm-automations/issues/119,"Support pull requests in GH projects: PR_OPEN and PR_CLOSED alerts, and include PRs in the Done export",dgutierr,Next,,PM,Major,,,,0.2,,0.2,0.2,0,0.2,,,2026-10-15,
-96,,https://github.com/kubesmarts/pm-automations/issues/96,New `NO_DESCRIPTION` alert for JIRA checker workflow,dgutierr,Next,,PM,Major,,,,0.1,,0.1,0.1,0,0.1,,,2026-10-15,
+Issue Number,Item Type,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
+96,Issue,,https://github.com/kubesmarts/pm-automations/issues/96,New `NO_DESCRIPTION` alert for JIRA checker workflow,dgutierr,In progress,,PM,Major,,,,0.1,,0.1,0.1,0,0.1,,,2026-10-16,
