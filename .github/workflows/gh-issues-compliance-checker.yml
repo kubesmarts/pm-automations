@@ -506,6 +506,10 @@ jobs:
                 fi
                 echo "  → Remaining Work auto-cleared (issue is Done)."
                 REMAINING_WORK=""
+                # Propagate the clear into the in-memory map so Phase 4 (sigma) uses the
+                # correct post-clear value when this item appears as a descendant.
+                ITEM_COMPOSITE_KEY="${REPO_OWNER}/${REPO_NAME}#${ISSUE_NUMBER}"
+                ISSUE_REMAINING["$ITEM_COMPOSITE_KEY"]=""
               fi
               HAS_ASSIGNEE=$(echo "$item" | jq -r '(.content.assignees.nodes // [] | length) > 0')
               if { [ "$STATUS_LC" = "in progress" ] || [ "$STATUS_LC" = "in review" ] || [ "$STATUS_LC" = "done" ]; } && \
@@ -640,18 +644,23 @@ jobs:
                 SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
                 if [ -n "$SYNC_STATUS_FIELD_ID" ]; then
                   echo "  → Alerts: ${SYNC_STATUS_CODES:-none}"
-                  if [ "$DRY_RUN" != "true" ]; then
-                    gh api graphql -f query='
-                      mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
-                        updateProjectV2ItemFieldValue(input: {
-                          projectId: $projectId
-                          itemId: $itemId
-                          fieldId: $fieldId
-                          value: { text: $text }
-                        }) { projectV2Item { id } }
-                      }
-                    ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                      -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES" > /dev/null
+                  EXISTING_ALERTS=$(get_field "$item" "Alerts")
+                  if [ "${SYNC_STATUS_CODES:-}" != "${EXISTING_ALERTS:-}" ]; then
+                    if [ "$DRY_RUN" != "true" ]; then
+                      gh api graphql -f query='
+                        mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                          updateProjectV2ItemFieldValue(input: {
+                            projectId: $projectId
+                            itemId: $itemId
+                            fieldId: $fieldId
+                            value: { text: $text }
+                          }) { projectV2Item { id } }
+                        }
+                      ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                        -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES" > /dev/null
+                    fi
+                  else
+                    echo "  → Alerts unchanged, skipping write."
                   fi
                 fi
                 if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_CREATE_ERROR|JIRA_ENDPOINT_ERROR'; then
@@ -926,18 +935,23 @@ jobs:
               # Write Alerts field (reflects validation violations and JIRA sync results)
               if [ -n "$SYNC_STATUS_FIELD_ID" ]; then
                 echo "  → Alerts: ${SYNC_STATUS_CODES:-none}"
-                if [ "$DRY_RUN" != "true" ]; then
-                  gh api graphql -f query='
-                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
-                      updateProjectV2ItemFieldValue(input: {
-                        projectId: $projectId
-                        itemId: $itemId
-                        fieldId: $fieldId
-                        value: { text: $text }
-                      }) { projectV2Item { id } }
-                    }
-                  ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                    -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES" > /dev/null
+                EXISTING_ALERTS=$(get_field "$item" "Alerts")
+                if [ "${SYNC_STATUS_CODES:-}" != "${EXISTING_ALERTS:-}" ]; then
+                  if [ "$DRY_RUN" != "true" ]; then
+                    gh api graphql -f query='
+                      mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $text: String!) {
+                        updateProjectV2ItemFieldValue(input: {
+                          projectId: $projectId
+                          itemId: $itemId
+                          fieldId: $fieldId
+                          value: { text: $text }
+                        }) { projectV2Item { id } }
+                      }
+                    ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                      -f fieldId="$SYNC_STATUS_FIELD_ID" -f text="$SYNC_STATUS_CODES" > /dev/null
+                  fi
+                else
+                  echo "  → Alerts unchanged, skipping write."
                 fi
               fi
               if echo "$SYNC_STATUS_CODES" | grep -qE 'JIRA_SYNC_ERROR|JIRA_CREATE_ERROR|JIRA_ENDPOINT_ERROR'; then
@@ -1475,7 +1489,25 @@ jobs:
                   SIGMA_SP=$(printf "%.10g" "$PARENT_SPENT" 2>/dev/null || echo "0")
                   
                   echo "  → Σ Estimate: $SIGMA_EST, Σ Remaining Work: $SIGMA_REM, Σ Time Spent: $SIGMA_SP"
-                  
+
+                  # Skip write if all three Σ fields are already set to these values.
+                  # Require existing fields to be non-empty so new items always get an initial write.
+                  EXISTING_SIGMA_EST_ND=$(get_field "$item" "Σ Estimate")
+                  EXISTING_SIGMA_REM_ND=$(get_field "$item" "Σ Remaining Work")
+                  EXISTING_SIGMA_SP_ND=$(get_field "$item"  "Σ Time Spent")
+                  if [ -n "$EXISTING_SIGMA_EST_ND" ] || [ -n "$EXISTING_SIGMA_REM_ND" ] || [ -n "$EXISTING_SIGMA_SP_ND" ]; then
+                    EXISTING_SIGMA_EST_ND=$(printf "%.10g" "$EXISTING_SIGMA_EST_ND" 2>/dev/null || echo "0")
+                    EXISTING_SIGMA_REM_ND=$(printf "%.10g" "$EXISTING_SIGMA_REM_ND" 2>/dev/null || echo "0")
+                    EXISTING_SIGMA_SP_ND=$(printf "%.10g"  "$EXISTING_SIGMA_SP_ND"  2>/dev/null || echo "0")
+                    if [ "$SIGMA_EST" = "$EXISTING_SIGMA_EST_ND" ] && \
+                       [ "$SIGMA_REM" = "$EXISTING_SIGMA_REM_ND" ] && \
+                       [ "$SIGMA_SP"  = "$EXISTING_SIGMA_SP_ND"  ]; then
+                      echo "  → Σ fields unchanged, skipping write."
+                      SIGMA_SKIPPED_COUNT=$((SIGMA_SKIPPED_COUNT + 1))
+                      continue
+                    fi
+                  fi
+
                   # Update the Σ fields with parent's values
                   if [ "$DRY_RUN" = "true" ]; then
                     echo "  → [DRY-RUN] Would update Σ Estimate=$SIGMA_EST, Σ Remaining=$SIGMA_REM, Σ Spent=$SIGMA_SP"
@@ -1596,7 +1628,25 @@ jobs:
                 SIGMA_SP=$(printf "%.10g" "$SIGMA_SP" 2>/dev/null || echo "0")
                 
                 echo "  → Validated: Σ Estimate: $SIGMA_EST, Σ Remaining Work: $SIGMA_REM, Σ Time Spent: $SIGMA_SP"
-                
+
+                # Skip write if all three Σ fields are already set to these values.
+                # Require existing fields to be non-empty so new items always get an initial write.
+                EXISTING_SIGMA_EST=$(get_field "$item" "Σ Estimate")
+                EXISTING_SIGMA_REM=$(get_field "$item" "Σ Remaining Work")
+                EXISTING_SIGMA_SP=$(get_field "$item"  "Σ Time Spent")
+                if [ -n "$EXISTING_SIGMA_EST" ] || [ -n "$EXISTING_SIGMA_REM" ] || [ -n "$EXISTING_SIGMA_SP" ]; then
+                  EXISTING_SIGMA_EST=$(printf "%.10g" "$EXISTING_SIGMA_EST" 2>/dev/null || echo "0")
+                  EXISTING_SIGMA_REM=$(printf "%.10g" "$EXISTING_SIGMA_REM" 2>/dev/null || echo "0")
+                  EXISTING_SIGMA_SP=$(printf "%.10g"  "$EXISTING_SIGMA_SP"  2>/dev/null || echo "0")
+                  if [ "$SIGMA_EST" = "$EXISTING_SIGMA_EST" ] && \
+                     [ "$SIGMA_REM" = "$EXISTING_SIGMA_REM" ] && \
+                     [ "$SIGMA_SP"  = "$EXISTING_SIGMA_SP"  ]; then
+                    echo "  → Σ fields unchanged, skipping write."
+                    SIGMA_SKIPPED_COUNT=$((SIGMA_SKIPPED_COUNT + 1))
+                    continue
+                  fi
+                fi
+
                 if [ "$DRY_RUN" = "true" ]; then
                   echo "  → [DRY-RUN] Would update Σ Estimate=$SIGMA_EST, Σ Remaining=$SIGMA_REM, Σ Spent=$SIGMA_SP"
                 else
