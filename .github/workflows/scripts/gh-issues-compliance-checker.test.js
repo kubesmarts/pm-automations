@@ -1958,3 +1958,298 @@ test('milestone sync: clears project field for PR item when project field was pr
   assert.equal(action, 'clear', 'expected clear — repo (PR) has no milestone but project field was set');
   assert.equal(milestone, '', 'expected MILESTONE to be cleared');
 });
+
+// ---------------------------------------------------------------------------
+// SECTION – Alerts skip guard
+//
+// The Alerts field write is now guarded: the mutation is only issued when the
+// freshly-computed SYNC_STATUS_CODES differs from the value already stored in
+// the project item's Alerts field (read via get_field from the cached item JSON).
+// ---------------------------------------------------------------------------
+
+/**
+ * Shared get_field implementation (mirrors the workflow exactly).
+ * Reused from gh-archive-project-items.test.js pattern.
+ */
+const GET_FIELD_FN_CC = `
+get_field() {
+  local item_json="$1"
+  local field_name="$2"
+  echo "$item_json" | jq -r --arg n "$field_name" '
+    [ .fieldValues.nodes[] | select(.field.name == $n) ] |
+    if length == 0 then ""
+    else .[0] |
+      if .text   != null then .text
+      elif .number != null then (.number | tostring)
+      elif .name   != null then .name
+      elif .date   != null then .date
+      else ""
+      end
+    end
+  '
+}
+`;
+
+/**
+ * Build a minimal project item JSON with a text field (e.g. "Alerts").
+ */
+function makeTextItem(fieldName, value) {
+  const node = value === ''
+    ? { field: { name: fieldName } }
+    : { text: value, field: { name: fieldName } };
+  return JSON.stringify({ fieldValues: { nodes: [node] } });
+}
+
+/**
+ * Build a minimal project item JSON with a number field (e.g. "Σ Estimate").
+ */
+function makeNumberItem(fields) {
+  const nodes = Object.entries(fields).map(([name, val]) =>
+    val === '' || val === null
+      ? { field: { name } }
+      : { number: Number(val), field: { name } }
+  );
+  return JSON.stringify({ fieldValues: { nodes } });
+}
+
+/**
+ * Simulate the Alerts skip guard from process_items().
+ * Returns 'written' if the gh api mutation was called, 'skipped' if suppressed.
+ */
+function evalAlertsGuard({ syncStatusCodes, existingAlerts }) {
+  const item = makeTextItem('Alerts', existingAlerts);
+  const script = `
+${GET_FIELD_FN_CC}
+SYNC_STATUS_CODES=${JSON.stringify(syncStatusCodes)}
+SYNC_STATUS_FIELD_ID="FIELD_ID"
+PROJECT_ID="PROJ_ID"
+ITEM_ID="ITEM_ID"
+item=${JSON.stringify(item)}
+SENTINEL=$(mktemp)
+
+# Stub gh: write to sentinel so we can detect the call even when stdout is redirected
+gh() { echo "written" > "$SENTINEL"; }
+export -f gh
+export SENTINEL
+
+EXISTING_ALERTS=$(get_field "$item" "Alerts")
+if [ "\${SYNC_STATUS_CODES:-}" != "\${EXISTING_ALERTS:-}" ]; then
+  gh api graphql -f query="stub" > /dev/null
+  cat "$SENTINEL"
+else
+  echo "skipped"
+fi
+rm -f "$SENTINEL"
+`;
+  return bash(script);
+}
+
+test('Alerts skip guard: write suppressed when SYNC_STATUS_CODES matches existing Alerts value', () => {
+  assert.equal(
+    evalAlertsGuard({ syncStatusCodes: 'NO_ESTIMATE', existingAlerts: 'NO_ESTIMATE' }),
+    'skipped',
+    'Expected write to be suppressed when values are identical'
+  );
+});
+
+test('Alerts skip guard: write suppressed when both SYNC_STATUS_CODES and existing Alerts are empty', () => {
+  assert.equal(
+    evalAlertsGuard({ syncStatusCodes: '', existingAlerts: '' }),
+    'skipped',
+    'Expected write to be suppressed when both values are empty'
+  );
+});
+
+test('Alerts skip guard: write issued when SYNC_STATUS_CODES differs from existing Alerts value', () => {
+  assert.equal(
+    evalAlertsGuard({ syncStatusCodes: 'NO_ESTIMATE', existingAlerts: '' }),
+    'written',
+    'Expected write when computed codes differ from stored value'
+  );
+});
+
+test('Alerts skip guard: write issued when Alerts is cleared (codes empty, existing non-empty)', () => {
+  assert.equal(
+    evalAlertsGuard({ syncStatusCodes: '', existingAlerts: 'NO_ESTIMATE' }),
+    'written',
+    'Expected write to clear a stale Alerts value'
+  );
+});
+
+test('Alerts skip guard: write issued when alert set changes (new code added)', () => {
+  assert.equal(
+    evalAlertsGuard({ syncStatusCodes: 'NO_ESTIMATE, NO_AREA', existingAlerts: 'NO_ESTIMATE' }),
+    'written',
+    'Expected write when an additional alert code appears'
+  );
+});
+
+// ---------------------------------------------------------------------------
+// SECTION – Σ field skip guard
+//
+// The Σ mutations are only issued when at least one of the three Σ fields
+// already has a value (ensuring new items always get an initial write) AND
+// the computed values differ from the stored values.
+// ---------------------------------------------------------------------------
+
+/**
+ * Simulate the Σ skip guard.
+ * existingSigma: { est, rem, sp } — pass '' to simulate an unset field.
+ * computedSigma: { est, rem, sp }
+ * Returns 'written' if the mutations would fire, 'skipped' if suppressed.
+ */
+function evalSigmaGuard({ existingSigma, computedSigma }) {
+  const item = makeNumberItem({
+    'Σ Estimate':      existingSigma.est,
+    'Σ Remaining Work': existingSigma.rem,
+    'Σ Time Spent':    existingSigma.sp,
+  });
+  const script = `
+${GET_FIELD_FN_CC}
+item=${JSON.stringify(item)}
+SIGMA_EST=${JSON.stringify(String(computedSigma.est))}
+SIGMA_REM=${JSON.stringify(String(computedSigma.rem))}
+SIGMA_SP=${JSON.stringify(String(computedSigma.sp))}
+SENTINEL=$(mktemp)
+
+# Stub gh: write to sentinel so we can detect the call even when stdout is redirected
+gh() { echo "written" > "$SENTINEL"; }
+export -f gh
+export SENTINEL
+
+EXISTING_SIGMA_EST=$(get_field "$item" "Σ Estimate")
+EXISTING_SIGMA_REM=$(get_field "$item" "Σ Remaining Work")
+EXISTING_SIGMA_SP=$(get_field  "$item" "Σ Time Spent")
+
+if [ -n "$EXISTING_SIGMA_EST" ] || [ -n "$EXISTING_SIGMA_REM" ] || [ -n "$EXISTING_SIGMA_SP" ]; then
+  EXISTING_SIGMA_EST=$(printf "%.10g" "$EXISTING_SIGMA_EST" 2>/dev/null || echo "0")
+  EXISTING_SIGMA_REM=$(printf "%.10g" "$EXISTING_SIGMA_REM" 2>/dev/null || echo "0")
+  EXISTING_SIGMA_SP=$(printf  "%.10g" "$EXISTING_SIGMA_SP"  2>/dev/null || echo "0")
+  if [ "$SIGMA_EST" = "$EXISTING_SIGMA_EST" ] && \\
+     [ "$SIGMA_REM" = "$EXISTING_SIGMA_REM" ] && \\
+     [ "$SIGMA_SP"  = "$EXISTING_SIGMA_SP"  ]; then
+    echo "skipped"
+  else
+    gh api graphql -f query="stub" > /dev/null
+    cat "$SENTINEL"
+  fi
+else
+  gh api graphql -f query="stub" > /dev/null
+  cat "$SENTINEL"
+fi
+rm -f "$SENTINEL"
+`;
+  return bash(script);
+}
+
+test('Σ skip guard: write suppressed when computed values match existing Σ fields', () => {
+  assert.equal(
+    evalSigmaGuard({
+      existingSigma: { est: 1, rem: 0.5, sp: 0.5 },
+      computedSigma: { est: '1', rem: '0.5', sp: '0.5' },
+    }),
+    'skipped',
+    'Expected write to be suppressed when all three Σ values are unchanged'
+  );
+});
+
+test('Σ skip guard: write issued when at least one Σ value changed', () => {
+  assert.equal(
+    evalSigmaGuard({
+      existingSigma: { est: 1, rem: 0.5, sp: 0.5 },
+      computedSigma: { est: '1', rem: '0.3', sp: '0.5' },
+    }),
+    'written',
+    'Expected write when Σ Remaining Work changed'
+  );
+});
+
+test('Σ skip guard: write issued for new item when all existing Σ fields are empty (first run)', () => {
+  assert.equal(
+    evalSigmaGuard({
+      existingSigma: { est: '', rem: '', sp: '' },
+      computedSigma: { est: '0', rem: '0', sp: '0' },
+    }),
+    'written',
+    'Expected initial write even when computed value is 0 — fields were never set'
+  );
+});
+
+test('Σ skip guard: write issued for new item when computed value is non-zero and fields are empty', () => {
+  assert.equal(
+    evalSigmaGuard({
+      existingSigma: { est: '', rem: '', sp: '' },
+      computedSigma: { est: '2', rem: '1', sp: '1' },
+    }),
+    'written',
+    'Expected initial write for new item with non-zero values'
+  );
+});
+
+test('Σ skip guard: write suppressed when computed values are 0 and stored values are also 0', () => {
+  assert.equal(
+    evalSigmaGuard({
+      existingSigma: { est: 0, rem: 0, sp: 0 },
+      computedSigma: { est: '0', rem: '0', sp: '0' },
+    }),
+    'skipped',
+    'Expected skip when all fields are zero and unchanged'
+  );
+});
+
+// ---------------------------------------------------------------------------
+// SECTION – Remaining Work auto-clear propagates to ISSUE_REMAINING map
+//
+// When Phase 3 auto-clears Remaining Work for a Done item, it must also update
+// ISSUE_REMAINING so that Phase 4 (sigma) uses the correct post-clear value
+// when this item appears as a descendant.
+// ---------------------------------------------------------------------------
+
+test('Remaining Work auto-clear: ISSUE_REMAINING map updated to empty after clear', () => {
+  const script = `
+declare -A ISSUE_REMAINING
+ISSUE_REMAINING["org/repo#42"]="0.5"
+
+STATUS_LC="done"
+REMAINING_WORK="0.5"
+REMAINING_WORK_FIELD_ID="FIELD_ID"
+REPO_OWNER="org"
+REPO_NAME="repo"
+ISSUE_NUMBER="42"
+
+if [ "$STATUS_LC" = "done" ] && [ -n "$REMAINING_WORK" ] && [ -n "$REMAINING_WORK_FIELD_ID" ]; then
+  REMAINING_WORK=""
+  ITEM_COMPOSITE_KEY="\${REPO_OWNER}/\${REPO_NAME}#\${ISSUE_NUMBER}"
+  ISSUE_REMAINING["\$ITEM_COMPOSITE_KEY"]=""
+fi
+
+echo "\${ISSUE_REMAINING[org/repo#42]:-<unset>}"
+`;
+  // After the clear, ISSUE_REMAINING["org/repo#42"] must be empty string (not "0.5")
+  const out = bash(script);
+  assert.equal(out, '<unset>', 'Expected ISSUE_REMAINING to be cleared after auto-clear');
+});
+
+test('Remaining Work auto-clear: ISSUE_REMAINING map not modified when item is not Done', () => {
+  const script = `
+declare -A ISSUE_REMAINING
+ISSUE_REMAINING["org/repo#42"]="0.5"
+
+STATUS_LC="in progress"
+REMAINING_WORK="0.5"
+REMAINING_WORK_FIELD_ID="FIELD_ID"
+REPO_OWNER="org"
+REPO_NAME="repo"
+ISSUE_NUMBER="42"
+
+if [ "$STATUS_LC" = "done" ] && [ -n "$REMAINING_WORK" ] && [ -n "$REMAINING_WORK_FIELD_ID" ]; then
+  REMAINING_WORK=""
+  ITEM_COMPOSITE_KEY="\${REPO_OWNER}/\${REPO_NAME}#\${ISSUE_NUMBER}"
+  ISSUE_REMAINING["\$ITEM_COMPOSITE_KEY"]=""
+fi
+
+echo "\${ISSUE_REMAINING[org/repo#42]}"
+`;
+  const out = bash(script);
+  assert.equal(out, '0.5', 'Expected ISSUE_REMAINING to be unchanged for non-Done items');
+});
