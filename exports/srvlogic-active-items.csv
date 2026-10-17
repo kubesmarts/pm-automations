@@ -68,10 +68,8 @@ Issue Number,Item Type,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,P
 1272,,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1272,Update the dependencies,baldimir,Next,Task,Productization,Major,Serverless logic,Future,,0.4,0,0.4,0.4,,0.4,,,2026-10-06,
 1271,,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1271,Validate newly migrated environment and configure it if needed. ,baldimir,Next,Task,Productization,Major,Serverless logic,Future,,0.2,0,0.2,0.2,,0.2,,,2026-10-06,
 1270,,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1270,Initiate the migration,baldimir,Next,Task,Productization,Major,Serverless logic,Future,,0.025,0,0.025,0.025,,0.025,,,2026-10-06,
-1269,,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1269,Outline repositories ownership,baldimir,Next,Task,Productization,Major,Serverless logic,Future,,0.025,0,0.025,0.025,,0.025,,,2026-10-06,
 1268,,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1268,Identify github.ibm.com/able migrated repositories dependencies,baldimir,Next,Task,Productization,Major,Serverless logic,Future,,0.05,0,0.05,0.05,,0.05,,,2026-10-06,
-1267,,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1267,Set migration label on all ABLE team owned repositories,baldimir,In review,Task,Productization,Major,Serverless logic,Future,,0.025,0.025,0,0.025,0.025,,,,2026-10-06,
-1266,,,https://redhat.atlassian.net/browse/SRVLOGIC-1266,GitHub NEXT migration,baldimir,In progress,Epic,Productization,Major,Serverless logic,Future,,0,0,0,0.85,0.05,0.8,,,2026-10-15,
+1266,,,https://redhat.atlassian.net/browse/SRVLOGIC-1266,GitHub NEXT migration,baldimir,In progress,Epic,Productization,Major,Serverless logic,Future,,0,0,0,0.85,0.075,0.775,,,2026-10-15,
 1265,,,https://redhat.atlassian.net/browse/SRVLOGIC-1265,Setup operator-bdd-tests job in IBM CSD,domhanak,In progress,Task,,Critical,Serverless logic,1.40.0 OSL,,0,0,0,,,,,,2026-10-13,"NO_COMPONENT, NO_ESTIMATE, NO_REMAINING_WORK"
 1264,,,https://redhat.atlassian.net/browse/SRVLOGIC-1264,Refactor kn-workflow-plugin - operator.go - isolate test-only methods from pkg/,domhanak,Next,Task,Cloud,Major,Serverless logic,1.40.0 OSL,,0.1,0,0.1,0.1,,0.1,,,2026-10-08,
 1260,,1196,https://redhat.atlassian.net/browse/SRVLOGIC-1260,Build CR2,baldimir,In progress,Task,Productization,Critical,Serverless logic,1.37.3 OSL,,0.2,0.125,0.075,0.2,0.125,0.075,,,2026-10-02,
