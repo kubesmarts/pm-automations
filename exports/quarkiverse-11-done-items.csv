@@ -1,5 +1,5 @@
 Issue Number,Item Type,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-237,Issue,207,https://github.com/open-workflow-specification/editor/issues/237,feat: Publish package on npm,fantonangeli,,Tooling,Critical,,2026/Q4,M,0.6,,2026-10-16,,,NO_TIME_SPENT
+237,Issue,207,https://github.com/open-workflow-specification/editor/issues/237,feat: Publish package on npm,fantonangeli,,Tooling,Critical,,2026/Q4,M,0.6,0,2026-10-17,,,
 438,PR,,https://github.com/open-workflow-specification/editor/pull/438,NO-ISSUE: Set workspace-concurrency to pnpm commands in CIs,fantonangeli,,CI,Minor,,2026/Q4,XS,0.1,0.1,2026-10-16,,,
 1004,Issue,,https://github.com/quarkiverse/quarkus-flow/issues/1004,Use WorkflowModel instead Object (Defining a new REST sync method),fjtirado,,Runtimes,Normal,,2.0.0,M,0.3,0.3,2026-10-16,,,
 474,Issue,214,https://github.com/open-workflow-specification/editor/issues/474,feat: Add drill-in component with error/changed badges and navigation breadcrumbs,lornakelly,,Tooling,Normal,,2026/Q4,M,0.6,0.6,2026-10-16,,,
