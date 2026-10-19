@@ -44,7 +44,6 @@ function arrayToCSV(data, columns) {
  */
 const ACTIVE_ITEMS_COLUMNS = [
   'Issue Number',
-  'Item Type',
   'Parent Issue',
   'Issue URL',
   'Title',
@@ -73,7 +72,6 @@ const ACTIVE_ITEMS_COLUMNS = [
  */
 const DONE_ITEMS_COLUMNS = [
   'Issue Number',
-  'Item Type',
   'Parent Issue',
   'Issue URL',
   'Title',
@@ -157,6 +155,7 @@ function readExistingCSV(exportsDir, fileName, columns) {
     }
 
     const items = [];
+    let skipped = 0;
 
     // Skip header (line 0), parse data rows
     for (let i = 1; i < lines.length; i++) {
@@ -165,6 +164,7 @@ function readExistingCSV(exportsDir, fileName, columns) {
 
       if (values.length !== columns.length) {
         console.warn(`Warning: Line ${i + 1} has ${values.length} columns, expected ${columns.length}`);
+        skipped++;
         continue;
       }
 
@@ -176,8 +176,20 @@ function readExistingCSV(exportsDir, fileName, columns) {
       items.push(item);
     }
 
+    // Every data row rejected means the file's schema no longer matches `columns`.
+    // Fail loudly instead of returning [] and letting the caller overwrite the history.
+    if (items.length === 0) {
+      const err = new Error(
+        `All ${skipped} data row(s) in ${fileName} were rejected (column count mismatch); ` +
+        `refusing to continue to avoid overwriting existing history`
+      );
+      err.schemaMismatch = true;
+      throw err;
+    }
+
     return items;
   } catch (error) {
+    if (error.schemaMismatch) throw error;
     console.warn(`Warning: Failed to read existing CSV ${fileName}: ${error.message}`);
     return null;
   }

@@ -152,7 +152,6 @@ function itemToActiveRow(item, parentMap) {
 
   return {
     'Issue Number': issueNumber,
-    'Item Type': getItemType(item),
     'Parent Issue': parentIssue,
     'Issue URL': issueUrl,
     'Title': title,
@@ -190,7 +189,6 @@ function itemToDoneRow(item, parentMap) {
 
   return {
     'Issue Number': issueNumber,
-    'Item Type': getItemType(item),
     'Parent Issue': parentIssue,
     'Issue URL': issueUrl,
     'Title': title,
