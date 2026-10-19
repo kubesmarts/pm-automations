@@ -20,7 +20,7 @@ const {
   processProjectItems,
   runExport
 } = require('./gh-export');
-const { ACTIVE_ITEMS_COLUMNS, DONE_ITEMS_COLUMNS } = require('./csv-generator');
+const { ACTIVE_ITEMS_COLUMNS, DONE_ITEMS_COLUMNS, readExistingCSV } = require('./csv-generator');
 
 // ---------------------------------------------------------------------------
 // Helpers & Fixtures
@@ -553,18 +553,13 @@ test('getItemType: returns "PR" for a PR item and "Issue" for a regular issue', 
   assert.equal(getItemType(issueItem), 'Issue');
 });
 
-test('itemToActiveRow: Item Type column is "PR" for PR item and "Issue" for issue item', () => {
-  const prRow = itemToActiveRow(makePRItem({ fields: { Status: 'In Progress' } }), new Map());
-  const issueRow = itemToActiveRow(makeProjectItem({ fields: { Status: 'In Progress' } }), new Map());
-  assert.equal(prRow['Item Type'], 'PR');
-  assert.equal(issueRow['Item Type'], 'Issue');
-});
-
-test('itemToDoneRow: Item Type column is "PR" for PR item and "Issue" for issue item', () => {
-  const prRow = itemToDoneRow(makePRItem({ fields: { Status: 'Done', 'Reporting Date': '2026-01-01' } }), new Map());
-  const issueRow = itemToDoneRow(makeProjectItem({ fields: { Status: 'Done', 'Reporting Date': '2026-01-01' } }), new Map());
-  assert.equal(prRow['Item Type'], 'PR');
-  assert.equal(issueRow['Item Type'], 'Issue');
+test('itemToActiveRow / itemToDoneRow: no Item Type column is emitted', () => {
+  const activeRow = itemToActiveRow(makePRItem({ fields: { Status: 'In Progress' } }), new Map());
+  const doneRow = itemToDoneRow(makePRItem({ fields: { Status: 'Done', 'Reporting Date': '2026-01-01' } }), new Map());
+  assert.equal('Item Type' in activeRow, false);
+  assert.equal('Item Type' in doneRow, false);
+  assert.equal(ACTIVE_ITEMS_COLUMNS.includes('Item Type'), false);
+  assert.equal(DONE_ITEMS_COLUMNS.includes('Item Type'), false);
 });
 
 test('isDoneEligible: merged PR item is eligible', () => {
@@ -621,7 +616,7 @@ test('processProjectItems: includes merged Done PR item in done export', () => {
   const result = processProjectItems('org', 1, [prItem], null, null);
   assert.equal(result.finalDoneRows.length, 1);
   assert.equal(result.finalDoneRows[0]['Issue Number'], '200');
-  assert.equal(result.finalDoneRows[0]['Item Type'], 'PR');
+  assert.equal(result.finalDoneRows[0]['Issue URL'], 'https://github.com/org/repo/pull/200');
 });
 
 test('processProjectItems: excludes Done PR item closed without merging', () => {
@@ -657,4 +652,34 @@ test('gh-export GraphQL query includes PullRequest fragment with state and merge
   assert.ok(PROJECT_QUERY.includes('... on PullRequest'), 'PROJECT_QUERY must include PullRequest fragment');
   assert.ok(PROJECT_QUERY.includes('merged'), 'PullRequest fragment must request merged field');
   assert.ok(PROJECT_QUERY.includes('state'), 'PullRequest fragment must request state field');
+});
+
+// ---------------------------------------------------------------------------
+// readExistingCSV: schema-mismatch guard
+// ---------------------------------------------------------------------------
+
+test('readExistingCSV: throws when every data row has a mismatched column count (schema change)', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'csv-guard-'));
+  const oldHeader = DONE_ITEMS_COLUMNS.slice(1).join(',');
+  const oldRow = DONE_ITEMS_COLUMNS.slice(1).map(() => 'x').join(',');
+  fs.writeFileSync(path.join(dir, 'p-done-items.csv'), `${oldHeader}\n${oldRow}\n${oldRow}\n`);
+  assert.throws(
+    () => readExistingCSV(dir, 'p-done-items.csv', DONE_ITEMS_COLUMNS),
+    /refusing to continue/
+  );
+});
+
+test('readExistingCSV: tolerates a few malformed rows when valid rows remain', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'csv-guard-'));
+  const good = DONE_ITEMS_COLUMNS.map(() => 'x').join(',');
+  fs.writeFileSync(path.join(dir, 'p-done-items.csv'), `${DONE_ITEMS_COLUMNS.join(',')}\n${good}\nbad,row\n`);
+  const rows = readExistingCSV(dir, 'p-done-items.csv', DONE_ITEMS_COLUMNS);
+  assert.equal(rows.length, 1);
+});
+
+test('readExistingCSV: header-only file returns empty array, missing file returns null', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'csv-guard-'));
+  fs.writeFileSync(path.join(dir, 'h.csv'), `${DONE_ITEMS_COLUMNS.join(',')}\n`);
+  assert.deepEqual(readExistingCSV(dir, 'h.csv', DONE_ITEMS_COLUMNS), []);
+  assert.equal(readExistingCSV(dir, 'nope.csv', DONE_ITEMS_COLUMNS), null);
 });

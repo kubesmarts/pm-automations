@@ -28,9 +28,8 @@ Exports current work-in-progress, ready work, and planned backlog items:
   - `Backlog` items without a specific target milestone.
   - Archived and draft items.
 - **Sorting**: Sorted by `Issue Number` descending (numeric order, newest first).
-- **Columns (23)**:
-  `Issue Number`, `Item Type`, `Parent Issue`, `Issue URL`, `Title`, `Assignees`, `Status`, `Type`, `Area`, `Priority`, `Initiative`, `Target Milestone`, `Size`, `Estimate`, `Time Spent`, `Remaining Work`, `Σ Estimate`, `Σ Time Spent`, `Σ Remaining Work`, `External Reference`, `Comments`, `Reporting Date`, `Alerts`.
-  - **`Item Type`**: `Issue` or `PR` — distinguishes pull request project items from issue items.
+- **Columns (22)**:
+  `Issue Number`, `Parent Issue`, `Issue URL`, `Title`, `Assignees`, `Status`, `Type`, `Area`, `Priority`, `Initiative`, `Target Milestone`, `Size`, `Estimate`, `Time Spent`, `Remaining Work`, `Σ Estimate`, `Σ Time Spent`, `Σ Remaining Work`, `External Reference`, `Comments`, `Reporting Date`, `Alerts`.
 
 ### 2. Done Items (`exports/<owner>-<number>-done-items.csv`)
 
@@ -53,9 +52,10 @@ Exports completed items and maintains historical tracking:
   When an issue previously recorded in `done-items.csv` transitions back to an active status (e.g. reopened or moved to `In Progress`, `Next`, or `Backlog`), the workflow automatically evicts the stale row from `done-items.csv` and moves it to `active-items.csv`.
 - **Change Detection ([Issue #115](https://github.com/kubesmarts/pm-automations/issues/115))**:
   Compares exported columns (`Title`, `Assignees`, `Type`, `Area`, `Priority`, `Initiative`, `Target Milestone`, `Size`, `Estimate`, `Time Spent`, `External Reference`, `Comments`, `Alerts`). Ignores `Reporting Date` and `Parent Issue` to avoid spurious updates.
-- **Columns (18)**:
-  `Issue Number`, `Item Type`, `Parent Issue`, `Issue URL`, `Title`, `Assignees`, `Type`, `Area`, `Priority`, `Initiative`, `Target Milestone`, `Size`, `Estimate`, `Time Spent`, `Reporting Date`, `External Reference`, `Comments`, `Alerts`.
-  - **`Item Type`**: `Issue` or `PR` — distinguishes pull request project items from issue items. PR items always have an empty `Parent Issue` column (PRs have no sub-issues).
+- **Columns (17)**:
+  `Issue Number`, `Parent Issue`, `Issue URL`, `Title`, `Assignees`, `Type`, `Area`, `Priority`, `Initiative`, `Target Milestone`, `Size`, `Estimate`, `Time Spent`, `Reporting Date`, `External Reference`, `Comments`, `Alerts`.
+  - PR items (`/pull/` in `Issue URL`) always have an empty `Parent Issue` column (PRs have no sub-issues).
+- **Schema-change safety**: if every data row of an existing done CSV is rejected because its column count no longer matches the expected schema, the export aborts with an error instead of rebuilding the file from scratch (which would silently discard the accumulated history). Migrate the CSV to the new columns before re-running.
 
 ## Configuration
 
