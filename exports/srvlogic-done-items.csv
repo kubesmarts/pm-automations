@@ -1,4 +1,8 @@
 Issue Number,Item Type,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1198,,1196,https://redhat.atlassian.net/browse/SRVLOGIC-1198,Build 1.37.3 CR1 container images,baldimir,Task,Productization,Major,Serverless logic,1.37.3 OSL,,0.1,0.1,2026-10-19,,,
+1197,,1196,https://redhat.atlassian.net/browse/SRVLOGIC-1197,Build 1.37.3 PNC CR1 artifacts,saumya1singh,Task,Productization,Major,Serverless logic,1.37.3 OSL,,0.125,0.025,2026-10-19,,,
+1240,,,https://redhat.atlassian.net/browse/SRVLOGIC-1240,Upgrade cpass to v9.42.1,saumya1singh,Task,Productization,Critical,Serverless logic,1.37.3 OSL,,0.075,0.05,2026-10-19,,,
+1204,,1196,https://redhat.atlassian.net/browse/SRVLOGIC-1204,Drools Build for 1.37.3 CR1 is failing,saumya1singh,Task,Productization,Blocker,Serverless logic,1.37.3 OSL,,0.1,0,2026-10-19,,,"NO_COMPONENT, NO_QA_CONTACT"
 1269,,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1269,Outline repositories ownership (able github.ibm.com org),baldimir,Task,Productization,Major,Serverless logic,Future,,0.025,0.025,2026-10-16,,,
 1267,,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1267,Set migration label on all ABLE team owned repositories,baldimir,Task,Productization,Major,Serverless logic,Future,,0.025,0.025,2026-10-16,,,
 1195,,1168,https://redhat.atlassian.net/browse/SRVLOGIC-1195,Build osl-cli-artifacts-image,saumya1singh,Sub-task,Productization,Critical,Serverless logic,1.39.0 OSL,,0.075,0.05,2026-10-15,,,NO_QA_CONTACT
