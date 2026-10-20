@@ -1,15 +1,16 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-1763,,https://github.com/open-workflow-specification/sdk-java/issues/1763,Migrate from Jackson 2 to Jackson 3,fjtirado,In progress,,Runtimes,Major,,2.0.0,M,0.6,0.4,0.2,0.6,0.4,0.2,,,2026-10-16,
-1613,,https://github.com/open-workflow-specification/sdk-java/issues/1613,Improve Json serialization for Collection interfaces,fjtirado,Backlog,,Runtimes,Minor,,2026/Q3,M,0.5,,0.4,0.5,0,0.4,,,2026-10-14,
+1613,,https://github.com/open-workflow-specification/sdk-java/issues/1613,Improve Json serialization for Collection interfaces,fjtirado,Backlog,,Runtimes,Minor,,2026/Q4,M,0.5,,0.4,0.5,0,0.4,,,2026-10-20,
 1607,,https://github.com/open-workflow-specification/sdk-java/issues/1607,Implement async call,mathecruz,In progress,,Runtimes,Major,,2026/Q3,,2,0.4,1.6,2,0.4,1.6,,,2026-08-14,
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0,0,0,,,2026-08-12,
 1485,,https://github.com/open-workflow-specification/sdk-java/issues/1485,Handle missing a2a operations,fjtirado,Backlog,,Runtimes,,,2026/Q4,S,,,,0,0,0,,,2026-08-12,
+1092,,https://github.com/quarkiverse/quarkus-flow/issues/1092,Override config:recommended inherited from quarkiverse/renovate-config,mathecruz,In progress,,,,,2.0.0,,,,,0,0,0,,,2026-10-20,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY"
+1089,,https://github.com/quarkiverse/quarkus-flow/issues/1089,bug: TLS handshake issue retrieving remote Openapi spec,fjtirado,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-10-20,
+1083,,https://github.com/quarkiverse/quarkus-flow/issues/1083,bug: Diagnostic hover messages are not visible in the Dev UI OWS Text Editor Issue type: Bug,fantonangeli,Backlog,,Tooling,Major,,2.0.0,M,0.6,0,0.6,0.6,0,0.6,,,2026-10-20,
 1080,,https://github.com/quarkiverse/quarkus-flow/issues/1080,Consolidate quarkus.flow config roots per module/phase,mathecruz,In progress,,,,,2.0.0,,,,,0,0,0,,,2026-10-16,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY"
 1073,,https://github.com/quarkiverse/quarkus-flow/issues/1073,feat: Review short term fix for the end the workflow span ending when a waiting instance is cancelled,wmedvede,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-10-15,
 1070,,https://github.com/quarkiverse/quarkus-flow/issues/1070,feat: Follow-up work from OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-10-10,
 1055,,https://github.com/quarkiverse/quarkus-flow/issues/1055,quarkus-flow-db-migration-quartz: only supports PostgreSQL today,mathecruz,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-10-08,
 1036,,https://github.com/quarkiverse/quarkus-flow/issues/1036,Implement quarkus-flow-db-migration extensions per ADR,mathecruz,In progress,,Runtimes,Major,,2.0.0,M,0.4,0.3,0.1,0.4,0.3,0.1,,,2026-10-07,
-1017,,https://github.com/open-workflow-specification/sdk-java/issues/1017,docs: Add documentation for all modules to help the user when using it,mathecruz,Next,,Tooling,Normal,,Future,L,0,0,,0,0,0,,,2026-10-06,REPO_ISSUE_CLOSED
 989,,https://github.com/quarkiverse/quarkus-flow/issues/989,Add workflowApplicationId to lifecycle events,,In progress,,Cloud,Major,,2.0.0,M,0.4,,0.4,0.4,0,0.4,,,,
 966,,https://github.com/quarkiverse/quarkus-flow/issues/966,bug: LoopAgent when parsed shows a error in DevUI,lornakelly,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-09-16,
 898,,https://github.com/quarkiverse/quarkus-flow/issues/898,feat: quarkus-flow-db-migration-quartz extension for Quartz schema migrations,mathecruz,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-08-28,
@@ -63,7 +64,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 314,214,https://github.com/open-workflow-specification/editor/issues/314,feat: Investigate and improve SDK validation error messaging,,Next,,Tooling,Normal,,2026/Q4,M,1,,1,1,0,1,,,2026-08-07,
 313,214,https://github.com/open-workflow-specification/editor/issues/313,feat: Verify and Enhance Workflow-Level Validation,handreyrc,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,2026-10-16,
 312,214,https://github.com/open-workflow-specification/editor/issues/312,feat: Task-Level Validation,handreyrc,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,2026-10-16,
-311,214,https://github.com/open-workflow-specification/editor/issues/311,feat: Field-Level Validation,handreyrc,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,2026-10-16,
+311,214,https://github.com/open-workflow-specification/editor/issues/311,feat: Field-Level Validation,handreyrc,In progress,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,2026-10-20,
 301,214,https://github.com/open-workflow-specification/editor/issues/301,feat: Implement visual styling for field states,lornakelly,Next,,Tooling,Normal,,2026/Q4,M,0.2,,0.2,0.2,0,0.2,,,2026-10-16,
 299,214,https://github.com/open-workflow-specification/editor/issues/299,feat: Implement onChange callback with content string emission,,Next,,Tooling,Normal,,2026/Q4,M,0.6,,0.6,0.6,0,0.6,,,,
 297,214,https://github.com/open-workflow-specification/editor/issues/297,feat: Implement Tab/Enter navigation and Cmd+Enter save shortcut,,Next,,Tooling,Normal,,2026/Q3,M,0.6,,0.6,0.6,0,0.6,,,,

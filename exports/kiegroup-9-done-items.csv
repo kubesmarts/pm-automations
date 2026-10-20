@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+648,,https://github.com/casehubio/platform/issues/648,Release 0.3,treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-20,,,
 1039,,https://github.com/casehubio/engine/pull/1039,fix: align engine with upstream SNAPSHOT API changes,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-10-16,,,
 1024,,https://github.com/casehubio/engine/pull/1024,fix: align record mappings with regenerated schema,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-10-16,,,
 1,,https://github.com/casehubio/scaffold/issues/1,"epic: scaffold deployment infrastructure — Docker, K8s, Helm, observability",treblereel,,Runtimes,Normal,,Future,XL,0,0,2026-10-08,,,
