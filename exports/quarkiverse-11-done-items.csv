@@ -1,8 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1768,,https://github.com/open-workflow-specification/sdk-java/issues/1768,Establish JDK 21 as minor java version,fjtirado,,Runtimes,,,2026/Q4,S,0.1,0.2,2026-10-21,,,NO_PRIORITY
+1040,,https://github.com/quarkiverse/quarkus-flow/issues/1040,OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,,Runtimes,Major,,1.2.0,L,1.6,1.6,2026-10-21,,,
+1745,,https://github.com/open-workflow-specification/sdk-java/issues/1745,WorkflowExecutionListenerAdapter don't propagate the close() method execution the enclosed listener.,wmedvede,,Runtimes,,,2026/Q3,XL,0.2,0.2,2026-10-21,,,"NO_PRIORITY, NO_MILESTONE"
 1076,,https://github.com/quarkiverse/quarkus-flow/issues/1076,Workflow input schema validation is a silent no-op (serverlessworkflow-impl-validation never on the classpath),mathecruz,,Runtimes,Critical,,2.0.0,M,0.4,0.4,2026-10-20,,,
 1017,,https://github.com/open-workflow-specification/sdk-java/issues/1017,docs: Add documentation for all modules to help the user when using it,mathecruz,,Tooling,Normal,,Future,L,0,0,2026-10-20,,,
 1763,,https://github.com/open-workflow-specification/sdk-java/issues/1763,Migrate from Jackson 2 to Jackson 3,fjtirado,,Runtimes,Major,,2.0.0,M,0.6,0.6,2026-10-20,,,
-1768,,https://github.com/open-workflow-specification/sdk-java/issues/1768,Establish JDK 21 as minor java version,fjtirado,,Runtimes,,,2026/Q4,S,0.1,0.2,2026-10-20,,,"NO_PRIORITY, NO_TIME_SPENT"
 237,207,https://github.com/open-workflow-specification/editor/issues/237,feat: Publish package on npm,fantonangeli,,Tooling,Critical,,2026/Q4,M,0.6,0,2026-10-17,,,
 438,,https://github.com/open-workflow-specification/editor/pull/438,NO-ISSUE: Set workspace-concurrency to pnpm commands in CIs,fantonangeli,,CI,Minor,,2026/Q4,XS,0.1,0.1,2026-10-16,,,
 1004,,https://github.com/quarkiverse/quarkus-flow/issues/1004,Use WorkflowModel instead Object (Defining a new REST sync method),fjtirado,,Runtimes,Normal,,2.0.0,M,0.3,0.3,2026-10-16,,,
@@ -14,7 +16,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 409,398,https://github.com/open-workflow-specification/editor/issues/409,feat: Wait task,kumaradityaraj,,Tooling,Normal,,2026/Q4,S,0.2,2,2026-10-14,,,
 402,398,https://github.com/open-workflow-specification/editor/issues/402,feat: Fork task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.1,2026-10-13,,,
 408,398,https://github.com/open-workflow-specification/editor/issues/408,feat: Try/Catch task,handreyrc,,Tooling,Normal,,2026/Q4,M,0.6,0.5,2026-10-13,,,
-1040,,https://github.com/quarkiverse/quarkus-flow/issues/1040,OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,,Runtimes,Major,,1.2.0,L,1.6,1.6,2026-10-10,,,NO_TIME_SPENT
 896,,https://github.com/quarkiverse/quarkus-flow/issues/896,ADR: Create extensions for schema migrations,mathecruz,,Docs,Major,,2.0.0,,0.5,0.2,2026-10-10,,,
 1749,,https://github.com/open-workflow-specification/sdk-java/issues/1749,`cancel()` on a WAITING instance clears instance metadata before `onWorkflowCancelled` is published,"edeandrea,fjtirado",,Runtimes,Critical,,2026/Q4,S,0.2,0.2,2026-10-09,,,
 400,398,https://github.com/open-workflow-specification/editor/issues/400,feat: Do Task,lornakelly,,Tooling,Normal,,2026/Q4,S,0.2,0.1,2026-10-09,,,
@@ -28,7 +29,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 884,,https://github.com/quarkiverse/quarkus-flow/issues/884,"Add a ""References"" page to share blogs and talks about Quarkus Flow",mathecruz,,Docs,Normal,,1.1.0,XS,0.2,0.2,2026-10-08,,,
 887,,https://github.com/quarkiverse/quarkus-flow/issues/887,Parallelize the Build with Integration Tests CI pipeline,mathecruz,,CI,Major,,1.1.0,,0.4,0,2026-10-08,,,
 1507,,https://github.com/open-workflow-specification/sdk-java/issues/1507,Allow loading of HttpRequestDecorator as additionalObject,fjtirado,,Runtimes,Normal,,1.1.0,S,0.2,0.2,2026-10-08,,,
-1745,,https://github.com/open-workflow-specification/sdk-java/issues/1745,WorkflowExecutionListenerAdapter don't propagate the close() method execution the enclosed listener.,wmedvede,,Runtimes,,,,XL,0.2,0.2,2026-10-08,,,"NO_ESTIMATE, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 331,223,https://github.com/open-workflow-specification/editor/issues/331,feat: Integrate the language service with Monaco,fantonangeli,,Tooling,Major,,2026/Q4,M,2,2.1,2026-10-08,,,
 1048,,https://github.com/quarkiverse/quarkus-flow/issues/1048,Update example SQL after latest DB changes,gmunozfe,,,,,2.0.0,,,,2026-10-07,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 403,398,https://github.com/open-workflow-specification/editor/issues/403,feat: For task,handreyrc,,Tooling,Normal,,2026/Q4,S,0.2,0.2,2026-10-07,,,

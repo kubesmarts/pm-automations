@@ -1,16 +1,16 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
-1778,,https://github.com/open-workflow-specification/sdk-java/issues/1778,Use java.net.HttpClient to download external http resources,fjtirado,Next,,Runtimes,Minor,,2026/Q4,S,0.1,,,,,,,,,
-1776,,https://github.com/open-workflow-specification/sdk-java/issues/1776,Allow define a custom HTTP client for getting external resource,fjtirado,In review,,Runtimes,Major,,2026/Q4,S,0.1,0.1,,,,,,,,
-1774,,https://github.com/open-workflow-specification/sdk-java/issues/1774,Update to latest version of openworkflow specification schema,fjtirado,Next,,Runtimes,Major,,2026/Q4,S,0.1,,,0,0,0,,,2026-10-20,
-1773,,https://github.com/open-workflow-specification/sdk-java/issues/1773,Allow publishing of life cycle events with the legacy prefix,fjtirado,Next,,Runtimes,Normal,,2026/Q4,S,0.2,,,0,0,0,,,2026-10-20,
-1772,,https://github.com/open-workflow-specification/sdk-java/issues/1772,Separate Jackson specific workflow from openworkflow-api module,fjtirado,In progress,,Runtimes,Normal,,2026/Q4,M,0.3,,0.3,0,0,0,,,2026-10-20,
+1778,,https://github.com/open-workflow-specification/sdk-java/issues/1778,Use java.net.HttpClient to download external http resources,fjtirado,Next,,Runtimes,Minor,,2026/Q4,S,0.1,,,0.1,0,0,,,2026-10-21,
+1776,,https://github.com/open-workflow-specification/sdk-java/issues/1776,Allow define a custom HTTP client for getting external resource,fjtirado,In review,,Runtimes,Major,,2026/Q4,S,0.1,0.1,,0.1,0.1,0,,,2026-10-21,"NO_REMAINING_WORK, REPO_ISSUE_CLOSED"
+1774,,https://github.com/open-workflow-specification/sdk-java/issues/1774,Update to latest version of openworkflow specification schema,fjtirado,Next,,Runtimes,Major,,2026/Q4,S,0.1,,,0.1,0,0,,,2026-10-21,
+1773,,https://github.com/open-workflow-specification/sdk-java/issues/1773,Allow publishing of life cycle events with the legacy prefix,fjtirado,Next,,Runtimes,Normal,,2026/Q4,S,0.2,,,0.2,0,0,,,2026-10-21,
+1772,,https://github.com/open-workflow-specification/sdk-java/issues/1772,Separate Jackson specific workflow from openworkflow-api module,fjtirado,In progress,,Runtimes,Normal,,2026/Q4,M,0.3,,0.3,0.3,0,0.3,,,2026-10-21,
 1613,,https://github.com/open-workflow-specification/sdk-java/issues/1613,Improve Json serialization for Collection interfaces,fjtirado,Backlog,,Runtimes,Minor,,2026/Q4,M,0.5,,0.4,0.5,0,0.4,,,2026-10-20,
 1607,,https://github.com/open-workflow-specification/sdk-java/issues/1607,Implement async call,mathecruz,In progress,,Runtimes,Major,,2026/Q3,,2,0.4,1.6,2,0.4,1.6,,,2026-08-14,
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0,0,0,,,2026-08-12,
 1485,,https://github.com/open-workflow-specification/sdk-java/issues/1485,Handle missing a2a operations,fjtirado,Backlog,,Runtimes,,,2026/Q4,S,,,,0,0,0,,,2026-08-12,
 1092,,https://github.com/quarkiverse/quarkus-flow/issues/1092,Override config:recommended inherited from quarkiverse/renovate-config,mathecruz,In progress,,,,,2.0.0,,,,,0,0,0,,,2026-10-20,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY"
 1089,,https://github.com/quarkiverse/quarkus-flow/issues/1089,bug: TLS handshake issue retrieving remote Openapi spec,mathecruz,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-10-20,
-1083,,https://github.com/quarkiverse/quarkus-flow/issues/1083,bug: Diagnostic hover messages are not visible in the Dev UI OWS Text Editor Issue type: Bug,fantonangeli,In progress,,Tooling,Blocker,,2.0.0,M,1,0,1,0.6,0,0.6,,,2026-10-20,
+1083,,https://github.com/quarkiverse/quarkus-flow/issues/1083,bug: Diagnostic hover messages are not visible in the Dev UI OWS Text Editor Issue type: Bug,fantonangeli,In progress,,Tooling,Blocker,,2.0.0,M,1,0,1,1,0,1,,,2026-10-21,
 1080,,https://github.com/quarkiverse/quarkus-flow/issues/1080,Consolidate quarkus.flow config roots per module/phase,mathecruz,In progress,,,,,2.0.0,,,,,0,0,0,,,2026-10-16,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY"
 1073,,https://github.com/quarkiverse/quarkus-flow/issues/1073,feat: Review short term fix for the end the workflow span ending when a waiting instance is cancelled,wmedvede,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-10-15,
 1070,,https://github.com/quarkiverse/quarkus-flow/issues/1070,feat: Follow-up work from OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-10-10,
@@ -28,8 +28,8 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 620,619,https://github.com/quarkiverse/quarkus-flow/issues/620,Create ADR for MCP Integration Design,ricardozanini,In review,,Runtimes,Normal,,2.0.0,M,0.2,0.1,0,0.2,0.1,0,,,2026-08-14,
 619,,https://github.com/quarkiverse/quarkus-flow/issues/619,[EPIC] Model Context Protocol (MCP) Integration,ricardozanini,Backlog,,Runtimes,Normal,,2.0.0,XL,,,,0.2,0.1,0,,,2026-08-14,
 606,,https://github.com/quarkiverse/quarkus-flow/issues/606,Epic: OIDC Token Propagation and Exchange,mathecruz,Next,,Runtimes,Major,,Future,XL,,,,0,0,0,,,2026-07-04,
-491,,https://github.com/open-workflow-specification/editor/issues/491,feat: Publish the core package to npm,fantonangeli,Next,,Tooling,Major,,2026/Q4,S,0.2,0.2,0.2,0.2,0.2,0.2,,,2026-10-17,
-489,289,https://github.com/open-workflow-specification/editor/issues/489,bug: Re-minifying the language service worker breaks JSON Schema diagnostics,fantonangeli,In review,,Tooling,Critical,,2026/Q4,M,0.6,0,0.6,0.6,0,0.6,,,2026-10-17,
+491,,https://github.com/open-workflow-specification/editor/issues/491,feat: Publish the core package to npm,fantonangeli,Next,,Tooling,Major,,2026/Q4,S,0.2,0.2,0.2,0.2,0.2,0.2,,,2026-10-21,
+489,289,https://github.com/open-workflow-specification/editor/issues/489,bug: Re-minifying the language service worker breaks JSON Schema diagnostics,fantonangeli,In review,,Tooling,Critical,,2026/Q4,M,0.6,0,0.6,0.6,0,0.6,,,2026-10-21,
 488,,https://github.com/quarkiverse/quarkus-flow/issues/488,task: Refactor docs module: Reorganize DSL examples and enable Maven test execution,domhanak,Backlog,,Docs,Major,,2.0.0,M,0.6,,0.6,0.6,0,0.6,,,2026-09-16,
 487,,https://github.com/quarkiverse/quarkus-flow/issues/487,docs: Expand Java DLS Cookbook with additional examples,domhanak,Backlog,,Docs,Major,,2.0.0,M,0.6,,0.6,0.6,0,0.6,,,2026-09-16,
 485,,https://github.com/open-workflow-specification/editor/issues/485,bug: Investigate inconsistent E2E test execution,handreyrc,Next,,Tooling,Normal,,2026/Q4,S,0.1,,0.1,0.1,0,0.1,,,2026-10-16,
@@ -43,7 +43,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 398,214,https://github.com/open-workflow-specification/editor/issues/398,epic: Implement dynamic form for task types,,Next,,Tooling,Normal,,2026/Q4,L,0,,0,4,6.1,0.2,,,,
 397,214,https://github.com/open-workflow-specification/editor/issues/397,feat: Hide irrelevant fields in side panel forms,,Next,,Tooling,Normal,,2026/Q4,M,0.6,,0.6,0.6,0,0.6,,,,
 395,214,https://github.com/open-workflow-specification/editor/issues/395,feat: Disable editing of graph-structural and flow-routing fields,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,,
-380,223,https://github.com/open-workflow-specification/editor/issues/380,poc: Validate Text Editor and Language Service in vanilla Web Component,fantonangeli,In review,,Tooling,Major,,2026/Q4,M,0.6,,0.6,0.6,0,0.6,,,2026-10-15,
+380,223,https://github.com/open-workflow-specification/editor/issues/380,poc: Validate Text Editor and Language Service in vanilla Web Component,fantonangeli,In review,,Tooling,Major,,2026/Q4,M,0.6,,0.6,0.6,0,0.6,,,2026-10-21,
 376,,https://github.com/quarkiverse/quarkus-flow/issues/376,Avoid hardcoding application URI in DevUIJsonRPCTest tests,mathecruz,Next,,Runtimes,Major,,Future,M,1,,0.8,1,0,0.8,,,2026-08-12,
 370,225,https://github.com/open-workflow-specification/editor/issues/370,feat: Publish the dual-editor package to npm,fantonangeli,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0,0.2,,,2026-09-16,
 369,225,https://github.com/open-workflow-specification/editor/issues/369,feat: Integrate the dual-editor in vanilla-web-component,kumaradityaraj,Next,,Tooling,Normal,,2026/Q4,M,1,,1,1,0,1,,,2026-09-16,
@@ -61,7 +61,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 346,344,https://github.com/open-workflow-specification/editor/issues/346,feat: Do Task field coverage and functionality,,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0,0.2,,,,
 345,344,https://github.com/open-workflow-specification/editor/issues/345,feat: Call Task field coverage and functionality,,Next,,Tooling,Normal,,2026/Q4,S,0.3,,0.3,0.3,0,0.3,,,,
 344,214,https://github.com/open-workflow-specification/editor/issues/344,epic: Task type field verification,,Next,,Tooling,Normal,,2026/Q4,L,,,,2.5,0,2.5,,,,
-334,,https://github.com/quarkiverse/quarkus-jackson-jq/issues/334,Migrate to Jackson JQ 2.0.0 and Jackson 3.x,wmedvede,In progress,,Runtimes,Critical,,2.0.0,M,1,,,0,0,0,,,2026-10-17,"NO_ESTIMATE, NO_REMAINING_WORK"
+334,,https://github.com/quarkiverse/quarkus-jackson-jq/issues/334,Migrate to Jackson JQ 2.0.0 and Jackson 3.x,wmedvede,In progress,,Runtimes,Critical,,2.0.0,M,1,,,1,0,0,,,2026-10-21,NO_REMAINING_WORK
 330,289,https://github.com/open-workflow-specification/editor/issues/330,feat: Publish the language-service package to npm,fantonangeli,Next,,Tooling,Normal,,2026/Q4,S,0.2,,0.2,0.2,0,0.2,,,2026-09-16,
 322,289,https://github.com/open-workflow-specification/editor/issues/322,feat: Implement volar-service-yaml for YAML language support,fantonangeli,Next,,Tooling,Normal,,2026/Q4,M,1,,1,1,0,1,,,2026-09-16,
 316,258,https://github.com/open-workflow-specification/editor/issues/316,task: Breakdown feature into tickets and estimate,lornakelly,Next,,Tooling,Major,,Future,M,0.8,,0.8,0.8,0,0.8,,,2026-08-07,
