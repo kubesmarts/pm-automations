@@ -138,6 +138,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 769,,https://redhat.atlassian.net/browse/SRVLOGIC-769,Include support for PDB for Serverless logic services,wmedvede,Epic,Cloud,Major,Serverless logic,1.38.0 OSL,,2.6,2.6,2026-07-07,,,
 757,,https://redhat.atlassian.net/browse/SRVLOGIC-757,Visualize function input output parameters on Data Index,fjtirado,Epic,Runtimes,Normal,Serverless logic,1.38.0 OSL,,2.4,1.2,2026-07-07,,,
 744,,https://redhat.atlassian.net/browse/SRVLOGIC-744,WebApp for Workflow Endpoint deployment,kumaradityaraj,Epic,Tooling,Normal,Serverless logic,1.38.0 OSL,,3,6,2026-07-07,,,
+1301,,https://redhat.atlassian.net/browse/SRVLOGIC-1301,[AGILE] Implement Google Apps Script automation for Initiatives tracking,fantonangeli,Task,PM,Normal,Serverless logic,1.38.0 OSL,,1,0.3,2026-07-01,,,
 1068,,https://redhat.atlassian.net/browse/SRVLOGIC-1068,CPaaS upgrade to v9.40.0 including osl + drools + drools-ansible-integration,saumya1singh,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.075,0.075,2026-06-29,,,
 1000,,https://redhat.atlassian.net/browse/SRVLOGIC-1000,CPaaS upgrade to 9.39.0 including osl + drools + drools-ansible-integration,jankrystof-ibm,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,0.075,0.0333,2026-06-29,,,
 895,,https://redhat.atlassian.net/browse/SRVLOGIC-895,CPaaS 9.38 Upgrade for OSL pipelines,jankrystof-ibm,Task,Productization,Blocker,Serverless logic,1.38.0 OSL,,0.075,0.075,2026-06-25,,,
