@@ -1,5 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-1204,1196,https://redhat.atlassian.net/browse/SRVLOGIC-1204,Drools Build for 1.37.3 CR1 is failing,saumya1singh,Task,Productization,Blocker,Serverless logic,1.37.3 OSL,,0.1,0.15,2026-10-22,,,"NO_COMPONENT, NO_TIME_SPENT, NO_QA_CONTACT"
+1169,,https://redhat.atlassian.net/browse/SRVLOGIC-1169,[Prograde] Automatic Image Builds Failing,saumya1singh,Task,Productization,Major,Serverless logic,1.40.0 OSL,,0.4,0,2026-10-23,,,NO_TIME_SPENT
+1155,,https://redhat.atlassian.net/browse/SRVLOGIC-1155,Evaluate the shortcomings faced in 1.39 CR1 Release ,saumya1singh,Task,Productization,Major,Serverless logic,1.40.0 OSL,,0.6,0.075,2026-10-23,,,
+1204,1196,https://redhat.atlassian.net/browse/SRVLOGIC-1204,Drools Build for 1.37.3 CR1 is failing,saumya1singh,Task,Productization,Blocker,Serverless logic,1.37.3 OSL,,0.1,0.15,2026-10-23,,,
 1095,,https://redhat.atlassian.net/browse/SRVLOGIC-1095,Investigate 2 failures in kogito-maven-repo-testsuite-smoke,domhanak,Task,QE,Critical,Serverless logic,1.39.0 OSL,,0.2,0.1,2026-10-21,,,
 1094,,https://redhat.atlassian.net/browse/SRVLOGIC-1094,Fix offline_maven_repo_upload problems,domhanak,Task,QE,Critical,Serverless logic,1.39.0 OSL,,0.1,0.2875,2026-10-21,,,
 1092,,https://redhat.atlassian.net/browse/SRVLOGIC-1092,Setup QE testing pipelines for 1.39.0,domhanak,Task,QE,Blocker,Serverless logic,1.39.0 OSL,,0.2,0.075,2026-10-21,,,
