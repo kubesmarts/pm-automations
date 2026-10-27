@@ -6,6 +6,8 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 1607,,https://github.com/open-workflow-specification/sdk-java/issues/1607,Implement async call,mathecruz,In progress,,Runtimes,Major,,2026/Q3,,2,0.4,1.6,2,0.4,1.6,,,2026-08-14,
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0,0,0,,,2026-08-12,
 1485,,https://github.com/open-workflow-specification/sdk-java/issues/1485,Handle missing a2a operations,fjtirado,Backlog,,Runtimes,,,2026/Q4,S,,,,0,0,0,,,2026-08-12,
+1112,,https://github.com/quarkiverse/quarkus-flow/issues/1112,bug: JPA persitence generates wrong JoinColum name WorkflowMetadataEntity,"wmedvede,fjtirado",In progress,,,,,1.4.0,,,,,0,0,0,,,2026-10-27,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY"
+1110,,https://github.com/quarkiverse/quarkus-flow/issues/1110,bug: Restored timed wait remains active but never resumes after pod failover,mathecruz,In progress,,,,,1.4.0,,,,,0,0,0,,,2026-10-27,"NO_ESTIMATE, NO_REMAINING_WORK, NO_AREA, NO_PRIORITY"
 1089,,https://github.com/quarkiverse/quarkus-flow/issues/1089,bug: TLS handshake issue retrieving remote Openapi spec,mathecruz,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-10-20,
 1083,,https://github.com/quarkiverse/quarkus-flow/issues/1083,bug: Diagnostic hover messages are not visible in the Dev UI OWS Text Editor Issue type: Bug,fantonangeli,In progress,,Tooling,Blocker,,2.0.0,M,1,0,1,1,0,1,,,2026-10-21,
 1073,,https://github.com/quarkiverse/quarkus-flow/issues/1073,feat: Review short term fix for the end the workflow span ending when a waiting instance is cancelled,wmedvede,Backlog,,,,,2.0.0,,,,,0,0,0,,,2026-10-15,
@@ -63,8 +65,8 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 316,258,https://github.com/open-workflow-specification/editor/issues/316,task: Breakdown feature into tickets and estimate,lornakelly,Next,,Tooling,Major,,Future,M,0.8,,0.8,0.8,0,0.8,,,2026-08-07,
 315,214,https://github.com/open-workflow-specification/editor/issues/315,feat: Update editor to consume new error messages,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,,
 314,214,https://github.com/open-workflow-specification/editor/issues/314,feat: Investigate and improve SDK validation error messaging,,Next,,Tooling,Normal,,2026/Q4,M,1,,1,1,0,1,,,2026-08-07,
-313,214,https://github.com/open-workflow-specification/editor/issues/313,feat: Verify and Enhance Workflow-Level Validation,handreyrc,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,2026-10-16,
-312,214,https://github.com/open-workflow-specification/editor/issues/312,feat: Task-Level Validation,handreyrc,In progress,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,2026-10-23,
+313,214,https://github.com/open-workflow-specification/editor/issues/313,feat: Verify and Enhance Workflow-Level Validation,handreyrc,In progress,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,2026-10-27,
+312,214,https://github.com/open-workflow-specification/editor/issues/312,feat: Task-Level Validation,handreyrc,In review,,Tooling,Normal,,2026/Q4,M,0.4,0.5,0,0.4,0.5,0,,,2026-10-27,
 301,214,https://github.com/open-workflow-specification/editor/issues/301,feat: Implement visual styling for field states,lornakelly,Next,,Tooling,Normal,,2026/Q4,M,0.2,,0.2,0.2,0,0.2,,,2026-10-16,
 299,214,https://github.com/open-workflow-specification/editor/issues/299,feat: Implement onChange callback with content string emission,,Next,,Tooling,Normal,,2026/Q4,M,0.6,,0.6,0.6,0,0.6,,,,
 297,214,https://github.com/open-workflow-specification/editor/issues/297,feat: Implement Tab/Enter navigation and Cmd+Enter save shortcut,,Next,,Tooling,Normal,,2026/Q3,M,0.6,,0.6,0.6,0,0.6,,,,
@@ -95,5 +97,5 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 225,207,https://github.com/open-workflow-specification/editor/issues/225,feat: Scaffold Dual-editor package with resizable split-view layout,fantonangeli,Next,,Tooling,Normal,,2026/Q3,M,0,,0,2.6,0,2.6,,,2026-08-29,
 224,207,https://github.com/open-workflow-specification/editor/issues/224,feat: Host-agnostic editable text + change events,,Next,,Tooling,Normal,,2026/Q3,M,0.8,,0.8,0.8,0,0.8,,,,
 223,207,https://github.com/open-workflow-specification/editor/issues/223,feat: Scaffold the text-editor workspace package,fantonangeli,Next,,Tooling,Normal,,2026/Q3,M,0,,0,3.4,2.8,1,,,2026-08-29,
-214,,https://github.com/open-workflow-specification/editor/issues/214,Epic: Milestone 2 - Edit a node,lornakelly,In progress,,Tooling,Critical,,2026/Q4,L,0,0,0,18.3,7.7,12.7,,Still adding tickets so estimate not final,2026-09-10,
+214,,https://github.com/open-workflow-specification/editor/issues/214,Epic: Milestone 2 - Edit a node,lornakelly,In progress,,Tooling,Critical,,2026/Q4,L,0,0,0,18.3,8.2,12.3,,Still adding tickets so estimate not final,2026-09-10,
 207,,https://github.com/open-workflow-specification/editor/issues/207,Epic: Milestone 1 - Side-by-side text + diagram,lornakelly,In progress,,Tooling,Critical,,2026/Q4,XL,0,0,0,18.2,3.5,13.6,,Still adding tickets so estimate not final,2026-09-22,

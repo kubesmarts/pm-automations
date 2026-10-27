@@ -7,6 +7,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 648,,https://github.com/casehubio/platform/issues/648,Release 0.3,treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-20,,,
 1039,,https://github.com/casehubio/engine/pull/1039,fix: align engine with upstream SNAPSHOT API changes,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-10-16,,,
 1024,,https://github.com/casehubio/engine/pull/1024,fix: align record mappings with regenerated schema,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-10-16,,,
+459,,https://github.com/mvel/mvel/issues/459,Enhance mvel3 test coverage,tkobayas,,QE,Major,,Future,M,1.5,1.5,2026-10-15,,,
 1,,https://github.com/casehubio/scaffold/issues/1,"epic: scaffold deployment infrastructure — Docker, K8s, Helm, observability",treblereel,,Runtimes,Normal,,Future,XL,0,0,2026-10-08,,,
 12,1,https://github.com/casehubio/scaffold/issues/12,Add Prometheus metrics endpoint for monitoring and observability,treblereel,,Runtimes,Normal,,Future,M,0.6,0,2026-10-08,,,
 13,1,https://github.com/casehubio/scaffold/issues/13,Add Docker container image build configuration,treblereel,,Runtimes,Normal,,Future,M,0.6,0,2026-10-08,,,
