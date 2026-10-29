@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+489,289,https://github.com/open-workflow-specification/editor/issues/489,bug: Re-minifying the language service worker breaks JSON Schema diagnostics,fantonangeli,,Tooling,Critical,,2026/Q4,M,0.6,0.5,2026-10-29,,,
+1112,,https://github.com/quarkiverse/quarkus-flow/issues/1112,bug: JPA persitence generates wrong JoinColum name WorkflowMetadataEntity,"wmedvede,fjtirado",,,,,1.4.0,,,,2026-10-29,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 1110,,https://github.com/quarkiverse/quarkus-flow/issues/1110,bug: Restored timed wait remains active but never resumes after pod failover,mathecruz,,,,,1.4.0,,,,2026-10-28,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 1098,,https://github.com/quarkiverse/quarkus-flow/issues/1098,VertxException when executing an application using JQ expressions (on event-loop thread),mathecruz,,,,,1.4.0,,,,2026-10-27,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 1107,,https://github.com/quarkiverse/quarkus-flow/issues/1107,"durable-kubernetes: member lease renewal steals leases, causing split-brain",ricardozanini,,Cloud,Blocker,,1.4.0,S,0.4,,2026-10-27,,,NO_TIME_SPENT

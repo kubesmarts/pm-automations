@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1,,https://github.com/casehubio/scaffold/issues/1,"epic: scaffold deployment infrastructure — Docker, K8s, Helm, observability",treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-29,,,
+2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-29,,,CHILDREN_STATUS
+1088,,https://github.com/casehubio/engine/issues/1088,fix: Generate API Docs workflow startup_failure,treblereel,,Runtimes,Normal,,Future,XS,0.1,0.1,2026-10-29,,,
 513,,https://github.com/casehubio/casehub-pages/issues/513,Repair failing examples Playwright suite,treblereel,,Runtimes,Normal,,Future,S,0.4,0,2026-10-26,,,
 145,,https://github.com/casehubio/casehub-ops/issues/145,Restore DetectionNodeSpec JSON round-trip test with Java Time support,treblereel,,Runtimes,Normal,,Future,M,1,0,2026-10-25,,,
 417,,https://github.com/casehubio/work/issues/417,Restore queue integration tests for generated REST endpoints,treblereel,,Runtimes,Normal,,Future,S,0.4,0,2026-10-21,,,
@@ -8,7 +11,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1039,,https://github.com/casehubio/engine/pull/1039,fix: align engine with upstream SNAPSHOT API changes,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-10-16,,,
 1024,,https://github.com/casehubio/engine/pull/1024,fix: align record mappings with regenerated schema,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-10-16,,,
 459,,https://github.com/mvel/mvel/issues/459,Enhance mvel3 test coverage,tkobayas,,QE,Major,,Future,M,1.5,1.5,2026-10-15,,,
-1,,https://github.com/casehubio/scaffold/issues/1,"epic: scaffold deployment infrastructure — Docker, K8s, Helm, observability",treblereel,,Runtimes,Normal,,Future,XL,0,0,2026-10-08,,,
 12,1,https://github.com/casehubio/scaffold/issues/12,Add Prometheus metrics endpoint for monitoring and observability,treblereel,,Runtimes,Normal,,Future,M,0.6,0,2026-10-08,,,
 13,1,https://github.com/casehubio/scaffold/issues/13,Add Docker container image build configuration,treblereel,,Runtimes,Normal,,Future,M,0.6,0,2026-10-08,,,
 14,1,https://github.com/casehubio/scaffold/issues/14,"Add Kubernetes deployment manifests (Deployment, Service, ConfigMap, Secret)",treblereel,,Runtimes,Normal,,Future,M,0.6,0,2026-10-08,,,
@@ -21,7 +23,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 3672,,https://github.com/apache/incubator-kie-tools/issues/3672,Follow up DRL editor (release),tkobayas,,Tooling,Major,,Future,XS,0.2,0.2,2026-09-30,,,
 56,6683,https://github.com/pibizza/drools-journal/issues/56,Make scan() return only live pages — two-tier catalog+data contract for JournalStorage,pibizza,,Runtimes,Normal,,Future,M,1,0.8,2026-09-26,,,
 7100,,https://github.com/apache/incubator-kie/issues/7100,Drools Sequential: Mixed alpha + beta expressions in one step → ClassCastException,Rikkola,,Runtimes,Normal,,Future,S,1,0.1,2026-09-25,,,
-2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,,Runtimes,Normal,,Future,XL,,,2026-09-18,,,CHILDREN_STATUS
 7079,,https://github.com/apache/incubator-kie/issues/7079,RuleUnit DSL: Support STREAM event processing and CEP temporal operators,tkobayas,,Runtimes,Major,,Future,S,0.1,0.1,2026-09-17,,,
 7095,,https://github.com/apache/incubator-kie/issues/7095,A ternary condition in an inline-eval results in a wrong constraint and class-reactive,tkobayas,,Runtimes,Critical,,Future,S,0.4,0.4,2026-09-17,,,
 7059,,https://github.com/apache/incubator-kie/issues/7059,Drools Sequential: Simple sequence() functionality,Rikkola,,Runtimes,Normal,,Future,L,2,1.5,2026-09-15,,,
