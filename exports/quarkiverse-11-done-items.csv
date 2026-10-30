@@ -1,9 +1,16 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1112,,https://github.com/quarkiverse/quarkus-flow/issues/1112,bug: JPA persitence generates wrong JoinColum name WorkflowMetadataEntity,"wmedvede,fjtirado",,Runtimes,Critical,,1.4.0,S,0.2,0.2,2026-10-30,,,
+1107,,https://github.com/quarkiverse/quarkus-flow/issues/1107,"durable-kubernetes: member lease renewal steals leases, causing split-brain",ricardozanini,,Cloud,Blocker,,1.4.0,S,0.4,0.2,2026-10-30,,,
+312,214,https://github.com/open-workflow-specification/editor/issues/312,feat: Task-Level Validation,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.5,2026-10-30,,,
+301,214,https://github.com/open-workflow-specification/editor/issues/301,feat: Implement visual styling for field states,lornakelly,,Tooling,Normal,,2026/Q4,M,0,0,2026-10-30,,,
+368,225,https://github.com/open-workflow-specification/editor/issues/368,feat: Create the dual-editor package with resizable split-view layout,kumaradityaraj,,Tooling,Normal,,2026/Q4,M,0.8,1,2026-10-30,,,
+446,398,https://github.com/open-workflow-specification/editor/issues/446,feat: task base fields,lornakelly,,Tooling,Normal,,2026/Q4,M,0.4,0.2,2026-10-30,,,
+1070,,https://github.com/quarkiverse/quarkus-flow/issues/1070,feat: Follow-up work from OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,,,,,2.0.0,,,,2026-10-30,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
+1773,,https://github.com/open-workflow-specification/sdk-java/issues/1773,Allow publishing of life cycle events with the legacy prefix,fjtirado,,Runtimes,Normal,,2026/Q4,S,0.2,0.1,2026-10-30,,,
+1806,,https://github.com/open-workflow-specification/sdk-java/issues/1806,A cancel over the completable future returned by start should cancel the instance,fjtirado,,Runtimes,Minor,,2.0.0,XS,0.1,0.15,2026-10-30,,,
 489,289,https://github.com/open-workflow-specification/editor/issues/489,bug: Re-minifying the language service worker breaks JSON Schema diagnostics,fantonangeli,,Tooling,Critical,,2026/Q4,M,0.6,0.5,2026-10-29,,,
-1112,,https://github.com/quarkiverse/quarkus-flow/issues/1112,bug: JPA persitence generates wrong JoinColum name WorkflowMetadataEntity,"wmedvede,fjtirado",,,,,1.4.0,,,,2026-10-29,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 1110,,https://github.com/quarkiverse/quarkus-flow/issues/1110,bug: Restored timed wait remains active but never resumes after pod failover,mathecruz,,,,,1.4.0,,,,2026-10-28,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 1098,,https://github.com/quarkiverse/quarkus-flow/issues/1098,VertxException when executing an application using JQ expressions (on event-loop thread),mathecruz,,,,,1.4.0,,,,2026-10-27,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
-1107,,https://github.com/quarkiverse/quarkus-flow/issues/1107,"durable-kubernetes: member lease renewal steals leases, causing split-brain",ricardozanini,,Cloud,Blocker,,1.4.0,S,0.4,,2026-10-27,,,NO_TIME_SPENT
 311,214,https://github.com/open-workflow-specification/editor/issues/311,feat: Field-Level Validation,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.4,2026-10-24,,,
 334,,https://github.com/quarkiverse/quarkus-jackson-jq/issues/334,Migrate to Jackson JQ 2.0.0 and Jackson 3.x,wmedvede,,Runtimes,Critical,,2.0.0,M,1,,2026-10-24,,,NO_TIME_SPENT
 1080,,https://github.com/quarkiverse/quarkus-flow/issues/1080,Consolidate quarkus.flow config roots per module/phase,mathecruz,,Runtimes,Normal,,2.0.0,M,0.4,0.2,2026-10-24,,,

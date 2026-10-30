@@ -6,4 +6,4 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 6683,,https://github.com/apache/incubator-kie/issues/6683,drools-journal: vol2 port — durable UnitInstance,pibizza,In progress,,Runtimes,Normal,,Future,L,0,2,0,11,5.4,5.4,,Added some more issues after a review of Mark Proctor,2026-07-08,
 97,,https://github.com/tkobayas/drlx-parser/issues/97,DRLX syntax review,tkobayas,In progress,,Docs,Major,,Future,M,0.8,0.4,0.4,0.8,0.4,0.4,,,2026-06-26,
 38,6683,https://github.com/pibizza/drools-journal/issues/38,Unified durability: three-mode journal replacing drools-reliability,pibizza,Next,,Runtimes,Major,,Future,XL,2,,2,2,0,2,,Increased initial estimation. Once it is properly split it will become clearer.,2026-09-09,
-5,2,https://github.com/casehubio/engine/issues/5,Drools Expression Engine,treblereel,Next,,Runtimes,Normal,,Future,L,1,0,1,1,0,1,,,2026-09-18,
+5,,https://github.com/casehubio/engine/issues/5,Drools Expression Engine,treblereel,Next,,Runtimes,Normal,,Future,L,1,0,1,1,0,1,,,2026-09-18,

@@ -1,6 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
 1,,https://github.com/casehubio/scaffold/issues/1,"epic: scaffold deployment infrastructure — Docker, K8s, Helm, observability",treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-29,,,
-2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-29,,,CHILDREN_STATUS
+2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-29,,,
 1088,,https://github.com/casehubio/engine/issues/1088,fix: Generate API Docs workflow startup_failure,treblereel,,Runtimes,Normal,,Future,XS,0.1,0.1,2026-10-29,,,
 513,,https://github.com/casehubio/casehub-pages/issues/513,Repair failing examples Playwright suite,treblereel,,Runtimes,Normal,,Future,S,0.4,0,2026-10-26,,,
 145,,https://github.com/casehubio/casehub-ops/issues/145,Restore DetectionNodeSpec JSON round-trip test with Java Time support,treblereel,,Runtimes,Normal,,Future,M,1,0,2026-10-25,,,
@@ -8,6 +8,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 418,,https://github.com/casehubio/work/issues/418,Fix queue JPA tenancy tests and verify tenant isolation,treblereel,,Runtimes,Normal,,Future,M,1,0,2026-10-21,,,
 7201,,https://github.com/apache/incubator-kie/issues/7201,Beta node sharing in sequential mode causes NPE and incorrect results,tkobayas,,Runtimes,Major,,Future,M,1,1,2026-10-21,,,
 648,,https://github.com/casehubio/platform/issues/648,Release 0.3,treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-20,,,
+128,,https://github.com/casehubio/life/issues/128,Restore overdue-task SLA escalation test after 0.3 CI timeout,treblereel,,Runtimes,Normal,,Future,M,1,0,2026-10-20,,,
 1039,,https://github.com/casehubio/engine/pull/1039,fix: align engine with upstream SNAPSHOT API changes,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-10-16,,,
 1024,,https://github.com/casehubio/engine/pull/1024,fix: align record mappings with regenerated schema,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-10-16,,,
 459,,https://github.com/mvel/mvel/issues/459,Enhance mvel3 test coverage,tkobayas,,QE,Major,,Future,M,1.5,1.5,2026-10-15,,,

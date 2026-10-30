@@ -1,5 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-42,41,https://github.com/kubesmarts/logic-operator/issues/42,[M3] Operator deploys workflow gateway,ricardozanini,,Cloud,Critical,Serverless Logic,2.0.0,,0.5,,2026-10-29,,,NO_TIME_SPENT
+42,41,https://github.com/kubesmarts/logic-operator/issues/42,[M3] Operator deploys workflow gateway,ricardozanini,,Cloud,Critical,Serverless Logic,2.0.0,,0.5,1,2026-10-30,,,
+75,,https://github.com/kubesmarts/logic-operator/issues/75,Add a GitHub Actions release pipeline,ricardozanini,,Cloud,Blocker,Serverless Logic,2.0.0,,0.1,0.1,2026-10-30,,,
 32,,https://github.com/kubesmarts/logic-operator/issues/32,[M1] [EPIC] Workflow Gateway MVP - Core Routing,ricardozanini,,Cloud,Major,,2.0.0,,,,2026-10-16,,,
 62,32,https://github.com/kubesmarts/logic-operator/issues/62,Create RBAC manifests (ClusterRole/ClusterRoleBinding) for workflow-gateway ServiceAccount,ricardozanini,,Cloud,Major,Serverless Logic,2.0.0,,0.1,0.1,2026-10-15,,,
 64,32,https://github.com/kubesmarts/logic-operator/issues/64,[M1] Get workflow instance from Kubernetes,ricardozanini,,Cloud,Major,Serverless Logic,2.0.0,,0.1,0,2026-10-15,,,
