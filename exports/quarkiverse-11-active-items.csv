@@ -1,9 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 1805,,https://github.com/open-workflow-specification/sdk-java/issues/1805,JaxRSAcessTokenProvider should be refactor and make part of core,fjtirado,Next,,Runtimes,Major,,2.0.0,M,0.6,,,0.6,0,0,,,2026-10-30,
 1804,,https://github.com/open-workflow-specification/sdk-java/issues/1804,ResourceLoader should use CompletableFuture,fjtirado,Next,,Runtimes,Normal,,2.0.0,M,0.3,,,0.3,0,0,,,2026-10-30,
-1793,,https://github.com/open-workflow-specification/sdk-java/issues/1793," ServicePriority can use generics so compareTo is downcasted to the proper type, not service priority",fjtirado,Next,,Runtimes,Minor,,2.0.0,S,0.2,,,0.2,0,0,,,2026-10-30,
-1778,,https://github.com/open-workflow-specification/sdk-java/issues/1778,Refactor http stack so external resource download reuses configured Http client,fjtirado,In review,,Runtimes,Normal,,2026/Q4,M,0.4,0.9,,0.4,0.9,0,,,2026-10-30,NO_REMAINING_WORK
-1774,,https://github.com/open-workflow-specification/sdk-java/issues/1774,Update to latest version of openworkflow specification schema,fjtirado,Next,,Runtimes,Major,,2026/Q4,S,0.1,,,0.1,0,0,,,2026-10-21,
+1793,,https://github.com/open-workflow-specification/sdk-java/issues/1793," ServicePriority can use generics so compareTo is downcasted to the proper type, not service priority",fjtirado,In progress,,Runtimes,Minor,,2.0.0,S,0.2,,0.1,0.2,0,0.1,,,2026-10-31,
+1778,,https://github.com/open-workflow-specification/sdk-java/issues/1778,Refactor http stack so external resource download reuses configured Http client,fjtirado,In review,,Runtimes,Normal,,2026/Q4,M,0.4,1,,0.4,1,0,,,2026-10-31,NO_REMAINING_WORK
+1774,,https://github.com/open-workflow-specification/sdk-java/issues/1774,Update to latest version of openworkflow specification schema,fjtirado,In progress,,Runtimes,Major,,2026/Q4,S,0.1,,0.05,0.1,0,0.05,,,2026-10-31,
 1613,,https://github.com/open-workflow-specification/sdk-java/issues/1613,Improve Json serialization for Collection interfaces,fjtirado,Backlog,,Runtimes,Minor,,2026/Q4,M,0.5,,0.4,0.5,0,0.4,,,2026-10-20,
 1607,,https://github.com/open-workflow-specification/sdk-java/issues/1607,Implement async call,mathecruz,In progress,,Runtimes,Major,,2026/Q3,,2,0.4,1.6,2,0.4,1.6,,,2026-08-14,
 1606,,https://github.com/open-workflow-specification/sdk-java/issues/1606,Implement MCP section of the spec,fjtirado,Backlog,,Runtimes,,,2026/Q4,M,,,,0,0,0,,,2026-08-12,
@@ -28,7 +28,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 619,,https://github.com/quarkiverse/quarkus-flow/issues/619,[EPIC] Model Context Protocol (MCP) Integration,ricardozanini,Backlog,,Runtimes,Normal,,2.0.0,XL,,,,0.2,0.1,0,,,2026-08-14,
 606,,https://github.com/quarkiverse/quarkus-flow/issues/606,Epic: OIDC Token Propagation and Exchange,mathecruz,Next,,Runtimes,Major,,Future,XL,,,,0,0,0,,,2026-07-04,
 508,223,https://github.com/open-workflow-specification/editor/issues/508,chore: Upgrade TypeScript to 7 once supported by Volar,fantonangeli,Next,,Tooling,Minor,,Future,XS,0.1,,0.1,0.1,0,0.1,,,2026-10-30,
-507,223,https://github.com/open-workflow-specification/editor/issues/507,bug: TypeScript 7 conflicts with Volar 2.4.30 peer dependencies,fantonangeli,In review,,Tooling,Critical,,2026/Q4,S,0.1,0.1,0.1,0.1,0,0,,,2026-10-30,NO_REMAINING_WORK
+507,223,https://github.com/open-workflow-specification/editor/issues/507,bug: TypeScript 7 conflicts with Volar 2.4.30 peer dependencies,fantonangeli,In review,,Tooling,Critical,,2026/Q4,S,0.1,0.1,0.1,0.1,0.1,0.1,,,2026-10-31,
 497,223,https://github.com/open-workflow-specification/editor/issues/497,feat: Evaluate Monaco worker initialization using the new `editor.worker.start` API,fantonangeli,Next,,Tooling,Minor,,2026/Q4,S,0.4,,0.4,0.4,0,0.4,,,2026-10-29,
 493,225,https://github.com/open-workflow-specification/editor/issues/493,bug: Monaco Editor logs worker errors in Web Component integrations,fantonangeli,In review,,Tooling,Major,,2026/Q4,S,0.2,0.2,0.2,0.2,0.2,0.2,,,2026-10-29,
 491,,https://github.com/open-workflow-specification/editor/issues/491,feat: Publish the core package to npm,fantonangeli,Next,,Tooling,Major,,2026/Q4,S,0.2,0.2,0.2,0.2,0.2,0.2,,,2026-10-21,
@@ -38,7 +38,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 480,225,https://github.com/open-workflow-specification/editor/issues/480,docs: Blog post introducing the Text Editor and IntelliSense features,fantonangeli,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,2026-10-16,
 479,,https://github.com/open-workflow-specification/editor/issues/479,Blog Post: Embedding the Diagram Editor into Quarkus Dev UI,fantonangeli,Backlog,,Tooling,Normal,,2026/Q4,S,0.4,0,0.4,0.4,0,0.4,,,2026-10-14,
 469,,https://github.com/quarkiverse/quarkus-flow/issues/469,feat: Test Framework for Workflow Event Assertions,mathecruz,Next,,Runtimes,Normal,,2.0.0,,1.6,0.6,,1.6,0.6,0,,,2026-08-14,
-445,214,https://github.com/open-workflow-specification/editor/issues/445,bug: Incorrect dirty draft count in footer on nested objects,lornakelly,In review,,Tooling,Normal,,2026/Q4,M,0.4,0.3,0,0.4,0.3,0,,,2026-10-30,
 418,207,https://github.com/open-workflow-specification/editor/issues/418,feat: handle blank canvas state in Diagram Editor,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,,
 397,214,https://github.com/open-workflow-specification/editor/issues/397,feat: Hide irrelevant fields in side panel forms,,Next,,Tooling,Normal,,2026/Q4,M,0.6,,0.6,0.6,0,0.6,,,,
 395,214,https://github.com/open-workflow-specification/editor/issues/395,feat: Disable editing of graph-structural and flow-routing fields,,Next,,Tooling,Normal,,2026/Q4,M,0.4,,0.4,0.4,0,0.4,,,,
@@ -93,6 +92,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 226,207,https://github.com/open-workflow-specification/editor/issues/226,feat: Live preview - text edits drive diagram refresh,,Next,,Tooling,Normal,,2026/Q3,M,0.8,,0.8,0.8,0,0.8,,,,
 225,207,https://github.com/open-workflow-specification/editor/issues/225,feat: Scaffold Dual-editor package with resizable split-view layout,fantonangeli,Next,,Tooling,Normal,,2026/Q3,M,0,,0,2.6,1.2,1.8,,,2026-08-29,
 224,207,https://github.com/open-workflow-specification/editor/issues/224,feat: Host-agnostic editable text + change events,,Next,,Tooling,Normal,,2026/Q3,M,0.8,,0.8,0.8,0,0.8,,,,
-223,207,https://github.com/open-workflow-specification/editor/issues/223,feat: Scaffold the text-editor workspace package,fantonangeli,Next,,Tooling,Normal,,2026/Q3,M,0,,0,3.6,3.1,1.2,,,2026-08-29,
+223,207,https://github.com/open-workflow-specification/editor/issues/223,feat: Scaffold the text-editor workspace package,fantonangeli,Next,,Tooling,Normal,,2026/Q3,M,0,,0,3.6,3.2,1.2,,,2026-08-29,
 214,,https://github.com/open-workflow-specification/editor/issues/214,Epic: Milestone 2 - Edit a node,lornakelly,In progress,,Tooling,Critical,,2026/Q4,L,0,0,0,18.1,8.5,11.5,,Still adding tickets so estimate not final,2026-09-10,
-207,,https://github.com/open-workflow-specification/editor/issues/207,Epic: Milestone 1 - Side-by-side text + diagram,lornakelly,In progress,,Tooling,Critical,,2026/Q4,XL,0,0,0,18.4,5.5,12.4,,Still adding tickets so estimate not final,2026-09-22,
+207,,https://github.com/open-workflow-specification/editor/issues/207,Epic: Milestone 1 - Side-by-side text + diagram,lornakelly,In progress,,Tooling,Critical,,2026/Q4,XL,0,0,0,18.4,5.6,12.4,,Still adding tickets so estimate not final,2026-09-22,

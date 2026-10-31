@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1768,,https://github.com/open-workflow-specification/sdk-java/issues/1768,Establish JDK 21 as minor java version,fjtirado,,Runtimes,Normal,,2026/Q4,S,0.1,0.2,2026-10-31,,,
+445,214,https://github.com/open-workflow-specification/editor/issues/445,bug: Incorrect dirty draft count in footer on nested objects,lornakelly,,Tooling,Normal,,2026/Q4,M,0.4,0.3,2026-10-31,,,
 1112,,https://github.com/quarkiverse/quarkus-flow/issues/1112,bug: JPA persitence generates wrong JoinColum name WorkflowMetadataEntity,"wmedvede,fjtirado",,Runtimes,Critical,,1.4.0,S,0.2,0.2,2026-10-30,,,
 1107,,https://github.com/quarkiverse/quarkus-flow/issues/1107,"durable-kubernetes: member lease renewal steals leases, causing split-brain",ricardozanini,,Cloud,Blocker,,1.4.0,S,0.4,0.2,2026-10-30,,,
 312,214,https://github.com/open-workflow-specification/editor/issues/312,feat: Task-Level Validation,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.5,2026-10-30,,,
@@ -20,7 +22,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 441,,https://github.com/open-workflow-specification/editor/issues/441,feat: Create a Core Package for Shared Hooks and Utilities,kumaradityaraj,,Tooling,Normal,,2026/Q4,M,0.6,,2026-10-22,,,NO_TIME_SPENT
 1092,,https://github.com/quarkiverse/quarkus-flow/issues/1092,Override config:recommended inherited from quarkiverse/renovate-config,mathecruz,,CI,Minor,,2.0.0,S,0.2,0.1,2026-10-22,,,
 1776,,https://github.com/open-workflow-specification/sdk-java/issues/1776,Allow define a custom HTTP client for getting external resource,fjtirado,,Runtimes,Major,,2026/Q4,S,0.1,0.1,2026-10-22,,,
-1768,,https://github.com/open-workflow-specification/sdk-java/issues/1768,Establish JDK 21 as minor java version,fjtirado,,Runtimes,,,2026/Q4,S,0.1,0.2,2026-10-21,,,NO_PRIORITY
 1040,,https://github.com/quarkiverse/quarkus-flow/issues/1040,OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,,Runtimes,Major,,1.2.0,L,1.6,1.6,2026-10-21,,,
 1076,,https://github.com/quarkiverse/quarkus-flow/issues/1076,Workflow input schema validation is a silent no-op (serverlessworkflow-impl-validation never on the classpath),mathecruz,,Runtimes,Critical,,2.0.0,M,0.4,0.4,2026-10-20,,,
 1017,,https://github.com/open-workflow-specification/sdk-java/issues/1017,docs: Add documentation for all modules to help the user when using it,mathecruz,,Tooling,Normal,,Future,L,0,0,2026-10-20,,,
