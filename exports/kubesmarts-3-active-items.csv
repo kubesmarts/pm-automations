@@ -1,6 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 989,48,https://github.com/quarkiverse/quarkus-flow/issues/989,Add workflowApplicationId to lifecycle events,,In progress,,Cloud,Low,Serverless Logic,2.0.0,,0.4,,0.4,0.4,0,0.4,,,,
-105,,https://github.com/kubesmarts/logic-apps/issues/105,Define a Data Index garbage-collection API and service,mathecruz,Backlog,,Cloud,Critical,Serverless Logic,2.0.0,,,,,0,0,0,,,2026-11-04,
+105,,https://github.com/kubesmarts/logic-apps/issues/105,Define a Data Index garbage-collection API and service,mathecruz,In progress,,Cloud,Critical,Serverless Logic,2.0.0,,,,,0,0,0,,,2026-11-05,"NO_ESTIMATE, NO_REMAINING_WORK"
 86,,https://github.com/kubesmarts/logic-apps/issues/86,Support multiple namespaces in Vector kubernetes_logs source,,Next,,Cloud,Blocker,Serverless Logic,2.0.0,,0.2,,0.2,0.2,0,0.2,,,,
 84,,https://github.com/kubesmarts/logic-operator/issues/84,Secure /v1/definitions on the workflow gateway (OIDC / API_KEY + Kubernetes auth),ricardozanini,Backlog,,Cloud,Major,Serverless Logic,2.0.0,,0.5,,,0.5,0,0,,,2026-11-03,
 79,48,https://github.com/kubesmarts/logic-apps/issues/79,[M5] MODE 3: Add workflow_application_id field (Kafka),,Next,,Cloud,Low,Serverless Logic,2.0.0,,0.5,,0.5,0.5,0,0.5,,,,
@@ -9,12 +9,11 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 77,48,https://github.com/kubesmarts/logic-apps/issues/77,[M5] MODE 1: Add workflow_application_id column (PostgreSQL),,Next,,Cloud,Low,Serverless Logic,2.0.0,,0.5,,0.5,0.5,0,0.5,,,,
 77,,https://github.com/kubesmarts/logic-operator/issues/77,Build a reusable framework for end-to-end tests,,Backlog,,Cloud,Normal,Serverless Logic,2.0.0,,2,,,2,0,0,,,,
 76,,https://github.com/kubesmarts/logic-operator/issues/76,Bound the gateway endpoint cache and resolve endpoints safely,,Backlog,,Cloud,Blocker,Serverless Logic,2.0.0,,0.4,,,0.4,0,0,,,,
-74,,https://github.com/kubesmarts/logic-operator/issues/74,Refactor LogicPlatform reconciliation into service controllers,ricardozanini,In progress,,Cloud,Blocker,Serverless Logic,2.0.0,,0.2,,,0.2,0,0,,,2026-11-04,NO_REMAINING_WORK
 73,,https://github.com/kubesmarts/logic-operator/issues/73,Add API links to the gateway definitions response,,Next,,Cloud,Normal,Serverless Logic,2.0.0,,0.2,,,0.2,0,0,,,,
 72,,https://github.com/kubesmarts/logic-apps/issues/72,Placeholder - Database migration service,mathecruz,Backlog,,Cloud,Major,Serverless Logic,2.0.0,,,,,0,0,0,,,2026-10-01,
 72,,https://github.com/kubesmarts/logic-operator/issues/72,Report LogicFlowDefinition readiness only after runtime registration,,Backlog,,Cloud,Major,Serverless Logic,2.0.0,,,,,0,0,0,,,,
 71,,https://github.com/kubesmarts/logic-apps/issues/71,Document versioning and release process,ricardozanini,Next,,Cloud,Major,Serverless Logic,2.0.0,,0.4,,0.4,0.4,0,0.4,,,2026-10-01,
-61,37,https://github.com/kubesmarts/logic-operator/issues/61,Add webhook validation to prevent multiple LogicFlowServices from referencing the same LogicFlowDefinition,,Backlog,,Cloud,Major,Serverless Logic,2.0.0,,,,,0,0,0,,,,
+61,37,https://github.com/kubesmarts/logic-operator/issues/61,Add webhook validation to prevent multiple LogicFlowServices from referencing the same LogicFlowDefinition,mathecruz,Backlog,,Cloud,Major,Serverless Logic,2.0.0,,,,,0,0,0,,,2026-11-05,
 57,,https://github.com/kubesmarts/logic-operator/issues/57,Per-Version Health Tracking & Status,,Next,,Cloud,Normal,Serverless Logic,2.0.0,,1,,1,1,0,1,,,,
 55,,https://github.com/kubesmarts/logic-operator/issues/55,Implement LogicPlatform.spec.runtimeDefaults,wmedvede,Next,,Cloud,Major,Serverless Logic,2.0.0,,0.5,,0.5,0.5,0,0.5,,,2026-10-02,
 53,,https://github.com/kubesmarts/logic-operator/issues/53,Refactor on `LogicFlowRuntime` webhook and create defaults for `LogicFlowDefinition` and `LogicFlowService`,wmedvede,Next,,Cloud,Normal,Serverless Logic,2.0.0,,0.3,,0.3,0.3,0,0.3,,,2026-10-02,
