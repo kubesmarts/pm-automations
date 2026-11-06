@@ -1,7 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-1065,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1065,[IBM test migration] Implement different Architectures Support in QE Jobs,gmunozfe,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,0,2026-11-05,,,NO_QA_CONTACT
+1065,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1065,[IBM test migration] Implement different Architectures Support in QE Jobs,gmunozfe,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,0,2026-11-06,,,NO_TIME_SPENT
+994,1013,https://redhat.atlassian.net/browse/SRVLOGIC-994,[IBM test migration] Migration of QE BxMS maven nexus mirror to IBM,baldimir,Task,QE,Major,Serverless logic,1.40.0 OSL,,0.2,0.2,2026-11-06,,,
+992,1013,https://redhat.atlassian.net/browse/SRVLOGIC-992,[IBM test migration] Migration of QE's RH OpenStack items to IBM Fyre,jakubschwan,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0.6,2026-11-06,,,
 996,1013,https://redhat.atlassian.net/browse/SRVLOGIC-996,[IBM test migration] Define supported hardware and configurations for QE migration,jakubschwan,Task,QE,Major,Serverless logic,1.40.0 OSL,,0.2,0.2,2026-11-05,,,
-992,1013,https://redhat.atlassian.net/browse/SRVLOGIC-992,[IBM test migration] Migration of QE's RH OpenStack items to IBM Fyre,jakubschwan,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0.6,2026-11-05,,,
 1307,,https://redhat.atlassian.net/browse/SRVLOGIC-1307,"Rebuild 1.37, 1.38 and 1.39 container images - 27 Oct 2026",baldimir,Task,Productization,Critical,Serverless logic,1.39.0 OSL,,0.6,0.15,2026-11-04,,,
 1304,,https://redhat.atlassian.net/browse/SRVLOGIC-1304,Add `stable-1.38` channel with `olm.skipRange` to the 1.38 operator bundle,baldimir,Task,Cloud,Normal,Serverless logic,1.38.1 OSL,,0.075,0.025,2026-11-03,,,
 1001,,https://redhat.atlassian.net/browse/SRVLOGIC-1001,Release of 1.39,saumya1singh,Epic,Productization,Critical,Serverless logic,1.39.0 OSL,,0,0.25,2026-11-02,,,
