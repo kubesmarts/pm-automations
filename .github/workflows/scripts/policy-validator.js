@@ -47,14 +47,11 @@ class PolicyValidator {
             'Cloud:Images': 'area/cloud',
             'Cloud:Operator': 'area/cloud',
             'Event Orchestration': 'area/runtimes',
-            'Integration': 'area/runtimes',
+            'Infrastructure': 'area/infrastructure',
             'Job Service': 'area/runtimes',
             'Persistence': 'area/runtimes',
-            'Service Orchestration': 'area/runtimes',
             'Security': 'area/runtimes',
             'Getting Started': 'area/docs',
-            'Migration': 'area/runtimes',
-            'Installation': 'area/docs',
             'Management Console': 'area/tooling',
             'Tooling:DataIndexWebapp': 'area/tooling',
             'Tooling:Editor': 'area/tooling',
@@ -228,22 +225,24 @@ class PolicyValidator {
             return { violations, sync };
         }
 
-        const component = jiraClient.extractFirstComponent(issue);
+        const components = jiraClient.extractComponents(issue);
         const currentAreaLabels = jiraClient.extractAreaLabels(issue);
 
         // Check if component is set
-        if (!component) {
+        if (components.length === 0) {
             violations.push('NO_COMPONENT');
             return { violations, sync };
         }
 
-        // Get expected area label from mapping
-        const expectedAreaLabel = this.componentAreaMapping[component];
-        
-        if (!expectedAreaLabel) {
-            console.warn(`  ⚠️  Component "${component}" not in mapping`);
+        // Use the first component (in JIRA order) that has a mapping
+        const mappedComponent = components.find(c => this.componentAreaMapping[c]);
+
+        if (!mappedComponent) {
+            console.warn(`  ⚠️  No mapping found for component(s): ${components.map(c => `"${c}"`).join(', ')}`);
             return { violations, sync };
         }
+
+        const expectedAreaLabel = this.componentAreaMapping[mappedComponent];
 
         // Check if area label needs to be synced
         const hasExpectedArea = currentAreaLabels.includes(expectedAreaLabel);
