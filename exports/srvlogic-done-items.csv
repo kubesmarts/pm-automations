@@ -1,16 +1,30 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1089,997,https://redhat.atlassian.net/browse/SRVLOGIC-1089,[IBM test migration] Migration of kieToolsUtils and testing utils,jakubschwan,Sub-task,Infrastructure,Major,Serverless logic,1.40.0 OSL,,0.05,0.05,2026-11-06,,,
+1084,995,https://redhat.atlassian.net/browse/SRVLOGIC-1084,[IBM Test migration - OCP] Add configuration for OCP version matrix to qflow job,gmunozfe,Sub-task,Infrastructure,Undefined,Serverless logic,1.40.0 OSL,,0.2,0,2026-11-06,,,"NO_PRIORITY, NO_TIME_SPENT, NO_QA_CONTACT"
 1065,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1065,[IBM test migration] Implement different Architectures Support in QE Jobs,gmunozfe,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,2,2026-11-06,,,
 1039,,https://redhat.atlassian.net/browse/SRVLOGIC-1039,Upgrade Quarkus to 3.27.4,baldimir,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.2,0.1021,2026-11-06,,,
 1029,,https://redhat.atlassian.net/browse/SRVLOGIC-1029,Remediate instance running smee-clients in rhos-d,domhanak,Spike,Infrastructure,Blocker,Serverless logic,1.39.0 OSL,,0.05,0.05,2026-11-06,,,
 1021,,https://redhat.atlassian.net/browse/SRVLOGIC-1021,Cleanup rhos-d of old unused instances,domhanak,Task,Infrastructure,Critical,Serverless logic,1.39.0 OSL,,0.1,0.1,2026-11-06,,,
+1004,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1004,Build CR2,saumya1singh,Task,Productization,Major,Serverless logic,1.39.0 OSL,,1,0,2026-11-06,,,"NO_TIME_SPENT, NO_QA_CONTACT"
+1175,1168,https://redhat.atlassian.net/browse/SRVLOGIC-1175,Bundle Build for 1.39 CR2,saumya1singh,Sub-task,,Critical,Serverless logic,1.39.0 OSL,,0.125,0.075,2026-11-06,,,"NO_COMPONENT, NO_QA_CONTACT"
+1172,1168,https://redhat.atlassian.net/browse/SRVLOGIC-1172,Build 5 kieGroup Projects in PNC,saumya1singh,Sub-task,,Critical,Serverless logic,Future,,0.125,0.15,2026-11-06,,,"NO_COMPONENT, NO_QA_CONTACT"
+1171,1168,https://redhat.atlassian.net/browse/SRVLOGIC-1171,Drools Build for 1.39 CR2,saumya1singh,Sub-task,,Critical,Serverless logic,1.39.0 OSL,,0.1,0.15,2026-11-06,,,"NO_COMPONENT, NO_QA_CONTACT"
+1128,,https://redhat.atlassian.net/browse/SRVLOGIC-1128,Automation Commits Causing Issue In PNC Builds ?,saumya1singh,Task,Productization,Undefined,Serverless logic,Future,,0.05,0,2026-11-06,,,"NO_PRIORITY, NO_TIME_SPENT, NO_QA_CONTACT"
+1102,,https://redhat.atlassian.net/browse/SRVLOGIC-1102,OSL 1.37 Respin for CVE ,saumya1singh,Task,Productization,Undefined,Serverless logic,1.37.3 OSL,,0.4,0.4,2026-11-06,,,NO_PRIORITY
 1100,,https://redhat.atlassian.net/browse/SRVLOGIC-1100,Upgrade to Quarkus 3.33.x stream,baldimir,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.6,0.6,2026-11-06,,,
+1274,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1274,Inform the team about the migration before the migration,baldimir,Task,Infrastructure,Major,Serverless logic,Future,,0.05,0.025,2026-11-06,,,
 1269,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1269,Outline repositories ownership (able github.ibm.com org),baldimir,Task,Infrastructure,Major,Serverless logic,Future,,0.025,0.025,2026-11-06,,,
 1267,1266,https://redhat.atlassian.net/browse/SRVLOGIC-1267,Set migration label on all ABLE team owned repositories,baldimir,Task,Infrastructure,Major,Serverless logic,Future,,0.025,0.025,2026-11-06,,,
-454,391,https://redhat.atlassian.net/browse/SRVLOGIC-454,[AGILE] Team velocity metrics dashboard,dgutierr,Task,,Critical,Serverless logic,Future,,2,0,2026-11-06,,,
-868,,https://redhat.atlassian.net/browse/SRVLOGIC-868,[AGILE] Write user guide for project reporting metrics,dgutierr,Feature,PM,Major,Serverless logic,Future,,0.2,0.1,2026-11-06,,,
-867,,https://redhat.atlassian.net/browse/SRVLOGIC-867,[AGILE] Auto-create JIRA tickets from GH project issues,dgutierr,Feature,PM,Major,Serverless logic,Future,,0.4,0.2,2026-11-06,,,
-861,,https://redhat.atlassian.net/browse/SRVLOGIC-861,[AGILE] Sync Project Reporting Metrics workflow,dgutierr,Feature,PM,Major,Serverless logic,Future,,1,0.7,2026-11-06,,,
-882,,https://redhat.atlassian.net/browse/SRVLOGIC-882,[AGILE] Auto-clear Remaining Work when issue is moved to Done,dgutierr,Story,PM,Critical,Serverless logic,Future,,0.4,0.2,2026-11-06,,,
+1253,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1253,Build CR3,baldimir,Task,Productization,Major,Serverless logic,1.39.0 OSL,,1,0.8,2026-11-06,,,
+454,391,https://redhat.atlassian.net/browse/SRVLOGIC-454,[AGILE] Team velocity metrics dashboard,dgutierr,Task,PM,Critical,Serverless logic,Future,,2,2,2026-11-06,,,"NO_TIME_SPENT, NO_QA_CONTACT"
+868,,https://redhat.atlassian.net/browse/SRVLOGIC-868,[AGILE] Write user guide for project reporting metrics,dgutierr,Feature,PM,Major,Serverless logic,Future,,0.2,0.1,2026-11-06,,,NO_QA_CONTACT
+867,,https://redhat.atlassian.net/browse/SRVLOGIC-867,[AGILE] Auto-create JIRA tickets from GH project issues,dgutierr,Feature,PM,Major,Serverless logic,Future,,0.4,0.2,2026-11-06,,,NO_QA_CONTACT
+861,,https://redhat.atlassian.net/browse/SRVLOGIC-861,[AGILE] Sync Project Reporting Metrics workflow,dgutierr,Feature,PM,Major,Serverless logic,Future,,1,0.7,2026-11-06,,,NO_QA_CONTACT
+882,,https://redhat.atlassian.net/browse/SRVLOGIC-882,[AGILE] Auto-clear Remaining Work when issue is moved to Done,dgutierr,Story,PM,Critical,Serverless logic,Future,,0.4,0.2,2026-11-06,,,NO_QA_CONTACT
+906,,https://redhat.atlassian.net/browse/SRVLOGIC-906,9.105.x nightly build contains incorrect values for imageTag and scmRevision,baldimir,Bug,CI,Major,Serverless logic,Future,,0.025,0,2026-11-06,,,NO_TIME_SPENT
+904,,https://redhat.atlassian.net/browse/SRVLOGIC-904,Investigate if affected packages/tools from latest supply chain malware attack are used in OSL code stack,baldimir,Task,CI,Major,Serverless logic,Future,,0.05,0,2026-11-06,,,"NO_TIME_SPENT, NO_QA_CONTACT"
+945,,https://redhat.atlassian.net/browse/SRVLOGIC-945,Productize the OSL-prod automation,jankrystof-ibm,Task,Productization,Major,Serverless logic,Future,,0.2,0.2,2026-11-06,,,NO_QA_CONTACT
+963,928,https://redhat.atlassian.net/browse/SRVLOGIC-963,Start publishing SNAPSHOT artifacts,baldimir,Task,CI,Blocker,Serverless logic,Future,,2,2.5,2026-11-06,,,
 982,,https://redhat.atlassian.net/browse/SRVLOGIC-982,SonataFlowPlatform CRD podTemplate lacks metadata.labels support — unable to set custom labels on data-index and jobs-service pods,wmedvede,Feature,Cloud,Critical,Serverless logic,1.39.0 OSL,,0.8,1,2026-11-06,,,
 994,1013,https://redhat.atlassian.net/browse/SRVLOGIC-994,[IBM test migration] Migration of QE BxMS maven nexus mirror to IBM,baldimir,Task,QE,Major,Serverless logic,1.40.0 OSL,,0.2,0.2,2026-11-06,,,
 992,1013,https://redhat.atlassian.net/browse/SRVLOGIC-992,[IBM test migration] Migration of QE's RH OpenStack items to IBM Fyre,jakubschwan,Task,QE,Major,Serverless logic,1.40.0 OSL,,1,0.6,2026-11-06,,,
