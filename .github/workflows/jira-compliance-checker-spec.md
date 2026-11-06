@@ -20,7 +20,7 @@ A GitHub Actions workflow that validates JIRA issues against ABLE team's softwar
 | Field Name | JIRA Field | Type | Validation |
 |------------|------------|------|------------|
 | Component | Component | Single select | Must be set (SRVLOGIC issues only) |
-| Area | area/\<value\> label | Label | Must have one label matching pattern `area/*` (e.g., area/ci, area/runtimes, area/tooling, area/cloud, area/qe, area/docs). For SRVLOGIC issues, automatically synced with Component field |
+| Area | area/\<value\> label | Label | Must have one label matching pattern `area/*` (e.g., area/ci, area/runtimes, area/tooling, area/cloud, area/qe, area/docs, area/infrastructure). For SRVLOGIC issues, automatically synced with Component field |
 | Priority | Priority | Single select | Must be set to one of: Blocker, Critical, Major, Normal, Minor |
 | Version | Fix Versions | Array | Must have at least one version set |
 | Estimate | Original Estimate | Time tracking | Must be set (any positive value). **Optional for epics** (issues of type Epic or with sub-tasks) |
@@ -43,14 +43,11 @@ For issues with keys starting with `SRVLOGIC-`, the Area label is automatically 
 | Cloud:Images | area/cloud |
 | Cloud:Operator | area/cloud |
 | Event Orchestration | area/runtimes |
-| Integration | area/runtimes |
+| Infrastructure | area/infrastructure |
 | Job Service | area/runtimes |
 | Persistence | area/runtimes |
-| Service Orchestration | area/runtimes |
 | Security | area/runtimes |
 | Getting Started | area/docs |
-| Migration | area/runtimes |
-| Installation | area/docs |
 | Management Console | area/tooling |
 | Tooling:DataIndexWebapp | area/tooling |
 | Tooling:Editor | area/tooling |
@@ -60,6 +57,7 @@ For issues with keys starting with `SRVLOGIC-`, the Area label is automatically 
 | serverless-workflow | area/runtimes |
 
 **Synchronization Behavior:**
+- If an issue has several components, they are checked in the order returned by JIRA and the **first component that has a mapping** determines the Area label. Components without a mapping (e.g. obsolete ones) are skipped. If none of the components is mapped, Area labels are left unchanged.
 - If Component is set and Area label is missing → Area label is automatically added
 - If Component is set and wrong Area label exists → Wrong Area label is removed and correct one is added
 - If Component changes → Old Area label is removed and new Area label is added
@@ -158,7 +156,7 @@ PSYNC_JIRA_PROJECTS: "ISSUE"
    - If NO: Skip Component/Area validation
 5. **Component/Area Validation (SRVLOGIC only):**
    - Check if Component is set → Add `NO_COMPONENT` if missing
-   - If Component is set and in mapping:
+   - If Component is set, iterate over the issue's components in JIRA order and use the first one that has an entry in the mapping (components without a mapping are skipped). If none is mapped, area labels are left untouched and a warning is logged:
      - Check if correct Area label exists
      - Add correct Area label if missing
      - Remove incorrect Area labels

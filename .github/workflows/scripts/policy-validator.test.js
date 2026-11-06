@@ -70,6 +70,7 @@ const jiraClient = {
     extractAreaLabel:        (i) => (i.fields.labels || []).find(l => l.startsWith('area/')) || null,
     extractAreaLabels:       (i) => (i.fields.labels || []).filter(l => l.startsWith('area/')),
     extractFirstComponent:   (i) => i.fields.components?.[0]?.name || null,
+    extractComponents:       (i) => i.fields.components?.map(c => c.name) || [],
     extractLabels:           (i) => i.fields.labels || [],
 };
 
@@ -533,3 +534,110 @@ test('PRS_CLOSED: not raised when a declined PR sits alongside an open PR', () =
     assert.ok(!result.violations.includes('PRS_CLOSED'),
         `Unexpected PRS_CLOSED when open PR exists: ${result.violations}`);
 });
+
+// ---------------------------------------------------------------------------
+// Component → Area label mapping tests (SRVLOGIC issues only)
+// ---------------------------------------------------------------------------
+
+function makeComponentIssue({ component, components = null, labels = [], status = 'IN PROGRESS', key = 'SRVLOGIC-1' } = {}) {
+    const issue = makeIssue({ status, key });
+    const names = components || (component ? [component] : []);
+    issue.fields.components = names.map(name => ({ name }));
+    issue.fields.labels = labels;
+    return issue;
+}
+
+test('COMPONENT_AREA: Infrastructure component maps to area/infrastructure', () => {
+    const validator = new PolicyValidator();
+    const issue = makeComponentIssue({ component: 'Infrastructure' });
+    const { violations, sync } = validator.validateComponentAndArea(issue, jiraClient);
+    assert.deepEqual(violations, []);
+    assert.equal(sync.shouldSync, true);
+    assert.deepEqual(sync.labelsToAdd, ['area/infrastructure']);
+    assert.deepEqual(sync.labelsToRemove, []);
+});
+
+test('COMPONENT_AREA: Infrastructure component replaces a wrong area label', () => {
+    const validator = new PolicyValidator();
+    const issue = makeComponentIssue({ component: 'Infrastructure', labels: ['area/runtimes'] });
+    const { sync } = validator.validateComponentAndArea(issue, jiraClient);
+    assert.equal(sync.shouldSync, true);
+    assert.deepEqual(sync.labelsToAdd, ['area/infrastructure']);
+    assert.deepEqual(sync.labelsToRemove, ['area/runtimes']);
+});
+
+test('COMPONENT_AREA: no sync when Infrastructure component already has area/infrastructure', () => {
+    const validator = new PolicyValidator();
+    const issue = makeComponentIssue({ component: 'Infrastructure', labels: ['area/infrastructure'] });
+    const { violations, sync } = validator.validateComponentAndArea(issue, jiraClient);
+    assert.deepEqual(violations, []);
+    assert.equal(sync.shouldSync, false);
+});
+
+test('COMPONENT_AREA: Infrastructure mapping is not applied to Backlog issues', () => {
+    const validator = new PolicyValidator();
+    const issue = makeComponentIssue({ component: 'Infrastructure', status: 'BACKLOG' });
+    const { sync } = validator.validateComponentAndArea(issue, jiraClient);
+    assert.equal(sync.shouldSync, false);
+});
+
+test('COMPONENT_AREA: Infrastructure mapping is not applied to non-SRVLOGIC issues', () => {
+    const validator = new PolicyValidator();
+    const issue = makeComponentIssue({ component: 'Infrastructure', key: 'OTHER-1' });
+    const { violations, sync } = validator.validateComponentAndArea(issue, jiraClient);
+    assert.deepEqual(violations, []);
+    assert.equal(sync.shouldSync, false);
+});
+
+test('COMPONENT_AREA: NO_COMPONENT raised when SRVLOGIC issue has no component', () => {
+    const validator = new PolicyValidator();
+    const issue = makeComponentIssue({ component: null });
+    const { violations } = validator.validateComponentAndArea(issue, jiraClient);
+    assert.deepEqual(violations, ['NO_COMPONENT']);
+});
+
+test('COMPONENT_AREA: skips an unmapped first component and uses the next mapped one (SRVLOGIC-1194 scenario)', () => {
+    const validator = new PolicyValidator();
+    const issue = makeComponentIssue({ components: ['Migration', 'Productization'], labels: ['area/runtimes'] });
+    const { violations, sync } = validator.validateComponentAndArea(issue, jiraClient);
+    assert.deepEqual(violations, []);
+    assert.equal(sync.shouldSync, true);
+    assert.deepEqual(sync.labelsToAdd, ['area/productization']);
+    assert.deepEqual(sync.labelsToRemove, ['area/runtimes']);
+});
+
+test('COMPONENT_AREA: iterates past several unmapped components to the first mapped one', () => {
+    const validator = new PolicyValidator();
+    const issue = makeComponentIssue({ components: ['Unknown A', 'Unknown B', 'Infrastructure'] });
+    const { sync } = validator.validateComponentAndArea(issue, jiraClient);
+    assert.deepEqual(sync.labelsToAdd, ['area/infrastructure']);
+});
+
+test('COMPONENT_AREA: first mapped component wins when several components are mapped', () => {
+    const validator = new PolicyValidator();
+    const issue = makeComponentIssue({ components: ['Productization', 'Infrastructure'] });
+    const { sync } = validator.validateComponentAndArea(issue, jiraClient);
+    assert.deepEqual(sync.labelsToAdd, ['area/productization']);
+});
+
+test('COMPONENT_AREA: no sync and no violation when none of several components is mapped', () => {
+    const validator = new PolicyValidator();
+    const issue = makeComponentIssue({ components: ['Unknown A', 'Unknown B'], labels: ['area/ci'] });
+    const { violations, sync } = validator.validateComponentAndArea(issue, jiraClient);
+    assert.deepEqual(violations, []);
+    assert.equal(sync.shouldSync, false);
+});
+
+
+for (const removed of ['Service Orchestration', 'Installation', 'Migration', 'Integration', 'Integrations']) {
+    test(`COMPONENT_AREA: removed component "${removed}" is no longer mapped`, () => {
+        const validator = new PolicyValidator();
+        assert.equal(validator.componentAreaMapping[removed], undefined);
+
+        const issue = makeComponentIssue({ component: removed, labels: ['area/ci'] });
+        const { violations, sync } = validator.validateComponentAndArea(issue, jiraClient);
+        assert.deepEqual(violations, []);
+        assert.equal(sync.shouldSync, false, 'unmapped component must leave area labels untouched');
+    });
+}
+
