@@ -1,4 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1125,,https://github.com/quarkiverse/quarkus-flow/issues/1125,Report runner readiness after all workflow definitions register,mathecruz,,Cloud,Normal,,1.4.0,S,0.2,0.2,2026-11-07,,,
+1129,,https://github.com/quarkiverse/quarkus-flow/issues/1129,Remove unneeded workflow_instance_id column from workflow_metadata_entity,mathecruz,,Runtimes,Normal,,2026/Q4,S,0.1,0.1,2026-11-07,,,
+1110,,https://github.com/quarkiverse/quarkus-flow/issues/1110,bug: Restored timed wait remains active but never resumes after pod failover,mathecruz,,Runtimes,Major,,1.4.0,M,0.4,0.4,2026-11-07,,,
+1098,,https://github.com/quarkiverse/quarkus-flow/issues/1098,VertxException when executing an application using JQ expressions (on event-loop thread),mathecruz,,Runtimes,Critical,,1.4.0,M,0.4,0.4,2026-11-07,,,
+1091,,https://github.com/quarkiverse/quarkus-flow/issues/1091,bug: Missing classes registered for reflection in native image building,mathecruz,,Runtimes,Critical,,2026/Q4,M,0.2,0.2,2026-11-07,,,
+1144,,https://github.com/quarkiverse/quarkus-flow/issues/1144,Quartz: default a deterministic scheduler instance-name (SCHED_NAME) and clustering for shared JDBC jobstores,ricardozanini,,Runtimes,Major,,1.4.0,S,0.1,0.1,2026-11-07,,,
 313,214,https://github.com/open-workflow-specification/editor/issues/313,feat: Verify and Enhance Workflow-Level Validation,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.6,2026-11-05,,,
 224,207,https://github.com/open-workflow-specification/editor/issues/224,feat: Host-agnostic editable text + change events,kumaradityaraj,,Tooling,Normal,,2026/Q3,M,0,,2026-11-05,,,NO_TIME_SPENT
 226,207,https://github.com/open-workflow-specification/editor/issues/226,feat: Live preview - text edits drive diagram refresh,kumaradityaraj,,Tooling,Normal,,2026/Q3,M,0,0,2026-11-05,,,
@@ -6,8 +12,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1793,,https://github.com/open-workflow-specification/sdk-java/issues/1793," ServicePriority can use generics so compareTo is downcasted to the proper type, not service priority",fjtirado,,Runtimes,Minor,,2.0.0,S,0.2,0.1,2026-11-05,,,
 1778,,https://github.com/open-workflow-specification/sdk-java/issues/1778,Refactor http stack so external resource download reuses configured Http client,fjtirado,,Runtimes,Normal,,2026/Q4,M,0.4,1,2026-11-04,,,
 507,223,https://github.com/open-workflow-specification/editor/issues/507,bug: TypeScript 7 conflicts with Volar 2.4.30 peer dependencies,fantonangeli,,Tooling,Critical,,2026/Q4,S,0.1,0.2,2026-11-03,,,
-1125,,https://github.com/quarkiverse/quarkus-flow/issues/1125,Report runner readiness after all workflow definitions register,mathecruz,,Cloud,Normal,,1.4.0,S,,,2026-11-03,,,"NO_ESTIMATE, NO_TIME_SPENT"
-1129,,https://github.com/quarkiverse/quarkus-flow/issues/1129,Remove unneeded workflow_instance_id column from workflow_metadata_entity,mathecruz,,,,,,,,,2026-11-03,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 1768,,https://github.com/open-workflow-specification/sdk-java/issues/1768,Establish JDK 21 as minor java version,fjtirado,,Runtimes,Normal,,2026/Q4,S,0.1,0.2,2026-10-31,,,
 445,214,https://github.com/open-workflow-specification/editor/issues/445,bug: Incorrect dirty draft count in footer on nested objects,lornakelly,,Tooling,Normal,,2026/Q4,M,0.4,0.3,2026-10-31,,,
 1112,,https://github.com/quarkiverse/quarkus-flow/issues/1112,bug: JPA persitence generates wrong JoinColum name WorkflowMetadataEntity,"wmedvede,fjtirado",,Runtimes,Critical,,1.4.0,S,0.2,0.2,2026-10-30,,,
@@ -20,12 +24,9 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1773,,https://github.com/open-workflow-specification/sdk-java/issues/1773,Allow publishing of life cycle events with the legacy prefix,fjtirado,,Runtimes,Normal,,2026/Q4,S,0.2,0.1,2026-10-30,,,
 1806,,https://github.com/open-workflow-specification/sdk-java/issues/1806,A cancel over the completable future returned by start should cancel the instance,fjtirado,,Runtimes,Minor,,2.0.0,XS,0.1,0.15,2026-10-30,,,
 489,289,https://github.com/open-workflow-specification/editor/issues/489,bug: Re-minifying the language service worker breaks JSON Schema diagnostics,fantonangeli,,Tooling,Critical,,2026/Q4,M,0.6,0.5,2026-10-29,,,
-1110,,https://github.com/quarkiverse/quarkus-flow/issues/1110,bug: Restored timed wait remains active but never resumes after pod failover,mathecruz,,,,,1.4.0,,,,2026-10-28,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
-1098,,https://github.com/quarkiverse/quarkus-flow/issues/1098,VertxException when executing an application using JQ expressions (on event-loop thread),mathecruz,,,,,1.4.0,,,,2026-10-27,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 311,214,https://github.com/open-workflow-specification/editor/issues/311,feat: Field-Level Validation,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.4,2026-10-24,,,
 334,,https://github.com/quarkiverse/quarkus-jackson-jq/issues/334,Migrate to Jackson JQ 2.0.0 and Jackson 3.x,wmedvede,,Runtimes,Critical,,2.0.0,M,1,,2026-10-24,,,NO_TIME_SPENT
 1080,,https://github.com/quarkiverse/quarkus-flow/issues/1080,Consolidate quarkus.flow config roots per module/phase,mathecruz,,Runtimes,Normal,,2.0.0,M,0.4,0.2,2026-10-24,,,
-1091,,https://github.com/quarkiverse/quarkus-flow/issues/1091,bug: Missing classes registered for reflection in native image building,mathecruz,,,,,,,,,2026-10-24,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 1772,,https://github.com/open-workflow-specification/sdk-java/issues/1772,Separate Jackson specific workflow from openworkflow-api module,fjtirado,,Runtimes,Normal,,2026/Q4,M,0.3,0.1,2026-10-24,,,
 1745,,https://github.com/open-workflow-specification/sdk-java/issues/1745,WorkflowExecutionListenerAdapter don't propagate the close() method execution the enclosed listener.,wmedvede,,Runtimes,,,2026/Q3,XL,0.2,0.2,2026-10-22,,,NO_PRIORITY
 441,,https://github.com/open-workflow-specification/editor/issues/441,feat: Create a Core Package for Shared Hooks and Utilities,kumaradityaraj,,Tooling,Normal,,2026/Q4,M,0.6,,2026-10-22,,,NO_TIME_SPENT
