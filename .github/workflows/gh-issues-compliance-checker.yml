@@ -201,6 +201,80 @@ jobs:
                 continue
               fi
 
+              # Get milestone value using the detected field name (Target Milestone or Version)
+              MILESTONE=$(get_field "$item" "$MILESTONE_FIELD_NAME")
+
+              # ---------------------------------------------------------------------------
+              # Repo → project milestone sync
+              # Sync the repo issue's native Milestone to the project's Target Milestone
+              # field regardless of contributor whitelist only when:
+              #   1. The item is linked to a GH issue (ISSUE_NUMBER is set).
+              #   2. The milestone field is configured in the project (MILESTONE_FIELD_ID set).
+              # Rules:
+              #   a. Repo milestone set AND is a valid option → set project field if different.
+              #   b. Repo milestone not set AND project field is set → clear project field.
+              #   c. Repo milestone set but NOT a valid option → log and leave unchanged.
+              # ---------------------------------------------------------------------------
+              if [ -n "$ISSUE_NUMBER" ] && [ -n "$MILESTONE_FIELD_ID" ]; then
+                REPO_MILESTONE=$(echo "$item" | jq -r '.content.milestone.title // ""')
+                if [ -n "$REPO_MILESTONE" ]; then
+                  # Check whether the repo milestone title is a valid option
+                  if echo "$MILESTONE_OPTIONS" | grep -qxF "$REPO_MILESTONE"; then
+                    if [ "$MILESTONE" != "$REPO_MILESTONE" ]; then
+                      # Look up the option ID for this title
+                      MILESTONE_OPT_ID=$(echo "$MILESTONE_OPTION_IDS" | awk -F'\t' -v name="$REPO_MILESTONE" '$2==name{print $1; exit}')
+                      echo "  → Milestone sync: repo='$REPO_MILESTONE', project='${MILESTONE:-<empty>}' → setting to '$REPO_MILESTONE' (optionId=$MILESTONE_OPT_ID)"
+                      if [ "$DRY_RUN" != "true" ] && [ -n "$MILESTONE_OPT_ID" ]; then
+                        gh api graphql -f query='
+                          mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                            updateProjectV2ItemFieldValue(input: {
+                              projectId: $projectId
+                              itemId: $itemId
+                              fieldId: $fieldId
+                              value: { singleSelectOptionId: $optionId }
+                            }) { projectV2Item { id } }
+                          }
+                        ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                          -f fieldId="$MILESTONE_FIELD_ID" -f optionId="$MILESTONE_OPT_ID" > /dev/null
+                      fi
+                      [ "$DRY_RUN" = "true" ] && echo "  → [DRY-RUN] Would set ${MILESTONE_FIELD_NAME} to '$REPO_MILESTONE'"
+                      MILESTONE="$REPO_MILESTONE"
+                    else
+                      echo "  → Milestone sync: repo='$REPO_MILESTONE', project='$MILESTONE' → already in sync"
+                    fi
+                  else
+                    echo "  → Milestone sync: repo='$REPO_MILESTONE' is not a valid ${MILESTONE_FIELD_NAME} option — leaving project field unchanged (current: '${MILESTONE:-<empty>}')"
+                  fi
+                else
+                  # Repo has no milestone; check if it ever had one via timeline
+                  if [ -n "$MILESTONE" ]; then
+                    # Only clear if repo issue previously had a milestone (unset event)
+                    REPO_HAD_MILESTONE=$(repo_issue_had_milestone "$item")
+                    if [ "$REPO_HAD_MILESTONE" = "true" ]; then
+                      echo "  → Milestone sync: repo previously had milestone, now cleared → clearing ${MILESTONE_FIELD_NAME}"
+                      if [ "$DRY_RUN" != "true" ]; then
+                        gh api graphql -f query='
+                          mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!) {
+                            clearProjectV2ItemFieldValue(input: {
+                              projectId: $projectId
+                              itemId: $itemId
+                              fieldId: $fieldId
+                            }) { projectV2Item { id } }
+                          }
+                        ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
+                          -f fieldId="$MILESTONE_FIELD_ID" > /dev/null
+                      fi
+                      [ "$DRY_RUN" = "true" ] && echo "  → [DRY-RUN] Would clear ${MILESTONE_FIELD_NAME}"
+                      MILESTONE=""
+                    else
+                      echo "  → Milestone sync: repo never had milestone, project='${MILESTONE}' → skipping clear"
+                    fi
+                  else
+                    echo "  → Milestone sync: repo has no milestone, project field is empty → already in sync"
+                  fi
+                fi
+              fi
+
               # Check contributor whitelist
               ASSIGNEES_LIST=$(echo "$item" | jq -r '[.content.assignees.nodes[].login] | join(",")' 2>/dev/null || echo "")
               if ! is_whitelisted "$ASSIGNEES_LIST"; then
@@ -278,81 +352,8 @@ jobs:
               REMAINING_WORK=$(get_field "$item" "Remaining Work")
               TIME_SPENT=$(get_field     "$item" "Time Spent")
               AREA=$(get_field           "$item" "Area")
-              # Get milestone value using the detected field name (Target Milestone or Version)
-              MILESTONE=$(get_field      "$item" "$MILESTONE_FIELD_NAME")
               EXTERNAL_REF=$(get_field   "$item" "External Reference")
               REPORTING_LOG=$(get_field  "$item" "Reporting Log")
-
-              # ---------------------------------------------------------------------------
-              # Repo → project milestone sync
-              # Sync the repo issue's native Milestone to the project's Target Milestone
-              # field only when:
-              #   1. The item is linked to a GH issue (ISSUE_NUMBER is set).
-              #   2. The milestone field is configured in the project (MILESTONE_FIELD_ID set).
-              # Rules:
-              #   a. Repo milestone set AND is a valid option → set project field if different.
-              #   b. Repo milestone not set AND project field is set → clear project field.
-              #   c. Repo milestone set but NOT a valid option → log and leave unchanged.
-              # ---------------------------------------------------------------------------
-              if [ -n "$ISSUE_NUMBER" ] && [ -n "$MILESTONE_FIELD_ID" ]; then
-                REPO_MILESTONE=$(echo "$item" | jq -r '.content.milestone.title // ""')
-                if [ -n "$REPO_MILESTONE" ]; then
-                  # Check whether the repo milestone title is a valid option
-                  if echo "$MILESTONE_OPTIONS" | grep -qxF "$REPO_MILESTONE"; then
-                    if [ "$MILESTONE" != "$REPO_MILESTONE" ]; then
-                      # Look up the option ID for this title
-                      MILESTONE_OPT_ID=$(echo "$MILESTONE_OPTION_IDS" | awk -F'\t' -v name="$REPO_MILESTONE" '$2==name{print $1; exit}')
-                      echo "  → Milestone sync: repo='$REPO_MILESTONE', project='${MILESTONE:-<empty>}' → setting to '$REPO_MILESTONE' (optionId=$MILESTONE_OPT_ID)"
-                      if [ "$DRY_RUN" != "true" ] && [ -n "$MILESTONE_OPT_ID" ]; then
-                        gh api graphql -f query='
-                          mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
-                            updateProjectV2ItemFieldValue(input: {
-                              projectId: $projectId
-                              itemId: $itemId
-                              fieldId: $fieldId
-                              value: { singleSelectOptionId: $optionId }
-                            }) { projectV2Item { id } }
-                          }
-                        ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                          -f fieldId="$MILESTONE_FIELD_ID" -f optionId="$MILESTONE_OPT_ID" > /dev/null
-                      fi
-                      [ "$DRY_RUN" = "true" ] && echo "  → [DRY-RUN] Would set ${MILESTONE_FIELD_NAME} to '$REPO_MILESTONE'"
-                      MILESTONE="$REPO_MILESTONE"
-                    else
-                      echo "  → Milestone sync: repo='$REPO_MILESTONE', project='$MILESTONE' → already in sync"
-                    fi
-                  else
-                    echo "  → Milestone sync: repo='$REPO_MILESTONE' is not a valid ${MILESTONE_FIELD_NAME} option — leaving project field unchanged (current: '${MILESTONE:-<empty>}')"
-                  fi
-                else
-                  # Repo has no milestone; check if it ever had one via timeline
-                  if [ -n "$MILESTONE" ]; then
-                    # Only clear if repo issue previously had a milestone (unset event)
-                    REPO_HAD_MILESTONE=$(repo_issue_had_milestone "$item")
-                    if [ "$REPO_HAD_MILESTONE" = "true" ]; then
-                      echo "  → Milestone sync: repo previously had milestone, now cleared → clearing ${MILESTONE_FIELD_NAME}"
-                      if [ "$DRY_RUN" != "true" ]; then
-                        gh api graphql -f query='
-                          mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!) {
-                            clearProjectV2ItemFieldValue(input: {
-                              projectId: $projectId
-                              itemId: $itemId
-                              fieldId: $fieldId
-                            }) { projectV2Item { id } }
-                          }
-                        ' -f projectId="$PROJECT_ID" -f itemId="$ITEM_ID" \
-                          -f fieldId="$MILESTONE_FIELD_ID" > /dev/null
-                      fi
-                      [ "$DRY_RUN" = "true" ] && echo "  → [DRY-RUN] Would clear ${MILESTONE_FIELD_NAME}"
-                      MILESTONE=""
-                    else
-                      echo "  → Milestone sync: repo never had milestone, project='${MILESTONE}' → skipping clear"
-                    fi
-                  else
-                    echo "  → Milestone sync: repo has no milestone, project field is empty → already in sync"
-                  fi
-                fi
-              fi
 
               # Parse tracked field values from the latest (first) entry in the log.
               # Log format: ENTRY1 | ENTRY2 | ... where each entry is DATE, AREA, STATUS, PRIORITY, MILESTONE, ESTIMATE, REMAINING_WORK, TIME_SPENT, EXTERNAL_REF
