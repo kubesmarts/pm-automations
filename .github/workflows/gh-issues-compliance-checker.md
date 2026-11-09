@@ -30,12 +30,12 @@ This prevents false compliance alerts (e.g. `NO_TIME_SPENT`, `NO_AREA`) from bei
 The workflow can be configured to process only issues assigned to approved contributors. This is controlled by a `contributors.csv` file in the repository root.
 
 **When `contributors.csv` exists:**
-- Only issues with at least one whitelisted assignee are processed
-- Issues with no assignees or only non-whitelisted assignees are skipped
-- Skipped issues are logged with reason "assignees not in contributor whitelist"
+- Repo milestone sync runs for **all linked issues** regardless of the contributor whitelist (ensuring unassigned issues or non-whitelisted issues keep their milestones in sync).
+- For compliance checks and reporting log updates: only issues with at least one whitelisted assignee are evaluated.
+- Issues with no assignees or only non-whitelisted assignees are skipped for compliance checks and logged with reason "assignees not in contributor whitelist".
 
 **When `contributors.csv` doesn't exist:**
-- All issues are processed (backward compatible behavior)
+- All issues are processed for compliance checks and reporting (backward compatible behavior).
 
 See the [Contributor Access Management](../docs/user-guide-rms-projects.md#contributor-access-management) section in the user guide for details on managing the whitelist.
 
@@ -149,7 +149,7 @@ Multiple codes are separated by `, ` (e.g. `NO_ESTIMATE, CHILDREN_STATUS`).
 
 ### Repo milestone sync
 
-On every run, for each project item linked to a GitHub issue, the workflow compares the **repo issue's native Milestone** field with the project item's **`Target Milestone`** (or `Version`) single-select field and applies one of the following actions:
+On every run, for each project item linked to a GitHub issue (regardless of contributor whitelist or assignment status), the workflow compares the **repo issue's native Milestone** field with the project item's **`Target Milestone`** (or `Version`) single-select field and applies one of the following actions:
 
 | Repo milestone | Repo timeline history | Project `Target Milestone` | Action |
 |----------------|----------------------|----------------------------|--------|

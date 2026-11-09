@@ -550,11 +550,12 @@ The automation workflows (sync and export) can be configured to process only iss
 When the `contributors.csv` file exists in the repository root, the workflows will:
 
 1. Load the list of active contributors on startup
-2. Check each issue's assignees against the whitelist
-3. Skip issues where none of the assignees are in the whitelist
-4. Log skipped issues with the reason "assignees not in contributor whitelist"
+2. Perform repository milestone sync for all linked issues (regardless of assignment status or whitelist)
+3. Check each issue's assignees against the whitelist for compliance checking and reporting
+4. Skip compliance evaluation for issues where none of the assignees are in the whitelist
+5. Log skipped issues with the reason "assignees not in contributor whitelist"
 
-**If the `contributors.csv` file doesn't exist**, the workflows process all issues (backward compatible).
+**If the `contributors.csv` file doesn't exist**, the workflows process all issues for compliance and reporting (backward compatible).
 
 ### The contributors.csv File
 
@@ -639,9 +640,10 @@ awk -F',' 'NR > 1 && !/^#/ && $2 == "true" {print $1, "-", $3}' contributors.csv
 ### Workflow Behavior
 
 **When whitelist is active:**
-- Issues with at least one whitelisted assignee → processed normally
-- Issues with no assignees → skipped
-- Issues with only non-whitelisted assignees → skipped
+- Repo milestone sync → runs for all linked issues regardless of assignee or whitelist status
+- Issues with at least one whitelisted assignee → compliance evaluated and reported normally
+- Issues with no assignees → skipped from compliance evaluation and reporting
+- Issues with only non-whitelisted assignees → skipped from compliance evaluation and reporting
 - Skipped issues are logged in the workflow output
 
 **When whitelist is not configured:**

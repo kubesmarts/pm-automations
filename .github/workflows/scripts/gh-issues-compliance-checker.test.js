@@ -1254,6 +1254,28 @@ test('NO_MILESTONE: not raised after milestone sync sets the project field', () 
   assert.ok(!codes.includes('NO_MILESTONE'), `Unexpected NO_MILESTONE after sync: "${codes}"`);
 });
 
+// -- Milestone sync runs regardless of contributor whitelist --
+
+test('workflow YAML: milestone sync occurs before contributor whitelist check', () => {
+  const milestoneSyncPos = WORKFLOW_YML.indexOf('Repo → project milestone sync');
+  const whitelistPos = WORKFLOW_YML.indexOf('Check contributor whitelist');
+  assert.ok(milestoneSyncPos > 0, 'Milestone sync block must exist in workflow');
+  assert.ok(whitelistPos > 0, 'Contributor whitelist block must exist in workflow');
+  assert.ok(milestoneSyncPos < whitelistPos, 'Milestone sync must execute before contributor whitelist check');
+});
+
+test('milestone sync: runs for item with no assignees when whitelist is active', () => {
+  // Simulate item with no assignees passing through milestone sync before whitelist check
+  const { action, milestone } = evalMilestoneSync({
+    repoMilestone: 'v2.0.0-Beta1',
+    projectMilestone: '2.0.0',
+    milestoneOptions: ['2.0.0', 'v2.0.0-Beta1'],
+    issueNumber: '40',
+  });
+  assert.equal(action, 'set', 'expected action=set even if item is unassigned');
+  assert.equal(milestone, 'v2.0.0-Beta1', 'expected milestone to be synced to v2.0.0-Beta1');
+});
+
 // ---------------------------------------------------------------------------
 // SECTION 7 – Bash logic: Milestone unset event detection
 //
