@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+7134,,https://github.com/apache/incubator-kie/issues/7134,Drools: not( X() and Y() from $list ) silently stops firing after cross-package segment split,Rikkola,,Runtimes,Normal,,Future,S,1,1,2026-11-10,,,
 1,,https://github.com/casehubio/scaffold/issues/1,"epic: scaffold deployment infrastructure — Docker, K8s, Helm, observability",treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-29,,,
 2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-29,,,
 1088,,https://github.com/casehubio/engine/issues/1088,fix: Generate API Docs workflow startup_failure,treblereel,,Runtimes,Normal,,Future,XS,0.1,0.1,2026-10-29,,,
