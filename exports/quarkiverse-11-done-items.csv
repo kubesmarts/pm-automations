@@ -1,7 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-1070,,https://github.com/quarkiverse/quarkus-flow/issues/1070,feat: Follow-up work from OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,,Runtimes,Normal,,2.0.0,M,1,1,2026-11-10,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
-334,,https://github.com/quarkiverse/quarkus-jackson-jq/issues/334,Migrate to Jackson JQ 2.0.0 and Jackson 3.x,wmedvede,,Runtimes,Critical,,2.0.0,M,1,1.6,2026-11-10,,,NO_TIME_SPENT
-1745,,https://github.com/open-workflow-specification/sdk-java/issues/1745,WorkflowExecutionListenerAdapter don't propagate the close() method execution the enclosed listener.,wmedvede,,Runtimes,Normal,,2026/Q3,S,0.2,0.2,2026-11-10,,,NO_PRIORITY
+1070,,https://github.com/quarkiverse/quarkus-flow/issues/1070,feat: Follow-up work from OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,,Runtimes,Normal,,2.0.0,M,1,1,2026-11-11,,,
+334,,https://github.com/quarkiverse/quarkus-jackson-jq/issues/334,Migrate to Jackson JQ 2.0.0 and Jackson 3.x,wmedvede,,Runtimes,Critical,,2.0.0,M,1,1.6,2026-11-11,,,
+1745,,https://github.com/open-workflow-specification/sdk-java/issues/1745,WorkflowExecutionListenerAdapter don't propagate the close() method execution the enclosed listener.,wmedvede,,Runtimes,Normal,,2026/Q3,S,0.2,0.2,2026-11-11,,,
+1804,,https://github.com/open-workflow-specification/sdk-java/issues/1804,ResourceLoader should use CompletableFuture,fjtirado,,Runtimes,Normal,,2.0.0,M,0.3,0.35,2026-11-11,,,
+441,,https://github.com/open-workflow-specification/editor/issues/441,feat: Create a Core Package for Shared Hooks and Utilities,kumaradityaraj,,Tooling,Normal,,2026/Q4,M,0.6,0.6,2026-11-11,,,
+314,214,https://github.com/open-workflow-specification/editor/issues/314,feat: Investigate and improve SDK validation error messaging,handreyrc,,Tooling,Normal,,2026/Q4,M,1,0.8,2026-11-11,,,
 897,,https://github.com/quarkiverse/quarkus-flow/issues/897,feat: quarkus-flow-db-migration-runtime extension for JPA schema migrations,mathecruz,,,,,1.4.0,,,,2026-11-10,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 898,,https://github.com/quarkiverse/quarkus-flow/issues/898,feat: quarkus-flow-db-migration-quartz extension for Quartz schema migrations,mathecruz,,,,,2.0.0,,,,2026-11-10,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 1036,,https://github.com/quarkiverse/quarkus-flow/issues/1036,Implement quarkus-flow-db-migration extensions per ADR,mathecruz,,Runtimes,Major,,2.0.0,M,0.4,0.3,2026-11-10,,,
@@ -11,7 +14,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1098,,https://github.com/quarkiverse/quarkus-flow/issues/1098,VertxException when executing an application using JQ expressions (on event-loop thread),mathecruz,,Runtimes,Critical,,1.4.0,M,0.4,0.4,2026-11-07,,,
 1091,,https://github.com/quarkiverse/quarkus-flow/issues/1091,bug: Missing classes registered for reflection in native image building,mathecruz,,Runtimes,Critical,,2026/Q4,M,0.2,0.2,2026-11-07,,,
 1144,,https://github.com/quarkiverse/quarkus-flow/issues/1144,Quartz: default a deterministic scheduler instance-name (SCHED_NAME) and clustering for shared JDBC jobstores,ricardozanini,,Runtimes,Major,,1.4.0,S,0.1,0.1,2026-11-07,,,
-1804,,https://github.com/open-workflow-specification/sdk-java/issues/1804,ResourceLoader should use CompletableFuture,fjtirado,,Runtimes,Normal,,2.0.0,M,0.3,0.35,2026-11-07,,,NO_REMAINING_WORK
 313,214,https://github.com/open-workflow-specification/editor/issues/313,feat: Verify and Enhance Workflow-Level Validation,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.6,2026-11-05,,,
 224,207,https://github.com/open-workflow-specification/editor/issues/224,feat: Host-agnostic editable text + change events,kumaradityaraj,,Tooling,Normal,,2026/Q3,M,0,,2026-11-05,,,NO_TIME_SPENT
 226,207,https://github.com/open-workflow-specification/editor/issues/226,feat: Live preview - text edits drive diagram refresh,kumaradityaraj,,Tooling,Normal,,2026/Q3,M,0,0,2026-11-05,,,
@@ -35,7 +37,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 311,214,https://github.com/open-workflow-specification/editor/issues/311,feat: Field-Level Validation,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.4,2026-10-24,,,
 1080,,https://github.com/quarkiverse/quarkus-flow/issues/1080,Consolidate quarkus.flow config roots per module/phase,mathecruz,,Runtimes,Normal,,2.0.0,M,0.4,0.2,2026-10-24,,,
 1772,,https://github.com/open-workflow-specification/sdk-java/issues/1772,Separate Jackson specific workflow from openworkflow-api module,fjtirado,,Runtimes,Normal,,2026/Q4,M,0.3,0.1,2026-10-24,,,
-441,,https://github.com/open-workflow-specification/editor/issues/441,feat: Create a Core Package for Shared Hooks and Utilities,kumaradityaraj,,Tooling,Normal,,2026/Q4,M,0.6,0.6,2026-10-22,,,NO_TIME_SPENT
 1092,,https://github.com/quarkiverse/quarkus-flow/issues/1092,Override config:recommended inherited from quarkiverse/renovate-config,mathecruz,,CI,Minor,,2.0.0,S,0.2,0.1,2026-10-22,,,
 1776,,https://github.com/open-workflow-specification/sdk-java/issues/1776,Allow define a custom HTTP client for getting external resource,fjtirado,,Runtimes,Major,,2026/Q4,S,0.1,0.1,2026-10-22,,,
 1040,,https://github.com/quarkiverse/quarkus-flow/issues/1040,OpenTelemetry: Broken Trace Continuity for Durable Workflows After JVM Restart,wmedvede,,Runtimes,Major,,1.2.0,L,1.6,1.6,2026-10-21,,,

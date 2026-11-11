@@ -1,6 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Remaining Work,Σ Estimate,Σ Time Spent,Σ Remaining Work,External Reference,Comments,Reporting Date,Alerts
 105,,https://github.com/kubesmarts/logic-apps/issues/105,Define a Data Index garbage-collection API and service,mathecruz,In progress,,Cloud,Critical,Serverless Logic,v2.0.0-Beta2,,,,,0,0,0,,,2026-11-09,"NO_ESTIMATE, NO_REMAINING_WORK"
-88,,https://github.com/kubesmarts/logic-operator/issues/88,Follow up: collect Vector logs from multiple runtime namespaces,,Next,,Runtimes,Major,Serverless Logic,v2.0.0-Beta1,,0.1,,,,,,,,,
+88,,https://github.com/kubesmarts/logic-operator/issues/88,Follow up: collect Vector logs from multiple runtime namespaces,,Next,,Runtimes,Major,Serverless Logic,v2.0.0-Beta1,,0.1,,,0.1,0,0,,,,
 86,,https://github.com/kubesmarts/logic-apps/issues/86,Support multiple namespaces in Vector kubernetes_logs source,,Next,,Cloud,Blocker,Serverless Logic,v2.0.0-Beta1,,0.2,,0.2,0.2,0,0.2,,,,
 84,,https://github.com/kubesmarts/logic-operator/issues/84,Secure /v1/definitions on the workflow gateway (OIDC / API_KEY + Kubernetes auth),ricardozanini,Backlog,,Cloud,Major,Serverless Logic,v2.0.0-Beta2,,0.5,,,0.5,0,0,,,2026-11-09,
 79,,https://github.com/kubesmarts/logic-apps/issues/79,[M5] MODE 3: Add workflow_application_id field (Kafka),,Next,,Cloud,Low,Serverless Logic,v2.0.0-Beta1,,0.5,,0.5,0.5,0,0.5,,,,
