@@ -1,4 +1,4 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-9272,7353,https://redhat.atlassian.net/browse/QUARKUS-9272,Prepare ER4 build of Quarkus Flow,baldimir,Task,Productization,Major,Quarkus,3.40.1.ER4,,0.15,0.05,2026-11-11,,,NO_QA_CONTACT
+9272,7353,https://redhat.atlassian.net/browse/QUARKUS-9272,Prepare ER4 build of Quarkus Flow,baldimir,Task,Productization,Major,Quarkus,3.40.1.ER4,,0.15,0.05,2026-11-12,,,
 8857,7353,https://redhat.atlassian.net/browse/QUARKUS-8857,Prepare CR1 build of Quarkus Flow,baldimir,Task,Productization,Major,Quarkus,3.40.1.GA,,0.15,0.15,2026-11-11,,,
 7353,,https://redhat.atlassian.net/browse/QUARKUS-7353,Add Quarkus Flow into Platform,baldimir,Epic,Productization,Major,Quarkus,3.40.1.GA,,0,1,2026-11-11,,,
