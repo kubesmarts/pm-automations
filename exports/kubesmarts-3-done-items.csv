@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+16,,https://github.com/kubesmarts/logic-operator/issues/16,[EPIC] Logic Operator v2.0 - Initial Implementation Roadmap,ricardozanini,,Cloud,Blocker,Serverless Logic,v.2.0.0-Alpha4,,,,2026-11-13,,,
+12,16,https://github.com/kubesmarts/logic-operator/issues/12,ClusterLogicPlatform: Single-Platform-Per-Cluster,ricardozanini,,Cloud,Blocker,Serverless Logic,v.2.0.0-Alpha4,,2,0.1,2026-11-13,,,
 74,,https://github.com/kubesmarts/logic-operator/issues/74,Refactor LogicPlatform reconciliation into service controllers,ricardozanini,,Cloud,Blocker,Serverless Logic,v.2.0.0-Alpha4,,0.2,0.1,2026-11-09,,,
 42,41,https://github.com/kubesmarts/logic-operator/issues/42,[M3] Operator deploys workflow gateway,ricardozanini,,Cloud,Critical,Serverless Logic,v.2.0.0-Alpha3,,0.5,1,2026-11-09,,,
 75,,https://github.com/kubesmarts/logic-operator/issues/75,Add a GitHub Actions release pipeline,ricardozanini,,Cloud,Blocker,Serverless Logic,v.2.0.0-Alpha3,,0.1,0.1,2026-11-09,,,

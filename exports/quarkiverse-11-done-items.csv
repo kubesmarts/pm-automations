@@ -1,4 +1,7 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+224,207,https://github.com/open-workflow-specification/editor/issues/224,feat: Host-agnostic editable text + change events,kumaradityaraj,,Tooling,Normal,,2026/Q3,M,0,0,2026-11-13,,,
+227,207,https://github.com/open-workflow-specification/editor/issues/227,feat: inline validation markers in the text edit,fantonangeli,,Tooling,Normal,,2026/Q4,M,0.2,0.2,2026-11-13,,,
+1805,,https://github.com/open-workflow-specification/sdk-java/issues/1805,JaxRSAcessTokenProvider should be refactor and make part of core,fjtirado,,Runtimes,Major,,2.0.0,M,0.6,0.2,2026-11-13,,,
 524,,https://github.com/open-workflow-specification/editor/issues/524,feat: Capture Playwright artifacts on E2E test failures,fantonangeli,,Tooling,Major,,2026/Q4,XS,0.1,0.1,2026-11-12,,,
 322,289,https://github.com/open-workflow-specification/editor/issues/322,feat: Implement volar-service-yaml for YAML language support,fantonangeli,,Tooling,Normal,,2026/Q4,M,1,1.1,2026-11-12,,,
 315,214,https://github.com/open-workflow-specification/editor/issues/315,feat: Update editor to consume new error messages,handreyrc,,Tooling,Normal,,2026/Q4,M,0,0,2026-11-12,,,
@@ -19,7 +22,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1091,,https://github.com/quarkiverse/quarkus-flow/issues/1091,bug: Missing classes registered for reflection in native image building,mathecruz,,Runtimes,Critical,,2026/Q4,M,0.2,0.2,2026-11-07,,,
 1144,,https://github.com/quarkiverse/quarkus-flow/issues/1144,Quartz: default a deterministic scheduler instance-name (SCHED_NAME) and clustering for shared JDBC jobstores,ricardozanini,,Runtimes,Major,,1.4.0,S,0.1,0.1,2026-11-07,,,
 313,214,https://github.com/open-workflow-specification/editor/issues/313,feat: Verify and Enhance Workflow-Level Validation,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.6,2026-11-05,,,
-224,207,https://github.com/open-workflow-specification/editor/issues/224,feat: Host-agnostic editable text + change events,kumaradityaraj,,Tooling,Normal,,2026/Q3,M,0,0,2026-11-05,,,NO_TIME_SPENT
 226,207,https://github.com/open-workflow-specification/editor/issues/226,feat: Live preview - text edits drive diagram refresh,kumaradityaraj,,Tooling,Normal,,2026/Q3,M,0,0,2026-11-05,,,
 398,214,https://github.com/open-workflow-specification/editor/issues/398,epic: Implement dynamic form for task types,"lornakelly,handreyrc",,Tooling,Normal,,2026/Q4,L,0,0,2026-11-05,,,
 1793,,https://github.com/open-workflow-specification/sdk-java/issues/1793," ServicePriority can use generics so compareTo is downcasted to the proper type, not service priority",fjtirado,,Runtimes,Minor,,2.0.0,S,0.2,0.1,2026-11-05,,,
