@@ -113,7 +113,7 @@ function isEligibleForExport(issue, resolvedAssignee, whitelist) {
  * Check if issue is a done item (for done items export)
  */
 function isDoneItem(issue) {
-  const status = (issue.fields?.status?.name || '').toUpperCase();
+  const status = (issue.fields?.status?.name || '').toUpperCase().trim();
   const resolution = issue.fields?.resolution?.name;
 
   // RELEASE PENDING is considered done
@@ -121,6 +121,9 @@ function isDoneItem(issue) {
 
   // DONE (next-gen Jira projects) is considered done
   if (status === 'DONE') return true;
+
+  // VERIFIED, RESOLVED (Quarkus Jira workflow) are considered done
+  if (status === 'VERIFIED' || status === 'RESOLVED') return true;
 
   // CLOSED with resolution = Done is considered done
   if (status === 'CLOSED' && resolution === 'Done') return true;
@@ -132,11 +135,13 @@ function isDoneItem(issue) {
  * Check if issue is an active item (for active items export)
  */
 function isActiveItem(issue) {
-  const status = (issue.fields?.status?.name || '').toUpperCase();
+  const status = (issue.fields?.status?.name || '').toUpperCase().trim();
 
   // Terminal statuses are never active
   if (status === 'RELEASE PENDING') return false;
   if (status === 'DONE') return false;
+  if (status === 'VERIFIED') return false;
+  if (status === 'RESOLVED') return false;
   if (status === 'CLOSED') return false; // any resolution — CLOSED+non-Done must be skipped, not exported as active
 
   return true;

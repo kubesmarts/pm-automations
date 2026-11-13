@@ -5,14 +5,35 @@ A GitHub Actions workflow that validates JIRA issues against ABLE team's softwar
 
 ## JIRA Status to Policy Stage Mapping
 
+The workflow supports project-specific status mappings for `SRVLOGIC` and `QUARKUS` workflows:
+
+### SRVLOGIC Status Mapping
+
 | JIRA Status | Policy Stage | Required Fields |
 |-------------|--------------|-----------------|
+| BACKLOG | Backlog | (none) |
 | NEW, REFINEMENT | Next | Area, Priority, Fix Versions |
 | IN PROGRESS, ON_DEV | In Progress | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
-| CORE_REVIEW, ON_QA | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
+| CODE REVIEW, CODE_REVIEW, CORE_REVIEW, ON_QA | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
 | RELEASE PENDING | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
 | CLOSED (resolution: Done) | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
 | CLOSED (other resolution) | Skipped | No checks — no work was done or planned |
+
+### QUARKUS Status Mapping
+
+| JIRA Status | Policy Stage | Required Fields |
+|-------------|--------------|-----------------|
+| Backlog | Backlog | (none) |
+| New, Refinement, Tasking and Estimation, To Do | Next | Area, Priority, Fix Versions |
+| In Progress | In Progress | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
+| Code review, Review, Dev Complete, Testing | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
+| Verified, Release Pending, Resolved | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
+| Closed (resolution: Done) | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
+| Closed (other resolution) | Skipped | No checks — no work was done or planned |
+
+### Other JIRA Projects (Fallback)
+
+When evaluating an issue from any other JIRA project, the workflow matches its status against the `SRVLOGIC` mapping first, then the `QUARKUS` mapping (using whichever mapping match is found first). If no match is found in either mapping, the status defaults to `Backlog`.
 
 ## JIRA Field Validation Rules
 

@@ -101,7 +101,8 @@ async function main() {
             // PR_OPEN needs the open list; PRS_CLOSED needs the closed (merged or declined) list.
             let openPullRequests = [];
             let closedPullRequests = [];
-            const preCheckStage = policyValidator.mapStatusToPolicyStage(jiraClient.extractStatus(issue));
+            const projectKey = issue.key ? issue.key.split('-')[0] : null;
+            const preCheckStage = policyValidator.mapStatusToPolicyStage(jiraClient.extractStatus(issue), projectKey);
             if (preCheckStage === 'Done' || preCheckStage === 'In Progress' || preCheckStage === 'In Review') {
                 const issueId = issue.id;
                 const allPRs = await jiraClient.fetchLinkedPullRequests(issueId);

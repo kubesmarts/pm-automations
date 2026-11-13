@@ -256,20 +256,40 @@ Backlog items ARE exported if:
 
 ## JIRA Status to CSV Status Mapping
 
-Based on the [JIRA Status to Policy Stage Mapping](https://github.com/kubesmarts/pm-automations/blob/main/.github/workflows/jira-compliance-checker-spec.md#jira-status-to-policy-stage-mapping):
+Based on the [JIRA Status to Policy Stage Mapping](https://github.com/kubesmarts/pm-automations/blob/main/.github/workflows/jira-compliance-checker-spec.md#jira-status-to-policy-stage-mapping), status mapping is project-specific:
+
+### SRVLOGIC Status Mapping
 
 | JIRA Status | CSV Status | Notes |
 |-------------|------------|-------|
+| BACKLOG | Backlog | Backlog stage |
 | NEW | Next | Planning stage |
 | REFINEMENT | Next | Planning stage |
 | IN PROGRESS | In progress | Active work |
 | ON_DEV | In progress | Active work |
 | CODE REVIEW | In review | Under review |
 | CODE_REVIEW | In review | Under review |
+| CORE_REVIEW | In review | Under review |
 | ON_QA | In review | Under review |
 | RELEASE PENDING | Done | Completed |
 | CLOSED (resolution: Done) | Done | Completed |
 | CLOSED (other resolution) | Skipped | Not exported |
+
+### QUARKUS Status Mapping
+
+| JIRA Status | CSV Status | Notes |
+|-------------|------------|-------|
+| Backlog | Backlog | Backlog stage |
+| New, Refinement, Tasking and Estimation, To Do | Next | Planning stage |
+| In Progress | In progress | Active work |
+| Code review, Review, Dev Complete, Testing | In review | Under review |
+| Verified, Release Pending, Resolved | Done | Completed |
+| Closed (resolution: Done) | Done | Completed |
+| Closed (other resolution) | Skipped | Not exported |
+
+### Fallback for Other JIRA Projects
+
+When exporting tickets from other JIRA projects, the exporter attempts to match the status against the `SRVLOGIC` mapping first, then the `QUARKUS` mapping (whichever match is found first). If no match is found, the normalized status name is preserved.
 
 **Note:** Tickets in CLOSED status with resolution other than "Done" (e.g., Duplicate, Won't Fix, Obsolete) are **NOT exported** to either active or done items CSV files.
 

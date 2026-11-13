@@ -58,7 +58,7 @@ async function issueToActiveItemRow(issue, baseUrl, whitelist, jiraClient) {
     'Issue URL': buildIssueUrl(baseUrl, issue.key),
     'Title': issue.fields?.summary || '',
     'Assignees': assignee || '',
-    'Status': mapStatus(issue.fields?.status?.name),
+    'Status': mapStatus(issue.fields?.status?.name, projectKey),
     'Type': extractIssueType(issue),
     'Area': extractArea(issue.fields?.labels || []),
     'Priority': mapPriority(issue.fields?.priority),

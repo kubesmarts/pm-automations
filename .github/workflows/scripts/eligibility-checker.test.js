@@ -40,6 +40,16 @@ test('isDoneItem: DONE is case-insensitive', () => {
   assert.ok(isDoneItem(makeIssue({ status: 'done' })));
 });
 
+test('isDoneItem: VERIFIED is done (QUARKUS workflow)', () => {
+  assert.ok(isDoneItem(makeIssue({ status: 'Verified' })));
+  assert.ok(isDoneItem(makeIssue({ status: 'VERIFIED' })));
+});
+
+test('isDoneItem: RESOLVED is done (QUARKUS workflow)', () => {
+  assert.ok(isDoneItem(makeIssue({ status: 'Resolved' })));
+  assert.ok(isDoneItem(makeIssue({ status: 'RESOLVED' })));
+});
+
 test('isDoneItem: CLOSED with resolution Done is done', () => {
   assert.ok(isDoneItem(makeIssue({ status: 'CLOSED', resolution: 'Done' })));
 });
@@ -95,6 +105,16 @@ test('isActiveItem: DONE is not active (next-gen Jira)', () => {
 
 test('isActiveItem: DONE is case-insensitive', () => {
   assert.equal(isActiveItem(makeIssue({ status: 'done' })), false);
+});
+
+test('isActiveItem: VERIFIED is not active (QUARKUS workflow)', () => {
+  assert.equal(isActiveItem(makeIssue({ status: 'Verified' })), false);
+  assert.equal(isActiveItem(makeIssue({ status: 'VERIFIED' })), false);
+});
+
+test('isActiveItem: RESOLVED is not active (QUARKUS workflow)', () => {
+  assert.equal(isActiveItem(makeIssue({ status: 'Resolved' })), false);
+  assert.equal(isActiveItem(makeIssue({ status: 'RESOLVED' })), false);
 });
 
 test('isActiveItem: CLOSED with resolution Done is not active', () => {

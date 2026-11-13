@@ -47,17 +47,32 @@ PSYNC_JIRA_PROJECTS: "ISSUE,QUARKUS,DROOLS"
 All three can be used together. Issues are automatically deduplicated.
 
 ### 2. Policy Validation
-Each issue is validated based on its JIRA status:
+Each issue is validated based on its JIRA status and project workflow. The mapping of JIRA status to policy stage is project-specific:
+
+#### SRVLOGIC Status Mapping
 
 | JIRA Status | Policy Stage | Required Fields |
 |-------------|--------------|-----------------|
-| BACKLOG | Backlog | (none) |
-| NEW, REFINEMENT | Next | Area, Priority, Fix Versions |
-| IN PROGRESS, ON_DEV | In Progress | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
-| CODE_REVIEW, ON_QA | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
-| RELEASE PENDING | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
-| CLOSED (resolution: Done) | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
-| CLOSED (other resolution) | Skipped | No checks — no work was done or planned |
+| `BACKLOG` | Backlog | (none) |
+| `NEW`, `REFINEMENT` | Next | Area, Priority, Fix Versions |
+| `IN PROGRESS`, `ON_DEV` | In Progress | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
+| `CODE REVIEW`, `CODE_REVIEW`, `CORE_REVIEW`, `ON_QA` | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
+| `RELEASE PENDING`, `CLOSED` (resolution: Done) | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
+| `CLOSED` (other resolution) | Skipped | No checks — no work was done or planned |
+
+#### QUARKUS Status Mapping
+
+| JIRA Status | Policy Stage | Required Fields |
+|-------------|--------------|-----------------|
+| `Backlog` | Backlog | (none) |
+| `New`, `Refinement`, `Tasking and Estimation`, `To Do` | Next | Area, Priority, Fix Versions |
+| `In Progress` | In Progress | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
+| `Code review`, `Review`, `Dev Complete`, `Testing` | In Review | Area, Priority, Fix Versions, Original Estimate, Remaining Estimate, Assignee |
+| `Verified`, `Release Pending`, `Resolved`, `Closed` (resolution: Done) | Done | Area, Priority, Fix Versions, Original Estimate, Time Spent, Assignee |
+| `Closed` (other resolution) | Skipped | No checks — no work was done or planned |
+
+#### Other JIRA Projects (Fallback)
+When processing an issue from any other JIRA project, the workflow matches its status against the `SRVLOGIC` mapping first, then the `QUARKUS` mapping (using whichever match is found first). If no match is found in either mapping, the status defaults to `Backlog`.
 
 ### 3. Compliance Alert Label and Comment
 When one or more compliance issues are detected a single `compliance-alerts` label is added to the issue. The specific issues are listed in the workflow report and in a JIRA comment.
