@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1176,,https://redhat.atlassian.net/browse/SRVLOGIC-1176,"[Security/VTM Failure] Critical CVEs (CVE-2019-10086, CVE-2023-44487) found in OpenShift 1.37.2 container images",baldimir,Bug,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.6,0.175,2026-11-13,,,
 1098,1056,https://redhat.atlassian.net/browse/SRVLOGIC-1098,[IBM test migration] Update nodejs version and fix go PATH for go install,jakubschwan,Sub-task,QE,Major,Serverless logic,1.40.0 OSL,,0.1,0.1,2026-11-11,,,
 1090,1056,https://redhat.atlassian.net/browse/SRVLOGIC-1090,[IBM test migration] Add kie-tools repo build tools to able playbooks,jakubschwan,Sub-task,QE,Blocker,Serverless logic,1.40.0 OSL,,0.1,0.1,2026-11-11,,,
 1145,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1145,[IBM test migration] Disable sending of junit results onto the jenkins UI for all existing jobs,jakubschwan,Task,Infrastructure,Major,Serverless logic,1.40.0 OSL,,0.025,0.025,2026-11-11,,,
@@ -77,7 +78,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1010,,https://redhat.atlassian.net/browse/SRVLOGIC-1010,Adjust Jenkinsfile.prod.nightly job definition to use 111-SNAPSHOT,domhanak,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,0.05,0.05,2026-10-21,,,
 1008,,https://redhat.atlassian.net/browse/SRVLOGIC-1008,Removal of non-OSL packages from kie-tools -> bpmn-editor and related packages,domhanak,Story,CI,Critical,Serverless logic,1.39.0 OSL,,1,0.4,2026-10-21,,,
 1196,,https://redhat.atlassian.net/browse/SRVLOGIC-1196,Release OpenShift Serverless Logic 1.37.3 patch release,saumya1singh,Epic,Productization,Major,Serverless logic,1.37.3 OSL,,0.6,0.425,2026-10-21,,,
-1176,,https://redhat.atlassian.net/browse/SRVLOGIC-1176,"[Security/VTM Failure] Critical CVEs (CVE-2019-10086, CVE-2023-44487) found in OpenShift 1.37.2 container images",baldimir,Bug,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.6,0.175,2026-10-21,,,
 1165,,https://redhat.atlassian.net/browse/SRVLOGIC-1165,Bind acting identity to authenticated security principal by default,fjtirado,Bug,Runtimes,Minor,Serverless logic,1.39.0 OSL,,0.2,0,2026-10-21,,,NO_TIME_SPENT
 1163,,https://redhat.atlassian.net/browse/SRVLOGIC-1163,Harden XML Document variable parsing against XXE injection,baldimir,Bug,Runtimes,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,2026-10-21,,,
 1160,,https://redhat.atlassian.net/browse/SRVLOGIC-1160,CI - kie-tools- refactoring,jankrystof-ibm,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.2,0.075,2026-10-21,,,
