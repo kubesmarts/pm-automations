@@ -36,31 +36,52 @@ function removeDuplicates(items) {
   return Array.from(uniqueMap.values());
 }
 
+const DONE_COMPARE_COLUMNS = [
+  'Title',
+  'Assignees',
+  'Type',
+  'Area',
+  'Priority',
+  'Initiative',
+  'Target Milestone',
+  'Size',
+  'Estimate',
+  'Time Spent',
+  'External Reference',
+  'Comments',
+  'Alerts'
+];
+
+const NUMERIC_COLUMNS = new Set(['Size', 'Estimate', 'Time Spent']);
+
 /**
- * Filter new items by reporting date threshold
- * Only keeps items with Reporting Date >= threshold
+ * Compare freshly built done row with existing stored row.
+ * Normalizes numeric fields (e.g. '1.0' === '1') to prevent cosmetic false positives.
+ * Returns array of diff strings.
  */
-function filterByReportingDate(newItems, latestDate) {
-  if (!latestDate) return newItems; // No threshold, keep all
+function compareDoneRows(oldRow, newRow) {
+  const diffs = [];
+  const cut = v => (v.length <= 80 ? v : v.slice(0, 77) + '...');
 
-  const threshold = new Date(latestDate);
+  for (const col of DONE_COMPARE_COLUMNS) {
+    const oldVal = (oldRow[col] || '').trim();
+    const newVal = (newRow[col] || '').trim();
 
-  return newItems.filter(item => {
-    const itemDate = new Date(item['Reporting Date']);
-    return itemDate >= threshold;
-  });
-}
+    if (oldVal === newVal) continue;
 
-/**
- * Get the latest reporting date from existing items
- * Returns null if no items
- */
-function getLatestReportingDate(existingItems) {
-  if (!existingItems || existingItems.length === 0) return null;
+    // For numeric columns, ignore cosmetic representation differences (e.g. '1.0' vs '1', '0.0' vs '0')
+    if (NUMERIC_COLUMNS.has(col) && oldVal !== '' && newVal !== '') {
+      const oldNum = Number(oldVal);
+      const newNum = Number(newVal);
+      if (!Number.isNaN(oldNum) && !Number.isNaN(newNum) && oldNum === newNum) {
+        continue;
+      }
+    }
 
-  // Assuming items are already sorted by reporting date (newest first)
-  // Return the first item's reporting date
-  return existingItems[0]['Reporting Date'];
+    diffs.push(`${col}: '${cut(oldVal)}' -> '${cut(newVal)}'`);
+  }
+
+  return diffs;
 }
 
 /**
@@ -82,44 +103,73 @@ function removeActiveItems(existingItems, activeUrls) {
 /**
  * Merge new done items with existing items
  * - Evicts rows for tickets that are currently Active (ghost row cleanup)
- * - Filters new items by latest reporting date
- * - Removes duplicates (keeps newest)
+ * - Identifies new done items not present in existing rows (no date cutoff)
+ * - Updates existing rows when exported field values changed (via compareDoneRows)
+ * - Retains existing rows when values are unchanged
  * - Sorts by reporting date descending
  */
 function mergeDoneItems(newItems, existingItems, activeUrls) {
-  if (!existingItems || existingItems.length === 0) {
-    // No existing items, just sort new items
-    return sortByReportingDate([...newItems]);
+  const incoming = newItems || [];
+  const existing = existingItems || [];
+
+  if (existing.length === 0) {
+    // No existing items, just sort incoming items
+    return sortByReportingDate([...incoming]);
   }
 
-  // Evict ghost rows for tickets that have transitioned back to Active
-  const cleanedExisting = removeActiveItems(existingItems, activeUrls);
+  // 1. Evict ghost rows for tickets that have transitioned back to Active
+  const cleanedExisting = removeActiveItems(existing, activeUrls);
 
-  // Get latest reporting date from cleaned existing items
-  const latestDate = getLatestReportingDate(cleanedExisting);
+  // 2. Build map of existing items by Issue URL
+  const existingMap = new Map();
+  for (const item of cleanedExisting) {
+    existingMap.set(item['Issue URL'], item);
+  }
 
-  // Filter new items - only keep items >= latest date
-  const filteredNewItems = filterByReportingDate(newItems, latestDate);
+  // 3. Process incoming items:
+  // - If item is NOT in existingMap -> new done item
+  // - If item IS in existingMap -> check for differences via compareDoneRows
+  //   - If diffs found -> re-export (fresh item wins)
+  //   - If no diffs -> keep existing item
+  const newOrUpdated = [];
+  let skippedUnchanged = 0;
 
-  console.log(`  → Filtered: ${filteredNewItems.length} of ${newItems.length} new items meet date threshold (>= ${latestDate})`);
+  for (const doneRow of incoming) {
+    const issueUrl = doneRow['Issue URL'];
+    const existingRow = existingMap.get(issueUrl);
 
-  // Combine all items
-  const allItems = [...filteredNewItems, ...cleanedExisting];
+    if (!existingRow) {
+      newOrUpdated.push(doneRow);
+    } else {
+      const diffs = compareDoneRows(existingRow, doneRow);
+      if (diffs.length > 0) {
+        console.log(`  → Re-exporting issue #${doneRow['Issue Number'] || ''} "${doneRow['Title'] || ''}" (${issueUrl}): exported values changed — ${diffs.join('; ')}`);
+        newOrUpdated.push(doneRow);
+      } else {
+        skippedUnchanged++;
+      }
+    }
+  }
 
-  // Remove duplicates (keeps newest by reporting date)
-  const uniqueItems = removeDuplicates(allItems);
+  // 4. Merge cleaned existing rows with new/updated done rows (deduplicating by Issue URL)
+  const urlMap = new Map();
+  for (const r of cleanedExisting) {
+    urlMap.set(r['Issue URL'], r);
+  }
+  for (const r of newOrUpdated) {
+    urlMap.set(r['Issue URL'], r); // fresh row wins
+  }
 
-  console.log(`  → Deduplicated: ${uniqueItems.length} unique items (removed ${allItems.length - uniqueItems.length} duplicates)`);
-
-  // Sort by reporting date descending
-  return sortByReportingDate(uniqueItems);
+  const finalDoneRows = Array.from(urlMap.values());
+  return sortByReportingDate(finalDoneRows);
 }
 
 module.exports = {
+  DONE_COMPARE_COLUMNS,
+  NUMERIC_COLUMNS,
+  compareDoneRows,
   sortByReportingDate,
   removeDuplicates,
-  filterByReportingDate,
-  getLatestReportingDate,
   removeActiveItems,
   mergeDoneItems
 };

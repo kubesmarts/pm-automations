@@ -3,10 +3,11 @@
 const test   = require('node:test');
 const assert = require('node:assert/strict');
 const {
+  DONE_COMPARE_COLUMNS,
+  NUMERIC_COLUMNS,
+  compareDoneRows,
   sortByReportingDate,
   removeDuplicates,
-  filterByReportingDate,
-  getLatestReportingDate,
   removeActiveItems,
   mergeDoneItems
 } = require('./done-items-merger');
@@ -69,35 +70,29 @@ test('removeDuplicates: keeps unique items with different URLs', () => {
 });
 
 // ---------------------------------------------------------------------------
-// filterByReportingDate
+// compareDoneRows
 // ---------------------------------------------------------------------------
 
-test('filterByReportingDate: returns all items when no latestDate', () => {
-  assert.equal(filterByReportingDate([item(1, '2026-07-01')], null).length, 1);
+test('compareDoneRows: returns empty array when rows are identical', () => {
+  const rowA = item(1, '2026-08-25', { Title: 'A', Area: 'QE', Estimate: '1', 'Time Spent': '0.5' });
+  const rowB = item(1, '2026-09-01', { Title: 'A', Area: 'QE', Estimate: '1', 'Time Spent': '0.5' });
+  assert.deepEqual(compareDoneRows(rowA, rowB), []);
 });
 
-test('filterByReportingDate: blocks items older than threshold', () => {
-  assert.equal(filterByReportingDate([item(1, '2026-08-01')], '2026-09-16').length, 0);
+test('compareDoneRows: ignores cosmetic numeric representation differences', () => {
+  const rowA = item(1, '2026-08-25', { Estimate: '1.0', 'Time Spent': '0.50' });
+  const rowB = item(1, '2026-09-01', { Estimate: '1', 'Time Spent': '0.5' });
+  assert.deepEqual(compareDoneRows(rowA, rowB), []);
 });
 
-test('filterByReportingDate: passes items on or after threshold', () => {
-  assert.equal(filterByReportingDate([item(1, '2026-09-16')], '2026-09-16').length, 1);
-});
-
-// ---------------------------------------------------------------------------
-// getLatestReportingDate
-// ---------------------------------------------------------------------------
-
-test('getLatestReportingDate: returns first item date (assumes sorted descending)', () => {
-  assert.equal(getLatestReportingDate([item(1, '2026-09-16'), item(2, '2026-08-01')]), '2026-09-16');
-});
-
-test('getLatestReportingDate: returns null for empty array', () => {
-  assert.equal(getLatestReportingDate([]), null);
-});
-
-test('getLatestReportingDate: returns null for null input', () => {
-  assert.equal(getLatestReportingDate(null), null);
+test('compareDoneRows: detects changes across compared fields', () => {
+  const rowA = item(1, '2026-08-25', { Title: 'Old Title', Priority: 'Normal', Alerts: 'NO_ESTIMATE' });
+  const rowB = item(1, '2026-09-01', { Title: 'New Title', Priority: 'Critical', Alerts: '' });
+  const diffs = compareDoneRows(rowA, rowB);
+  assert.equal(diffs.length, 3);
+  assert.ok(diffs.some(d => d.includes('Title')));
+  assert.ok(diffs.some(d => d.includes('Priority')));
+  assert.ok(diffs.some(d => d.includes('Alerts')));
 });
 
 // ---------------------------------------------------------------------------
@@ -145,18 +140,31 @@ test('mergeDoneItems: sorts only when no existing items', () => {
   assert.equal(result[0]['Reporting Date'], '2026-09-01');
 });
 
-test('mergeDoneItems: adds new item that meets date threshold', () => {
+test('mergeDoneItems: adds new item regardless of reporting date (no date cutoff)', () => {
   const existing = [item(1, '2026-09-10')];
-  const result = mergeDoneItems([item(2, '2026-09-16')], existing);
-  assert.equal(result.length, 2);
+  const result = mergeDoneItems([item(2, '2026-09-16'), item(99, '2026-08-01')], existing);
+  assert.equal(result.length, 3);
   assert.ok(result.some(i => i['Issue Number'] === '2'));
+  assert.ok(result.some(i => i['Issue Number'] === '99'));
 });
 
-test('mergeDoneItems: blocks new item older than threshold', () => {
-  const existing = [item(1, '2026-09-10')];
-  const result = mergeDoneItems([item(99, '2026-08-01')], existing);
+test('mergeDoneItems: updates existing item when exported fields change', () => {
+  const existing = [item(1, '2026-09-10', { Title: 'Old Title', Alerts: 'NO_TIME_SPENT' })];
+  const incoming = [item(1, '2026-09-16', { Title: 'Updated Title', Alerts: '' })];
+  const result = mergeDoneItems(incoming, existing);
   assert.equal(result.length, 1);
-  assert.equal(result[0]['Issue Number'], '1');
+  assert.equal(result[0]['Title'], 'Updated Title');
+  assert.equal(result[0]['Alerts'], '');
+  assert.equal(result[0]['Reporting Date'], '2026-09-16');
+});
+
+test('mergeDoneItems: keeps existing item when exported fields are identical', () => {
+  const existing = [item(1, '2026-09-10', { Title: 'Same Title' })];
+  const incoming = [item(1, '2026-09-16', { Title: 'Same Title' })];
+  const result = mergeDoneItems(incoming, existing);
+  assert.equal(result.length, 1);
+  assert.equal(result[0]['Title'], 'Same Title');
+  assert.equal(result[0]['Reporting Date'], '2026-09-10');
 });
 
 test('mergeDoneItems: evicts ghost done-items row for ticket now Active', () => {
