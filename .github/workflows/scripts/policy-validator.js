@@ -1,17 +1,46 @@
 class PolicyValidator {
     constructor() {
-        // JIRA Status to Policy Stage mapping
-        this.statusMapping = {
+        // SRVLOGIC JIRA Status to Policy Stage mapping
+        this.srvlogicStatusMapping = {
             'BACKLOG': 'Backlog',
             'NEW': 'Next',
             'REFINEMENT': 'Next',
             'IN PROGRESS': 'In Progress',
             'ON_DEV': 'In Progress',
             'CODE REVIEW': 'In Review',
+            'CODE_REVIEW': 'In Review',
+            'CORE_REVIEW': 'In Review',
             'ON_QA': 'In Review',
             'RELEASE PENDING': 'Done',
             'CLOSED': 'Done'
         };
+
+        // QUARKUS JIRA Status to Policy Stage mapping
+        this.quarkusStatusMapping = {
+            'BACKLOG': 'Backlog',
+            'NEW': 'Next',
+            'REFINEMENT': 'Next',
+            'TASKING AND ESTIMATION': 'Next',
+            'TASKING_AND_ESTIMATION': 'Next',
+            'TO DO': 'Next',
+            'TODO': 'Next',
+            'IN PROGRESS': 'In Progress',
+            'IN_PROGRESS': 'In Progress',
+            'CODE REVIEW': 'In Review',
+            'CODE_REVIEW': 'In Review',
+            'REVIEW': 'In Review',
+            'DEV COMPLETE': 'In Review',
+            'DEV_COMPLETE': 'In Review',
+            'TESTING': 'In Review',
+            'VERIFIED': 'Done',
+            'RELEASE PENDING': 'Done',
+            'RELEASE_PENDING': 'Done',
+            'RESOLVED': 'Done',
+            'CLOSED': 'Done'
+        };
+
+        // Default / backward-compatible statusMapping property
+        this.statusMapping = this.srvlogicStatusMapping;
 
         // Required fields per policy stage
         this.requiredFields = {
@@ -71,8 +100,25 @@ class PolicyValidator {
         return resolution !== 'Done';
     }
 
-    mapStatusToPolicyStage(jiraStatus) {
-        const stage = this.statusMapping[jiraStatus?.toUpperCase()];
+    mapStatusToPolicyStage(jiraStatus, projectKey = null) {
+        if (!jiraStatus) {
+            return 'Backlog';
+        }
+        const status = jiraStatus.toUpperCase().trim();
+        const project = projectKey
+            ? (projectKey.includes('-') ? projectKey.split('-')[0] : projectKey).toUpperCase().trim()
+            : null;
+
+        let stage = null;
+        if (project === 'QUARKUS') {
+            stage = this.quarkusStatusMapping[status] || this.srvlogicStatusMapping[status];
+        } else if (project === 'SRVLOGIC') {
+            stage = this.srvlogicStatusMapping[status] || this.quarkusStatusMapping[status];
+        } else {
+            // Other project or projectKey not specified: try SRVLOGIC first, then QUARKUS
+            stage = this.srvlogicStatusMapping[status] || this.quarkusStatusMapping[status];
+        }
+
         if (!stage) {
             console.warn(`Unknown JIRA status: ${jiraStatus}, defaulting to Backlog`);
             return 'Backlog';
@@ -97,8 +143,9 @@ class PolicyValidator {
     }
 
     validateIssue(issue, jiraClient, openPullRequests = [], closedPullRequests = []) {
+        const projectKey = issue.key ? issue.key.split('-')[0] : null;
         const status = jiraClient.extractStatus(issue);
-        const policyStage = this.mapStatusToPolicyStage(status);
+        const policyStage = this.mapStatusToPolicyStage(status, projectKey);
         const requiredFields = this.requiredFields[policyStage] || [];
         const epic = this.isEpic(issue);
 
@@ -221,7 +268,7 @@ class PolicyValidator {
         }
 
         const status = jiraClient.extractStatus(issue);
-        if (this.mapStatusToPolicyStage(status) === 'Backlog') {
+        if (this.mapStatusToPolicyStage(status, issueKey) === 'Backlog') {
             return { violations, sync };
         }
 

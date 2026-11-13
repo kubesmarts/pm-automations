@@ -340,10 +340,9 @@ test('NO_QA_CONTACT: not raised for Backlog issue with estimate >= 4h', () => {
 
 test('NO_QA_CONTACT: not raised for unknown-status issue (defaults to Backlog) with estimate >= 4h', () => {
     const validator = new PolicyValidator();
-    // Unknown statuses (e.g. "Testing", "Resolved", "Review" from external projects) fall
-    // back to policyStage "Backlog" and must not fire NO_QA_CONTACT — this was the
-    // false-positive seen in QUARKUS-8965, QUARKUS-8374, QUARKUS-9046.
-    const issue = makeIssue({ status: 'Resolved', estimateSeconds: ONE_WEEK_S });
+    // Truly unknown statuses from external projects fall back to policyStage "Backlog"
+    // and must not fire NO_QA_CONTACT
+    const issue = makeIssue({ status: 'UNKNOWN_CUSTOM_STATUS', estimateSeconds: ONE_WEEK_S });
     const result = validator.validateIssue(issue, jiraClient);
     assert.ok(!result.violations.includes('NO_QA_CONTACT'),
         `Unexpected NO_QA_CONTACT for unknown-status (Backlog) issue: ${result.violations}`);
@@ -618,6 +617,95 @@ test('COMPONENT_AREA: first mapped component wins when several components are ma
     const issue = makeComponentIssue({ components: ['Productization', 'Infrastructure'] });
     const { sync } = validator.validateComponentAndArea(issue, jiraClient);
     assert.deepEqual(sync.labelsToAdd, ['area/productization']);
+});
+
+// ---------------------------------------------------------------------------
+// JIRA Status to Policy Stage Mapping tests (QUARKUS, SRVLOGIC, and other projects)
+// ---------------------------------------------------------------------------
+
+test('mapStatusToPolicyStage: QUARKUS workflow mappings', () => {
+    const validator = new PolicyValidator();
+
+    // Backlog
+    assert.equal(validator.mapStatusToPolicyStage('Backlog', 'QUARKUS'), 'Backlog');
+    assert.equal(validator.mapStatusToPolicyStage('BACKLOG', 'QUARKUS-100'), 'Backlog');
+
+    // Next
+    assert.equal(validator.mapStatusToPolicyStage('New', 'QUARKUS'), 'Next');
+    assert.equal(validator.mapStatusToPolicyStage('Refinement', 'QUARKUS'), 'Next');
+    assert.equal(validator.mapStatusToPolicyStage('Tasking and Estimation', 'QUARKUS'), 'Next');
+    assert.equal(validator.mapStatusToPolicyStage('To Do', 'QUARKUS'), 'Next');
+    assert.equal(validator.mapStatusToPolicyStage('TODO', 'QUARKUS-200'), 'Next');
+
+    // In Progress
+    assert.equal(validator.mapStatusToPolicyStage('In Progress', 'QUARKUS'), 'In Progress');
+    assert.equal(validator.mapStatusToPolicyStage('IN_PROGRESS', 'QUARKUS-300'), 'In Progress');
+
+    // In Review
+    assert.equal(validator.mapStatusToPolicyStage('Code review', 'QUARKUS'), 'In Review');
+    assert.equal(validator.mapStatusToPolicyStage('CODE_REVIEW', 'QUARKUS'), 'In Review');
+    assert.equal(validator.mapStatusToPolicyStage('Review', 'QUARKUS'), 'In Review');
+    assert.equal(validator.mapStatusToPolicyStage('Dev Complete', 'QUARKUS'), 'In Review');
+    assert.equal(validator.mapStatusToPolicyStage('Testing', 'QUARKUS-400'), 'In Review');
+
+    // Done
+    assert.equal(validator.mapStatusToPolicyStage('Verified', 'QUARKUS'), 'Done');
+    assert.equal(validator.mapStatusToPolicyStage('Release Pending', 'QUARKUS'), 'Done');
+    assert.equal(validator.mapStatusToPolicyStage('Resolved', 'QUARKUS'), 'Done');
+    assert.equal(validator.mapStatusToPolicyStage('Closed', 'QUARKUS-500'), 'Done');
+});
+
+test('mapStatusToPolicyStage: SRVLOGIC workflow mappings', () => {
+    const validator = new PolicyValidator();
+
+    assert.equal(validator.mapStatusToPolicyStage('BACKLOG', 'SRVLOGIC'), 'Backlog');
+    assert.equal(validator.mapStatusToPolicyStage('NEW', 'SRVLOGIC-1'), 'Next');
+    assert.equal(validator.mapStatusToPolicyStage('REFINEMENT', 'SRVLOGIC'), 'Next');
+    assert.equal(validator.mapStatusToPolicyStage('IN PROGRESS', 'SRVLOGIC'), 'In Progress');
+    assert.equal(validator.mapStatusToPolicyStage('ON_DEV', 'SRVLOGIC-2'), 'In Progress');
+    assert.equal(validator.mapStatusToPolicyStage('CODE REVIEW', 'SRVLOGIC'), 'In Review');
+    assert.equal(validator.mapStatusToPolicyStage('ON_QA', 'SRVLOGIC-3'), 'In Review');
+    assert.equal(validator.mapStatusToPolicyStage('RELEASE PENDING', 'SRVLOGIC'), 'Done');
+    assert.equal(validator.mapStatusToPolicyStage('CLOSED', 'SRVLOGIC-4'), 'Done');
+});
+
+test('mapStatusToPolicyStage: other projects fallback to first match from SRVLOGIC or QUARKUS', () => {
+    const validator = new PolicyValidator();
+
+    // From SRVLOGIC
+    assert.equal(validator.mapStatusToPolicyStage('ON_DEV', 'OTHER-1'), 'In Progress');
+    assert.equal(validator.mapStatusToPolicyStage('ON_QA', 'OTHER-2'), 'In Review');
+
+    // From QUARKUS
+    assert.equal(validator.mapStatusToPolicyStage('Tasking and Estimation', 'OTHER-3'), 'Next');
+    assert.equal(validator.mapStatusToPolicyStage('To Do', 'OTHER-4'), 'Next');
+    assert.equal(validator.mapStatusToPolicyStage('Testing', 'OTHER-5'), 'In Review');
+    assert.equal(validator.mapStatusToPolicyStage('Verified', 'OTHER-6'), 'Done');
+    assert.equal(validator.mapStatusToPolicyStage('Resolved', 'OTHER-7'), 'Done');
+
+    // Truly unknown status defaults to Backlog
+    assert.equal(validator.mapStatusToPolicyStage('NON_EXISTENT_STATUS', 'OTHER-8'), 'Backlog');
+    assert.equal(validator.mapStatusToPolicyStage('', 'OTHER-9'), 'Backlog');
+    assert.equal(validator.mapStatusToPolicyStage(null, 'OTHER-10'), 'Backlog');
+});
+
+test('validateIssue: uses QUARKUS status mapping for QUARKUS issues', () => {
+    const validator = new PolicyValidator();
+
+    // Issue with status "Testing" in QUARKUS is In Review
+    const testingIssue = makeIssue({ key: 'QUARKUS-1234', status: 'Testing', qaContact: ['tester@example.com'] });
+    const testingResult = validator.validateIssue(testingIssue, jiraClient);
+    assert.equal(testingResult.policyStage, 'In Review');
+
+    // Issue with status "To Do" in QUARKUS is Next
+    const todoIssue = makeIssue({ key: 'QUARKUS-5678', status: 'To Do' });
+    const todoResult = validator.validateIssue(todoIssue, jiraClient);
+    assert.equal(todoResult.policyStage, 'Next');
+
+    // Issue with status "Resolved" in QUARKUS is Done
+    const resolvedIssue = makeIssue({ key: 'QUARKUS-9999', status: 'Resolved', estimateSeconds: 3600, qaContact: ['qa@example.com'] });
+    const resolvedResult = validator.validateIssue(resolvedIssue, jiraClient);
+    assert.equal(resolvedResult.policyStage, 'Done');
 });
 
 test('COMPONENT_AREA: no sync and no violation when none of several components is mapped', () => {

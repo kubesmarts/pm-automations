@@ -95,30 +95,66 @@ function buildIssueUrl(baseUrl, issueKey) {
   return `${baseUrl}/browse/${issueKey}`;
 }
 
+const SRVLOGIC_STATUS_MAP = {
+  'NEW': 'Next',
+  'REFINEMENT': 'Next',
+  'IN PROGRESS': 'In progress',
+  'ON_DEV': 'In progress',
+  'CODE REVIEW': 'In review',
+  'CODE_REVIEW': 'In review',
+  'CORE_REVIEW': 'In review',
+  'ON_QA': 'In review',
+  'RELEASE PENDING': 'Done',
+  'CLOSED': 'Done', // Only if resolution = Done (checked before calling)
+  'BACKLOG': 'Backlog'
+};
+
+const QUARKUS_STATUS_MAP = {
+  'BACKLOG': 'Backlog',
+  'NEW': 'Next',
+  'REFINEMENT': 'Next',
+  'TASKING AND ESTIMATION': 'Next',
+  'TASKING_AND_ESTIMATION': 'Next',
+  'TO DO': 'Next',
+  'TODO': 'Next',
+  'IN PROGRESS': 'In progress',
+  'IN_PROGRESS': 'In progress',
+  'CODE REVIEW': 'In review',
+  'CODE_REVIEW': 'In review',
+  'REVIEW': 'In review',
+  'DEV COMPLETE': 'In review',
+  'DEV_COMPLETE': 'In review',
+  'TESTING': 'In review',
+  'VERIFIED': 'Done',
+  'RELEASE PENDING': 'Done',
+  'RELEASE_PENDING': 'Done',
+  'RESOLVED': 'Done',
+  'CLOSED': 'Done'
+};
+
 /**
  * Map JIRA status to CSV status
- * Based on JIRA Status to Policy Stage Mapping
+ * Based on JIRA Status to Policy Stage Mapping (supports SRVLOGIC and QUARKUS workflows)
  */
-function mapStatus(jiraStatus) {
+function mapStatus(jiraStatus, projectKey = null) {
   if (!jiraStatus) return '';
 
-  const status = jiraStatus.toUpperCase();
+  const status = jiraStatus.toUpperCase().trim();
+  const project = projectKey
+    ? (projectKey.includes('-') ? projectKey.split('-')[0] : projectKey).toUpperCase().trim()
+    : null;
 
-  const statusMap = {
-    'NEW': 'Next',
-    'REFINEMENT': 'Next',
-    'IN PROGRESS': 'In progress',
-    'ON_DEV': 'In progress',
-    'CODE REVIEW': 'In review',
-    'CODE_REVIEW': 'In review',
-    'CORE_REVIEW': 'In review',
-    'ON_QA': 'In review',
-    'RELEASE PENDING': 'Done',
-    'CLOSED': 'Done', // Only if resolution = Done (checked before calling)
-    'BACKLOG': 'Backlog'
-  };
+  let mapped = null;
+  if (project === 'QUARKUS') {
+    mapped = QUARKUS_STATUS_MAP[status] || SRVLOGIC_STATUS_MAP[status];
+  } else if (project === 'SRVLOGIC') {
+    mapped = SRVLOGIC_STATUS_MAP[status] || QUARKUS_STATUS_MAP[status];
+  } else {
+    // Other projects or unspecified: match SRVLOGIC first, then QUARKUS
+    mapped = SRVLOGIC_STATUS_MAP[status] || QUARKUS_STATUS_MAP[status];
+  }
 
-  return statusMap[status] || status;
+  return mapped || status;
 }
 
 /**
