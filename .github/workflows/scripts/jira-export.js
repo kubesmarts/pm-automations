@@ -177,8 +177,15 @@ function generateExports(projectActiveItems, projectDoneItems) {
 
   console.log('\n=== Generating Exports ===\n');
 
-  // Generate active items exports
-  for (const [projectKey, items] of Object.entries(projectActiveItems)) {
+  // Get all unique project keys across active and done items
+  const allProjectKeys = new Set([
+    ...Object.keys(projectActiveItems),
+    ...Object.keys(projectDoneItems)
+  ]);
+
+  // Generate active items exports for all discovered projects
+  for (const projectKey of allProjectKeys) {
+    const items = projectActiveItems[projectKey] || [];
     const result = generateActiveItemsCSV(items, projectKey);
     if (result) {
       if (!DRY_RUN) {
@@ -192,7 +199,8 @@ function generateExports(projectActiveItems, projectDoneItems) {
   }
 
   // Generate done items exports (with merging)
-  for (const [projectKey, newItems] of Object.entries(projectDoneItems)) {
+  for (const projectKey of allProjectKeys) {
+    const newItems = projectDoneItems[projectKey] || [];
     const fileName = `${projectKey.toLowerCase()}-done-items.csv`;
 
     // Build set of active Issue URLs for this project (used to evict ghost rows)
@@ -204,6 +212,7 @@ function generateExports(projectActiveItems, projectDoneItems) {
     const existingItems = readExistingCSV(EXPORTS_DIR, fileName, DONE_ITEMS_COLUMNS);
 
     if (existingItems === null) {
+      if (newItems.length === 0) continue;
       // File doesn't exist or couldn't be read, create new
       console.log(`${fileName} → ${newItems.length} new items (created)`);
       const content = arrayToCSV(newItems, DONE_ITEMS_COLUMNS);
@@ -219,7 +228,7 @@ function generateExports(projectActiveItems, projectDoneItems) {
       const mergedItems = mergeDoneItems(newItems, existingItems, activeUrls);
       const addedCount = mergedItems.length - existingItems.length;
 
-      console.log(`${fileName} → ${addedCount} new items added (total: ${mergedItems.length})`);
+      console.log(`${fileName} → ${addedCount >= 0 ? addedCount : 0} new items added (total: ${mergedItems.length})`);
 
       const content = arrayToCSV(mergedItems, DONE_ITEMS_COLUMNS);
       if (!DRY_RUN) {

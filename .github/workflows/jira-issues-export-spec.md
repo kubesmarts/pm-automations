@@ -545,12 +545,12 @@ const initiative = PROJECT_NAMES[projectKey] || projectKey
 2. **If file exists:**
    - Load existing entries
    - **Evict ghost rows:** remove any existing done-items row whose Issue URL appears in the current active-items export for the same project (ticket transitioned back to Active)
-   - For each new done item:
-     - Check if Reporting Date ≥ first entry's Reporting Date
-     - If YES: eligible to add
-     - If NO: skip (too old)
-   - Remove duplicate entries (same Issue URL, older Reporting Date)
-   - Add new entries
+   - For each incoming done item:
+     - Check if it exists in the current file (by `Issue URL`):
+       - If NOT found: add as a new done item (no date threshold cutoff)
+       - If found: compare exported field values against the existing row using `compareDoneRows`
+         - If changes detected: update the existing row with the fresh export data
+         - If identical: preserve the existing row and its original Reporting Date
    - Sort all entries by Reporting Date (newest first)
    - Write updated file
 
@@ -558,17 +558,16 @@ const initiative = PROJECT_NAMES[projectKey] || projectKey
 
 A ticket can transition from Done back to an active status (e.g. reopened, moved back to In Review). When this happens the done-items CSV retains a stale snapshot from when the ticket was first Done. On each export run, any existing done-items row whose `Issue URL` also appears in the current active-items export for the same project is removed before the merge step.
 
-**Duplicate Prevention:**
+**Change Detection and Merging:**
 
-Before adding a new entry:
+Before adding or updating an entry:
 1. Search existing entries for same `Issue URL`
-2. If found with older `Reporting Date`:
-   - Remove old entry
-   - Add new entry
-3. If found with newer `Reporting Date`:
-   - Skip new entry (keep existing)
-4. If not found:
-   - Add new entry
+2. If found:
+   - Compare compared fields (Title, Assignees, Type, Area, Priority, Initiative, Target Milestone, Size, Estimate, Time Spent, External Reference, Comments, Alerts)
+   - If values changed: update existing entry with fresh data
+   - If unchanged: keep existing entry (preserving original Reporting Date)
+3. If not found:
+   - Add as new done entry
 
 **Example Scenario:**
 
@@ -799,10 +798,11 @@ Summary:
 #### done-items-merger.js
 ```javascript
 - parseExistingCSV(filePath) // Parse existing done items CSV
-- mergeDoneItems(newItems, existingItems) // Merge new items with existing
+- mergeDoneItems(newItems, existingItems, activeUrls) // Merge new items with existing
+- compareDoneRows(oldRow, newRow) // Compare freshly built done row with existing stored row
+- removeActiveItems(existingItems, activeUrls) // Evict ghost rows for tickets now Active
 - removeDuplicates(items) // Remove older duplicates by Issue URL
 - sortByReportingDate(items) // Sort descending by Reporting Date
-- filterByReportingDate(newItems, latestDate) // Filter items by date threshold
 ```
 
 ## Success Criteria

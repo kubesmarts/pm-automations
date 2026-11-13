@@ -23,7 +23,7 @@ function escapeCSVField(value) {
  * Convert array of objects to CSV string
  */
 function arrayToCSV(data, columns) {
-  if (!data || data.length === 0) return '';
+  if (!columns || columns.length === 0) return '';
 
   const rows = [];
 
@@ -31,9 +31,11 @@ function arrayToCSV(data, columns) {
   rows.push(columns.join(','));
 
   // Data rows
-  for (const item of data) {
-    const values = columns.map(col => escapeCSVField(item[col]));
-    rows.push(values.join(','));
+  if (data && data.length > 0) {
+    for (const item of data) {
+      const values = columns.map(col => escapeCSVField(item[col]));
+      rows.push(values.join(','));
+    }
   }
 
   return rows.join('\n');
@@ -95,15 +97,14 @@ const DONE_ITEMS_COLUMNS = [
  * Completely replaces any existing file
  */
 function generateActiveItemsCSV(issues, projectKey) {
-  if (!issues || issues.length === 0) return null;
-
-  const csvData = arrayToCSV(issues, ACTIVE_ITEMS_COLUMNS);
+  const items = issues || [];
+  const csvData = arrayToCSV(items, ACTIVE_ITEMS_COLUMNS);
   const fileName = `${projectKey.toLowerCase()}-active-items.csv`;
 
   return {
     fileName,
     content: csvData,
-    count: issues.length
+    count: items.length
   };
 }
 
