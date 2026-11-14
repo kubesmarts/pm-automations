@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+61,37,https://github.com/kubesmarts/logic-operator/issues/61,Add webhook validation to prevent multiple LogicFlowServices from referencing the same LogicFlowDefinition,ricardozanini,,Cloud,Major,Serverless Logic,v.2.0.0-Alpha4,,0.1,0.1,2026-11-14,,,
 16,,https://github.com/kubesmarts/logic-operator/issues/16,[EPIC] Logic Operator v2.0 - Initial Implementation Roadmap,ricardozanini,,Cloud,Blocker,Serverless Logic,v.2.0.0-Alpha4,,,,2026-11-13,,,
 12,16,https://github.com/kubesmarts/logic-operator/issues/12,ClusterLogicPlatform: Single-Platform-Per-Cluster,ricardozanini,,Cloud,Blocker,Serverless Logic,v.2.0.0-Alpha4,,2,0.1,2026-11-13,,,
 74,,https://github.com/kubesmarts/logic-operator/issues/74,Refactor LogicPlatform reconciliation into service controllers,ricardozanini,,Cloud,Blocker,Serverless Logic,v.2.0.0-Alpha4,,0.2,0.1,2026-11-09,,,

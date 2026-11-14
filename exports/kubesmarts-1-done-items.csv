@@ -1,4 +1,6 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+136,,https://github.com/kubesmarts/pm-automations/issues/136,Support project-specific JIRA status to policy stage mappings (SRVLOGIC and QUARKUS),dgutierr,,PM,Major,,,,0.05,0.05,2026-11-14,,,
+138,,https://github.com/kubesmarts/pm-automations/issues/138,JIRA export: align done-items merge logic with GH export and prevent history drop,dgutierr,,PM,Critical,,,,0.05,0.025,2026-11-14,,,
 132,,https://github.com/kubesmarts/pm-automations/issues/132,Allow repo milestone sync to run regardless of contributor whitelist,dgutierr,,PM,Normal,,,,0.05,0.075,2026-11-10,,,
 130,,https://github.com/kubesmarts/pm-automations/issues/130,Add area/infrastructure and clean up obsolete component-to-area mappings in JIRA compliance checker,dgutierr,,PM,Normal,,,,0.1,0.05,2026-11-07,,,
 128,,https://github.com/kubesmarts/pm-automations/issues/128,Done items CSV history silently wiped after adding the Item Type column,dgutierr,,PM,Blocker,,,,0.025,0.025,2026-10-20,,,
