@@ -22,7 +22,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Status,Type,Area,Priority,In
 43,41,https://github.com/kubesmarts/logic-operator/issues/43,[M3] E2E test suite,,Next,,Cloud,Major,Serverless Logic,v2.0.0-Beta3,,2,,2,2,0,2,,,,
 41,,https://github.com/kubesmarts/logic-operator/issues/41,[M3] [EPIC] Operator Integration & E2E Testing,ricardozanini,Next,,Cloud,Major,,v2.0.0-Beta3,,,,,2.5,1,2,,,2026-11-09,
 40,37,https://github.com/kubesmarts/logic-operator/issues/40,[M2] Handle pod failures and stale instances,,Next,,Cloud,Major,,v2.0.0-Beta1,,1,,1,1,0,1,,,,
-39,37,https://github.com/kubesmarts/logic-operator/issues/39,[M2] Route operations to discovered pod,,Next,,Cloud,Major,Serverless Logic,v2.0.0-Beta1,,0.5,,0.5,0.5,0,0.5,,,,
+39,37,https://github.com/kubesmarts/logic-operator/issues/39,[M2] Route operations to discovered pod,,In progress,,Cloud,Major,Serverless Logic,v2.0.0-Beta1,,0.5,,0.5,0.5,0,0.5,,,,
 37,,https://github.com/kubesmarts/logic-operator/issues/37,[M2] [EPIC] Sticky Session Routing - Operations Support,ricardozanini,Next,,Cloud,Major,,v2.0.0-Beta1,,,,,4,1.1,2.9,,,2026-11-09,
 15,,https://github.com/kubesmarts/logic-operator/issues/15,Production Readiness,ricardozanini,Next,,Cloud,Blocker,Serverless Logic,v2.0.0-Beta4,,1,,1,1,0,1,,,2026-11-09,
 14,,https://github.com/kubesmarts/logic-operator/issues/14,Migration Guide & Documentation,ricardozanini,In progress,,Docs,Blocker,Serverless Logic,v2.0.0-Beta4,,1,0.6,0.4,1,0.6,0.4,,,2026-11-09,
