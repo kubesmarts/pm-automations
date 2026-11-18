@@ -1,8 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-9178,,https://redhat.atlassian.net/browse/QUARKUS-9178,Upload temporary Quarkus and Quarkus Flow productized artifacts to Artifactory,baldimir,Task,Quarkus-flow,Major,Quarkus,3.39.3.ER3,,0.2,0,2026-11-17,,,"NO_TIME_SPENT, NO_QA_CONTACT"
-9098,7353,https://redhat.atlassian.net/browse/QUARKUS-9098,Prepare ER3 build of Quarkus Flow,baldimir,Task,Productization,Major,Quarkus,3.39.3.ER3,,0.15,0.15,2026-11-17,,,NO_QA_CONTACT
-8761,7353,https://redhat.atlassian.net/browse/QUARKUS-8761,Prepare ER2 build of Quarkus Flow,baldimir,Task,Productization,Major,Quarkus,3.39.0.ER2,,0.15,0.125,2026-11-17,,,NO_QA_CONTACT
-7611,7353,https://redhat.atlassian.net/browse/QUARKUS-7611,Quarkus Flow: Find out which dependencies need to be productized. ,baldimir,Task,Productization,Major,Quarkus,3.39.3.ER3,,0.6,0.375,2026-11-17,,,NO_QA_CONTACT
+9178,,https://redhat.atlassian.net/browse/QUARKUS-9178,Upload temporary Quarkus and Quarkus Flow productized artifacts to Artifactory,baldimir,Task,Quarkus-flow,Major,Quarkus,3.39.3.ER3,,0.2,0.2,2026-11-18,,,
+9098,7353,https://redhat.atlassian.net/browse/QUARKUS-9098,Prepare ER3 build of Quarkus Flow,baldimir,Task,Productization,Major,Quarkus,3.39.3.ER3,,0.15,0.15,2026-11-18,,,
+8761,7353,https://redhat.atlassian.net/browse/QUARKUS-8761,Prepare ER2 build of Quarkus Flow,baldimir,Task,Productization,Major,Quarkus,3.39.0.ER2,,0.15,0.125,2026-11-18,,,
+7611,7353,https://redhat.atlassian.net/browse/QUARKUS-7611,Quarkus Flow: Find out which dependencies need to be productized. ,baldimir,Task,Productization,Major,Quarkus,3.39.3.ER3,,0.6,0.375,2026-11-18,,,
 9272,7353,https://redhat.atlassian.net/browse/QUARKUS-9272,Prepare ER4 build of Quarkus Flow,baldimir,Task,Productization,Major,Quarkus,3.40.1.GA,,0.15,0.05,2026-11-16,,,
 9593,,https://redhat.atlassian.net/browse/QUARKUS-9593,Quarkus Flow QE: Container image compatibility failures on OCP 4.19 ppc64le,gmunozfe,Task,QE,Major,Quarkus,3.40.1.GA,,0,0,2026-11-13,,,"NO_ESTIMATE, NO_TIME_SPENT"
 9046,,https://redhat.atlassian.net/browse/QUARKUS-9046,Quarkus Flow platform participant misses three targeted extensions,baldimir,Bug,Productization,Blocker,Quarkus,3.40.1.GA,,0.1,0.025,2026-11-13,,,
