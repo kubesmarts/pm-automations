@@ -1,7 +1,12 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-1161,,https://github.com/quarkiverse/quarkus-flow/issues/1161,Workflow-scoped cross-shard instance discovery for gateway routing,ricardozanini,,,,,,,,,2026-11-18,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
-1829,,https://github.com/open-workflow-specification/sdk-java/issues/1829,Handle HttpCall output property,fjtirado,,Runtimes,Major,,2.0.0,S,0.3,0.2,2026-11-18,,,
+1161,,https://github.com/quarkiverse/quarkus-flow/issues/1161,Workflow-scoped cross-shard instance discovery for gateway routing,ricardozanini,,Cloud,Major,,1.4.0,M,0.2,0.2,2026-11-19,,,
+1829,,https://github.com/open-workflow-specification/sdk-java/issues/1829,Handle HttpCall output property,fjtirado,,Runtimes,Major,,2.0.0,S,0.3,0.4,2026-11-19,,,
+539,225,https://github.com/open-workflow-specification/editor/issues/539,bug: Monaco diagnostic hover is clipped near the top of the editor,fantonangeli,,Tooling,Minor,,Future,S,0.2,0.2,2026-11-19,,,
+236,207,https://github.com/open-workflow-specification/editor/issues/236,feat: Validate editor against real-world workflows,kumaradityaraj,,Tooling,Normal,,2026/Q4,M,0,,2026-11-19,,,NO_TIME_SPENT
+1166,,https://github.com/quarkiverse/quarkus-flow/issues/1166,Move per-workflow instances endpoints to /q/flow/instances/{namespace}/{name}[/{version}],mathecruz,,,,,1.4.0,,,,2026-11-19,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
+1848,,https://github.com/open-workflow-specification/sdk-java/issues/1848,User AssertCore assertions rather than Junit ones,fjtirado,,Runtimes,Minor,,2026/Q4,S,0.1,0.1,2026-11-19,,,
 1831,,https://github.com/open-workflow-specification/sdk-java/issues/1831,OpenAPI AI found bugs,mathecruz,,Runtimes,Critical,,2026/Q4,,0.6,0.6,2026-11-18,,,
+232,207,https://github.com/open-workflow-specification/editor/issues/232,feat: Review and increase unit test coverage,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,,2026-11-18,,,
 1157,,https://github.com/quarkiverse/quarkus-flow/issues/1157,Group lc4j separately and examples + pom together,mathecruz,,Runtimes,Normal,,1.4.0,S,0,0,2026-11-17,,,
 897,,https://github.com/quarkiverse/quarkus-flow/issues/897,feat: quarkus-flow-db-migration-runtime extension for JPA schema migrations,mathecruz,,Runtimes,Major,,1.4.0,M,0.5,0.5,2026-11-17,,,
 898,,https://github.com/quarkiverse/quarkus-flow/issues/898,feat: quarkus-flow-db-migration-quartz extension for Quartz schema migrations,mathecruz,,Runtimes,Major,,2.0.0,M,0.5,0.5,2026-11-17,,,

@@ -1,7 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+71,,https://github.com/kubesmarts/logic-apps/issues/71,Document versioning and release process,ricardozanini,,Cloud,Major,Serverless Logic,v.2.0.0-Alpha4,,0.4,0.4,2026-11-19,,,
+72,,https://github.com/kubesmarts/logic-operator/issues/72,Report LogicFlowDefinition readiness only after runtime registration,ricardozanini,,Cloud,Major,Serverless Logic,v2.0.0-Beta1,,0.2,0.2,2026-11-19,,,
 87,,https://github.com/kubesmarts/logic-apps/issues/87,Fix Data Index Quarkus configuration warnings,mathecruz,,Cloud,Normal,Serverless Logic,v.2.0.0-Alpha3,,0.1,0.1,2026-11-17,,,
 114,,https://github.com/kubesmarts/logic-apps/issues/114,Align Vector image version across the repo,mathecruz,,Cloud,Normal,,v.2.0.0-Alpha4,,0.1,0.1,2026-11-17,,,
-71,,https://github.com/kubesmarts/logic-apps/issues/71,Document versioning and release process,ricardozanini,,Cloud,Major,Serverless Logic,v.2.0.0-Alpha4,,0.4,,2026-11-17,,,NO_TIME_SPENT
 105,,https://github.com/kubesmarts/logic-apps/issues/105,Define a Data Index garbage-collection API and service,mathecruz,,Cloud,Critical,Serverless Logic,v2.0.0-Beta2,,1.5,1.5,2026-11-17,,,
 61,37,https://github.com/kubesmarts/logic-operator/issues/61,Add webhook validation to prevent multiple LogicFlowServices from referencing the same LogicFlowDefinition,ricardozanini,,Cloud,Major,Serverless Logic,v.2.0.0-Alpha4,,0.1,0.1,2026-11-14,,,
 16,,https://github.com/kubesmarts/logic-operator/issues/16,[EPIC] Logic Operator v2.0 - Initial Implementation Roadmap,ricardozanini,,Cloud,Blocker,Serverless Logic,v.2.0.0-Alpha4,,,,2026-11-13,,,
