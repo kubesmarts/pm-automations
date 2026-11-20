@@ -1,4 +1,8 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+53,,https://github.com/kubesmarts/logic-operator/issues/53,Refactor on `LogicFlowRuntime` webhook and create defaults for `LogicFlowDefinition` and `LogicFlowService`,wmedvede,,Cloud,Normal,Serverless Logic,v.2.0.0-Alpha4,,0.3,0.4,2026-11-20,,,NO_TIME_SPENT
+76,,https://github.com/kubesmarts/logic-operator/issues/76,Bound the gateway endpoint cache and resolve endpoints safely,ricardozanini,,Cloud,Blocker,Serverless Logic,v2.0.0-Beta1,,0.1,0.1,2026-11-20,,,
+79,,https://github.com/kubesmarts/logic-operator/issues/79,Add topology discovery API to Workflow Gateway,ricardozanini,,Cloud,Major,Serverless Logic,v.2.0.0-Alpha4,,1,0.1,2026-11-20,,,
+93,,https://github.com/kubesmarts/logic-operator/issues/93,Rename container images to logic-data-index / logic-db-migrator,mathecruz,,Cloud,Blocker,Serverless Logic,v.2.0.0-Alpha4,,,,2026-11-20,,,"NO_ESTIMATE, NO_TIME_SPENT"
 71,,https://github.com/kubesmarts/logic-apps/issues/71,Document versioning and release process,ricardozanini,,Cloud,Major,Serverless Logic,v.2.0.0-Alpha4,,0.4,0.4,2026-11-19,,,
 72,,https://github.com/kubesmarts/logic-operator/issues/72,Report LogicFlowDefinition readiness only after runtime registration,ricardozanini,,Cloud,Major,Serverless Logic,v2.0.0-Beta1,,0.2,0.2,2026-11-19,,,
 87,,https://github.com/kubesmarts/logic-apps/issues/87,Fix Data Index Quarkus configuration warnings,mathecruz,,Cloud,Normal,Serverless Logic,v.2.0.0-Alpha3,,0.1,0.1,2026-11-17,,,
