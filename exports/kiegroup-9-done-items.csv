@@ -19,6 +19,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 589,,https://github.com/casehubio/platform/issues/589,Add integration test: standalone mcp-api consumer without platform-api,treblereel,,QE,Normal,,Future,S,0.2,0.2,2026-11-13,https://github.com/casehubio/platform/pull/813,Completed; merged into main. https://github.com/casehubio/platform/pull/813,
 634,,https://github.com/casehubio/platform/issues/634,Verify chain fallback behavior in integration tests,treblereel,,QE,Normal,,Future,S,0.2,0.2,2026-11-13,https://github.com/casehubio/platform/pull/814,Completed; merged into main. https://github.com/casehubio/platform/pull/814,
 7134,,https://github.com/apache/incubator-kie/issues/7134,Drools: not( X() and Y() from $list ) silently stops firing after cross-package segment split,Rikkola,,Runtimes,Normal,,Future,S,1,1,2026-11-10,,,
+7101,,https://github.com/apache/incubator-kie/issues/7101,Drools Sequential: Named consequence before a later sequence → wrong anchor skip,Rikkola,,Runtimes,Normal,,Future,M,2,1,2026-11-05,,,
 1,,https://github.com/casehubio/scaffold/issues/1,"epic: scaffold deployment infrastructure — Docker, K8s, Helm, observability",treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-29,,,
 2,,https://github.com/casehubio/engine/issues/2,Pluggable Expression Evaluation Framework,treblereel,,Runtimes,Normal,,Future,XL,4,4,2026-10-29,,,
 1088,,https://github.com/casehubio/engine/issues/1088,fix: Generate API Docs workflow startup_failure,treblereel,,Runtimes,Normal,,Future,XS,0.1,0.1,2026-10-29,,,
