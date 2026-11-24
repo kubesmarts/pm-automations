@@ -1,8 +1,10 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+546,,https://github.com/open-workflow-specification/editor/issues/546,bug: Call AsyncAPI showing required fields as optional,handreyrc,,Tooling,Normal,,2026/Q4,M,0.2,0.2,2026-11-24,,,
 232,207,https://github.com/open-workflow-specification/editor/issues/232,feat: Review and increase unit test coverage,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,0.2,2026-11-21,,,
 236,207,https://github.com/open-workflow-specification/editor/issues/236,feat: Validate editor against real-world workflows,kumaradityaraj,,Tooling,Normal,,2026/Q4,M,0,0,2026-11-21,,,
 1173,,https://github.com/quarkiverse/quarkus-flow/issues/1173,Runner images can't use a schema created by the flow-db-migration scripts (missing physical-naming-strategy),mathecruz,,,,,1.4.0,,,,2026-11-21,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 538,214,https://github.com/open-workflow-specification/editor/issues/538,bug: Validation error counter inconsistencies in the forms,handreyrc,,Tooling,Normal,,2026/Q4,M,0.5,0.6,2026-11-20,,,
+234,207,https://github.com/open-workflow-specification/editor/issues/234,feat: Assess and improve accessibility,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,,2026-11-20,,,
 1161,,https://github.com/quarkiverse/quarkus-flow/issues/1161,Workflow-scoped cross-shard instance discovery for gateway routing,ricardozanini,,Cloud,Major,,1.4.0,M,0.2,0.2,2026-11-19,,,
 1829,,https://github.com/open-workflow-specification/sdk-java/issues/1829,Handle HttpCall output property,fjtirado,,Runtimes,Major,,2.0.0,S,0.3,0.4,2026-11-19,,,
 539,225,https://github.com/open-workflow-specification/editor/issues/539,bug: Monaco diagnostic hover is clipped near the top of the editor,fantonangeli,,Tooling,Minor,,Future,S,0.2,0.2,2026-11-19,,,
