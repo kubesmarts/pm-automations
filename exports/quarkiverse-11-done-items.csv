@@ -1,10 +1,11 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+234,207,https://github.com/open-workflow-specification/editor/issues/234,feat: Assess and improve accessibility,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,0.2,2026-11-25,,,NO_TIME_SPENT
+1868,,https://github.com/open-workflow-specification/sdk-java/issues/1868,Only the last workflow using `schedule.on.all` is started,"mathecruz,fjtirado",,,,,,,,,2026-11-25,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 546,,https://github.com/open-workflow-specification/editor/issues/546,bug: Call AsyncAPI showing required fields as optional,handreyrc,,Tooling,Normal,,2026/Q4,M,0.2,0.2,2026-11-24,,,
 232,207,https://github.com/open-workflow-specification/editor/issues/232,feat: Review and increase unit test coverage,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,0.2,2026-11-21,,,
 236,207,https://github.com/open-workflow-specification/editor/issues/236,feat: Validate editor against real-world workflows,kumaradityaraj,,Tooling,Normal,,2026/Q4,M,0,0,2026-11-21,,,
 1173,,https://github.com/quarkiverse/quarkus-flow/issues/1173,Runner images can't use a schema created by the flow-db-migration scripts (missing physical-naming-strategy),mathecruz,,,,,1.4.0,,,,2026-11-21,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 538,214,https://github.com/open-workflow-specification/editor/issues/538,bug: Validation error counter inconsistencies in the forms,handreyrc,,Tooling,Normal,,2026/Q4,M,0.5,0.6,2026-11-20,,,
-234,207,https://github.com/open-workflow-specification/editor/issues/234,feat: Assess and improve accessibility,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,,2026-11-20,,,
 1161,,https://github.com/quarkiverse/quarkus-flow/issues/1161,Workflow-scoped cross-shard instance discovery for gateway routing,ricardozanini,,Cloud,Major,,1.4.0,M,0.2,0.2,2026-11-19,,,
 1829,,https://github.com/open-workflow-specification/sdk-java/issues/1829,Handle HttpCall output property,fjtirado,,Runtimes,Major,,2.0.0,S,0.3,0.4,2026-11-19,,,
 539,225,https://github.com/open-workflow-specification/editor/issues/539,bug: Monaco diagnostic hover is clipped near the top of the editor,fantonangeli,,Tooling,Minor,,Future,S,0.2,0.2,2026-11-19,,,
@@ -44,6 +45,7 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 398,214,https://github.com/open-workflow-specification/editor/issues/398,epic: Implement dynamic form for task types,"lornakelly,handreyrc",,Tooling,Normal,,2026/Q4,L,0,0,2026-11-05,,,
 1793,,https://github.com/open-workflow-specification/sdk-java/issues/1793," ServicePriority can use generics so compareTo is downcasted to the proper type, not service priority",fjtirado,,Runtimes,Minor,,2.0.0,S,0.2,0.1,2026-11-05,,,
 515,214,https://github.com/open-workflow-specification/editor/issues/515,feat: Consolidate and simplify,lornakelly,,Tooling,Normal,,2026/Q4,M,0.2,0.1,2026-11-05,,,
+253,214,https://github.com/open-workflow-specification/editor/issues/253,feat: Assess and improve accessibility,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0,0,2026-11-05,,This task is already completed in PR #234,
 1778,,https://github.com/open-workflow-specification/sdk-java/issues/1778,Refactor http stack so external resource download reuses configured Http client,fjtirado,,Runtimes,Normal,,2026/Q4,M,0.4,1,2026-11-04,,,
 507,223,https://github.com/open-workflow-specification/editor/issues/507,bug: TypeScript 7 conflicts with Volar 2.4.30 peer dependencies,fantonangeli,,Tooling,Critical,,2026/Q4,S,0.1,0.2,2026-11-03,,,
 1768,,https://github.com/open-workflow-specification/sdk-java/issues/1768,Establish JDK 21 as minor java version,fjtirado,,Runtimes,Normal,,2026/Q4,S,0.1,0.2,2026-10-31,,,
