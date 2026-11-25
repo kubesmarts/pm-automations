@@ -1,4 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+1084,995,https://redhat.atlassian.net/browse/SRVLOGIC-1084,[IBM Test migration - OCP] Add configuration for OCP version matrix to qflow job,gmunozfe,Sub-task,Infrastructure,Minor,Serverless logic,1.40.0 OSL,,0.2,0.2,2026-11-25,,,
+906,,https://redhat.atlassian.net/browse/SRVLOGIC-906,9.105.x nightly build contains incorrect values for imageTag and scmRevision,baldimir,Bug,CI,Major,Serverless logic,Future,,0.025,0.025,2026-11-25,,,NO_TIME_SPENT
+904,,https://redhat.atlassian.net/browse/SRVLOGIC-904,Investigate if affected packages/tools from latest supply chain malware attack are used in OSL code stack,baldimir,Task,CI,Major,Serverless logic,Future,,0.05,0.05,2026-11-25,,,"NO_TIME_SPENT, NO_QA_CONTACT"
+758,,https://redhat.atlassian.net/browse/SRVLOGIC-758,Python runtimes fixes,fjtirado,Bug,Runtimes,Normal,Serverless logic,Future,,0.4,0.4,2026-11-25,,,
+858,,https://redhat.atlassian.net/browse/SRVLOGIC-858,QE Verification of SRVLOGIC-758,gmunozfe,Task,QE,Major,Serverless logic,Future,,0,0,2026-11-25,,,
 1004,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1004,Build CR2,saumya1singh,Task,Productization,Major,Serverless logic,1.39.0 OSL,,1,0.8,2026-11-19,,,
 1175,1168,https://redhat.atlassian.net/browse/SRVLOGIC-1175,Bundle Build for 1.39 CR2,saumya1singh,Sub-task,Productization,Critical,Serverless logic,1.39.0 OSL,,0.125,0.075,2026-11-19,,,
 1172,1168,https://redhat.atlassian.net/browse/SRVLOGIC-1172,Build 5 kieGroup Projects in PNC,saumya1singh,Sub-task,Productization,Critical,Serverless logic,Future,,0.125,0.15,2026-11-19,,,
@@ -27,7 +32,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1306,,https://redhat.atlassian.net/browse/SRVLOGIC-1306,"KN CLI container images rebuild for 1.37, 1.38, 1.39 latest releases.  ",saumya1singh,Task,Productization,Critical,Serverless logic,1.39.0 OSL,,0.125,0.175,2026-11-10,,,
 915,,https://redhat.atlassian.net/browse/SRVLOGIC-915,Test to validate ConfigMaps installed by operator use expected product values,domhanak,Story,QE,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,2026-11-10,,,
 1089,997,https://redhat.atlassian.net/browse/SRVLOGIC-1089,[IBM test migration] Migration of kieToolsUtils and testing utils,jakubschwan,Sub-task,Infrastructure,Major,Serverless logic,1.40.0 OSL,,0.05,0.05,2026-11-06,,,
-1084,995,https://redhat.atlassian.net/browse/SRVLOGIC-1084,[IBM Test migration - OCP] Add configuration for OCP version matrix to qflow job,gmunozfe,Sub-task,Infrastructure,Undefined,Serverless logic,1.40.0 OSL,,0.2,0,2026-11-06,,,"NO_PRIORITY, NO_TIME_SPENT, NO_QA_CONTACT"
 1065,1013,https://redhat.atlassian.net/browse/SRVLOGIC-1065,[IBM test migration] Implement different Architectures Support in QE Jobs,gmunozfe,Task,QE,Major,Serverless logic,1.40.0 OSL,,2,2,2026-11-06,,,
 1039,,https://redhat.atlassian.net/browse/SRVLOGIC-1039,Upgrade Quarkus to 3.27.4,baldimir,Task,Productization,Major,Serverless logic,1.39.0 OSL,,0.2,0.1021,2026-11-06,,,
 1029,,https://redhat.atlassian.net/browse/SRVLOGIC-1029,Remediate instance running smee-clients in rhos-d,domhanak,Spike,Infrastructure,Blocker,Serverless logic,1.39.0 OSL,,0.05,0.05,2026-11-06,,,
@@ -42,8 +46,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 867,,https://redhat.atlassian.net/browse/SRVLOGIC-867,[AGILE] Auto-create JIRA tickets from GH project issues,dgutierr,Feature,PM,Major,Serverless logic,Future,,0.4,0.2,2026-11-06,,,
 861,,https://redhat.atlassian.net/browse/SRVLOGIC-861,[AGILE] Sync Project Reporting Metrics workflow,dgutierr,Feature,PM,Major,Serverless logic,Future,,1,0.7,2026-11-06,,,
 882,,https://redhat.atlassian.net/browse/SRVLOGIC-882,[AGILE] Auto-clear Remaining Work when issue is moved to Done,dgutierr,Story,PM,Critical,Serverless logic,Future,,0.4,0.2,2026-11-06,,,
-906,,https://redhat.atlassian.net/browse/SRVLOGIC-906,9.105.x nightly build contains incorrect values for imageTag and scmRevision,baldimir,Bug,CI,Major,Serverless logic,Future,,0.025,0,2026-11-06,,,NO_TIME_SPENT
-904,,https://redhat.atlassian.net/browse/SRVLOGIC-904,Investigate if affected packages/tools from latest supply chain malware attack are used in OSL code stack,baldimir,Task,CI,Major,Serverless logic,Future,,0.05,0,2026-11-06,,,"NO_TIME_SPENT, NO_QA_CONTACT"
 940,698,https://redhat.atlassian.net/browse/SRVLOGIC-940,Build: Update SHA checksums for all newly built containers,jankrystof-ibm,Task,CI,Major,Serverless logic,1.39.0 OSL,,1,0.15,2026-11-06,,,
 963,928,https://redhat.atlassian.net/browse/SRVLOGIC-963,Start publishing SNAPSHOT artifacts,baldimir,Task,CI,Blocker,Serverless logic,Future,,2,2.5,2026-11-06,,,
 982,,https://redhat.atlassian.net/browse/SRVLOGIC-982,SonataFlowPlatform CRD podTemplate lacks metadata.labels support — unable to set custom labels on data-index and jobs-service pods,wmedvede,Feature,Cloud,Critical,Serverless logic,1.39.0 OSL,,0.8,1,2026-11-06,,,
