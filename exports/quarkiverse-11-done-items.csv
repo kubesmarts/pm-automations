@@ -1,5 +1,9 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
-234,207,https://github.com/open-workflow-specification/editor/issues/234,feat: Assess and improve accessibility,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,0.2,2026-11-25,,,NO_TIME_SPENT
+234,207,https://github.com/open-workflow-specification/editor/issues/234,feat: Assess and improve accessibility,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,0.2,2026-11-26,,,
+1048,,https://github.com/quarkiverse/quarkus-flow/issues/1048,Update example SQL after latest DB changes,gmunozfe,,Runtimes,Normal,,2.0.0,S,,1,2026-11-26,,,NO_ESTIMATE
+525,225,https://github.com/open-workflow-specification/editor/issues/525,feat: Update Netlify previews to include the Diagram and the Dual Editor,fantonangeli,,Tooling,Major,,2026/Q4,XS,0.1,0,2026-11-26,,,
+267,214,https://github.com/open-workflow-specification/editor/issues/267,feat: Bump sdk package and remove temporary workaround,lornakelly,,Tooling,Normal,,2026/Q4,M,0.2,0.1,2026-11-26,,,
+254,214,https://github.com/open-workflow-specification/editor/issues/254,feat: Styling/UX refinements,lornakelly,,Tooling,Normal,,2026/Q4,M,2,2,2026-11-26,,,
 1868,,https://github.com/open-workflow-specification/sdk-java/issues/1868,Only the last workflow using `schedule.on.all` is started,"mathecruz,fjtirado",,,,,,,,,2026-11-25,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 546,,https://github.com/open-workflow-specification/editor/issues/546,bug: Call AsyncAPI showing required fields as optional,handreyrc,,Tooling,Normal,,2026/Q4,M,0.2,0.2,2026-11-24,,,
 232,207,https://github.com/open-workflow-specification/editor/issues/232,feat: Review and increase unit test coverage,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,0.2,2026-11-21,,,
@@ -94,7 +98,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 887,,https://github.com/quarkiverse/quarkus-flow/issues/887,Parallelize the Build with Integration Tests CI pipeline,mathecruz,,CI,Major,,1.1.0,,0.4,0,2026-10-08,,,
 1507,,https://github.com/open-workflow-specification/sdk-java/issues/1507,Allow loading of HttpRequestDecorator as additionalObject,fjtirado,,Runtimes,Normal,,1.1.0,S,0.2,0.2,2026-10-08,,,
 331,223,https://github.com/open-workflow-specification/editor/issues/331,feat: Integrate the language service with Monaco,fantonangeli,,Tooling,Major,,2026/Q4,M,2,2.1,2026-10-08,,,
-1048,,https://github.com/quarkiverse/quarkus-flow/issues/1048,Update example SQL after latest DB changes,gmunozfe,,,,,2.0.0,,,,2026-10-07,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 403,398,https://github.com/open-workflow-specification/editor/issues/403,feat: For task,handreyrc,,Tooling,Normal,,2026/Q4,S,0.2,0.2,2026-10-07,,,
 404,398,https://github.com/open-workflow-specification/editor/issues/404,feat: Listen task,handreyrc,,Tooling,Normal,,2026/Q4,M,0.4,0.6,2026-10-07,,,
 1738,,https://github.com/open-workflow-specification/sdk-java/issues/1738,Metadata is getting overwriten when a workflow is restored from a persistence state,fjtirado,,Runtimes,Critical,,2026/Q3,S,0.2,0.2,2026-10-06,,,

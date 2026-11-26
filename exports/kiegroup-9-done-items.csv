@@ -1,4 +1,5 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+7311,,https://github.com/apache/incubator-kie/issues/7311,Drools: Consequence with an indexed method-call should work,Rikkola,,Runtimes,Normal,,Future,S,1,0.5,2026-11-26,,,
 284,,https://github.com/casehubio/engine/issues/284,Implement Kubernetes Secrets integration for SecretManager SPI,treblereel,,Runtimes,Normal,,Future,M,1,0,2026-11-19,,,
 285,,https://github.com/casehubio/engine/issues/285,Implement Kubernetes ConfigMaps integration for ConfigManager SPI,treblereel,,Runtimes,Normal,,Future,M,1,0,2026-11-19,,,
 765,,https://github.com/casehubio/platform/issues/765,feat: CorpusSelectionEventObserver should rebuild trigger index on profile activation,treblereel,,Runtimes,Normal,,Future,S,0.2,0.2,2026-11-19,https://github.com/casehubio/platform/pull/816,Completed; merged into main. https://github.com/casehubio/platform/pull/816,
