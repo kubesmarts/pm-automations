@@ -4,6 +4,8 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 858,,https://redhat.atlassian.net/browse/SRVLOGIC-858,QE Verification of SRVLOGIC-758,gmunozfe,Task,QE,Major,Serverless logic,Future,,0,0,2026-11-26,,,"NO_ESTIMATE, NO_TIME_SPENT"
 1069,,https://redhat.atlassian.net/browse/SRVLOGIC-1069,Update docker/docker go module to v29. ,ricardozanini,Task,Cloud,Major,Serverless logic,1.39.0 OSL,,0.2,0.2,2026-11-26,,,
 1165,,https://redhat.atlassian.net/browse/SRVLOGIC-1165,Bind acting identity to authenticated security principal by default,fjtirado,Bug,Runtimes,Minor,Serverless logic,1.39.0 OSL,,0.2,0.6,2026-11-26,,,
+1012,,https://redhat.atlassian.net/browse/SRVLOGIC-1012,Removal of non-OSL packages from kie-tools -> pmml-vscode-extension,domhanak,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.025,0.1,2026-11-26,,,
+983,,https://redhat.atlassian.net/browse/SRVLOGIC-983,Provide a long term solution for the Operator version and Images tag version not being bumped up by the release procedure,domhanak,Bug,Cloud,Blocker,Serverless logic,1.39.0 OSL,,0.025,0,2026-11-26,,,
 1084,995,https://redhat.atlassian.net/browse/SRVLOGIC-1084,[IBM Test migration - OCP] Add configuration for OCP version matrix to qflow job,gmunozfe,Sub-task,Infrastructure,Minor,Serverless logic,1.40.0 OSL,,0.2,0.2,2026-11-25,,,
 758,,https://redhat.atlassian.net/browse/SRVLOGIC-758,Python runtimes fixes,fjtirado,Bug,Runtimes,Normal,Serverless logic,Future,,0.4,0.4,2026-11-25,,,
 1004,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1004,Build CR2,saumya1singh,Task,Productization,Major,Serverless logic,1.39.0 OSL,,1,0.8,2026-11-19,,,
@@ -86,7 +88,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1015,,https://redhat.atlassian.net/browse/SRVLOGIC-1015,Add the ability to configure user provided labels in the Data Index and Job service pods according with the linked customer request.,wmedvede,Epic,Cloud,Normal,Serverless logic,1.39.0 OSL,,0.8,0.8,2026-10-21,,,
 1014,975,https://redhat.atlassian.net/browse/SRVLOGIC-1014,Document the support of multiversioned workflows,wmedvede,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,0.4,0.4,2026-10-21,,,
 1013,975,https://redhat.atlassian.net/browse/SRVLOGIC-1013,Operator addings to support the deployment of multiversioned workflows,wmedvede,Task,Cloud,Blocker,Serverless logic,1.39.0 OSL,,1,1,2026-10-21,,,
-1012,,https://redhat.atlassian.net/browse/SRVLOGIC-1012,Removal of non-OSL packages from kie-tools -> pmml-vscode-extension,domhanak,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.025,0,2026-10-21,,,NO_TIME_SPENT
 1010,,https://redhat.atlassian.net/browse/SRVLOGIC-1010,Adjust Jenkinsfile.prod.nightly job definition to use 111-SNAPSHOT,domhanak,Task,CI,Blocker,Serverless logic,1.39.0 OSL,,0.05,0.05,2026-10-21,,,
 1008,,https://redhat.atlassian.net/browse/SRVLOGIC-1008,Removal of non-OSL packages from kie-tools -> bpmn-editor and related packages,domhanak,Story,CI,Critical,Serverless logic,1.39.0 OSL,,1,0.4,2026-10-21,,,
 1196,,https://redhat.atlassian.net/browse/SRVLOGIC-1196,Release OpenShift Serverless Logic 1.37.3 patch release,saumya1singh,Epic,Productization,Major,Serverless logic,1.37.3 OSL,,0.6,0.425,2026-10-21,,,
@@ -148,7 +149,6 @@ Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiativ
 1283,,https://redhat.atlassian.net/browse/SRVLOGIC-1283,CPaaS upgrade to v9.42.2 -- drools + drools-ansible-integration + OSL,jankrystof-ibm,Task,CI,Major,Serverless logic,1.39.0 OSL,,0.05,0.0313,2026-10-15,,,
 939,,https://redhat.atlassian.net/browse/SRVLOGIC-939,Extend osl cut-off automation: update attributes version+replaces in logic-operator.clusterserviceversion.yaml,jankrystof-ibm,Task,Productization,Critical,Serverless logic,1.39.0 OSL,,0.05,0.05,2026-10-15,,,
 973,,https://redhat.atlassian.net/browse/SRVLOGIC-973,Reflect midstream changes in osl cut-off automation,jankrystof-ibm,Task,CI,Normal,Serverless logic,1.39.0 OSL,,0.15,0.175,2026-10-15,,,
-983,,https://redhat.atlassian.net/browse/SRVLOGIC-983,Provide a long term solution for the Operator version and Images tag version not being bumped up by the release procedure,domhanak,Bug,Cloud,Blocker,Serverless logic,1.39.0 OSL,,0.025,0,2026-10-15,,,NO_TIME_SPENT
 1257,,https://redhat.atlassian.net/browse/SRVLOGIC-1257,QE testing OCP cluster are not available,jakubschwan,Bug,QE,Blocker,Serverless logic,1.39.0 OSL,,0.1,0.0625,2026-10-14,,,
 1003,1001,https://redhat.atlassian.net/browse/SRVLOGIC-1003,Build CR1,saumya1singh,Task,Productization,Blocker,Serverless logic,1.39.0 OSL,,1,0.925,2026-10-13,,,
 1048,,https://redhat.atlassian.net/browse/SRVLOGIC-1048,[IBM build migration] Create a new CI system inside IBM infrastructure,jankrystof-ibm,Epic,CI,Major,Serverless logic,1.40.0 OSL,,0.6,0.625,2026-09-21,,,
