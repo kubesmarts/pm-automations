@@ -1,19 +1,21 @@
 Issue Number,Parent Issue,Issue URL,Title,Assignees,Type,Area,Priority,Initiative,Target Milestone,Size,Estimate,Time Spent,Reporting Date,External Reference,Comments,Alerts
+525,225,https://github.com/open-workflow-specification/editor/issues/525,feat: Update Netlify previews to include the Diagram and the Dual Editor,fantonangeli,,Tooling,Major,,2026/Q4,XS,0.1,0.3,2026-11-27,,,
+1173,,https://github.com/quarkiverse/quarkus-flow/issues/1173,Runner images can't use a schema created by the flow-db-migration scripts (missing physical-naming-strategy),mathecruz,,Runtimes,Major,,1.4.0,S,0.1,0.1,2026-11-27,,,
+1166,,https://github.com/quarkiverse/quarkus-flow/issues/1166,Move per-workflow instances endpoints to /q/flow/instances/{namespace}/{name}[/{version}],mathecruz,,Runtimes,Critical,,1.4.0,M,0.2,0.2,2026-11-27,,,
+564,,https://github.com/open-workflow-specification/editor/issues/564,feat: Hide node handles in edit and read-only modes,handreyrc,,Tooling,Normal,,2026/Q4,XS,0.1,0.1,2026-11-27,,,
 234,207,https://github.com/open-workflow-specification/editor/issues/234,feat: Assess and improve accessibility,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,0.2,2026-11-26,,,
 1048,,https://github.com/quarkiverse/quarkus-flow/issues/1048,Update example SQL after latest DB changes,gmunozfe,,Runtimes,Normal,,2.0.0,S,,1,2026-11-26,,,NO_ESTIMATE
-525,225,https://github.com/open-workflow-specification/editor/issues/525,feat: Update Netlify previews to include the Diagram and the Dual Editor,fantonangeli,,Tooling,Major,,2026/Q4,XS,0.1,0,2026-11-26,,,
 267,214,https://github.com/open-workflow-specification/editor/issues/267,feat: Bump sdk package and remove temporary workaround,lornakelly,,Tooling,Normal,,2026/Q4,M,0.2,0.1,2026-11-26,,,
 254,214,https://github.com/open-workflow-specification/editor/issues/254,feat: Styling/UX refinements,lornakelly,,Tooling,Normal,,2026/Q4,M,2,2,2026-11-26,,,
+557,225,https://github.com/open-workflow-specification/editor/issues/557,"bug: stuck ""loading"" suggestion on dual editor",fantonangeli,,Tooling,Normal,,2026/Q4,M,0.4,0.1,2026-11-26,,,
 1868,,https://github.com/open-workflow-specification/sdk-java/issues/1868,Only the last workflow using `schedule.on.all` is started,"mathecruz,fjtirado",,,,,,,,,2026-11-25,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_MILESTONE, NO_TIME_SPENT"
 546,,https://github.com/open-workflow-specification/editor/issues/546,bug: Call AsyncAPI showing required fields as optional,handreyrc,,Tooling,Normal,,2026/Q4,M,0.2,0.2,2026-11-24,,,
 232,207,https://github.com/open-workflow-specification/editor/issues/232,feat: Review and increase unit test coverage,kumaradityaraj,,Tooling,Minor,,2026/Q4,M,0.2,0.2,2026-11-21,,,
 236,207,https://github.com/open-workflow-specification/editor/issues/236,feat: Validate editor against real-world workflows,kumaradityaraj,,Tooling,Normal,,2026/Q4,M,0,0,2026-11-21,,,
-1173,,https://github.com/quarkiverse/quarkus-flow/issues/1173,Runner images can't use a schema created by the flow-db-migration scripts (missing physical-naming-strategy),mathecruz,,,,,1.4.0,,,,2026-11-21,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 538,214,https://github.com/open-workflow-specification/editor/issues/538,bug: Validation error counter inconsistencies in the forms,handreyrc,,Tooling,Normal,,2026/Q4,M,0.5,0.6,2026-11-20,,,
 1161,,https://github.com/quarkiverse/quarkus-flow/issues/1161,Workflow-scoped cross-shard instance discovery for gateway routing,ricardozanini,,Cloud,Major,,1.4.0,M,0.2,0.2,2026-11-19,,,
 1829,,https://github.com/open-workflow-specification/sdk-java/issues/1829,Handle HttpCall output property,fjtirado,,Runtimes,Major,,2.0.0,S,0.3,0.4,2026-11-19,,,
 539,225,https://github.com/open-workflow-specification/editor/issues/539,bug: Monaco diagnostic hover is clipped near the top of the editor,fantonangeli,,Tooling,Minor,,Future,S,0.2,0.2,2026-11-19,,,
-1166,,https://github.com/quarkiverse/quarkus-flow/issues/1166,Move per-workflow instances endpoints to /q/flow/instances/{namespace}/{name}[/{version}],mathecruz,,,,,1.4.0,,,,2026-11-19,,,"NO_ESTIMATE, NO_AREA, NO_PRIORITY, NO_TIME_SPENT"
 1848,,https://github.com/open-workflow-specification/sdk-java/issues/1848,User AssertCore assertions rather than Junit ones,fjtirado,,Runtimes,Minor,,2026/Q4,S,0.1,0.1,2026-11-19,,,
 1831,,https://github.com/open-workflow-specification/sdk-java/issues/1831,OpenAPI AI found bugs,mathecruz,,Runtimes,Critical,,2026/Q4,,0.6,0.6,2026-11-18,,,
 1157,,https://github.com/quarkiverse/quarkus-flow/issues/1157,Group lc4j separately and examples + pom together,mathecruz,,Runtimes,Normal,,1.4.0,S,0,0,2026-11-17,,,
